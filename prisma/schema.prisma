@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  wechatOpenId String   @unique
+  createdDate  DateTime @default(now()) @map("created_time")
+  nickName     String
+}
+
+model VerificationWxQrCode {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String   @unique
+  isScan     Boolean
+  expires    DateTime @default(now()) @map("created_time")
+  openId     String?
+}
+
+model Group {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  createUserId String   @db.ObjectId
+  createdDate  DateTime @default(now()) @map("created_time")
+  name         String
+  describe     String
+}
+
+model GroupUser {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate DateTime @default(now()) @map("created_time")
+  userName    String
+  userId      String
+  groupId     String
+  active      Int
+}
+
+model Active {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate DateTime @default(now()) @map("created_time")
+  userName    String
+  userId      String
+  groupId     String
+}
