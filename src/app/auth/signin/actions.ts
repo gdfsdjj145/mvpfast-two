@@ -1,7 +1,93 @@
 'use server';
 import prisma from '@/app/lib/prisma';
 import { getGeneratorName } from '@/app/lib/generatorName';
+import { sendEmail } from '@/lib/email';
 
+// 发送验证码
+export const sendCode = async (type: string, params: any) => {
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
+  if (type === 'email') {
+    const { identifier } = params;
+
+    const res = await prisma.verificationCode.findFirst({
+      where: {
+        identifier,
+        expiresAt: {
+          gt: new Date(), //验证是否有效
+        },
+      },
+    });
+
+    if (res) {
+      return {
+        code: 0,
+        data: {},
+        msg: '验证码已发送，验证码在有效期内',
+      };
+    }
+
+    const info = await sendEmail({
+      to: identifier,
+      subject: 'MvpFast登录验证码',
+      html: `
+        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; margin: 0 auto">
+          <h2 style="color: #4CAF50;">欢迎使用MvpFast服务!</h2>
+          <p>亲爱的用户,</p>
+          <p>感谢您的使用，以下是你本次的验证码，验证码在两分钟内有效:</p>
+            ${code}
+          <p>谢谢</p>
+        </div>
+      `,
+    });
+
+    if (info.messageId) {
+      // 保存验证码到数据库
+      await prisma.verificationCode.create({
+        data: {
+          identifier,
+          code,
+          expiresAt,
+        },
+      });
+    }
+
+    return {
+      code: 0,
+      data: {},
+      msg: '验证码发送成功',
+    };
+  }
+};
+
+// 验证码校验
+export const verifyCode = async (type: string, params: any) => {
+  if (type === 'email') {
+    const { identifier, code } = params;
+    const res = await prisma.verificationCode.findFirst({
+      where: {
+        identifier,
+        code,
+        expiresAt: {
+          gt: new Date(), //验证是否有效
+        },
+      },
+    });
+
+    if (res) {
+      // 验证成功
+      await prisma.verificationCode.delete({
+        where: { id: res.id },
+      });
+      return true;
+    } else {
+      // 验证失败
+      return false;
+    }
+  }
+};
+
+// 生成微信二维码
 export const createQrCode = async (ticket: string) => {
   await prisma.verificationWxQrCode.create({
     data: {

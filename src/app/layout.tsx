@@ -5,6 +5,7 @@ import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
+import { SessionProvider } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="cmyk">
       <body className={inter.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <SessionProvider>
+          <ReduxProvider>{children}</ReduxProvider>
+        </SessionProvider>
         <Toaster></Toaster>
         <Analytics></Analytics>
         <Script

@@ -12,6 +12,16 @@ model User {
   wechatOpenId String   @unique
   createdDate  DateTime @default(now()) @map("created_time")
   nickName     String
+  phone        String
+  email        String
+}
+
+model VerificationCode {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  expiresAt  DateTime @default(now()) @map("created_time")
+  createdAt  DateTime @default(now())
+  code       String
 }
 
 model VerificationWxQrCode {
@@ -20,29 +30,4 @@ model VerificationWxQrCode {
   isScan     Boolean
   expires    DateTime @default(now()) @map("created_time")
   openId     String?
-}
-
-model Group {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  createUserId String   @db.ObjectId
-  createdDate  DateTime @default(now()) @map("created_time")
-  name         String
-  describe     String
-}
-
-model GroupUser {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdDate DateTime @default(now()) @map("created_time")
-  userName    String
-  userId      String
-  groupId     String
-  active      Int
-}
-
-model Active {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdDate DateTime @default(now()) @map("created_time")
-  userName    String
-  userId      String
-  groupId     String
 }

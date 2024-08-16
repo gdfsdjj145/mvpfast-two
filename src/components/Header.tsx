@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
+import { useSession } from 'next-auth/react';
 import { renderText } from '@/app/lib/utils';
 import { getUser } from '@/app/dashboard/actions';
 import { selectInfo } from '@/store/user';
@@ -11,51 +12,76 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const info = useAppSelector(selectInfo);
 
-  const initUser = async () => {
-    let openId = '';
-    const userInfo = JSON.parse(localStorage.getItem('user') as string) || {};
-    if (userInfo && dayjs().unix() < userInfo.expires) {
-      openId = userInfo.id;
-    } else {
-      window.location.href = `/auth/signin?callbackUrl=${window.location.pathname}${window.location.search}`;
-    }
-    const user = await getUser(openId);
-    dispatch(
-      setInfo({
-        openId,
-        nickName: user?.nickName,
-        id: user.id,
-      })
-    );
-  };
+  const session = useSession();
 
-  useEffect(() => {
-    initUser();
-  }, []);
+  console.log(session);
+
+  const navigation = [
+    {
+      name: '首页',
+      href: '',
+    },
+    {
+      name: '功能',
+      href: '',
+    },
+    {
+      name: '优势',
+      href: '',
+    },
+    {
+      name: '价格',
+      href: '',
+    },
+    {
+      name: 'FAQ',
+      href: '',
+    },
+  ];
 
   return (
-    <header className="flex justify-center items-center w-full navbar rounded-box mx-auto max-w-xl mb-6">
-      <div className="navbar max-w-3xl shadow-xl rounded-box bg-[#ffffff]">
-        <div className="flex-1">
-          <a className="btn btn-ghost text-xl" href="/">
-            <img className="w-10 h-10" src="/logo.png" alt="" srcSet="" />
-            We Fight
+    <header>
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
+        <div className="flex lg:flex-1">
+          <a href="#" className="-m-1.5 p-1.5">
+            <span className="sr-only">Your Company</span>
+            <img
+              alt=""
+              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+              className="h-8 w-auto"
+            />
           </a>
         </div>
-        <div className="flex-none gap-2">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
+        {/* <div className="flex lg:hidden">
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(true)}
+          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400"
+        >
+          <span className="sr-only">Open main menu</span>
+          <Bars3Icon aria-hidden="true" className="h-6 w-6" />
+        </button>
+      </div> */}
+        <div className="hidden lg:flex lg:gap-x-12">
+          {navigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-sm font-semibold leading-6 "
             >
-              <div className="w-10 h-10 rounded-full !flex justify-center items-center bg-[#ca3d77]">
-                <span className="text-xl">{renderText(info.nickName)}</span>
-              </div>
-            </div>
-          </div>
+              {item.name}
+            </a>
+          ))}
         </div>
-      </div>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <a href="/auth/signin" className="text-sm font-semibold leading-6 ">
+            登录<span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </nav>
     </header>
   );
 }
