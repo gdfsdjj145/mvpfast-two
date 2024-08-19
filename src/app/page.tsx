@@ -9,9 +9,9 @@ export default function Home() {
     <div>
       <main>
         <Header></Header>
-        {/* <HeroComponent></HeroComponent>
+        <HeroComponent></HeroComponent>
         <FeatureComponent></FeatureComponent>
-        <CtaComponent></CtaComponent>
+        {/* <CtaComponent></CtaComponent>
         <FooterComponent></FooterComponent> */}
       </main>
     </div>
