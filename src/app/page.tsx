@@ -1,7 +1,9 @@
 import Header from '@/components/Header';
 import HeroComponent from '@/components/landingpage/HeroComponent';
 import FeatureComponent from '@/components/landingpage/FeatureComponent';
-import CtaComponent from '@/components/landingpage/CtaComponent';
+import CaseComponent from '@/components/landingpage/CaseComponent';
+import PriceComponent from '@/components/landingpage/PriceComponent';
+import FaqComponents from '@/components/landingpage/FaqComponents';
 import FooterComponent from '@/components/landingpage/FooterComponent';
 
 export default function Home() {
@@ -11,8 +13,10 @@ export default function Home() {
         <Header></Header>
         <HeroComponent></HeroComponent>
         <FeatureComponent></FeatureComponent>
-        {/* <CtaComponent></CtaComponent>
-        <FooterComponent></FooterComponent> */}
+        <CaseComponent></CaseComponent>
+        <PriceComponent></PriceComponent>
+        <FaqComponents></FaqComponents>
+        <FooterComponent></FooterComponent>
       </main>
     </div>
   );

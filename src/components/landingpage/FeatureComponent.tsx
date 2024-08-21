@@ -4,24 +4,32 @@ export default function FeatureComponent() {
   const features = [
     {
       name: '登录',
-      icon: 'mongodb',
+      icon: 'user',
+      description:
+        '邮箱、手机号、微信公众号，三种登录方式可选，涵盖国内主流生态的登录方式，一键配置',
     },
     {
       name: '鉴权',
-      icon: 'mongodb',
+      icon: 'lock',
+      description:
+        '利用NextAuth的jwt登录鉴权，可以提高网站的安全性，只需配置登录密钥即可',
     },
     {
       name: '数据库',
       icon: 'mongodb',
+      description:
+        '利用mongodb提供的云数据库能力，无需费用，轻松配置后即可使用',
     },
     {
       name: '微信',
-      icon: 'mongodb',
+      icon: 'wx',
+      description:
+        '使用微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯',
     },
   ];
 
   return (
-    <section className="bg-white py-24 sm:py-32">
+    <section id="feat" className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">

@@ -19,23 +19,25 @@ export default function Header() {
   const navigation = [
     {
       name: '首页',
-      href: '',
+      href: '/',
     },
     {
       name: '功能',
-      href: '',
-    },
-    {
-      name: '优势',
-      href: '',
+      href: '#feat',
     },
     {
       name: '价格',
-      href: '',
+      href: '#price',
     },
     {
       name: 'FAQ',
-      href: '',
+      href: '#faq',
+    },
+    {
+      name: '关于我们',
+      href: 'https://www.islandspage.com/EM-T',
+      target: '_blank',
+      rel: 'external',
     },
   ];
 
