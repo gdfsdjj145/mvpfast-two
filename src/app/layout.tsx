@@ -10,11 +10,11 @@ import { SessionProvider } from 'next-auth/react';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'WeFight-一起奋斗吧！',
+  title: 'MvpFast-快速构建网站应用',
   description:
-    'WeFight是一个通过互相打卡竞技排名的方式来完成目标的网站,通过创建目标任务群组,邀请好友进入群组,完成每天打卡任务,通过每天打卡的方式来培养好习惯和完成目标,适合健身、学习、读书、工作各种社交场景',
+    '这是一款能帮助你快速构建个人网站的应用，使用最新的前端技术栈，集成登录、鉴权、手机、邮箱、数据库、博客、文章、支付等等网站所需要的功能，你只需要花几个小时开发你的核心功能就可以上线，一次购买，永久拥有',
   keywords:
-    '群组社交,打卡任务,健身群,活动群,读书群,学习群,比赛排行,一起完成任务,多人排名,培养习惯,21天养成好习惯',
+    '开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板',
 };
 
 export default function RootLayout({
@@ -32,14 +32,14 @@ export default function RootLayout({
         <Analytics></Analytics>
         <Script
           strategy="lazyOnload"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-R392ZK8B1J`}
+          src={`https://www.googletagmanager.com/gtag/js?id=G-Q1PC08733G`}
         />
         <Script id="ga-script" strategy="lazyOnload">
           {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){window.dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-R392ZK8B1J');
+        gtag('config', 'G-Q1PC08733G');
       `}
         </Script>
       </body>
