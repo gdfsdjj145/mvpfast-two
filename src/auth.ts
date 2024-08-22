@@ -17,29 +17,32 @@ declare module 'next-auth' {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
-      async authorize(credentials: any) {
+      async authorize(credentials) {
         const { identifier, code, type } = credentials;
 
-        const verifyState = await verifyCode(type, { identifier, code });
+        const verifyState = await verifyCode(type as string, {
+          identifier,
+          code,
+        });
 
         if (verifyState) {
           if (type === 'email') {
             const res = await prisma.user.findFirst({
               where: {
-                email: identifier,
+                email: identifier as string,
               },
             });
             if (res) {
               return res;
             } else {
-              const payload = {
-                email: identifier,
-                wechatOpenId: '',
-                phone: '',
-                nickName: '',
-              };
               const user = await prisma.user.create({
-                data: payload,
+                data: {
+                  email: identifier as string,
+                  wechatOpenId: '',
+                  phone: '',
+                  nickName: '',
+                  createdDate: new Date(),
+                },
               });
               return user;
             }
