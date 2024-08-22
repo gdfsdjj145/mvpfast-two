@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useSession } from 'next-auth/react';
 import { renderText } from '@/app/lib/utils';
-import { getUser } from '@/app/dashboard/actions';
 import { selectInfo } from '@/store/user';
 import { useAppSelector, useAppDispatch } from '@/store/hook';
 import { setInfo } from '@/store/user';
