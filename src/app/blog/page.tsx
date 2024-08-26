@@ -1,7 +1,8 @@
 // app/page.tsx
 import Link from 'next/link';
 import { compareDesc, format, parseISO } from 'date-fns';
-import { allBlogPosts, Post } from 'contentlayer/generated';
+import { allBlogPosts } from 'contentlayer/generated';
+import Header from '@/components/Header';
 
 function PostCard(post: Post) {
   return (

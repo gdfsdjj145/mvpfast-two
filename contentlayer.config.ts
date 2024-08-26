@@ -21,6 +21,7 @@ export const DocPage = defineDocumentType(() => ({
   name: 'DocPage',
   filePathPattern: `docs/**/*.md`,
   fields: {
+    key: { type: 'string', required: true },
     title: { type: 'string', required: true },
     description: { type: 'string', required: true },
   },

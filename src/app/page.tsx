@@ -9,8 +9,8 @@ import FooterComponent from '@/components/landingpage/FooterComponent';
 export default function Home() {
   return (
     <div>
+      <Header></Header>
       <main>
-        <Header></Header>
         <HeroComponent></HeroComponent>
         <FeatureComponent></FeatureComponent>
         <CaseComponent></CaseComponent>

@@ -21,16 +21,16 @@ export default function Header() {
       href: '/',
     },
     {
-      name: '功能',
-      href: '#feat',
+      name: '文档',
+      href: '/docs',
+    },
+    {
+      name: '博客',
+      href: '/blog',
     },
     {
       name: '价格',
       href: '#price',
-    },
-    {
-      name: 'FAQ',
-      href: '#faq',
     },
     {
       name: '关于我们',
