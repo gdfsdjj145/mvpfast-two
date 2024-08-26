@@ -11,9 +11,9 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const info = useAppSelector(selectInfo);
 
-  const session = useSession();
+  // const session = useSession();
 
-  console.log(session);
+  // console.log(session);
 
   const navigation = [
     {
