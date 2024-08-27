@@ -1,32 +1,30 @@
 'use server';
 import prisma from '@/app/lib/prisma';
 import { getGeneratorName } from '@/app/lib/generatorName';
-import { sendEmail } from '@/lib/email';
+import sendEmail from '@/lib/email';
+import sendPhone from '@/lib/phone';
 
-// 发送验证码
-export const sendCode = async (type: string, params: any) => {
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
-  if (type === 'email') {
-    const { identifier } = params;
+const handlerSendCode = async (type: string, params: any, code: string) => {
+  const { identifier } = params;
 
-    const res = await prisma.verificationCode.findFirst({
-      where: {
-        identifier,
-        expiresAt: {
-          gt: new Date(), //验证是否有效
-        },
+  const res = await prisma.verificationCode.findFirst({
+    where: {
+      identifier,
+      expiresAt: {
+        gt: new Date(), //验证是否有效
       },
-    });
+    },
+  });
 
-    if (res) {
-      return {
-        code: 0,
-        data: {},
-        msg: '验证码已发送，验证码在有效期内',
-      };
-    }
+  if (res) {
+    return {
+      code: 0,
+      data: {},
+      msg: '验证码已发送，验证码在有效期内',
+    };
+  }
 
+  if (type === 'email') {
     const info = await sendEmail({
       to: identifier,
       subject: 'MvpFast登录验证码',
@@ -41,23 +39,41 @@ export const sendCode = async (type: string, params: any) => {
       `,
     });
 
-    if (info.messageId) {
-      // 保存验证码到数据库
-      await prisma.verificationCode.create({
-        data: {
-          identifier,
-          code,
-          expiresAt,
-        },
-      });
-    }
-
-    return {
-      code: 0,
-      data: {},
-      msg: '验证码发送成功',
-    };
+    return info;
   }
+
+  if (type === 'phone') {
+    const info = await sendPhone(identifier, code);
+    return info;
+  }
+};
+
+// 发送验证码
+export const sendCode = async (type: string, params: any) => {
+  const { identifier } = params;
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
+
+  const info = await handlerSendCode(type, params, code);
+
+  console.log(info);
+
+  if (info.messageId) {
+    // 保存验证码到数据库
+    await prisma.verificationCode.create({
+      data: {
+        identifier,
+        code,
+        expiresAt,
+      },
+    });
+  }
+
+  return {
+    code: 0,
+    data: {},
+    msg: '验证码发送成功',
+  };
 };
 
 // 验证码校验

@@ -7,13 +7,37 @@ import { selectInfo } from '@/store/user';
 import { useAppSelector, useAppDispatch } from '@/store/hook';
 import { setInfo } from '@/store/user';
 
+const LoginButtton = () => {
+  const { data: session, status } = useSession();
+
+  console.log(session);
+
+  if (status === 'unauthenticated') {
+    return (
+      <a href="/auth/signin" className="text-sm font-semibold leading-6 ">
+        登录<span aria-hidden="true">&rarr;</span>
+      </a>
+    );
+  }
+
+  return (
+    <div className="flex justify-center items-center gap-4">
+      <div className="avatar placeholder">
+        <div className="bg-neutral text-neutral-content w-12 rounded-full">
+          <span>{session?.user?.email.slice(0, 1)}</span>
+        </div>
+      </div>
+      <div>{session?.user?.email}</div>
+      <button className="btn">退出</button>
+    </div>
+  );
+};
+
 export default function Header() {
   const dispatch = useAppDispatch();
   const info = useAppSelector(selectInfo);
 
-  // const session = useSession();
-
-  // console.log(session);
+  const session = useSession();
 
   const navigation = [
     {
@@ -78,9 +102,7 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="/auth/signin" className="text-sm font-semibold leading-6 ">
-            登录<span aria-hidden="true">&rarr;</span>
-          </a>
+          <LoginButtton />
         </div>
       </nav>
     </header>

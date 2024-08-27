@@ -11,7 +11,7 @@ export interface MailInfo {
   html?: string;
 }
 
-export const sendEmail = async (mailInfo: MailInfo) => {
+const sendEmail = async (mailInfo: MailInfo) => {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: +(process.env.MAIL_PORT || 465),
@@ -30,3 +30,5 @@ export const sendEmail = async (mailInfo: MailInfo) => {
 
   return info;
 };
+
+export default sendEmail;

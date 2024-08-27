@@ -1,44 +1,51 @@
-// app/page.tsx
 import Link from 'next/link';
 import { compareDesc, format, parseISO } from 'date-fns';
 import { allBlogPosts } from 'contentlayer/generated';
-import Header from '@/components/Header';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 function PostCard(post: Post) {
   return (
-    <div className="mb-8">
-      <h2 className="mb-1 text-xl">
-        <Link
-          href={post.url}
-          className="text-blue-700 hover:text-blue-900 dark:text-blue-400"
-        >
-          {post.title}
-        </Link>
-      </h2>
-      <time dateTime={post.date} className="mb-2 block text-xs text-gray-600">
-        {format(parseISO(post.date), 'LLLL d, yyyy')}
-      </time>
-      <div
-        className="text-sm [&>*]:mb-3 [&>*:last-child]:mb-0"
-        dangerouslySetInnerHTML={{ __html: post.body.html }}
-      />
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+      {post.coverImage && (
+        <Image
+          src={post.coverImage}
+          alt={post.title}
+          width={400}
+          height={200}
+          className="w-full h-48 object-cover"
+        />
+      )}
+      <div className="p-4">
+        <h2 className="text-xl font-semibold mb-2">
+          <Link href={post.url} className="text-blue-600 hover:text-blue-800">
+            {post.title}
+          </Link>
+        </h2>
+        <time dateTime={post.date} className="text-sm text-gray-500 mb-2 block">
+          {format(parseISO(post.date), 'LLLL d, yyyy')}
+        </time>
+        {post.description && (
+          <p className="text-gray-600 mb-4 line-clamp-3">{post.description}</p>
+        )}
+      </div>
     </div>
   );
 }
 
-export default function Home() {
+export default function BlogPage() {
   const posts = allBlogPosts.sort((a, b) =>
     compareDesc(new Date(a.date), new Date(b.date))
   );
 
   return (
-    <div className="mx-auto max-w-xl py-8">
-      <h1 className="mb-8 text-center text-2xl font-black">
-        Next.js + Contentlayer Example
-      </h1>
-      {posts.map((post, idx) => (
-        <PostCard key={idx} {...post} />
-      ))}
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold text-center mb-8">博客文章</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+        {posts.map((post, idx) => (
+          <PostCard key={idx} {...post} />
+        ))}
+      </div>
     </div>
   );
 }

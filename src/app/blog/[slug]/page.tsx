@@ -1,37 +1,68 @@
 import { format, parseISO } from 'date-fns';
 import { allBlogPosts } from 'contentlayer/generated';
+import { getMDXComponent } from 'next-mdx-remote/rsc';
+import { notFound } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export const generateStaticParams = async () =>
   allBlogPosts.map((post) => ({ slug: post._raw.flattenedPath }));
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   const post = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === `blog/${params.slug}`
+    (post) => post._raw.flattenedPath === params.slug
   );
-  if (!post) throw new Error(`Post not found for slug: ${params.slug}`);
+  if (!post) notFound();
   return { title: post.title };
 };
 
-const PostLayout = ({ params }: { params: { slug: string } }) => {
-  const post = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === `blog/${params.slug}`
-  );
-  if (!post) throw new Error(`Post not found for slug: ${params.slug}`);
-
-  return (
-    <article className="mx-auto max-w-xl py-8">
-      <div className="mb-8 text-center">
-        <time dateTime={post.date} className="mb-1 text-xs text-gray-600">
-          {format(parseISO(post.date), 'LLLL d, yyyy')}
-        </time>
-        <h1 className="text-3xl font-bold">{post.title}</h1>
-      </div>
-      <div
-        className="[&>*]:mb-3 [&>*:last-child]:mb-0"
-        dangerouslySetInnerHTML={{ __html: post.body.html }}
-      />
-    </article>
-  );
+const getReadingTime = (content: string) => {
+  const wordsPerMinute = 200;
+  const wordCount = content.split(/\s+/g).length;
+  return Math.ceil(wordCount / wordsPerMinute);
 };
 
-export default PostLayout;
+export default function PostPage({ params }: { params: { slug: string } }) {
+  const post = allBlogPosts.find(
+    (post) => post._raw.flattenedPath === params.slug
+  );
+  if (!post) notFound();
+
+  const Content = getMDXComponent(post.body.code);
+  const { data: session } = useSession();
+
+  const readingTime = getReadingTime(post.body.raw);
+
+  return (
+    <article className="max-w-2xl mx-auto px-4 py-12">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+        <div className="text-gray-600 text-sm mb-4">
+          <time dateTime={post.date}>
+            {format(parseISO(post.date), 'LLLL d, yyyy')}
+          </time>
+          <span className="mx-2">·</span>
+          <span>{readingTime} min read</span>
+        </div>
+        {session && session.user && (
+          <div className="flex items-center mb-4">
+            <Image
+              src={session.user.image || '/default-avatar.png'}
+              alt={session.user.name || 'Author'}
+              width={40}
+              height={40}
+              className="rounded-full mr-2"
+            />
+            <span className="text-sm text-gray-700">{session.user.name}</span>
+          </div>
+        )}
+        {post.description && (
+          <p className="text-xl text-gray-600 mb-8">{post.description}</p>
+        )}
+      </div>
+      <div className="prose prose-lg max-w-none">
+        <Content />
+      </div>
+    </article>
+  );
+}

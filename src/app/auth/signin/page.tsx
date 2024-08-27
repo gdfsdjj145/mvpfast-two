@@ -19,7 +19,7 @@ const WxCode = () => {
 
   const getWxQrCode = async () => {
     const data = await get(
-      'https://express-sjle-115303-5-1328029634.sh.run.tcloudbase.com/api/getWxQrCode'
+      `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode`
     );
     createQrCode(data.ticket);
     pollQrCode(data.ticket);
@@ -102,7 +102,7 @@ export default function SignInPage() {
   const router = useRouter();
   const [type, setType] = useState('email');
   const [form, setForm] = useState({
-    identifier: '929932952@qq.com',
+    identifier: '',
     code: '',
   });
 
@@ -164,7 +164,9 @@ export default function SignInPage() {
                   <input
                     value={form.identifier}
                     type="text"
-                    placeholder="请填写邮箱"
+                    placeholder={
+                      type === 'email' ? '请输入邮箱' : '请输入手机号'
+                    }
                     className="input input-bordered w-full"
                     onChange={(e) =>
                       handleFormChnage('identifier', e.target.value)
