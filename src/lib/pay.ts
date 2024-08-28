@@ -27,10 +27,12 @@ function generateSignature(
 ) {
   const message = `${method}\n${url}\n${timestamp}\n${nonce}\n${body}\n`;
 
+  const privateKey = process.env.WECHAT_PRIVATE_KEY;
+
   const signature = crypto
     .createSign('RSA-SHA256')
     .update(message)
-    .sign(process.env.WECHAT_API_V3_KEY as string, 'base64');
+    .sign(privateKey, 'base64');
   return signature;
 }
 
@@ -52,8 +54,6 @@ export async function createNativeOrder(orderInfo: OrderInfo) {
     },
   });
 
-  console.log('body', body);
-
   const signature = generateSignature(
     method,
     url.pathname,
@@ -62,11 +62,7 @@ export async function createNativeOrder(orderInfo: OrderInfo) {
     body
   );
 
-  console.log('signature', signature);
-
   const authorizationString = `WECHATPAY2-SHA256-RSA2048 mchid="${process.env.WECHAT_MCHID}",nonce_str="${nonce}",signature="${signature}",timestamp="${timestamp}",serial_no="${process.env.WECHAT_SERIAL_NO}"`;
-
-  // console.log('authorizationString', authorizationString);
 
   try {
     const response = await axios.post(WECHAT_PAY_URL, body, {

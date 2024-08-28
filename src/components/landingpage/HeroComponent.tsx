@@ -16,7 +16,9 @@ export default function HeroComponent() {
           Atlas、微信体系来构建的网站应用
         </p>
         <div className="space-y-4">
-          <button className="btn btn-primary group btn-wide">获取模板</button>
+          <a href="/pay" className="btn btn-primary group btn-wide">
+            获取模板
+          </a>
           <p className="text-sm  flex justify-center items-center gap-2 md:text-sm">
             前100名购买用户，可享作者全程上线服务🚀
           </p>

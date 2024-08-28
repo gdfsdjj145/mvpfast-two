@@ -27,10 +27,12 @@ export async function POST(request: NextRequest) {
       data: {
         qrCodeUrl: result.code_url,
         outTradeNo,
+        createdAt: new Date().toLocaleString(),
       },
       msg: '创建微信支付订单成功',
     });
   } catch (error) {
+    console.error('创建微信支付订单失败:', error);
     return NextResponse.json(
       {
         data: {},

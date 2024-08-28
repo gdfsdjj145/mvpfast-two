@@ -3,7 +3,10 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 // 不需要验证的路由列表
-const publicRoutes = ['/docs', '/blog', '/api/auth', '/pay'];
+const publicRoutes = ['/docs', '/blog', '/api/auth'];
+
+// 需要验证的路由列表
+const protectedRoutes = ['/pay'];
 
 export async function middleware(request: NextRequest) {
   const secret = process.env.NEXTAUTH_SECRET;
@@ -14,13 +17,23 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-    salt: process.env.NEXTAUTH_SALT, // 添加这一行
+    salt: process.env.NEXTAUTH_SALT, // 如果您使用了 salt
   });
   const { pathname } = request.nextUrl;
 
   // 检查当前路径是否在公开路由列表中
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next();
+  }
+
+  // 检查当前路径是否在需要保护的路由列表中
+  if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+    if (!token) {
+      // 用户未登录，重定向到登录页面
+      const loginUrl = new URL('/auth/signin', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
