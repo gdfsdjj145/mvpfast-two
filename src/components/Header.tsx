@@ -1,16 +1,22 @@
 'use client';
 import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { renderText } from '@/app/lib/utils';
 import { selectInfo } from '@/store/user';
 import { useAppSelector, useAppDispatch } from '@/store/hook';
 import { setInfo } from '@/store/user';
+import { useRouter } from 'next/navigation';
 
 const LoginButtton = () => {
   const { data: session, status } = useSession();
-
+  const router = useRouter();
   console.log(session);
+
+  const handleLogout = async () => {
+    const result = await signOut({ redirect: false, callbackUrl: '/' });
+    router.push(result.url);
+  };
 
   if (status === 'unauthenticated') {
     return (
@@ -28,7 +34,9 @@ const LoginButtton = () => {
         </div>
       </div>
       <div>{session?.user?.email}</div>
-      <button className="btn">退出</button>
+      <button className="btn" onClick={handleLogout}>
+        退出
+      </button>
     </div>
   );
 };

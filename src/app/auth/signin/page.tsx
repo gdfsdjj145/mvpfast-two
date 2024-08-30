@@ -100,7 +100,7 @@ const VerificationButton = (props) => {
 
 export default function SignInPage() {
   const router = useRouter();
-  const [type, setType] = useState('email');
+  const [type, setType] = useState('phone');
   const [form, setForm] = useState({
     identifier: '',
     code: '',

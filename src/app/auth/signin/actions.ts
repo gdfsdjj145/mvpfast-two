@@ -54,11 +54,10 @@ export const sendCode = async (type: string, params: any) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
 
-  const info = await handlerSendCode(type, params, code);
+  const info: any = await handlerSendCode(type, params, code);
 
   console.log(info);
-
-  if (info.messageId) {
+  if (info.success) {
     // 保存验证码到数据库
     await prisma.verificationCode.create({
       data: {
@@ -78,28 +77,29 @@ export const sendCode = async (type: string, params: any) => {
 
 // 验证码校验
 export const verifyCode = async (type: string, params: any) => {
-  if (type === 'email') {
-    const { identifier, code } = params;
-    const res = await prisma.verificationCode.findFirst({
-      where: {
-        identifier,
-        code,
-        expiresAt: {
-          gt: new Date(), //验证是否有效
-        },
-      },
-    });
+  const { identifier, code } = params;
 
-    if (res) {
-      // 验证成功
-      await prisma.verificationCode.delete({
-        where: { id: res.id },
-      });
-      return true;
-    } else {
-      // 验证失败
-      return false;
-    }
+  const res = await prisma.verificationCode.findFirst({
+    where: {
+      identifier,
+      code,
+      expiresAt: {
+        gt: new Date(), //验证是否有效
+      },
+    },
+  });
+
+  console.log(res);
+
+  if (res) {
+    // 验证成功
+    await prisma.verificationCode.delete({
+      where: { id: res.id },
+    });
+    return true;
+  } else {
+    // 验证失败
+    return false;
   }
 };
 

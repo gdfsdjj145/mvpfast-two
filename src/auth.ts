@@ -20,35 +20,46 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const { identifier, code, type } = credentials;
 
+        console.log(credentials);
+
         const verifyState = await verifyCode(type as string, {
           identifier,
           code,
         });
 
         if (verifyState) {
+          let res = null;
+          const params = {
+            email: '',
+            wechatOpenId: '',
+            phone: '',
+            nickName: '',
+            createdDate: new Date(),
+          };
           if (type === 'email') {
-            const res = await prisma.user.findFirst({
+            res = await prisma.user.findFirst({
               where: {
                 email: identifier as string,
               },
             });
-            if (res) {
-              return res;
-            } else {
-              const user = await prisma.user.create({
-                data: {
-                  email: identifier as string,
-                  wechatOpenId: '',
-                  phone: '',
-                  nickName: '',
-                  createdDate: new Date(),
-                },
-              });
-              return user;
-            }
+            params.email = identifier as string;
           }
-        } else {
-          return null;
+          if (type === 'phone') {
+            res = await prisma.user.findFirst({
+              where: {
+                phone: identifier as string,
+              },
+            });
+            params.phone = identifier as string;
+          }
+          if (res) {
+            return res;
+          } else {
+            const user = await prisma.user.create({
+              data: params,
+            });
+            return user;
+          }
         }
       },
     }),

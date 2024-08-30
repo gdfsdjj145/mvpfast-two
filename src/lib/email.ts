@@ -22,13 +22,26 @@ const sendEmail = async (mailInfo: MailInfo) => {
     },
   });
 
-  // 定义transport对象并发送邮件
-  const info = await transporter.sendMail({
-    from: `MvpFast <${process.env.MAIL_USER}>`,
-    ...mailInfo,
-  });
+  try {
+    const result = await transporter.sendMail({
+      from: `MvpFast <${process.env.MAIL_USER}>`,
+      ...mailInfo,
+    });
 
-  return info;
+    if (result.messageId) {
+      // 在实际应用中，您应该将验证码保存到数据库或缓存中，而不是直接返回
+      return {
+        success: true,
+        message: '验证码发送成功',
+        messageId: result.messageId,
+      };
+    } else {
+      return { success: false, message: `发送失败: ${result.messageId}` };
+    }
+  } catch (error) {
+    console.error('发送验证码时出错:', error);
+    return { success: false, message: '发送验证码时发生错误' };
+  }
 };
 
 export default sendEmail;
