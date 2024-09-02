@@ -4,7 +4,7 @@ import { allBlogPosts } from 'contentlayer/generated';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
-function PostCard(post: Post) {
+function PostCard(post: any) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
       {post.coverImage && (
