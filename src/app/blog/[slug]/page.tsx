@@ -28,7 +28,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
   );
   if (!post) notFound();
 
-  const Content = MDXRemote(post.body.code);
+  // const Content = <MDXRemote {...post.body.code} />;
   const { data: session } = useSession();
 
   const readingTime = getReadingTime(post.body.raw);
@@ -60,9 +60,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
           <p className="text-xl text-gray-600 mb-8">{post.description}</p>
         )}
       </div>
-      <div className="prose prose-lg max-w-none">
-        <Content />
-      </div>
+      <div className="prose prose-lg max-w-none">{/* <Content /> */}</div>
     </article>
   );
 }
