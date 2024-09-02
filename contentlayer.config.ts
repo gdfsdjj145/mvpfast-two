@@ -5,6 +5,7 @@ export const BlogPost = defineDocumentType(() => ({
   name: 'BlogPost',
   filePathPattern: `blog/**/*.md`,
   fields: {
+    key: { type: 'string', required: true },
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
     description: { type: 'string', required: true },

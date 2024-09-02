@@ -1,16 +1,15 @@
 import { format, parseISO } from 'date-fns';
 import { allBlogPosts } from 'contentlayer/generated';
-import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
 
-export const generateStaticParams = async () =>
-  allBlogPosts.map((post) => ({ slug: post._raw.flattenedPath }));
+export const generateStaticParams = async () => {
+  return allBlogPosts.map((post) => ({ slug: post._raw.flattenedPath }));
+};
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   const post = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === params.slug
+    (post) => post._raw.flattenedPath === `blog/${params.slug}`
   );
   if (!post) notFound();
   return { title: post.title };
@@ -24,12 +23,9 @@ const getReadingTime = (content: string) => {
 
 export default function PostPage({ params }: { params: { slug: string } }) {
   const post: any = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === params.slug
+    (post) => post._raw.flattenedPath === `blog/${params.slug}`
   );
   if (!post) notFound();
-
-  // const Content = <MDXRemote {...post.body.code} />;
-  const { data: session } = useSession();
 
   const readingTime = getReadingTime(post.body.raw);
 
@@ -44,23 +40,13 @@ export default function PostPage({ params }: { params: { slug: string } }) {
           <span className="mx-2">·</span>
           <span>{readingTime} min read</span>
         </div>
-        {session && session.user && (
-          <div className="flex items-center mb-4">
-            {/* <Image
-              src={session.user.image || '/default-avatar.png'}
-              alt={session.user.name || 'Author'}
-              width={40}
-              height={40}
-              className="rounded-full mr-2"
-            /> */}
-            <span className="text-sm text-gray-700">{session.user.name}</span>
-          </div>
-        )}
         {post.description && (
           <p className="text-xl text-gray-600 mb-8">{post.description}</p>
         )}
       </div>
-      <div className="prose prose-lg max-w-none">{/* <Content /> */}</div>
+      <div className="prose prose-lg max-w-none">
+        <ReactMarkdown>{post.body.raw}</ReactMarkdown>
+      </div>
     </article>
   );
 }
