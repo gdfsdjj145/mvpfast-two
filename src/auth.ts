@@ -13,6 +13,7 @@ declare module 'next-auth' {
       phone?: string | null;
       role?: string;
       wechatOpenId?: string | null;
+      name?: string | null;
       // 其他需要的属性
     };
   }
@@ -21,6 +22,7 @@ declare module 'next-auth' {
     phone?: string;
     wechatOpenId?: string;
     role?: string;
+    name?: string;
     // 其他需要的属性
   }
 }

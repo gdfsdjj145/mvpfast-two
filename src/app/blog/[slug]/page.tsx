@@ -23,7 +23,7 @@ const getReadingTime = (content: string) => {
 };
 
 export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = allBlogPosts.find(
+  const post: any = allBlogPosts.find(
     (post) => post._raw.flattenedPath === params.slug
   );
   if (!post) notFound();
@@ -46,13 +46,13 @@ export default function PostPage({ params }: { params: { slug: string } }) {
         </div>
         {session && session.user && (
           <div className="flex items-center mb-4">
-            <Image
+            {/* <Image
               src={session.user.image || '/default-avatar.png'}
               alt={session.user.name || 'Author'}
               width={40}
               height={40}
               className="rounded-full mr-2"
-            />
+            /> */}
             <span className="text-sm text-gray-700">{session.user.name}</span>
           </div>
         )}
