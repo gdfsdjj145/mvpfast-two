@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         data: {},
-        msg: '缺少必要参数',
+        message: '缺少必要参数',
       },
       { status: 400 }
     );
@@ -29,14 +29,14 @@ export async function POST(request: NextRequest) {
         outTradeNo,
         createdAt: new Date().toLocaleString(),
       },
-      msg: '创建微信支付订单成功',
+      message: '创建微信支付订单成功',
     });
   } catch (error) {
     console.error('创建微信支付订单失败:', error);
     return NextResponse.json(
       {
         data: {},
-        msg: '创建微信支付订单失败',
+        message: '创建微信支付订单失败',
       },
       { status: 500 }
     );

@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         data: {},
-        msg: '二维码不存在',
+        message: '二维码不存在',
       },
       {
         status: 500,
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(
     {
       data: {},
-      msg: '已修改二维码状态',
+      message: '已修改二维码状态',
     },
     {
       status: 200,

@@ -4,7 +4,7 @@ export default function FaqComponents() {
   const faqs = [
     {
       question: 'MvpFast的支付问题',
-      answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，购买者需要开通微信商家验证，绑定支付密钥既可以使用支付功能`,
+      answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能`,
     },
     {
       question: '购买后得到什么',
@@ -31,17 +31,11 @@ export default function FaqComponents() {
             </h2>
             <p className="mt-4 text-base leading-7 text-gray-600">
               如果你的问题这里答案，可以用一下方式联系我们
-              <a
-                href="#faq"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
+              <a href="#faq" className="font-semibold text-secondary ">
                 邮箱：freecloud@emong.com.cn
               </a>{' '}
               ，
-              <a
-                href="#faq"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
+              <a href="#faq" className="font-semibold text-secondary">
                 微信：jiajiandu
               </a>{' '}
             </p>

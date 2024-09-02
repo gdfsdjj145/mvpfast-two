@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useSession, signOut } from 'next-auth/react';
-import { renderText } from '@/app/lib/utils';
 import { selectInfo } from '@/store/user';
 import { useAppSelector, useAppDispatch } from '@/store/hook';
 import { setInfo } from '@/store/user';
@@ -11,7 +10,6 @@ import { useRouter } from 'next/navigation';
 const LoginButtton = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  console.log(session);
 
   const handleLogout = async () => {
     const result = await signOut({ redirect: false, callbackUrl: '/' });
@@ -26,14 +24,32 @@ const LoginButtton = () => {
     );
   }
 
+  const renderName = () => {
+    if (session?.user?.email) {
+      return session?.user?.email.slice(0, 1);
+    }
+    if (session?.user?.phone) {
+      return session?.user?.phone.slice(0, 1);
+    }
+  };
+
+  const renderAllName = () => {
+    if (session?.user?.email) {
+      return session?.user?.email;
+    }
+    if (session?.user?.phone) {
+      return session?.user?.phone;
+    }
+  };
+
   return (
     <div className="flex justify-center items-center gap-4">
       <div className="avatar placeholder">
         <div className="bg-neutral text-neutral-content w-12 rounded-full">
-          <span>{session?.user?.email.slice(0, 1)}</span>
+          <span>{renderName()}</span>
         </div>
       </div>
-      <div>{session?.user?.email}</div>
+      <div>{renderAllName()}</div>
       <button className="btn" onClick={handleLogout}>
         退出
       </button>
@@ -80,24 +96,10 @@ export default function Header() {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              className="h-8 w-auto"
-            />
+            <span className="sr-only">MvpFast</span>
+            <img alt="" src="/title-logo.png" className="h-12 w-auto" />
           </a>
         </div>
-        {/* <div className="flex lg:hidden">
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(true)}
-          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400"
-        >
-          <span className="sr-only">Open main menu</span>
-          <Bars3Icon aria-hidden="true" className="h-6 w-6" />
-        </button>
-      </div> */}
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
             <a

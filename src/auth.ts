@@ -8,9 +8,20 @@ import prisma from './app/lib/prisma';
 declare module 'next-auth' {
   interface Session {
     user: {
-      id: any;
-      role: any;
-    } & DefaultSession['user'];
+      id: string;
+      email?: string | null;
+      phone?: string | null;
+      role?: string;
+      wechatOpenId?: string | null;
+      // 其他需要的属性
+    };
+  }
+
+  interface User {
+    phone?: string;
+    wechatOpenId?: string;
+    role?: string;
+    // 其他需要的属性
   }
 }
 
@@ -20,14 +31,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const { identifier, code, type } = credentials;
 
-        console.log(credentials);
-
         const verifyState = await verifyCode(type as string, {
           identifier,
           code,
         });
 
-        if (verifyState) {
+        if (verifyState || type === 'wx') {
           let res = null;
           const params = {
             email: '',
@@ -52,13 +61,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
             params.phone = identifier as string;
           }
+          if (type === 'wx') {
+            res = await prisma.user.findFirst({
+              where: {
+                wechatOpenId: identifier as string,
+              },
+            });
+            params.wechatOpenId = identifier as string;
+          }
           if (res) {
             return res;
           } else {
-            const user = await prisma.user.create({
+            await prisma.user.create({
               data: params,
             });
-            return user;
+            return params;
           }
         }
       },
@@ -81,13 +98,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         if (token.email) {
-          session.user.role = token.role;
+          session.user.email = token.email;
+        }
+
+        if (token.phone) {
+          session.user.phone = token.phone as string;
         }
 
         session.user.name = token.name;
         session.user.image = token.picture;
       }
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.phone = user.phone;
+      }
+      return token;
     },
   },
 });

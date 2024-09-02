@@ -15,7 +15,7 @@ export default function CtaComponent() {
             购买MvpFast
           </h2>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            节省你的时间，让React开发者能快速的上线网站
+            节省你的时间，让开发者和初创企业能快速的上线网站
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none">
@@ -27,7 +27,7 @@ export default function CtaComponent() {
               包含了基础的网站开发功能，例如用户登录，数据库，博客，文章，支付等能力的集成方案。购买后，你可以永久的使用MvpFast的模板，并且享受该模板后续版本的更新功能，在网站上线过程中如遇到问题，可以享受作者的技术支持服务，帮你解决一切的技术问题。
             </p>
             <div className="mt-10 flex items-center gap-x-4">
-              <h4 className="flex-none text-sm font-semibold leading-6 text-indigo-600">
+              <h4 className="flex-none text-sm font-semibold leading-6 text-secondary">
                 你将获得
               </h4>
               <div className="h-px flex-auto bg-gray-100" />
@@ -60,7 +60,7 @@ export default function CtaComponent() {
                 </p>
                 <a
                   href="#"
-                  className="mt-10 block w-full rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="mt-10 btn btn-secondary group btn-wide text-white"
                 >
                   立即购买
                 </a>

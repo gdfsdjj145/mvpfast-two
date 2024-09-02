@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         data: {},
-        msg: '缺少必要参数',
+        message: '缺少必要参数',
       },
       { status: 400 }
     );
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const result = await queryOrder(outTradeNo);
     return NextResponse.json({
       data: result,
-      msg: '查询微信支付订单成功',
+      message: '查询微信支付订单成功',
     });
   } catch (error) {
     console.error('查询微信支付订单失败:', error);

@@ -25,7 +25,7 @@ async function sendPhone(
   };
 
   try {
-    const result = await client.request('SendSms', params, requestOption);
+    const result: any = await client.request('SendSms', params, requestOption);
 
     if (result.Code === 'OK') {
       // 在实际应用中，您应该将验证码保存到数据库或缓存中，而不是直接返回

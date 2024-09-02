@@ -20,7 +20,7 @@ const handlerSendCode = async (type: string, params: any, code: string) => {
     return {
       code: 0,
       data: {},
-      msg: '验证码已发送，验证码在有效期内',
+      message: '验证码已发送，验证码在有效期内',
     };
   }
 
@@ -71,7 +71,7 @@ export const sendCode = async (type: string, params: any) => {
   return {
     code: 0,
     data: {},
-    msg: '验证码发送成功',
+    message: '验证码发送成功',
   };
 };
 
@@ -116,7 +116,7 @@ export const createQrCode = async (ticket: string) => {
   return {
     code: 0,
     data: {},
-    msg: '',
+    message: '',
   };
 };
 
