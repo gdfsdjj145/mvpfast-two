@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import { allBlogPosts } from 'contentlayer/generated';
-import { getMDXComponent } from 'next-mdx-remote/rsc';
+import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -28,7 +28,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
   );
   if (!post) notFound();
 
-  const Content = getMDXComponent(post.body.code);
+  const Content = MDXRemote(post.body.code);
   const { data: session } = useSession();
 
   const readingTime = getReadingTime(post.body.raw);
