@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 
 const WxCode = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   let timer: any = null;
   const [codeState, setCodeState] = useState({
     ticket: '',
@@ -40,13 +41,14 @@ const WxCode = () => {
         timer = null;
         const res = await signIn('credentials', {
           type: 'wx',
-          identifier: data.openid,
+          identifier: data.openId,
           redirect: false,
         });
         if (res?.error) {
           toast.error(res?.error);
         } else {
-          router.push('/'); // 登录成功后跳转到 /
+          const callbackUrl = searchParams.get('callbackUrl') || '/';
+          router.push(callbackUrl);
         }
       }
     }, 2000);
@@ -147,7 +149,8 @@ export default function SignInPage() {
     if (res?.error) {
       toast.error(res?.error);
     } else {
-      router.push('/'); // 登录成功后跳转到 /
+      const callbackUrl = searchParams.get('callbackUrl') || '/';
+      router.push(callbackUrl);
     }
   };
 
@@ -264,7 +267,7 @@ export default function SignInPage() {
 
           <div className="mt-10 text-center flex gap-4 justify-center">
             <span className="text-sm text-primary">
-              第一次登录时会创建帐号💡
+              第一次登录时会创建帐号，并且会生成有趣的昵称💡
             </span>
           </div>
         </div>

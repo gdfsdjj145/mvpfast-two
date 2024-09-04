@@ -1,4 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import path from 'path';
 
 // 定义博客内容类型
 export const BlogPost = defineDocumentType(() => ({
@@ -36,6 +37,7 @@ export const DocPage = defineDocumentType(() => ({
 }));
 
 export default makeSource({
+  disableImportAliasWarning: true,
   contentDirPath: 'content',
   documentTypes: [BlogPost, DocPage],
 });

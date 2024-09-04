@@ -59,7 +59,7 @@ export default function CtaComponent() {
                   </span>
                 </p>
                 <a
-                  href="#"
+                  href="/pay"
                   className="mt-10 btn btn-secondary group btn-wide text-white"
                 >
                   立即购买

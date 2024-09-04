@@ -2,6 +2,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode } from './app/auth/signin/actions';
+import { getGeneratorName } from '@/app/lib/generatorName';
 
 import prisma from './app/lib/prisma';
 
@@ -13,7 +14,7 @@ declare module 'next-auth' {
       phone?: string | null;
       role?: string;
       wechatOpenId?: string | null;
-      name?: string | null;
+      nickName?: string | null;
       // 其他需要的属性
     };
   }
@@ -22,7 +23,7 @@ declare module 'next-auth' {
     phone?: string;
     wechatOpenId?: string;
     role?: string;
-    name?: string;
+    nickName?: string;
     // 其他需要的属性
   }
 }
@@ -33,6 +34,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const { identifier, code, type } = credentials;
 
+        console.log('credentials', credentials);
+
         const verifyState = await verifyCode(type as string, {
           identifier,
           code,
@@ -41,10 +44,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (verifyState || type === 'wx') {
           let res = null;
           const params = {
-            email: '',
-            wechatOpenId: '',
-            phone: '',
-            nickName: '',
+            email: null,
+            wechatOpenId: null,
+            phone: null,
+            nickName: getGeneratorName(),
             createdDate: new Date(),
           };
           if (type === 'email') {
@@ -107,8 +110,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           session.user.phone = token.phone as string;
         }
 
-        session.user.name = token.name;
-        session.user.image = token.picture;
+        if (token.wechatOpenId) {
+          session.user.wechatOpenId = token.wechatOpenId as string;
+          session.user.nickName = token.nickName as string;
+        }
       }
       return session;
     },
@@ -117,6 +122,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.email = user.email;
         token.phone = user.phone;
+        token.wechatOpenId = user.wechatOpenId;
+        token.nickName = user.nickName;
       }
       return token;
     },

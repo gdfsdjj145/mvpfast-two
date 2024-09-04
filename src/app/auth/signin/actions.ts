@@ -156,8 +156,8 @@ export const checkQrCode = async (
         wechatOpenId: qrcode.openId as string,
         createdDate: new Date(),
         nickName: getGeneratorName(),
-        phone: '',
-        email: '',
+        phone: null,
+        email: null,
       },
     });
 

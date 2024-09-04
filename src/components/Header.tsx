@@ -31,6 +31,9 @@ const LoginButtton = () => {
     if (session?.user?.phone) {
       return session?.user?.phone.slice(0, 1);
     }
+    if (session?.user?.wechatOpenId) {
+      return session?.user?.nickName.slice(0, 1);
+    }
   };
 
   const renderAllName = () => {
@@ -39,6 +42,9 @@ const LoginButtton = () => {
     }
     if (session?.user?.phone) {
       return session?.user?.phone;
+    }
+    if (session?.user?.wechatOpenId) {
+      return session?.user?.nickName;
     }
   };
 
@@ -58,11 +64,6 @@ const LoginButtton = () => {
 };
 
 export default function Header() {
-  const dispatch = useAppDispatch();
-  const info = useAppSelector(selectInfo);
-
-  const session = useSession();
-
   const navigation = [
     {
       name: '首页',
