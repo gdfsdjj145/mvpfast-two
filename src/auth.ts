@@ -2,9 +2,9 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode } from './app/auth/signin/actions';
-import { getGeneratorName } from '@/app/lib/generatorName';
+import { getGeneratorName } from '@/lib/generatorName';
 
-import prisma from './app/lib/prisma';
+import prisma from './lib/prisma';
 
 declare module 'next-auth' {
   interface Session {
@@ -86,6 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
@@ -94,6 +95,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: '/signin',
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   callbacks: {
     async session({ token, session }) {

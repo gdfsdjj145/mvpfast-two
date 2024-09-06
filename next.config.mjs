@@ -20,9 +20,10 @@ const nextConfig = {
   },
   // 如果您使用了 Contentlayer，可能需要以下配置
   webpack: (config) => {
-    config.infrastructureLogging = {
-      level: "error",
-    };
+    config.module.rules.push({
+      test: /\.md$/,
+      use: 'raw-loader',
+    });
     return config;
   },
 };

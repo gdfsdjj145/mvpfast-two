@@ -3,11 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import WeChatPayQRCode from '@/components/PayQrcode';
 
+const BASEINFO = {
+  amount: 29800,
+  description: 'MvpFast模板购买',
+};
+
 export default function PaymentPage() {
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
-    amount: 1,
-    description: 'MvpFast模板购买',
+    amount: BASEINFO.amount,
+    description: BASEINFO.description,
     createdAt: '',
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +37,6 @@ export default function PaymentPage() {
     transactionId: string;
     paidAt: string;
   }) => {
-    console.log('支付成功');
     setPaymentStatus('success');
     setPaymentResult(result);
   };
@@ -42,7 +46,6 @@ export default function PaymentPage() {
       ...prevState,
       ...order,
     }));
-    console.log('创建订单', order);
   };
 
   if (isLoading) {
@@ -91,6 +94,13 @@ export default function PaymentPage() {
               <span className="font-semibold text-green-700">支付时间：</span>
               <span className="text-green-600">{paymentResult.paidAt}</span>
             </div>
+            <div className="mb-2">
+              <span className="font-semibold text-green-700">客服微信：</span>
+              <span className="text-green-600">
+                <img className="w-36" src="/wechat.jpg" alt="" srcSet="" />
+              </span>
+            </div>
+            <div className="text-gray-500">添加客服微信获取模板</div>
           </div>
         )}
         <div className="mt-6 text-sm text-gray-500">

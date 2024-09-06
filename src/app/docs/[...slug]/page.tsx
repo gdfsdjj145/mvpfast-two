@@ -4,19 +4,28 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
-import 'highlight.js/styles/github-dark.css'; // 代码高亮主题
+import 'highlight.js/styles/github-dark.css';
 import 'github-markdown-css/github-markdown.css';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
+
+export const generateStaticParams = async () => {
+  return allDocPages.map((doc) => ({
+    slug: doc.url.replace('/docs/', '').split('/'),
+  }));
+};
 
 const DocPageComponent = ({ params }: { params: { slug: string } }) => {
-  const doc = allDocPages.find(
-    (doc) => doc._raw.flattenedPath === `docs/${params.slug}`
-  );
-  if (!doc) throw new Error(`文档未找到，slug: ${params.slug}`);
+  const slug = params.slug.join('/');
+  const doc = allDocPages.find((doc) => doc.url === `/docs/${slug}`);
+
+  if (!doc) {
+    notFound();
+  }
 
   const components = {
     img: ({ src, alt }: { src: string; alt?: string }) => (
-      <div className="flex justify-center my-4">
+      <span className="flex justify-center my-4">
         <Image
           src={src}
           alt={alt || ''}
@@ -24,8 +33,14 @@ const DocPageComponent = ({ params }: { params: { slug: string } }) => {
           height={500}
           style={{ maxWidth: '100%', height: 'auto' }}
         />
-      </div>
+      </span>
     ),
+    p: ({ children }: { children: React.ReactNode }) => {
+      if (typeof children === 'string' || typeof children === 'number') {
+        return <p>{children}</p>;
+      }
+      return <>{children}</>;
+    },
   };
 
   return (
@@ -49,9 +64,3 @@ const DocPageComponent = ({ params }: { params: { slug: string } }) => {
 };
 
 export default DocPageComponent;
-
-export async function generateStaticParams() {
-  return allDocPages.map((doc) => ({
-    slug: doc._raw.flattenedPath.replace('docs/', ''),
-  }));
-}

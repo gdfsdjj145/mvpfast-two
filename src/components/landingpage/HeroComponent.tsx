@@ -8,8 +8,12 @@ export default function HeroComponent() {
     >
       <div className="flex flex-col gap-10 lg:gap-14 items-center justify-center text-center lg:text-left lg:items-start">
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4 flex flex-col gap-3 items-center lg:items-start">
-          <span>快速构建Mvp</span>
-          <span>你的网站应用</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
+            使用最短的时间
+          </span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-600 animate-pulse">
+            上线网站应用
+          </span>
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">
           使用NextJS、NextAuth、TailWindCss、Mongdb
@@ -23,9 +27,12 @@ export default function HeroComponent() {
             获取模板
           </a>
           <p className="text-sm  flex justify-center items-center gap-2 md:text-sm">
-            前100名购买用户，可享作者全程上线服务🚀
+            🛒前100名购买用户，可享作者全程上线服务🚀
           </p>
         </div>
+        <p className="text-xl font-bold text-secondary animate-pulse">
+          立即购买，开启您的快速开发之旅！
+        </p>
       </div>
       <div className="relative max-md:-m-4 lg:w-full">
         <img src="/banner.png" alt="" className="w-full max-w-xl ml-auto" />

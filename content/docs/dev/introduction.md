@@ -1,8 +1,8 @@
 ---
+order: 1
 key: introduction
 title: MVPFast 简介
 description: 快速构建现代 Web 应用的全栈开发模板
-order: 1
 ---
 
 MVPFast 是一款专为快速开发和部署而设计的全栈 Web 应用模板。无论您是想迅速上线个人项目,还是搭建企业级应用,MVPFast 都能成为您的得力助手。

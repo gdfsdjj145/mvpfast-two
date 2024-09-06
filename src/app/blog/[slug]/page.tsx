@@ -1,52 +1,52 @@
-import { format, parseISO } from 'date-fns';
 import { allBlogPosts } from 'contentlayer/generated';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
+import { format, parseISO } from 'date-fns';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export const generateStaticParams = async () => {
-  return allBlogPosts.map((post) => ({ slug: post._raw.flattenedPath }));
+  return allBlogPosts.map((post) => ({
+    slug: post.url.replace('/blog/', ''),
+  }));
 };
 
-export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const post = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === `blog/${params.slug}`
-  );
-  if (!post) notFound();
-  return { title: post.title };
-};
+export default function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = allBlogPosts.find((post) => post.url === `/blog/${params.slug}`);
 
-const getReadingTime = (content: string) => {
-  const wordsPerMinute = 200;
-  const wordCount = content.split(/\s+/g).length;
-  return Math.ceil(wordCount / wordsPerMinute);
-};
-
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post: any = allBlogPosts.find(
-    (post) => post._raw.flattenedPath === `blog/${params.slug}`
-  );
-  if (!post) notFound();
-
-  const readingTime = getReadingTime(post.body.raw);
+  if (!post) {
+    notFound();
+  }
 
   return (
-    <article className="max-w-2xl mx-auto px-4 py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
-        <div className="text-gray-600 text-sm mb-4">
-          <time dateTime={post.date}>
-            {format(parseISO(post.date), 'LLLL d, yyyy')}
-          </time>
-          <span className="mx-2">·</span>
-          <span>{readingTime} min read</span>
-        </div>
-        {post.description && (
-          <p className="text-xl text-gray-600 mb-8">{post.description}</p>
-        )}
-      </div>
-      <div className="prose prose-lg max-w-none">
-        <ReactMarkdown>{post.body.raw}</ReactMarkdown>
-      </div>
-    </article>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Link
+        href="/blog"
+        className="inline-block mb-6 text-blue-600 hover:text-blue-800"
+      >
+        <span className="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+          返回博客列表
+        </span>
+      </Link>
+
+      <article className="prose lg:prose-xl">
+        <h1 className="mb-4">{post.title}</h1>
+        <time dateTime={post.date} className="text-sm text-gray-600 mb-4 block">
+          {format(parseISO(post.date), 'LLLL d, yyyy')}
+        </time>
+        <div dangerouslySetInnerHTML={{ __html: post.body.html }} />
+      </article>
+    </div>
   );
 }

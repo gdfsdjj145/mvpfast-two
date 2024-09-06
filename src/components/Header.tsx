@@ -1,11 +1,8 @@
 'use client';
-import React, { useEffect } from 'react';
-import dayjs from 'dayjs';
+import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { selectInfo } from '@/store/user';
-import { useAppSelector, useAppDispatch } from '@/store/hook';
-import { setInfo } from '@/store/user';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const LoginButtton = () => {
   const { data: session, status } = useSession();
@@ -16,11 +13,11 @@ const LoginButtton = () => {
     router.push(result.url);
   };
 
-  if (status === 'unauthenticated') {
+  if (status === 'unauthenticated' || status === 'loading') {
     return (
-      <a href="/auth/signin" className="text-sm font-semibold leading-6 ">
+      <Link href="/auth/signin" className="text-sm font-semibold leading-6">
         登录<span aria-hidden="true">&rarr;</span>
-      </a>
+      </Link>
     );
   }
 
@@ -80,6 +77,10 @@ export default function Header() {
     {
       name: '价格',
       href: '#price',
+    },
+    {
+      name: '购买须知',
+      href: '/blog/commercial',
     },
     {
       name: '关于我们',

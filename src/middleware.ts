@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-
+import { JWT } from 'next-auth/jwt';
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth'];
 
@@ -14,11 +14,22 @@ export async function middleware(request: NextRequest) {
     throw new Error('NEXTAUTH_SECRET is not set');
   }
 
-  const token = await getToken({
+  let token: JWT | string | null = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
     salt: process.env.NEXTAUTH_SALT, // 如果您使用了 salt
   });
+
+  // 如果是开发环境，我们可以从 cookie 中直接读取 session
+  if (process.env.NODE_ENV === 'development' && !token) {
+    const sessionToken = request.cookies.get('next-auth.session-token')?.value;
+    if (sessionToken) {
+      console.log('Development mode: Session token found in cookie');
+      // 这里你可以根据需要处理 sessionToken
+      token = sessionToken;
+    }
+  }
+
   const { pathname } = request.nextUrl;
 
   // 检查当前路径是否在公开路由列表中

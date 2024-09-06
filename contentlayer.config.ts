@@ -10,11 +10,21 @@ export const BlogPost = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
     description: { type: 'string', required: true },
+    coverImage: { type: 'string', required: false },
   },
   computedFields: {
     url: {
       type: 'string',
       resolve: (post) => `/${post._raw.flattenedPath}`,
+    },
+    coverImagePath: {
+      type: 'string',
+      resolve: (post) => {
+        if (post.coverImage) {
+          return path.join('content/blog/assets', post.coverImage);
+        }
+        return null;
+      },
     },
   },
 }));
@@ -27,11 +37,19 @@ export const DocPage = defineDocumentType(() => ({
     key: { type: 'string', required: true },
     title: { type: 'string', required: true },
     description: { type: 'string', required: true },
+    order: { type: 'number', required: true },
   },
   computedFields: {
     url: {
       type: 'string',
       resolve: (doc) => `/${doc._raw.flattenedPath}`,
+    },
+    folder: {
+      type: 'string',
+      resolve: (doc) => {
+        const parts = doc._raw.flattenedPath.split('/');
+        return parts.length > 2 ? parts[1] : 'root';
+      },
     },
   },
 }));

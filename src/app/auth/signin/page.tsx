@@ -47,7 +47,7 @@ const WxCode = () => {
         if (res?.error) {
           toast.error(res?.error);
         } else {
-          const callbackUrl = searchParams.get('callbackUrl') || '/';
+          const callbackUrl = searchParams.get('redirect') || '/';
           router.push(callbackUrl);
         }
       }
@@ -128,6 +128,7 @@ export default function SignInPage() {
     identifier: '',
     code: '',
   });
+  const searchParams = useSearchParams();
 
   const handleFormChnage = (key, value) => {
     setForm({
@@ -149,7 +150,7 @@ export default function SignInPage() {
     if (res?.error) {
       toast.error(res?.error);
     } else {
-      const callbackUrl = searchParams.get('callbackUrl') || '/';
+      const callbackUrl = searchParams.get('redirect') || '/';
       router.push(callbackUrl);
     }
   };

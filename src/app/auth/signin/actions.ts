@@ -1,6 +1,6 @@
 'use server';
-import prisma from '@/app/lib/prisma';
-import { getGeneratorName } from '@/app/lib/generatorName';
+import prisma from '@/lib/prisma';
+import { getGeneratorName } from '@/lib/generatorName';
 import sendEmail from '@/lib/email';
 import sendPhone from '@/lib/phone';
 

@@ -1,8 +1,8 @@
 ---
+order: 4
 key: vercel
 title: 部署到Vercel
 description: Vercel的介绍
-order: 5
 ---
 
 # Vercel（CI/CD）

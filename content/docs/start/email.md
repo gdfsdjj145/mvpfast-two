@@ -1,11 +1,9 @@
 ---
+order: 3
 key: email
 title: 邮箱登录功能
 description: 邮箱登录功能
-order: 7
 ---
-
-# SMTP 邮箱服务
 
 ### 使用 SMTP 的邮箱服务
 

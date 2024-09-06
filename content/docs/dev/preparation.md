@@ -1,8 +1,8 @@
 ---
+order: 2
 key: preparation
 title: 准备工作
 description: 开始开发前的准备工作
-order: 2
 ---
 
 ## 技术栈概览

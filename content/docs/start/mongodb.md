@@ -1,8 +1,8 @@
 ---
+order: 1
 key: mongodb
 title: 数据库Mongo
 description: 数据库
-order: 4
 ---
 
 ### Mongodb Altas
