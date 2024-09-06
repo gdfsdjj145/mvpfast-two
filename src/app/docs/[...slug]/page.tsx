@@ -15,7 +15,7 @@ export const generateStaticParams = async () => {
   }));
 };
 
-const DocPageComponent = ({ params }: { params: { slug: string } }) => {
+const DocPageComponent = ({ params }: { params: { slug: string[] } }) => {
   const slug = params.slug.join('/');
   const doc = allDocPages.find((doc) => doc.url === `/docs/${slug}`);
 
