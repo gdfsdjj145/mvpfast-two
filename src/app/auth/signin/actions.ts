@@ -27,16 +27,7 @@ const handlerSendCode = async (type: string, params: any, code: string) => {
   if (type === 'email') {
     const info = await sendEmail({
       to: identifier,
-      subject: 'MvpFast登录验证码',
-      html: `
-        <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; margin: 0 auto">
-          <h2 style="color: #4CAF50;">欢迎使用MvpFast服务!</h2>
-          <p>亲爱的用户,</p>
-          <p>感谢您的使用，以下是你本次的验证码，验证码在两分钟内有效:</p>
-            ${code}
-          <p>谢谢</p>
-        </div>
-      `,
+      code,
     });
 
     return info;

@@ -123,7 +123,7 @@ const VerificationButton = (props) => {
 
 export default function SignInPage() {
   const router = useRouter();
-  const [type, setType] = useState('wx');
+  const [type, setType] = useState('email');
   const [form, setForm] = useState({
     identifier: '',
     code: '',
@@ -244,21 +244,27 @@ export default function SignInPage() {
                 <div className="divider">或者</div>
               </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                {type !== 'phone' && (
-                  <button className="btn" onClick={() => setType('phone')}>
+              <div className="mt-6 flex justify-between gap-4">
+                {/* {type !== 'phone' && (
+                  <button
+                    className="btn flex-1"
+                    onClick={() => setType('phone')}
+                  >
                     📱 手机登录
                   </button>
-                )}
+                )} */}
 
                 {type !== 'email' && (
-                  <button className="btn" onClick={() => setType('email')}>
+                  <button
+                    className="btn flex-1"
+                    onClick={() => setType('email')}
+                  >
                     📫 邮箱
                   </button>
                 )}
 
                 {type !== 'wx' && (
-                  <button className="btn" onClick={() => setType('wx')}>
+                  <button className="btn flex-1" onClick={() => setType('wx')}>
                     💬 微信登录
                   </button>
                 )}
