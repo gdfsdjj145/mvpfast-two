@@ -68,7 +68,7 @@ export default function Header() {
     },
     {
       name: '文档',
-      href: '/docs',
+      href: '/docs/dev/introduction',
     },
     {
       name: '博客',

@@ -1,8 +1,8 @@
 ---
 order: 3
 key: start
-title: 快速开始
-description: MvpFast的介绍
+title: 开始开发
+description: 开始开发
 ---
 
 # 开发
@@ -104,7 +104,18 @@ WECHAT_PRIVATE_KEY = 交易私钥;
 pnpm install
 ```
 
-### 3.运行
+### 3.数据库 Prisma
+
+在运行项目之前，我们需要把本项目的数据库表推到云数据库，你每次修改了本地的数据表时，都需要运行以下命令
+
+```
+// 在项目根目录
+npx prisma db push // 推送数据表到云数据库
+......
+npx prisma generate // 本地生成表类型
+```
+
+### 4.运行
 
 ```
 pnpm run dev
@@ -126,7 +137,7 @@ privateKey: 交易私钥;
 
 ### 2.部署到微信云托管
 
-[微信云服务]: www.baidu.com
+[微信云服务]: https://cloud.weixin.qq.com/cloudrun/
 
 ## 运行成功
 
