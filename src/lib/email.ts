@@ -23,7 +23,7 @@ const sendEmail = async (mailInfo: MailInfo) => {
       .split('')
       .map(
         (char) =>
-          `<span style="font-size: 24px; color: #FF5733; padding: 10px; border: 2px solid #FF5733; border-radius: 5px; display: inline-block; margin: 0 2px;">${char}</span>`
+          `<span style="font-size: 32px; color: #FF5733; padding: 15px; border: 2px solid #FF5733; border-radius: 10px; display: inline-block; margin: 0 5px; background-color: #fff;">${char}</span>`
       )
       .join('');
     const result = await transporter.sendMail({
@@ -31,15 +31,14 @@ const sendEmail = async (mailInfo: MailInfo) => {
       from: `MvpFast <${process.env.MAIL_USER}>`,
       subject: 'MvpFast登录验证码',
       html: `
-       <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; max-width: 600px; text-align: center; background-color: #f9f9f9;">
-          <h2 style="color: #4CAF50;">欢迎使用MvpFast服务!</h2>
-          <p style="text-align: left;">亲爱的用户,</p>
-          <p style="text-align: left;">感谢您的使用，以下是你本次的验证码，验证码在两分钟内有效:</p>
-          <div style="display: flex; justify-content: center;">${styledCode}</div>
-          <p style="text-align: left;">谢谢</p>
-          <footer style="margin-top: 20px; font-size: 12px; color: #777;">
-            如果您没有请求此验证码，请忽略此邮件。
-          </footer>
+        <div style="font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 40px; border-radius: 10px; max-width: 600px; margin: auto;">
+          <h1 style="color: #333;">MvpFast</h1>
+          <h2 style="color: #333;">欢迎使用MvpFast服务🎉</h2>
+          <p style="font-size: 20px; color: #333;">你的验证码是:</p>
+          <div style="display: flex; justify-content: center; margin: 20px 0;">
+            ${styledCode}
+          </div>
+          <p style="color: #666;">验证码在2分钟内有效</p>
         </div>
       `,
     });
