@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import WeChatPayQRCode from '@/components/PayQrcode';
+import confetti from 'canvas-confetti';
 
 const BASEINFO = {
   amount: 29800,
@@ -39,6 +40,12 @@ export default function PaymentPage() {
   }) => {
     setPaymentStatus('success');
     setPaymentResult(result);
+    // 撒礼炮
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
   };
 
   const handleCreateOrder = (order: any) => {
