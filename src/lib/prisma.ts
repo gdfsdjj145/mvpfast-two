@@ -1,14 +1,11 @@
 import { PrismaClient } from '@prisma/client';
+import { config } from '../config'; //
 
-let prisma: PrismaClient;
+let prisma: PrismaClient | null = null;
 
-if (process.env.NODE_ENV === 'production') {
+if (config.db) {
+  // 根据 config.db 值决定是否初始化 Prisma
   prisma = new PrismaClient();
-} else {
-  if (!(global as any).prisma) {
-    (global as any).prisma = new PrismaClient();
-  }
-  prisma = (global as any).prisma;
 }
 
 export default prisma;

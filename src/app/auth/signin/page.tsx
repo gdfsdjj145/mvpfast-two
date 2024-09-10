@@ -1,12 +1,18 @@
 'use client';
 import React, { useEffect, useState, Suspense, useRef } from 'react';
 import { get } from '@/app/services/index';
-import dayjs from 'dayjs';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { sendCode, createQrCode, checkQrCode } from './actions';
+import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+
+const LOGIN_HASH = {
+  wx: '💬 微信登录',
+  phone: '📱 手机登录',
+  email: '📫 邮箱登录',
+};
 
 const WxCode = () => {
   const router = useRouter();
@@ -123,7 +129,7 @@ const VerificationButton = (props) => {
 
 export default function SignInPage() {
   const router = useRouter();
-  const [type, setType] = useState('wx');
+  const [type, setType] = useState(config.loginType);
   const [form, setForm] = useState({
     identifier: '',
     code: '',
@@ -158,7 +164,7 @@ export default function SignInPage() {
   return (
     <div className="relative h-svh w-full flex justify-center items-center bg-slate-100">
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <a href="/" className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             alt="Your Company"
             src="/logo.png"
@@ -167,7 +173,7 @@ export default function SignInPage() {
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Mvp Fast
           </h2>
-        </div>
+        </a>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
@@ -245,29 +251,18 @@ export default function SignInPage() {
               </div>
 
               <div className="mt-6 flex justify-between gap-4">
-                {/* {type !== 'phone' && (
-                  <button
-                    className="btn flex-1"
-                    onClick={() => setType('phone')}
-                  >
-                    📱 手机登录
-                  </button>
-                )} */}
-
-                {type !== 'email' && (
-                  <button
-                    className="btn flex-1"
-                    onClick={() => setType('email')}
-                  >
-                    📫 邮箱
-                  </button>
-                )}
-
-                {type !== 'wx' && (
-                  <button className="btn flex-1" onClick={() => setType('wx')}>
-                    💬 微信登录
-                  </button>
-                )}
+                {config.loginTypes.map((item) => (
+                  <>
+                    {type !== item && (
+                      <button
+                        className="btn flex-1"
+                        onClick={() => setType(item)}
+                      >
+                        {LOGIN_HASH[item]}
+                      </button>
+                    )}
+                  </>
+                ))}
               </div>
             </div>
           </div>

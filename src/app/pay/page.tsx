@@ -3,17 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import WeChatPayQRCode from '@/components/PayQrcode';
 import confetti from 'canvas-confetti';
-
-const BASEINFO = {
-  amount: 15900,
-  description: 'MvpFast模板购买',
-};
+import { config } from '@/config';
 
 export default function PaymentPage() {
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
-    amount: BASEINFO.amount,
-    description: BASEINFO.description,
+    amount: config.amount,
+    description: config.description,
     createdAt: '',
   });
   const [isLoading, setIsLoading] = useState(true);
