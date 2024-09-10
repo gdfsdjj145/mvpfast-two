@@ -123,7 +123,7 @@ const VerificationButton = (props) => {
 
 export default function SignInPage() {
   const router = useRouter();
-  const [type, setType] = useState('email');
+  const [type, setType] = useState('wx');
   const [form, setForm] = useState({
     identifier: '',
     code: '',

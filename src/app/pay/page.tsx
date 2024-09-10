@@ -5,7 +5,7 @@ import WeChatPayQRCode from '@/components/PayQrcode';
 import confetti from 'canvas-confetti';
 
 const BASEINFO = {
-  amount: 29800,
+  amount: 15900,
   description: 'MvpFast模板购买',
 };
 
