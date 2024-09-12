@@ -31,3 +31,11 @@ model VerificationWxQrCode {
   expires    DateTime @default(now()) @map("created_time")
   openId     String?
 }
+
+model Order {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier    String
+  createdAt     DateTime @default(now())
+  orderId       String   @unique
+  transactionId String   @unique
+}

@@ -4,7 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const LoginButtton = () => {
+const UserMenu = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -22,66 +22,79 @@ const LoginButtton = () => {
   }
 
   const renderName = () => {
-    if (session?.user?.email) {
-      return session?.user?.email.slice(0, 1);
-    }
-    if (session?.user?.phone) {
-      return session?.user?.phone.slice(0, 1);
-    }
-    if (session?.user?.wechatOpenId) {
-      return session?.user?.nickName.slice(0, 1);
-    }
+    if (session?.user?.email) return session.user.email[0];
+    if (session?.user?.phone) return session.user.phone[0];
+    if (session?.user?.wechatOpenId) return session.user.nickName[0];
+    return '?';
   };
 
-  const renderAllName = () => {
-    if (session?.user?.email) {
-      return session?.user?.email;
-    }
-    if (session?.user?.phone) {
-      return session?.user?.phone;
-    }
-    if (session?.user?.wechatOpenId) {
-      return session?.user?.nickName;
-    }
+  const renderFullName = () => {
+    if (session?.user?.email) return session.user.email;
+    if (session?.user?.phone) return session.user.phone;
+    if (session?.user?.wechatOpenId) return session.user.nickName;
+    return '未知用户';
   };
 
   return (
-    <div className="flex justify-center items-center gap-4">
-      <div className="avatar placeholder">
-        <div className="bg-neutral text-neutral-content w-12 rounded-full">
-          <span>{renderName()}</span>
-        </div>
+    <>
+      {/* PC端显示 */}
+      <div className="hidden sm:block dropdown dropdown-end">
+        <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+          <div className="w-10 rounded-full">
+            <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center text-base">
+              <span>{renderName()}</span>
+            </div>
+          </div>
+        </label>
+        <ul
+          tabIndex={0}
+          className="dropdown-content menu p-1 shadow bg-base-100 rounded-box w-52 mt-2 right-0"
+        >
+          <li className="menu-title text-center font-bold text-sm pb-1 border-b border-gray-200">
+            {renderFullName()}
+          </li>
+          <li className="hover:bg-base-200 rounded-lg">
+            <Link
+              href="/dashboard"
+              className="justify-center py-1 text-sm font-medium"
+            >
+              我的
+            </Link>
+          </li>
+          <li className="hover:bg-base-200 rounded-lg border-t border-gray-200">
+            <button
+              onClick={handleLogout}
+              className="justify-center py-1 text-sm font-medium text-red-500"
+            >
+              退出
+            </button>
+          </li>
+        </ul>
       </div>
-      <div>{renderAllName()}</div>
-      <button className="btn" onClick={handleLogout}>
-        退出
-      </button>
-    </div>
+
+      {/* 移动端显示 */}
+      <div className="sm:hidden">
+        <Link href="/dashboard" className="btn btn-ghost btn-sm mr-2">
+          <span className="text-sm font-semibold">我的</span>
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="btn btn-ghost btn-sm text-red-500"
+        >
+          <span className="text-sm font-semibold">退出</span>
+        </button>
+      </div>
+    </>
   );
 };
 
 export default function Header() {
   const navigation = [
-    {
-      name: '首页',
-      href: '/',
-    },
-    {
-      name: '文档',
-      href: '/docs/dev/introduction',
-    },
-    {
-      name: '博客',
-      href: '/blog',
-    },
-    {
-      name: '价格',
-      href: '#price',
-    },
-    {
-      name: '购买须知',
-      href: '/blog/commercial',
-    },
+    { name: '首页', href: '/' },
+    { name: '文档', href: '/docs/dev/introduction' },
+    { name: '博客', href: '/blog' },
+    { name: '价格', href: '#price' },
+    { name: '购买须知', href: '/blog/commercial' },
     {
       name: '关于我们',
       href: 'https://www.islandspage.com/EM-T',
@@ -91,32 +104,28 @@ export default function Header() {
   ];
 
   return (
-    <header>
-      <nav
-        aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-      >
-        <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">MvpFast</span>
-            <img alt="" src="/title-logo.png" className="h-12 w-auto" />
+    <header className="bg-base-100">
+      <div className="navbar max-w-7xl mx-auto">
+        <div className="navbar-start">
+          <a href="#" className="btn btn-ghost normal-case text-xl">
+            <img alt="MvpFast" src="/title-logo.png" className="h-12 w-auto" />
           </a>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-sm font-semibold leading-6 "
-            >
-              {item.name}
-            </a>
-          ))}
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">
+            {navigation.map((item) => (
+              <li key={item.name}>
+                <a href={item.href} target={item.target} rel={item.rel}>
+                  {item.name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <LoginButtton />
+        <div className="navbar-end">
+          <UserMenu />
         </div>
-      </nav>
+      </div>
     </header>
   );
 }

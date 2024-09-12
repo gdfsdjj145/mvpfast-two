@@ -1,11 +1,21 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import WeChatPayQRCode from '@/components/PayQrcode';
+import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
+import { useSession } from 'next-auth/react';
 import { config } from '@/config';
+import { createOrder, checkUserPayment } from './actions';
+import Link from 'next/link';
+
+// 动态导入 WeChatPayQRCode 组件
+const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
+  loading: () => <p>加载支付二维码...</p>,
+  ssr: false,
+});
 
 export default function PaymentPage() {
+  const { data: session, status } = useSession();
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
     amount: config.amount,
@@ -20,27 +30,52 @@ export default function PaymentPage() {
   });
 
   useEffect(() => {
-    // 模拟加载订单信息
-    setTimeout(() => {
-      setOrderInfo((prevState) => ({
-        ...prevState,
-        createdAt: new Date().toLocaleString(),
-      }));
+    const checkPayment = async () => {
+      if (status === 'authenticated' && session?.user?.id) {
+        try {
+          const result = await checkUserPayment(session.user.id);
+          if (result.data.hasPaid) {
+            setPaymentStatus('success');
+            setPaymentResult({
+              transactionId: result.data.transactionId,
+              paidAt: new Date(result.data.createdAt).toLocaleString(),
+            });
+            setOrderInfo((prevState) => ({
+              ...prevState,
+              orderId: result.data.orderId,
+              createdAt: new Date(result.data.createdAt).toLocaleString(),
+            }));
+          } else {
+            setPaymentStatus('pending');
+          }
+        } catch (error) {
+          console.error('检查支付状态失败:', error);
+          setPaymentStatus('failed');
+        }
+      }
       setIsLoading(false);
-    }, 1000);
-  }, []);
+    };
 
-  const handlePaymentSuccess = (result: {
+    checkPayment();
+  }, [status, session]);
+
+  const handlePaymentSuccess = async (result: {
     transactionId: string;
     paidAt: string;
   }) => {
     setPaymentStatus('success');
     setPaymentResult(result);
-    // 撒礼炮
     confetti({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
+    });
+
+    await createOrder({
+      identifier: session?.user.id,
+      createdAt: new Date(result.paidAt),
+      transactionId: result.transactionId,
+      orderId: orderInfo.orderId,
     });
   };
 
@@ -51,13 +86,81 @@ export default function PaymentPage() {
     }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+  const LoadingSpinner = () => (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-bounce">
+        <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-pink-500 rounded-full"></div>
+          </div>
+        </div>
+        <div className="text-center mt-4 text-pink-500 font-bold">
+          加载中...
+        </div>
       </div>
-    );
-  }
+    </div>
+  );
+
+  const renderRightContent = () => {
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    if (paymentStatus === 'success') {
+      return (
+        <div className="bg-white p-8 rounded-lg shadow-md w-full">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">订单详情</h2>
+          <div className="space-y-4">
+            <p>
+              <span className="font-semibold">订单号：</span>
+              {orderInfo.orderId}
+            </p>
+            <p>
+              <span className="font-semibold">交易号：</span>
+              {paymentResult.transactionId}
+            </p>
+            <p>
+              <span className="font-semibold">支付金额：</span>¥
+              {(orderInfo.amount / 100).toFixed(2)}
+            </p>
+            <p>
+              <span className="font-semibold">支付时间：</span>
+              {paymentResult.paidAt}
+            </p>
+            <p>
+              <span className="font-semibold">商品描述：</span>
+              {orderInfo.description}
+            </p>
+          </div>
+          <div className="mt-8">
+            <Link href="/dashboard" className="btn btn-primary w-full">
+              前往个人页面
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
+    if (paymentStatus === 'pending') {
+      return (
+        <>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            微信扫码支付
+          </h2>
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <WeChatPayQRCode
+              amount={orderInfo.amount}
+              description={orderInfo.description}
+              onPaymentSuccess={handlePaymentSuccess}
+              onCreateOrder={handleCreateOrder}
+            />
+          </div>
+        </>
+      );
+    }
+
+    return <p>加载失败，请刷新页面重试</p>;
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -112,17 +215,9 @@ export default function PaymentPage() {
         </div>
       </div>
 
-      {/* 右侧：支付二维码 */}
+      {/* 右侧：支付二维码或订单详情 */}
       <div className="w-1/2 p-8 flex flex-col items-center justify-center bg-gray-50">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">微信扫码支付</h2>
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <WeChatPayQRCode
-            amount={orderInfo.amount}
-            description={orderInfo.description}
-            onPaymentSuccess={handlePaymentSuccess}
-            onCreateOrder={handleCreateOrder}
-          />
-        </div>
+        {renderRightContent()}
       </div>
     </div>
   );

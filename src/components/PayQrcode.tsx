@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
 
@@ -21,6 +21,8 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('pending');
+  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
+  const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const createOrder = async () => {
@@ -46,7 +48,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!outTradeNo) return;
+    if (!outTradeNo || isPaymentSuccessful) return;
 
     const checkOrderStatus = async () => {
       try {
@@ -55,20 +57,29 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         );
         if (data.data.trade_state === 'SUCCESS') {
           setPaymentStatus('success');
+          setIsPaymentSuccessful(true);
           onPaymentSuccess({
             transactionId: data.data.transaction_id,
             paidAt: new Date(data.data.success_time).toLocaleString(),
           });
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
         }
       } catch (err) {
         console.error('查询订单状态失败:', err);
       }
     };
 
-    const intervalId = setInterval(checkOrderStatus, 5000); // 每5秒检查一次
+    intervalIdRef.current = setInterval(checkOrderStatus, 5000); // 每5秒检查一次
 
-    return () => clearInterval(intervalId);
-  }, [outTradeNo, onPaymentSuccess]);
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, [outTradeNo, onPaymentSuccess, isPaymentSuccessful]);
 
   if (isLoading) {
     return (

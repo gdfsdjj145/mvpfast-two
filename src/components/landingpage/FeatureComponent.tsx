@@ -1,6 +1,13 @@
+'use client';
 import React from 'react';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 export default function FeatureComponent() {
+  const [ref, isIntersecting] = useIntersectionObserver({
+    threshold: 0.1, // 当10%的组件可见时触发
+    triggerOnce: true, // 只触发一次
+  });
+
   const features = [
     {
       name: '登录',
@@ -29,8 +36,12 @@ export default function FeatureComponent() {
   ];
 
   return (
-    <section id="feat" className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section id="feat" className="bg-white py-24 sm:py-32" ref={ref}>
+      <div
+        className={`mx-auto max-w-7xl px-6 lg:px-8 transition-opacity duration-1000 ${
+          isIntersecting ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-secondary">
             快速构建网页应用
@@ -44,11 +55,23 @@ export default function FeatureComponent() {
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
           <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-            {features.map((feature) => (
-              <div key={feature.name} className="relative pl-16">
+            {features.map((feature, index) => (
+              <div
+                key={feature.name}
+                className={`relative pl-16 group transition-all duration-300 transform ${
+                  isIntersecting
+                    ? 'translate-y-0 opacity-100'
+                    : 'translate-y-10 opacity-0'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
+              >
                 <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg ">
-                    <img src={`/${feature.icon}.png`} alt="" />
+                  <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-purple-400 to-pink-600 group-hover:from-purple-500 group-hover:to-pink-700 transition-all duration-300">
+                    <img
+                      src={`/${feature.icon}.png`}
+                      alt=""
+                      className="h-6 w-6 text-white"
+                    />
                   </div>
                   {feature.name}
                 </dt>

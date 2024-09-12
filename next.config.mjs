@@ -4,6 +4,7 @@ import { withContentlayer } from 'next-contentlayer'
 
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['framer-motion'],
   swcMinify: true,
   experimental: {
     missingSuspenseWithCSRBailout: false,
