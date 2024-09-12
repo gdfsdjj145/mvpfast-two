@@ -50,14 +50,16 @@ const WxCode = () => {
           identifier: data.openId,
           redirect: false,
         });
+        console.log(res)
         if (res?.error) {
           toast.error(res?.error);
         } else {
           const callbackUrl = searchParams.get('redirect') || '/';
-          router.push(callbackUrl);
+          // router.push(callbackUrl);
+          window.location.href = callbackUrl
         }
       }
-    }, 2000);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -252,7 +254,7 @@ export default function SignInPage() {
 
               <div className="mt-6 flex justify-between gap-4">
                 {config.loginTypes.map((item) => (
-                  <>
+                  <React.Fragment key={item}>
                     {type !== item && (
                       <button
                         className="btn flex-1"
@@ -261,7 +263,7 @@ export default function SignInPage() {
                         {LOGIN_HASH[item]}
                       </button>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
             </div>
