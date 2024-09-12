@@ -10,7 +10,7 @@ export const config = {
   loginTypes: ['wx', 'email'],
   // 支付集成功能
   // 支付金额 分为单位  即 100元 == 100+00 = 10000
-  amount: 1,
+  amount: 15900,
   // 产品描述
   description: 'MvpFast模板购买',
 };
