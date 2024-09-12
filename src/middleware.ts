@@ -30,8 +30,6 @@ export async function middleware(request: NextRequest) {
       token = sessionToken;
     }
 
-  console.log(token)
-
   const { pathname } = request.nextUrl;
 
   // 检查当前路径是否在公开路由列表中

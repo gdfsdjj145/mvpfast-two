@@ -252,7 +252,7 @@ export default function SignInPage() {
 
               <div className="mt-6 flex justify-between gap-4">
                 {config.loginTypes.map((item) => (
-                  <>
+                  <React.Fragment key={item}>
                     {type !== item && (
                       <button
                         className="btn flex-1"
@@ -261,7 +261,7 @@ export default function SignInPage() {
                         {LOGIN_HASH[item]}
                       </button>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
             </div>
