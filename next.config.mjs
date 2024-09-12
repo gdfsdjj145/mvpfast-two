@@ -20,7 +20,6 @@ const nextConfig = {
     ],
   },
   env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET
   },
   // 如果您使用了 Contentlayer，可能需要以下配置
