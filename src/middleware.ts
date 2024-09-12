@@ -22,15 +22,13 @@ export async function middleware(request: NextRequest) {
 
   console.log(token, 'Token')
 
-  // 如果是开发环境，我们可以从 cookie 中直接读取 session
-  if (process.env.NODE_ENV === 'development' && !token) {
-    const sessionToken = request.cookies.get('next-auth.session-token')?.value;
+
+  const sessionToken = request.cookies.get('next-auth.session-token')?.value;
     if (sessionToken) {
       console.log('Development mode: Session token found in cookie');
       // 这里你可以根据需要处理 sessionToken
       token = sessionToken;
     }
-  }
 
   console.log(token)
 
