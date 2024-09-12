@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { JWT } from 'next-auth/jwt';
+
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth'];
 
@@ -11,23 +11,22 @@ const protectedRoutes = ['/pay'];
 export async function middleware(request: NextRequest) {
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) {
+    console.error('NEXTAUTH_SECRET is not set');
     throw new Error('NEXTAUTH_SECRET is not set');
   }
 
-  let token: JWT | string | null = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-    salt: process.env.NEXTAUTH_SALT, // 如果您使用了 salt
-  });
+  console.log('Middleware running for path:', request.nextUrl.pathname);
 
-  // 如果是开发环境，我们可以从 cookie 中直接读取 session
-  if (process.env.NODE_ENV === 'development' && !token) {
-    const sessionToken = request.cookies.get('next-auth.session-token')?.value;
-    if (sessionToken) {
-      console.log('Development mode: Session token found in cookie');
-      // 这里你可以根据需要处理 sessionToken
-      token = sessionToken;
-    }
+  let token;
+  try {
+    token = await getToken({
+      req: request,
+      secret: secret,
+      salt: process.env.NEXTAUTH_SALT,
+    });
+    console.log('Token:', token);
+  } catch (error) {
+    console.error('Error getting token:', error);
   }
 
   const { pathname } = request.nextUrl;
@@ -40,9 +39,9 @@ export async function middleware(request: NextRequest) {
   // 检查当前路径是否在需要保护的路由列表中
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!token) {
-      // 用户未登录，重定向到登录页面
+      console.log('No token found, redirecting to login');
       const loginUrl = new URL('/auth/signin', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
+      loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
