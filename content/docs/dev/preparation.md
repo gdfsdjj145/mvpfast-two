@@ -27,8 +27,8 @@ env
 数据库
 DATABASE_URL="your_database_url"
 NextAuth.js
-NEXTAUTH_SECRET="your_nextauth_secret"
-NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your_nextauth_secret" // mvpfast默认值
+NEXTAUTH_SALT="your_nextauth_salt" // mvpfast默认值
 邮件服务（用于邮箱验证码登录）
 EMAIL_SERVER_HOST="your_email_server_host"
 EMAIL_SERVER_PORT="your_email_server_port"
