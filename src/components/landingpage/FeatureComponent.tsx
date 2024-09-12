@@ -36,7 +36,7 @@ export default function FeatureComponent() {
   ];
 
   return (
-    <section id="feat" className="bg-white py-24 sm:py-32" ref={ref}>
+    <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
       <div
         className={`mx-auto max-w-7xl px-6 lg:px-8 transition-opacity duration-1000 ${
           isIntersecting ? 'opacity-100' : 'opacity-0'
