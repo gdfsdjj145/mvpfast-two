@@ -50,14 +50,16 @@ const WxCode = () => {
           identifier: data.openId,
           redirect: false,
         });
+        console.log(res)
         if (res?.error) {
           toast.error(res?.error);
         } else {
           const callbackUrl = searchParams.get('redirect') || '/';
-          router.push(callbackUrl);
+          // router.push(callbackUrl);
+          window.location.href = callbackUrl
         }
       }
-    }, 2000);
+    }, 3000);
   };
 
   useEffect(() => {

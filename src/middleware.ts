@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 import { JWT } from 'next-auth/jwt';
 
 // 不需要验证的路由列表
-const publicRoutes = ['/docs', '/blog', '/api/auth'];
+const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
 
 // 需要验证的路由列表
 const protectedRoutes = ['/pay', '/dashboard'];
@@ -15,17 +15,20 @@ export async function middleware(request: NextRequest) {
     throw new Error('NEXTAUTH_SECRET is not set');
   }
 
-  let token: JWT | string | null = await getToken({
+  let token: JWT | null = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-    salt: process.env.NEXTAUTH_SALT, // 如果您使用了 salt
+    salt: process.env.NEXTAUTH_SALT,
   });
 
-  const sessionToken = request.cookies.get('next-auth.session-token')?.value;
-  if (sessionToken) {
-    console.log('Development mode: Session token found in cookie');
-    // 这里你可以根据需要处理 sessionToken
-    token = sessionToken;
+  // 如果没有通过getToken获取到token，尝试从cookie中获取
+  if (!token) {
+    const sessionToken = request.cookies.get('next-auth.session-token');
+    if (sessionToken) {
+      // 这里只是简单地将cookie值赋给token
+      // 实际使用时可能需要进行更复杂的解析和验证
+      token = { sessionToken: sessionToken.value } as JWT;
+    }
   }
 
   const { pathname, search } = request.nextUrl;
@@ -40,6 +43,12 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // 检查是否是登录后的重定向
+  const redirectParam = request.nextUrl.searchParams.get('redirect');
+  if (token && redirectParam && protectedRoutes.some(route => redirectParam.startsWith(route))) {
+    return NextResponse.redirect(new URL(redirectParam, request.url));
+  }
+
   // 检查当前路径是否在公开路由列表中
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next();
@@ -48,18 +57,13 @@ export async function middleware(request: NextRequest) {
   // 检查当前路径是否在需要保护的路由列表中
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!token) {
-      console.log('用户未登录，重定向到登录页面');
-      const loginUrl = new URL('/api/auth/signin', request.url);
-      loginUrl.searchParams.set('redirect', fullPath);
+      const loginUrl = new URL('/auth/signin', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
 
-  // 如果用户已登录且尝试访问登录页面，重定向到首页
-  if (token && pathname === '/auth/signin') {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
+  // 对于所有其他路由，允许访问
   return NextResponse.next();
 }
 

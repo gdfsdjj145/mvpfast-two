@@ -47,7 +47,6 @@ export const sendCode = async (type: string, params: any) => {
 
   const info: any = await handlerSendCode(type, params, code);
 
-  console.log(info);
   if (info.success) {
     // 保存验证码到数据库
     await prisma.verificationCode.create({
@@ -80,7 +79,6 @@ export const verifyCode = async (type: string, params: any) => {
     },
   });
 
-  console.log(res);
 
   if (res) {
     // 验证成功
