@@ -30,17 +30,22 @@ NextAuth.js
 NEXTAUTH_SECRET="your_nextauth_secret" // mvpfast默认值
 NEXTAUTH_SALT="your_nextauth_salt" // mvpfast默认值
 邮件服务（用于邮箱验证码登录）
-EMAIL_SERVER_HOST="your_email_server_host"
-EMAIL_SERVER_PORT="your_email_server_port"
-EMAIL_SERVER_USER="your_email_username"
-EMAIL_SERVER_PASSWORD="your_email_password"
-EMAIL_FROM="your_sender_email"
+MAIL_HOST=邮箱服务的 host
+MAIL_PORT=邮箱服务的端口
+MAIL_USER=邮箱服务的发出用户
+MAIL_PASS=邮箱服务的发出用户的密码
 短信服务（用于手机验证码登录）
-SMS_API_KEY="your_sms_api_key"
-SMS_API_SECRET="your_sms_api_secret"
+ALIYUN_ACCESS_KEY_ID=阿里云账号 ACCESS_KEY
+ALIYUN_ACCESS_KEY_SECRET=阿里云账号 SECRET_KEY
+ALIYUN_SMS_SIGN_NAME=sms 服务签名
+ALIYUN_SMS_TEMPLATE_CODE=sms 发送模板
 微信登录（如需使用）
-WECHAT_APP_ID="your_wechat_app_id"
-WECHAT_APP_SECRET="your_wechat_app_secret"
+NEXT_PUBLIC_API_URL=支付回调地址 // 你的vercel部署域名
+WECHAT_APPID=公众号id
+WECHAT_MCHID=商家号
+WECHAT_API_V3_KEY=v3支付私钥
+WECHAT_SERIAL_NO=证书序列号
+WECHAT_PRIVATE_KEY=证书密钥
 ```
 
 请根据实际情况替换上述占位符。

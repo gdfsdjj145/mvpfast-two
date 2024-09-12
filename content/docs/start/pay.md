@@ -12,8 +12,12 @@ description: 支付的介绍
 支付需要的环境变量，其中`v3支付私钥`在微信云服务中已经获取过，证书序列号看图，**注意，序列号和私钥都是要使用同一个证书**
 
 ```js
-WECHAT_SERIAL_NO = '证书序列号';
-WECHAT_PRIVATE_KEY = 'v3支付私钥';
+NEXT_PUBLIC_API_URL = 支付回调地址; // 你的vercel部署域名
+WECHAT_APPID = 公众号id;
+WECHAT_MCHID = 商家号;
+WECHAT_API_V3_KEY = v3支付私钥;
+WECHAT_SERIAL_NO = 证书序列号;
+WECHAT_PRIVATE_KEY = 证书密钥;
 ```
 
 ![pay1](/docs/assets/pay1.png)
