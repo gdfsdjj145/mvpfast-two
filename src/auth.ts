@@ -109,6 +109,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async session({ token, session }) {
+      console.log('Session Callback', { token, session });
       if (session.user) {
         if (token.sub) {
           session.user.id = token.sub;
@@ -130,6 +131,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async jwt({ token, user }) {
+      console.log('JWT Callback', { token, user });
       if (user) {
         token.id = user.id;
         token.email = user.email;
