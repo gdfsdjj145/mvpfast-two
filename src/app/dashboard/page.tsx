@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
 import Footer from '@/components/landingpage/FooterComponent';
@@ -10,41 +10,51 @@ import Link from 'next/link';
 
 const DashboardPage = () => {
   const { data: session, status } = useSession();
-  const [orders, setOrders] = React.useState([]);
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       if (status === 'authenticated' && session?.user?.id) {
         try {
+          setIsLoading(true);
           const result = await getOrdersByUserId(session.user.id);
           console.log(result);
           setOrders(result.data);
         } catch (error) {
           console.error('获取订单失败:', error);
+        } finally {
+          setIsLoading(false);
         }
+      } else if (status !== 'loading') {
+        setIsLoading(false);
       }
     };
 
     fetchOrders();
   }, [status, session]);
 
+  const renderLoading = () => (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-bounce">
+        <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-pink-500 rounded-full"></div>
+          </div>
+        </div>
+        <div className="text-center mt-4 text-pink-500 font-bold">
+          加载中...
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 max-w-5xl">
-        {status === 'loading' ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-bounce">
-              <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
-                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                  <div className="w-6 h-6 bg-pink-500 rounded-full"></div>
-                </div>
-              </div>
-              <div className="text-center mt-4 text-pink-500 font-bold">
-                加载中...
-              </div>
-            </div>
-          </div>
+        {isLoading ? (
+          renderLoading()
         ) : orders.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-md">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">

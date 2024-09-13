@@ -8,37 +8,38 @@ import Header from '@/components/Header';
 function PostCard(post: any) {
   const coverImagePath = post.coverImage
     ? `/blog/assets/${post.coverImage}`
-    : null;
+    : '/default-blog-cover.jpg'; // 默认封面图片
 
   return (
-    <a
+    <Link
       href={post.url}
-      className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:scale-105"
+      className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1"
     >
-      {coverImagePath && (
-        <div className="relative w-full h-48">
-          <Image
-            src={coverImagePath}
-            alt={post.title}
-            fill
-            style={{ objectFit: 'cover' }}
-          />
+      <div className="relative w-full h-48">
+        <Image
+          src={coverImagePath}
+          alt={post.title}
+          fill
+          style={{ objectFit: 'cover' }}
+        />
+        <div className="absolute top-2 left-2">
+          <span className="bg-yellow-400 text-sm font-semibold px-2 py-1 rounded">
+            {post.category || '未分类'}
+          </span>
         </div>
-      )}
-      <div className="p-4">
-        <h2 className="text-xl font-semibold mb-2">
-          <Link href={post.url} className="text-blue-600 hover:text-blue-800">
-            {post.title}
-          </Link>
-        </h2>
-        <time dateTime={post.date} className="text-sm text-gray-500 mb-2 block">
-          {format(parseISO(post.date), 'yyyy年MM月dd日', { locale: zhCN })}
-        </time>
-        {post.description && (
-          <p className="text-gray-600 mb-4 line-clamp-3">{post.description}</p>
-        )}
       </div>
-    </a>
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2 line-clamp-2">
+          <div className="text-gray-800 hover:text-blue-600">{post.title}</div>
+        </h2>
+        <p className="text-gray-600 mb-4 line-clamp-3">{post.description}</p>
+        <div className="flex items-center justify-between">
+          <time dateTime={post.date} className="text-sm text-gray-500">
+            {format(parseISO(post.date), 'yyyy年MM月dd日', { locale: zhCN })}
+          </time>
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -52,7 +53,7 @@ export default function BlogPage() {
       <Header />
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-center mb-8">博客文章</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post, idx) => (
             <PostCard key={idx} {...post} />
           ))}

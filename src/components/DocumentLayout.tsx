@@ -60,8 +60,6 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
       groups[folder].sort((a, b) => a.order - b.order);
     });
 
-    console.log(groups);
-
     return groups;
   }, []);
 
@@ -73,7 +71,7 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
           prefetch
           className={`flex items-center p-2 hover:bg-base-300 rounded-lg transition-colors duration-200 ${
             selectedDocUrl === doc.url
-              ? 'bg-primary text-primary-content font-medium'
+              ? 'bg-[#e300dd] font-medium text-white'
               : 'text-base-content'
           }`}
         >
@@ -96,7 +94,7 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
         {Object.entries(groupedDocs).map(([folder, docs]) => (
           <li key={folder}>
             <div className="flex items-center justify-between p-2 font-medium">
-              <span>{folderNames[folder] || folder}</span>
+              <span className="font-bold">{folderNames[folder] || folder}</span>
               <FaChevronDown />
             </div>
             <ul className="ml-4">{docs.map(renderDocLink)}</ul>

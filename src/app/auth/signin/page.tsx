@@ -50,16 +50,15 @@ const WxCode = () => {
           identifier: data.openId,
           redirect: false,
         });
-        console.log(res)
+        console.log(res);
         if (res?.error) {
           toast.error(res?.error);
         } else {
           const callbackUrl = searchParams.get('redirect') || '/';
-          // router.push(callbackUrl);
-          window.location.href = callbackUrl
+          window.location.href = callbackUrl;
         }
       }
-    }, 3000);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -155,7 +154,7 @@ export default function SignInPage() {
       ...form,
       redirect: false,
     });
-    console.log(res, 'res')
+    console.log(res, 'res');
     if (res?.error) {
       toast.error(res?.error);
     } else {

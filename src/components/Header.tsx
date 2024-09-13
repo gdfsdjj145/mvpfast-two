@@ -104,18 +104,23 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-base-100">
-      <div className="navbar max-w-7xl mx-auto">
+    <header className="bg-base-100 shadow-sm">
+      <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
-          <a href="#" className="btn btn-ghost normal-case text-xl">
-            <img alt="MvpFast" src="/title-logo.png" className="h-12 w-auto" />
+          <a href="#" className="btn btn-ghost normal-case text-xl p-0">
+            <img alt="MvpFast" src="/title-logo.png" className="h-10 w-auto" />
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal px-1 gap-1">
             {navigation.map((item) => (
               <li key={item.name}>
-                <a href={item.href} target={item.target} rel={item.rel}>
+                <a
+                  href={item.href}
+                  target={item.target}
+                  rel={item.rel}
+                  className="px-3 py-2 text-sm"
+                >
                   {item.name}
                 </a>
               </li>

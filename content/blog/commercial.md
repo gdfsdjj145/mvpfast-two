@@ -4,6 +4,7 @@ title: 商用协议
 date: 2024-09-06
 description: MvpFast 商用协议，购买前请详细阅读
 coverImage: 1.png
+category: 协议
 ---
 
 # MvpFast 商用协议

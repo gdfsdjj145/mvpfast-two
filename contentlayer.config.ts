@@ -11,6 +11,7 @@ export const BlogPost = defineDocumentType(() => ({
     date: { type: 'date', required: true },
     description: { type: 'string', required: true },
     coverImage: { type: 'string', required: false },
+    category: { type: 'string', required: false },
   },
   computedFields: {
     url: {
