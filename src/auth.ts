@@ -74,6 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
             params.wechatOpenId = identifier as string;
           }
+          console.log(params, 'params');
           if (res) {
             return res;
           } else {
