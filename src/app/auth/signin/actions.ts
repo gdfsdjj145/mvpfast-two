@@ -136,6 +136,8 @@ export const checkQrCode = async (
     },
   });
 
+  console.log(user, 'user');
+
   if (!user) {
     // 没用用户 创建用户
 

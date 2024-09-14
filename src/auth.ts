@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: null,
             wechatOpenId: null,
             phone: null,
-            nickName: getGeneratorName(),
+            nickName: '',
             createdDate: new Date(),
           };
           if (type === 'email') {
@@ -78,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (res) {
             return res;
           } else {
+            params.nickName = getGeneratorName();
             await prisma.user.create({
               data: params,
             });
