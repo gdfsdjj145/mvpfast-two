@@ -79,7 +79,6 @@ export const verifyCode = async (type: string, params: any) => {
     },
   });
 
-
   if (res) {
     // 验证成功
     await prisma.verificationCode.delete({
@@ -131,7 +130,7 @@ export const checkQrCode = async (
     };
   }
 
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
       wechatOpenId: qrcode.openId as string,
     },
