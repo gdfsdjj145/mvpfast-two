@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="cmyk">
+    <html lang="en" data-theme="cupcake">
       <body className={inter.className}>
         <SessionProvider>
           <ReduxProvider>{children}</ReduxProvider>

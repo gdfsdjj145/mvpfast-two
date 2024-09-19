@@ -31,11 +31,11 @@ export default function FaqComponents() {
             </h2>
             <p className="mt-4 text-base leading-7 text-gray-600">
               如果你的问题这里答案，可以用一下方式联系我们
-              <a href="#faq" className="font-semibold text-secondary ">
+              <a href="#faq" className="font-semibold text-primary ">
                 邮箱：freecloud@emong.com.cn
               </a>{' '}
               ，
-              <a href="#faq" className="font-semibold text-secondary">
+              <a href="#faq" className="font-semibold text-primary">
                 微信：jiajiandu
               </a>{' '}
             </p>

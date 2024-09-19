@@ -9,8 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#4F46E5',
-        secondary: '#10B981',
+        primary: '#e400de',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -73,7 +72,7 @@ const config: Config = {
   },
   plugins: [require('daisyui'), require('@tailwindcss/typography')],
   daisyui: {
-    themes: ['cmyk'],
+    themes: ['cupcake'],
   },
 };
 export default config;

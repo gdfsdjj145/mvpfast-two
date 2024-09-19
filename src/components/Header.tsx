@@ -14,11 +14,7 @@ const UserMenu = () => {
   };
 
   if (status === 'unauthenticated' || status === 'loading') {
-    return (
-      <Link href="/auth/signin" className="text-sm font-semibold leading-6">
-        登录<span aria-hidden="true">&rarr;</span>
-      </Link>
-    );
+    return <></>;
   }
 
   const renderName = () => {
@@ -107,7 +103,7 @@ export default function Header() {
     <header className="bg-base-100 shadow-sm">
       <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
-          <a href="#" className="btn btn-ghost normal-case text-xl p-0">
+          <a href="#" className="normal-case text-xl p-0">
             <img alt="MvpFast" src="/title-logo.png" className="h-10 w-auto" />
           </a>
         </div>
