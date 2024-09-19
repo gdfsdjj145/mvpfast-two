@@ -82,13 +82,13 @@ export default function FeatureComponent() {
     <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
       <div>
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-primary">
+          <h2 className="text-base font-semibold leading-7 text-primary mb-4">
             快速构建网页应用
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             用最短的时间上线MVP，验证你的想法
           </p>
-          <p className="mt-6 text-lg leading-8 mb-12 text-gray-600">
+          <p className="mt-10 text-lg leading-8 mb-12 text-gray-600">
             使用目前最流行的技术搭建你产品的Mvp，快速验证你的产品idea，这套模板包含了一个小产品的最基础功能，集成了登录，鉴权，邮箱，数据库，微信公众号等能力。
           </p>
         </div>
