@@ -17,6 +17,7 @@ MVPFAST 使用以下主要技术：
 6. [MongoDB Atlas](https://www.mongodb.com/zh-cn/cloud/atlas/register) - 数据库
 7. [Vercel](https://vercel.com/) - 云平台
 8. [GitHub](https://github.com/) - 代码托管平台
+9. [微信开发](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html) - 公众号开发
 
 ## 环境变量配置
 
