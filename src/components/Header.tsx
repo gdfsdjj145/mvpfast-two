@@ -100,7 +100,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-base-100 shadow-sm">
+    <header className="bg-white shadow-sm">
       <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
           <a href="#" className="normal-case text-xl p-0">
