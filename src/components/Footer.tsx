@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const footerSections = [
   {
@@ -30,6 +31,32 @@ export default function FooterComponent() {
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <div className="flex space-x-4 flex-col mr-20">
+            <Link href="/" className="flex gap-3">
+              <img className="w-6 h-6" src="/logo.png" alt="" />
+              <span className="font-bold">MvpFast</span>
+            </Link>
+            <p className="mt-3 mb-3 text-sm text-base-content/80 leading-relaxed">
+              用最短的时间快速创建你个人应用的开发模板
+            </p>
+            <Link
+              href="https://www.mvpfast.top"
+              className="border-2 border-base-content/20 rounded-md p-2 group hover:bg-base-content/20 text-sm"
+            >
+              <div className="flex gap-2 items-center group justify-center">
+                <span>使用</span>
+                <span className="font-bold  flex gap-0.5 items-center tracking-tight">
+                  <img
+                    className="w-6 h-6 group-hover:scale-110 group-hover:rotate-45 transition-all mr-1"
+                    src="/logo.png"
+                    alt=""
+                  />
+                  MvpFast
+                </span>
+                <span>开发</span>
+              </div>
+            </Link>
+          </div>
           {footerSections.map((section) => (
             <div key={section.title}>
               <h3 className="text-sm font-semibold text-gray-900">
@@ -50,26 +77,6 @@ export default function FooterComponent() {
               </ul>
             </div>
           ))}
-          <div className="flex space-x-4">
-            <div className="relative w-24 h-24">
-              <Image
-                src="/xiaohongshu.png"
-                alt="QR Code 1"
-                fill
-                sizes="(max-width: 768px) 96px, 96px"
-                className="object-contain"
-              />
-            </div>
-            <div className="relative w-24 h-24">
-              <Image
-                src="/wechat.jpg"
-                alt="QR Code 2"
-                fill
-                sizes="(max-width: 768px) 96px, 96px"
-                className="object-contain"
-              />
-            </div>
-          </div>
         </div>
         <div className="mt-10 border-t border-gray-900/10 pt-8 flex justify-center items-center">
           <p className="text-xs leading-5 text-gray-500">

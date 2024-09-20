@@ -4,7 +4,7 @@ import FeatureComponent from '@/components/landingpage/FeatureComponent';
 import CaseComponent from '@/components/landingpage/CaseComponent';
 import PriceComponent from '@/components/landingpage/PriceComponent';
 import FaqComponents from '@/components/landingpage/FaqComponents';
-import FooterComponent from '@/components/landingpage/FooterComponent';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -16,8 +16,8 @@ export default function Home() {
         <CaseComponent></CaseComponent>
         <PriceComponent></PriceComponent>
         <FaqComponents></FaqComponents>
-        <FooterComponent></FooterComponent>
       </main>
+      <Footer></Footer>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
-import Footer from '@/components/landingpage/FooterComponent';
+import Footer from '@/components/Footer';
 import { getOrdersByUserId } from './actions';
 import { config } from '@/config';
 import Link from 'next/link';
