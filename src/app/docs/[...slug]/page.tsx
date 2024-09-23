@@ -45,11 +45,13 @@ const DocPageComponent = ({ params }: { params: { slug: string[] } }) => {
 
   return (
     <DocLayout>
-      <article className="markdown-body prose prose-lg lg:prose-xl dark:prose-invert max-w-none w-full px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-4">{doc.title}</h1>
-        </div>
-        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 mb-8">
+      <div className="max-w-5xl px-4 py-8">
+        <h1 className="text-4xl font-bold mb-6">{doc.title}</h1>
+
+        <article
+          className="markdown-body prose prose-lg lg:prose-xl dark:prose-invert max-w-none w-full"
+          style={{ backgroundColor: 'transparent' }} // 添加这一行
+        >
           <ReactMarkdown
             rehypePlugins={[rehypeRaw, rehypeHighlight]}
             remarkPlugins={[remarkGfm]}
@@ -57,8 +59,8 @@ const DocPageComponent = ({ params }: { params: { slug: string[] } }) => {
           >
             {doc.body.raw}
           </ReactMarkdown>
-        </div>
-      </article>
+        </article>
+      </div>
     </DocLayout>
   );
 };
