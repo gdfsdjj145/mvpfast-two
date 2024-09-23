@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import dynamic from 'next/dynamic';
 import './globals.css';
 import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
+const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
+  ssr: false,
+});
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="cupcake">
       <body className={inter.className}>
+        <PageProgressBar />
         <SessionProvider>
           <ReduxProvider>{children}</ReduxProvider>
         </SessionProvider>

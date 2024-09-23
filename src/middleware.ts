@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getToken } from "next-auth/jwt";
+import { getToken } from 'next-auth/jwt';
 import { JWT } from 'next-auth/jwt';
+import NProgress from 'nprogress';
 
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
@@ -10,6 +11,11 @@ const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
 const protectedRoutes = ['/pay', '/dashboard'];
 
 export async function middleware(request: NextRequest) {
+  const response = NextResponse.next();
+
+  // 设置一个自定义头部来触发客户端的进度条
+  response.headers.set('X-Progress-Start', 'true');
+
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) {
     throw new Error('NEXTAUTH_SECRET is not set');
@@ -35,7 +41,10 @@ export async function middleware(request: NextRequest) {
   const fullPath = `${pathname}${search}`;
 
   // 处理登录成功后的重定向
-  if (pathname === '/api/auth/signin/credentials' || pathname === '/api/auth/session') {
+  if (
+    pathname === '/api/auth/signin/credentials' ||
+    pathname === '/api/auth/session'
+  ) {
     const callbackUrl = request.nextUrl.searchParams.get('redirect');
     if (callbackUrl) {
       console.log('登录成功，重定向到:', callbackUrl);
@@ -45,13 +54,17 @@ export async function middleware(request: NextRequest) {
 
   // 检查是否是登录后的重定向
   const redirectParam = request.nextUrl.searchParams.get('redirect');
-  if (token && redirectParam && protectedRoutes.some(route => redirectParam.startsWith(route))) {
+  if (
+    token &&
+    redirectParam &&
+    protectedRoutes.some((route) => redirectParam.startsWith(route))
+  ) {
     return NextResponse.redirect(new URL(redirectParam, request.url));
   }
 
   // 检查当前路径是否在公开路由列表中
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
-    return NextResponse.next();
+    return response;
   }
 
   // 检查当前路径是否在需要保护的路由列表中
@@ -64,7 +77,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // 对于所有其他路由，允许访问
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

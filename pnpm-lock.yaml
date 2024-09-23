@@ -23,6 +23,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.14
         version: https://registry.npmmirror.com/@tailwindcss/typography/-/typography-0.5.14.tgz(tailwindcss@https://registry.npmmirror.com/tailwindcss/-/tailwindcss-3.4.1.tgz)
+      '@types/nprogress':
+        specifier: ^0.2.3
+        version: 0.2.3
       '@vercel/analytics':
         specifier: ^1.3.1
         version: https://registry.npmmirror.com/@vercel/analytics/-/analytics-1.3.1.tgz(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
@@ -74,9 +77,15 @@ importers:
       next-mdx-remote:
         specifier: ^5.0.0
         version: https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
+      nextjs-progressbar:
+        specifier: ^0.0.16
+        version: 0.0.16(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       nodemailer:
         specifier: ^6.9.14
         version: https://registry.npmmirror.com/nodemailer/-/nodemailer-6.9.14.tgz
+      nprogress:
+        specifier: ^0.2.0
+        version: 0.2.0
       prisma:
         specifier: ^5.14.0
         version: https://registry.npmmirror.com/prisma/-/prisma-5.14.0.tgz
@@ -856,6 +865,9 @@ packages:
   '@types/node@https://registry.npmmirror.com/@types/node/-/node-20.0.0.tgz':
     resolution: {integrity: sha512-cD2uPTDnQQCVpmRefonO98/PPijuOnnEy5oytWJFPY1N9aJCz2wJ5kSGWO+zJoed2cY2JxQh6yBuUq4vIn61hw==, tarball: https://registry.npmmirror.com/@types/node/-/node-20.0.0.tgz}
     version: 20.0.0
+
+  '@types/nprogress@0.2.3':
+    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
 
   '@types/parse5@https://registry.npmmirror.com/@types/parse5/-/parse5-6.0.3.tgz':
     resolution: {integrity: sha512-SuT16Q1K51EAVPz1K29DJ/sXjhSQ0zjvsypYJ6tlwVsRV9jwW5Adq2ch8Dq8kDBCkYnELS7N7VNCSB5nC56t/g==, tarball: https://registry.npmmirror.com/@types/parse5/-/parse5-6.0.3.tgz}
@@ -1783,6 +1795,9 @@ packages:
     resolution: {integrity: sha512-3P9qfTYDVnNn642LCAqIKbTGb9a1TBxZ9ti5zEVEr48aDdflgRjhspWFb6WM4PzAfFbGMJYC4+803v8riCRAKw==, tarball: https://registry.npmmirror.com/jose/-/jose-5.7.0.tgz}
     version: 5.7.0
 
+  js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+
   js-tokens@https://registry.npmmirror.com/js-tokens/-/js-tokens-4.0.0.tgz:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==, tarball: https://registry.npmmirror.com/js-tokens/-/js-tokens-4.0.0.tgz}
     version: 4.0.0
@@ -1860,6 +1875,10 @@ packages:
   longest-streak@https://registry.npmmirror.com/longest-streak/-/longest-streak-3.1.0.tgz:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==, tarball: https://registry.npmmirror.com/longest-streak/-/longest-streak-3.1.0.tgz}
     version: 3.1.0
+
+  loose-envify@1.4.0:
+    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
+    hasBin: true
 
   loose-envify@https://registry.npmmirror.com/loose-envify/-/loose-envify-1.4.0.tgz:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==, tarball: https://registry.npmmirror.com/loose-envify/-/loose-envify-1.4.0.tgz}
@@ -2390,6 +2409,13 @@ packages:
       sass:
         optional: true
 
+  nextjs-progressbar@0.0.16:
+    resolution: {integrity: sha512-GV0fD38EMD3vSDCmkq+tObmoup6QA91a6a9MxGuhJZuRk/9TNsrHGnIQQQ/sggkMkXuT4fBgF6jRjFwScDT3zA==}
+    version: 0.0.16
+    peerDependencies:
+      next: '>= 6.0.0'
+      react: '>= 16.0.0'
+
   no-case@https://registry.npmmirror.com/no-case/-/no-case-3.0.4.tgz:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==, tarball: https://registry.npmmirror.com/no-case/-/no-case-3.0.4.tgz}
     version: 3.0.4
@@ -2414,9 +2440,16 @@ packages:
     version: 3.0.0
     engines: {node: '>=0.10.0'}
 
+  nprogress@0.2.0:
+    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
+
   oauth4webapi@https://registry.npmmirror.com/oauth4webapi/-/oauth4webapi-2.12.0.tgz:
     resolution: {integrity: sha512-WFmcHzhFtq2Ar91crpGQZUD8DS0SG7Zti1AgbansUAfdpIsoRXE+hcMNi8MW6bGNNObWis0x8BZRl6K+FR4oQg==, tarball: https://registry.npmmirror.com/oauth4webapi/-/oauth4webapi-2.12.0.tgz}
     version: 2.12.0
+
+  object-assign@4.1.1:
+    resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
+    engines: {node: '>=0.10.0'}
 
   object-assign@https://registry.npmmirror.com/object-assign/-/object-assign-4.1.1.tgz:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==, tarball: https://registry.npmmirror.com/object-assign/-/object-assign-4.1.1.tgz}
@@ -2582,6 +2615,9 @@ packages:
     engines: {node: '>=16.13'}
     hasBin: true
 
+  prop-types@15.8.1:
+    resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
+
   property-information@https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz:
     resolution: {integrity: sha512-PgTgs/BlvHxOu8QuEN7wi5A0OmXaBcHpmCSTehcs6Uuu9IkDIEo13Hy7n898RHfrQ49vKCoGeWZSaAK01nwVig==, tarball: https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz}
     version: 6.5.0
@@ -2629,6 +2665,9 @@ packages:
     version: 5.3.0
     peerDependencies:
       react: '*'
+
+  react-is@16.13.1:
+    resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
   react-markdown@https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz:
     resolution: {integrity: sha512-186Gw/vF1uRkydbsOIkcGXw7aHq0sZOCRFFjGrr7b9+nVZg4UfA4enXCaxm4fUzecU38sWfrNDitGhshuU7rdg==, tarball: https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz}
@@ -3837,6 +3876,8 @@ snapshots:
 
   '@types/node@https://registry.npmmirror.com/@types/node/-/node-20.0.0.tgz': {}
 
+  '@types/nprogress@0.2.3': {}
+
   '@types/parse5@https://registry.npmmirror.com/@types/parse5/-/parse5-6.0.3.tgz': {}
 
   '@types/prop-types@https://registry.npmmirror.com/@types/prop-types/-/prop-types-15.7.12.tgz': {}
@@ -4660,6 +4701,8 @@ snapshots:
 
   jose@https://registry.npmmirror.com/jose/-/jose-5.7.0.tgz: {}
 
+  js-tokens@4.0.0: {}
+
   js-tokens@https://registry.npmmirror.com/js-tokens/-/js-tokens-4.0.0.tgz: {}
 
   js-yaml@https://registry.npmmirror.com/js-yaml/-/js-yaml-3.14.1.tgz:
@@ -4705,6 +4748,10 @@ snapshots:
   long@https://registry.npmmirror.com/long/-/long-5.2.3.tgz: {}
 
   longest-streak@https://registry.npmmirror.com/longest-streak/-/longest-streak-3.1.0.tgz: {}
+
+  loose-envify@1.4.0:
+    dependencies:
+      js-tokens: 4.0.0
 
   loose-envify@https://registry.npmmirror.com/loose-envify/-/loose-envify-1.4.0.tgz:
     dependencies:
@@ -5598,6 +5645,14 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
+  nextjs-progressbar@0.0.16(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
+    dependencies:
+      '@types/nprogress': 0.2.3
+      next: https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
+      nprogress: 0.2.0
+      prop-types: 15.8.1
+      react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
+
   no-case@https://registry.npmmirror.com/no-case/-/no-case-3.0.4.tgz:
     dependencies:
       lower-case: https://registry.npmmirror.com/lower-case/-/lower-case-2.0.2.tgz
@@ -5615,7 +5670,11 @@ snapshots:
 
   normalize-path@https://registry.npmmirror.com/normalize-path/-/normalize-path-3.0.0.tgz: {}
 
+  nprogress@0.2.0: {}
+
   oauth4webapi@https://registry.npmmirror.com/oauth4webapi/-/oauth4webapi-2.12.0.tgz: {}
+
+  object-assign@4.1.1: {}
 
   object-assign@https://registry.npmmirror.com/object-assign/-/object-assign-4.1.1.tgz: {}
 
@@ -5749,6 +5808,12 @@ snapshots:
     dependencies:
       '@prisma/engines': https://registry.npmmirror.com/@prisma/engines/-/engines-5.14.0.tgz
 
+  prop-types@15.8.1:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react-is: 16.13.1
+
   property-information@https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz: {}
 
   protobufjs@https://registry.npmmirror.com/protobufjs/-/protobufjs-7.4.0.tgz:
@@ -5795,6 +5860,8 @@ snapshots:
   react-icons@https://registry.npmmirror.com/react-icons/-/react-icons-5.3.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
     dependencies:
       react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
+
+  react-is@16.13.1: {}
 
   react-markdown@https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
     dependencies:
