@@ -8,4 +8,13 @@ if (config.db) {
   prisma = new PrismaClient();
 }
 
-export default prisma;
+const prismaProxy = new Proxy(prisma, {
+  get(target, prop) {
+    if (!prisma) {
+      return () => Promise.resolve(null);
+    }
+    return prisma[prop];
+  },
+});
+
+export default prismaProxy as PrismaClient;

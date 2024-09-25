@@ -6,6 +6,7 @@ import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
 import { createOrder, checkUserPayment } from './actions';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 // 动态导入 WeChatPayQRCode 组件
@@ -16,10 +17,13 @@ const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
 
 export default function PaymentPage() {
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const goodKey = searchParams.get('key');
+  const good = config.goods.filter((good) => good.key === goodKey)[0];
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
-    amount: config.amount,
-    description: config.description,
+    amount: good.price * 100,
+    description: good.description,
     createdAt: '',
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -150,7 +154,7 @@ export default function PaymentPage() {
           <div className="bg-white p-8 rounded-lg shadow-md">
             <WeChatPayQRCode
               amount={orderInfo.amount}
-              description={orderInfo.description}
+              description={good.name}
               onPaymentSuccess={handlePaymentSuccess}
               onCreateOrder={handleCreateOrder}
             />
@@ -166,7 +170,12 @@ export default function PaymentPage() {
     <div className="flex min-h-screen bg-gray-100">
       {/* 左侧：商品信息 */}
       <div className="w-1/2 p-8 bg-white">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">订单详情</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 flex justify-between">
+          <a href="/" className="text-xl">
+            👈返回
+          </a>
+          <span>订单详情</span>
+        </h2>
         <div className="bg-gray-50 rounded-lg shadow-md p-6">
           <div className="mb-4">
             <span className="font-semibold text-gray-700">订单号：</span>

@@ -103,7 +103,7 @@ export default function Header() {
     <header className="bg-white shadow-sm">
       <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
-          <a href="#" className="normal-case text-xl p-0">
+          <a href="/" className="normal-case text-xl p-0">
             <img alt="MvpFast" src="/title-logo.png" className="h-10 w-auto" />
           </a>
         </div>

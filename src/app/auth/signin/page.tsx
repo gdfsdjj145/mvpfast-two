@@ -243,6 +243,9 @@ export default function SignInPage() {
                   <h2 className="card-title justify-center">
                     请使用微信扫码登录
                   </h2>
+                  <p className="mt-6 text-center text-xs leading-5 text-gray-600">
+                    扫码后等待几秒
+                  </p>
                 </div>
               </div>
             )}

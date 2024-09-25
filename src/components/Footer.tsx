@@ -30,8 +30,8 @@ export default function FooterComponent() {
   return (
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          <div className="flex space-x-4 flex-col mr-20">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+          <div className="flex space-x-4 flex-col">
             <Link href="/" className="flex gap-3">
               <img className="w-6 h-6" src="/logo.png" alt="" />
               <span className="font-bold">MvpFast</span>
@@ -39,13 +39,14 @@ export default function FooterComponent() {
             <p className="mt-3 mb-3 text-sm text-base-content/80 leading-relaxed">
               用最短的时间快速创建你个人应用的开发模板
             </p>
+
             <Link
               href="https://www.mvpfast.top"
-              className="border-2 border-base-content/20 rounded-md p-2 group hover:bg-base-content/20 text-sm"
+              className="border-2 border-base-content/20 rounded-md p-2 group hover:bg-base-content/20 text-sm flex flex-col items-center"
             >
               <div className="flex gap-2 items-center group justify-center">
-                <span>使用</span>
-                <span className="font-bold  flex gap-0.5 items-center tracking-tight">
+                <span className="hidden md:block">使用</span>
+                <span className="font-bold flex gap-0.5 items-center tracking-tight">
                   <img
                     className="w-6 h-6 group-hover:scale-110 group-hover:rotate-45 transition-all mr-1"
                     src="/logo.png"
@@ -55,6 +56,9 @@ export default function FooterComponent() {
                 </span>
                 <span>开发</span>
               </div>
+              <span className="text-xs text-gray-500 mt-1 block md:hidden">
+                点击这里了解更多
+              </span>
             </Link>
           </div>
           {footerSections.map((section) => (

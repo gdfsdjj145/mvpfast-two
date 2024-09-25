@@ -25,7 +25,7 @@ export default function HeroComponent() {
               </p>
               <div className="space-y-4 " style={{ animationDelay: '0.6s' }}>
                 <Link
-                  href="/pay"
+                  href="/#price"
                   className="inline-block px-8 py-3 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
                 >
                   获取模板
