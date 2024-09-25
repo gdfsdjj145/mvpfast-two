@@ -20,8 +20,7 @@ export default function HeroComponent() {
                 className="text-lg text-gray-600 leading-relaxed "
                 style={{ animationDelay: '0.3s' }}
               >
-                使用NextJS、NextAuth、TailWindCss、Mongdb
-                Atlas、微信体系来构建的网站应用
+                手把手教你从0到1完成Nextjs全栈开发，从编程小白进阶到全栈开发者，让你学会独自开发项目并上线
               </p>
               <div className="space-y-4 " style={{ animationDelay: '0.6s' }}>
                 <Link
@@ -31,7 +30,7 @@ export default function HeroComponent() {
                   获取模板
                 </Link>
                 <p className="text-sm text-gray-500 flex justify-center items-center gap-2 md:text-sm">
-                  🛒前100名购买用户，可享作者全程上线服务🚀
+                  🛒前100名购买用户，可享作者全程技术服务🚀
                 </p>
               </div>
               <p className="text-xl font-bold text-purple-600 animate-bounce">

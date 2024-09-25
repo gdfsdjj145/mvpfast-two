@@ -31,7 +31,7 @@ export default function FooterComponent() {
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-          <div className="flex space-x-4 flex-col">
+          <div className="flex  flex-col mr-4 justify-start">
             <Link href="/" className="flex gap-3">
               <img className="w-6 h-6" src="/logo.png" alt="" />
               <span className="font-bold">MvpFast</span>
