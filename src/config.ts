@@ -8,11 +8,6 @@ export const config = {
   // 登录方式 最少一个
   // wx 微信登录  phone 手机登录 email 邮箱登录
   loginTypes: ['wx', 'email'],
-  // 支付集成功能
-  // 支付金额 分为单位  即 100元 == 100+00 = 10000
-  amount: 6900,
-  // 产品描述
-  description: 'MvpFast模板购买',
   goods: [
     {
       key: 'normal',
