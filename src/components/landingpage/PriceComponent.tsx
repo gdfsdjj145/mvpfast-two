@@ -82,7 +82,7 @@ export default function CtaComponent() {
                   立刻购买
                 </a>
                 <p className="mt-6 text-center text-xs leading-5 text-gray-600">
-                  提示：虚拟产品，购买后不支持退款
+                  提示：如购买后需要退款，可联系作者协商
                 </p>
               </div>
             ))}
