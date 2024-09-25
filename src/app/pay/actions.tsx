@@ -23,6 +23,9 @@ export const checkUserPayment = async (userId: string) => {
         transactionId: existingOrder?.transactionId,
         createdAt: existingOrder?.createdAt,
         orderId: existingOrder?.orderId,
+        price: existingOrder?.price,
+        name: existingOrder?.name,
+        orderType: existingOrder?.orderType,
       },
       message: existingOrder ? '用户已支付' : '用户未支付',
     };

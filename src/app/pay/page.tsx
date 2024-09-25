@@ -44,10 +44,17 @@ export default function PaymentPage() {
               transactionId: result.data.transactionId,
               paidAt: new Date(result.data.createdAt).toLocaleString(),
             });
+            const order = config.goods.filter(
+              (good) => good.key === result.data.orderType
+            )[0];
             setOrderInfo((prevState) => ({
               ...prevState,
               orderId: result.data.orderId,
               createdAt: new Date(result.data.createdAt).toLocaleString(),
+              amount: result.data.price * 100,
+              name: result.data.name,
+              orderType: result.data.orderType,
+              description: order.description,
             }));
           } else {
             setPaymentStatus('pending');
@@ -80,6 +87,9 @@ export default function PaymentPage() {
       createdAt: new Date(result.paidAt),
       transactionId: result.transactionId,
       orderId: orderInfo.orderId,
+      orderType: good.key,
+      price: good.price,
+      name: good.name,
     });
   };
 

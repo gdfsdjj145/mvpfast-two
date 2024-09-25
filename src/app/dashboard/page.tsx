@@ -64,7 +64,7 @@ const DashboardPage = () => {
               立即购买以获取更多功能！
             </p>
             <Link
-              href="/pay"
+              href="/#price"
               className="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-pink-600 hover:to-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110"
             >
               前往购买
@@ -86,12 +86,12 @@ const DashboardPage = () => {
                     />
                     <div className="flex-1">
                       <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                        {config.description}
+                        {order.name}
                       </h2>
                       <div className="space-y-2">
                         <p className="text-lg font-semibold text-primary">
                           <i className="fas fa-money-bill-wave mr-2"></i>金额: ¥
-                          {config.amount / 100}
+                          {order.price}
                         </p>
                         <p className="text-sm text-gray-600">
                           <i className="fas fa-hashtag mr-2"></i>订单号:{' '}
@@ -109,7 +109,7 @@ const DashboardPage = () => {
 
                       <div className="mt-4 flex space-x-3">
                         <a
-                          href="/pay"
+                          href={`/pay?key=${order.orderType}`}
                           className="btn px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                           详情
