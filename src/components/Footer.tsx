@@ -3,8 +3,12 @@ import Link from 'next/link';
 
 const footerSections = [
   {
-    title: '产品案例',
+    title: '友情链接',
     links: [
+      {
+        name: 'ez背单词',
+        href: 'https://ezbdc.dashu.ai',
+      },
       { name: 'LogoCook', href: 'https://www.logocook.shop/' },
       { name: 'IMessageU', href: 'https://www.imessageu.shop/' },
       { name: 'WeFight', href: 'https://www.wefight.cn/' },

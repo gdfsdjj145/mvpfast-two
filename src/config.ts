@@ -35,6 +35,7 @@ export const config = {
         '课程学习过程的内容解答',
         '技术支持服务',
       ],
+      original: 259,
       price: 189,
       mostPopular: true,
       href: '/pay?key=most',

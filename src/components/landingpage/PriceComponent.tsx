@@ -51,7 +51,13 @@ export default function CtaComponent() {
                     {good.description}
                   </p>
                   <p className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-4xl font-bold tracking-tight text-gray-900">
+                    <span className="text-4xl font-bold tracking-tight text-gray-900 flex items-center">
+                      {good.original && (
+                        <span className="relative opacity-80 text-base px-2 text-[#acacac]">
+                          <span className="absolute bg-[#acacac] h-[1.5px] inset-x-0 top-[48%]"></span>
+                          <span>￥{good.original}</span>
+                        </span>
+                      )}
                       ￥{good.price}
                     </span>
                   </p>
