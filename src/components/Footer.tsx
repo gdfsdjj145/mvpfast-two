@@ -8,10 +8,31 @@ const footerSections = [
       {
         name: 'ez背单词',
         href: 'https://ezbdc.dashu.ai',
+        title:
+          '一款极简的英文单词学习应用，可以非常方便高效的学习英文，具有有挑战的单词背诵模式，无需注册，下载即用。',
+        logo: 'ezbbc-logo.png',
       },
-      { name: 'LogoCook', href: 'https://www.logocook.shop/' },
-      { name: 'IMessageU', href: 'https://www.imessageu.shop/' },
-      { name: 'WeFight', href: 'https://www.wefight.cn/' },
+      {
+        name: 'LogoCook',
+        href: 'https://www.logocook.shop/',
+        title:
+          'LogoCook是一款快速免费的logo生成器,通过在线编辑就可以快速的创建自己想要的logo,包括logo免费下载,可爱的logo属性设计,上传自定义的svg文件,满足个人和企业快速创建logo的需求',
+        logo: 'cook-logo.png',
+      },
+      {
+        name: 'IMessageU',
+        href: 'https://www.imessageu.shop/',
+        title:
+          'WeFight是一个通过互相打卡竞技排名的方式来完成目标的网站,通过创建目标任务群组,邀请好友进入群组,完成每天打卡任务,通过每天打卡的方式来培养好习惯和完成目标,适合健身、学习、读书、工作各种社交场景',
+        logo: 'want-logo.png',
+      },
+      {
+        name: 'WeFight',
+        href: 'https://www.wefight.cn/',
+        title:
+          '一款快速打通用户反馈通道的产品，创建你的面板来接受用户的心声和建议，帮助开发者助力打造更好的产品，帮助开发者减少伪需求的开发，帮助开发者避免无用功',
+        logo: 'fight-logo.png',
+      },
     ],
   },
   {
@@ -76,8 +97,11 @@ export default function FooterComponent() {
                     <a
                       href={link.href}
                       target="_blank"
-                      className="text-sm text-gray-600 hover:text-gray-900"
+                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-4"
                     >
+                      {link.logo && (
+                        <img src={`/${link.logo}`} alt="" className="w-6 h-6" />
+                      )}
                       {link.name}
                     </a>
                   </li>
