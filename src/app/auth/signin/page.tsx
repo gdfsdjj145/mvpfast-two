@@ -154,7 +154,6 @@ export default function SignInPage() {
       ...form,
       redirect: false,
     });
-    console.log(res, 'res');
     if (res?.error) {
       toast.error(res?.error);
     } else {

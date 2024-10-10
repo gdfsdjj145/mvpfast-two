@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { JWT } from 'next-auth/jwt';
-import NProgress from 'nprogress';
 
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
