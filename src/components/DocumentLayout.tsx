@@ -10,15 +10,23 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { allDocPages } from 'contentlayer/generated';
 import { FaBook, FaBars, FaChevronDown } from 'react-icons/fa';
+import { BsCaretRightSquare } from 'react-icons/bs';
+import { FiBookOpen } from 'react-icons/fi';
 
 interface DocGroup {
   [key: string]: typeof allDocPages;
 }
 
 // 文件夹名称映射
-const folderNames: { [key: string]: string } = {
-  start: '开发教程',
-  dev: '开始',
+const folderNames: { [key: string]: any } = {
+  start: {
+    label: '开发教程',
+    icon: <FiBookOpen />,
+  },
+  dev: {
+    label: '开始',
+    icon: <BsCaretRightSquare />,
+  },
   // 添加更多文件夹映射...
 };
 
@@ -83,18 +91,25 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
   );
 
   return (
-    <aside className="bg-base-200 w-80 h-full overflow-y-auto">
+    <aside className="h-full overflow-y-auto sm:w-64">
       <a
         href="/"
-        className="sticky top-0 z-30 bg-opacity-90 backdrop-blur px-4 py-2 bg-base-200 flex items-center gap-2"
+        className="sticky top-0 z-30 bg-opacity-90 backdrop-blur px-4 py-2 flex items-center gap-2"
       >
-        <img src="/title-logo.png" alt="" />
+        <img
+          src="/title-logo.png"
+          className="w-32 hover:bg-base-200 pl-2 rounded-lg"
+          alt=""
+        />
       </a>
       <ul className="menu menu-compact flex flex-col p-4 space-y-2">
         {Object.entries(groupedDocs).map(([folder, docs]) => (
           <li key={folder}>
-            <div className="flex items-center justify-between p-2 font-medium">
-              <span className="font-bold">{folderNames[folder] || folder}</span>
+            <div className="flex items-center justify-between p-2 gap-2 font-medium">
+              {folderNames[folder].icon}
+              <span className="font-bold flex-1">
+                {folderNames[folder].label || folder}
+              </span>
               <FaChevronDown />
             </div>
             <ul className="ml-4">{docs.map(renderDocLink)}</ul>
