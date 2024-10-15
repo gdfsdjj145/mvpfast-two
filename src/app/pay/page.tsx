@@ -5,9 +5,11 @@ import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
-import { createOrder, checkUserPayment } from './actions';
+import { createOrder, checkUserPayment, checkUserById } from './actions';
 import { useSearchParams } from 'next/navigation';
+import { FaInfoCircle } from 'react-icons/fa';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 // 动态导入 WeChatPayQRCode 组件
 const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
@@ -19,12 +21,14 @@ export default function PaymentPage() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const goodKey = searchParams.get('key');
+  const shareId = searchParams.get('shareid');
   const good = config.goods.filter((good) => good.key === goodKey)[0];
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
     amount: good.price * 100,
     description: good.description,
     createdAt: '',
+    shareId: '',
   });
   const [isLoading, setIsLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState('pending'); // 'pending', 'success', 'failed'
@@ -35,7 +39,7 @@ export default function PaymentPage() {
 
   useEffect(() => {
     const checkPayment = async () => {
-      if (status === 'authenticated' && session?.user?.id) {
+      if (status === 'authenticated' && session) {
         try {
           const result = await checkUserPayment(session.user.id);
           if (result.data.hasPaid) {
@@ -47,6 +51,9 @@ export default function PaymentPage() {
             const order = config.goods.filter(
               (good) => good.key === result.data.orderType
             )[0];
+
+            console.log(result);
+
             setOrderInfo((prevState) => ({
               ...prevState,
               orderId: result.data.orderId,
@@ -55,6 +62,7 @@ export default function PaymentPage() {
               name: result.data.name,
               orderType: result.data.orderType,
               description: order.description,
+              shareId: result.data.promoter,
             }));
           } else {
             setPaymentStatus('pending');
@@ -67,7 +75,26 @@ export default function PaymentPage() {
       setIsLoading(false);
     };
 
+    const getShare = async () => {
+      if (status === 'authenticated' && session) {
+        const user = await checkUserById(shareId);
+        if (user.data) {
+          setOrderInfo((prevState) => ({
+            ...prevState,
+            amount: orderInfo.amount - config.sharePrice * 100,
+            shareId: shareId,
+          }));
+          toast.success(`推广人验证成功，获得${config.sharePrice}元优惠额度`);
+        } else {
+          toast.error('推广人id有误，无法享受优惠');
+        }
+      }
+    };
+
     checkPayment();
+    if (shareId) {
+      getShare();
+    }
   }, [status, session]);
 
   const handlePaymentSuccess = async (result: {
@@ -82,15 +109,21 @@ export default function PaymentPage() {
       origin: { y: 0.6 },
     });
 
-    await createOrder({
+    console.log(orderInfo);
+
+    const order = {
       identifier: session?.user.id,
       createdAt: new Date(result.paidAt),
       transactionId: result.transactionId,
       orderId: orderInfo.orderId,
       orderType: good.key,
-      price: good.price,
+      price: orderInfo.amount / 100,
       name: good.name,
-    });
+      promoter: orderInfo.shareId,
+      promotionPrice: config.sharePrice,
+    };
+
+    await createOrder(order);
   };
 
   const handleCreateOrder = (order: any) => {
@@ -147,7 +180,7 @@ export default function PaymentPage() {
             </p>
           </div>
           <div className="mt-8">
-            <Link href="/dashboard" className="btn btn-primary w-full">
+            <Link href="/dashboard/order" className="btn btn-primary w-full">
               前往个人页面
             </Link>
           </div>
@@ -200,6 +233,21 @@ export default function PaymentPage() {
             <span className="text-xl font-bold text-red-500">
               ¥{(orderInfo.amount / 100).toFixed(2)}
             </span>
+          </div>
+          <div className="mb-4 flex">
+            <span className="font-semibold text-gray-700 flex items-center">
+              推广者
+              <span
+                className="tooltip mx-2 tooltip-right"
+                data-tip={`
+                  推广者验证成功后
+                  可以获得${config.sharePrice}元的优惠额度`}
+              >
+                <FaInfoCircle></FaInfoCircle>
+              </span>
+              ：
+            </span>
+            <span className="text-gray-600">{orderInfo.shareId || '-'}</span>
           </div>
           <div className="mb-4">
             <span className="font-semibold text-gray-700">创建时间：</span>

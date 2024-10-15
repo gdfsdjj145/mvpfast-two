@@ -45,7 +45,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
     };
 
     createOrder();
-  }, []);
+  }, [amount]);
 
   useEffect(() => {
     if (!outTradeNo || isPaymentSuccessful) return;

@@ -35,12 +35,26 @@ model VerificationWxQrCode {
 }
 
 model Order {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier    String
-  createdAt     DateTime @default(now())
-  orderId       String   @unique
-  transactionId String   @unique
-  orderType     String?
-  price         Float?
-  name          String?
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier     String
+  createdAt      DateTime @default(now())
+  orderId        String   @unique
+  transactionId  String   @unique
+  orderType      String?
+  price          Float?
+  name           String?
+  promoter       String?
+  promotionPrice Float?   @default(0)
+}
+
+model Promotion {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  // 推广人
+  identifier     String
+  createdAt      DateTime @default(now())
+  orderType      String
+  promotionPrice Float?   @default(0)
+  // 购买者
+  purchaser      String
+  checkout       Boolean  @default(false)
 }

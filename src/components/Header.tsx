@@ -51,7 +51,7 @@ const UserMenu = () => {
           </li>
           <li className="hover:bg-base-200 rounded-lg">
             <Link
-              href="/dashboard"
+              href="/dashboard/order"
               className="justify-center py-1 text-sm font-medium"
             >
               我的
@@ -70,7 +70,7 @@ const UserMenu = () => {
 
       {/* 移动端显示 */}
       <div className="sm:hidden">
-        <Link href="/dashboard" className="btn btn-ghost btn-sm mr-2">
+        <Link href="/dashboard/order" className="btn btn-ghost btn-sm mr-2">
           <span className="text-sm font-semibold">我的</span>
         </Link>
         <button
