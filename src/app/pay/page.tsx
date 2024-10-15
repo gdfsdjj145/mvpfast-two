@@ -52,8 +52,6 @@ export default function PaymentPage() {
               (good) => good.key === result.data.orderType
             )[0];
 
-            console.log(result);
-
             setOrderInfo((prevState) => ({
               ...prevState,
               orderId: result.data.orderId,
@@ -90,11 +88,10 @@ export default function PaymentPage() {
         }
       }
     };
-
-    checkPayment();
     if (shareId) {
       getShare();
     }
+    checkPayment();
   }, [status, session]);
 
   const handlePaymentSuccess = async (result: {
@@ -108,8 +105,6 @@ export default function PaymentPage() {
       spread: 70,
       origin: { y: 0.6 },
     });
-
-    console.log(orderInfo);
 
     const order = {
       identifier: session?.user.id,
