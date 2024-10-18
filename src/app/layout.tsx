@@ -41,11 +41,11 @@ export default function RootLayout({
         />
         <Script id="ga-script" strategy="lazyOnload">
           {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){window.dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-Q1PC08733G');
-      `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-Q1PC08733G');
+          `}
         </Script>
       </body>
     </html>
