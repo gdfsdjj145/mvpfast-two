@@ -37,14 +37,14 @@ export default function RootLayout({
         <Analytics></Analytics>
         <Script
           strategy="lazyOnload"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-Q1PC08733G`}
+          src={`https://www.googletagmanager.com/gtag/js?id=G-B315FBSZWP`}
         />
         <Script id="ga-script" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){window.dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-Q1PC08733G');
+            gtag('config', 'G-B315FBSZWP');
           `}
         </Script>
       </body>
