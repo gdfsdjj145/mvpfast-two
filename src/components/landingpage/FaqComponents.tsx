@@ -4,7 +4,7 @@ export default function FaqComponents() {
   const faqs = [
     {
       question: 'MvpFast的支付问题',
-      answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能`,
+      answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。`,
     },
     {
       question: '购买后得到什么',
@@ -14,11 +14,11 @@ export default function FaqComponents() {
     },
     {
       question: '购买MvpFast之后，我可以做什么',
-      answer: `你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任`,
+      answer: `你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。`,
     },
     {
       question: '如何部署MvpFast',
-      answer: `部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟`,
+      answer: `部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。`,
     },
   ];
   return (

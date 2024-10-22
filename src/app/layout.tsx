@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
+import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import './globals.css';
 import { ReduxProvider } from '@/store';
@@ -12,6 +14,15 @@ const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
 });
 
 const inter = Inter({ subsets: ['latin'] });
+
+const fonts = localFont({
+  src: [
+    {
+      path: '../../public/fonts/xft.ttf',
+    },
+  ],
+  variable: '--font-xft',
+});
 
 export const metadata: Metadata = {
   title: 'MvpFast-快速构建网站应用',
@@ -28,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="cupcake">
-      <body className={inter.className}>
+      <body className={cn(fonts.variable, inter.className)}>
         <PageProgressBar />
         <SessionProvider>
           <ReduxProvider>{children}</ReduxProvider>

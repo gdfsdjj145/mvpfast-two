@@ -81,7 +81,7 @@ export default function FeatureComponent() {
   return (
     <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
       <div>
-        <div className="mx-auto max-w-2xl lg:text-center">
+        <div className="mx-auto max-w-2xl lg:text-center lg:px-0 px-6">
           <h2 className="text-base font-semibold leading-7 text-primary mb-4">
             快速构建网页应用
           </h2>

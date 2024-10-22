@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         primary: '#e400de',
       },
+      fontFamily: {
+        xft: ['var(--font-xft)', 'sans-serif'],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
