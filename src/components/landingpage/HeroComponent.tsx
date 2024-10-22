@@ -43,7 +43,7 @@ export default function HeroComponent() {
                     ></IoGiftOutline>
                     30元
                   </span>
-                  优惠
+                  优惠，联系作者获得链接
                 </p>
               </div>
               <p className="text-xl font-bold text-purple-600 animate-pulse">
