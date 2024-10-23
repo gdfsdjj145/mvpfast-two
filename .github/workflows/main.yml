@@ -21,15 +21,19 @@ jobs:
           git config user.name "kajian"
           git config user.email "929932952@qq.com"
 
-      - name: Add template remote
-        run: git remote add template https://github.com/gdfsdjj145/mvpfast.git
+      - name: Authenticate with GitHub
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote remove template
+          git remote add template https://$TOKEN@github.com/gdfsdjj145/mvpfast.git
 
       - name: Fetch template
         run: git fetch template
 
       - name: Merge template changes
         run: |
-          git merge mvpfast-web/main --no-commit || true
+          git merge template/main --no-commit || true
           git commit -am "Sync template updates"
 
       - name: Push changes
