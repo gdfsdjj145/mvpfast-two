@@ -32,8 +32,8 @@ jobs:
 
       - name: Merge template changes
         run: |
-          git merge template/main --no-commit || true
-          git commit -am "Sync template updates"
+          git merge template/main --no-commit --allow-unrelated-histories || true
+          git commit -am "Sync template updates" || true
 
       - name: Push changes
         run: git push origin main
