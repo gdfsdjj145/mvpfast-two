@@ -18,8 +18,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "kajian"
+          git config user.email "929932952@qq.com"
 
       - name: Add template remote
         run: git remote add template https://github.com/gdfsdjj145/mvpfast.git
