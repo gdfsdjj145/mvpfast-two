@@ -1,0 +1,132 @@
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import QRCode from 'qrcode.react';
+import axios from 'axios';
+
+interface WeChatPayQRCodeProps {
+  amount: number;
+  description: string;
+  onPaymentSuccess: (result: { transactionId: string; paidAt: string }) => void;
+  onCreateOrder: (order: any) => void;
+}
+
+const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
+  amount,
+  description,
+  onPaymentSuccess,
+  onCreateOrder,
+}) => {
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [outTradeNo, setOutTradeNo] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState('pending');
+  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
+  const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const createOrder = async () => {
+      try {
+        const { data } = await axios.post('/api/wx/create-wechat-order', {
+          amount,
+          description,
+        });
+        onCreateOrder({
+          orderId: data.data.outTradeNo,
+          createdAt: data.data.createdAt,
+        });
+        setQrCodeUrl(data.data.qrCodeUrl);
+        setOutTradeNo(data.data.outTradeNo);
+      } catch (err) {
+        setError('创建支付订单失败');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    createOrder();
+  }, [amount]);
+
+  useEffect(() => {
+    if (!outTradeNo || isPaymentSuccessful) return;
+
+    const checkOrderStatus = async () => {
+      try {
+        const { data } = await axios.get(
+          `/api/wx/query-wechat-order?outTradeNo=${outTradeNo}`
+        );
+        if (data.data.trade_state === 'SUCCESS') {
+          setPaymentStatus('success');
+          setIsPaymentSuccessful(true);
+          onPaymentSuccess({
+            transactionId: data.data.transaction_id,
+            paidAt: new Date(data.data.success_time).toLocaleString(),
+          });
+          if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
+        }
+      } catch (err) {
+        console.error('查询订单状态失败:', err);
+      }
+    };
+
+    intervalIdRef.current = setInterval(checkOrderStatus, 5000); // 每5秒检查一次
+
+    return () => {
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, [outTradeNo, onPaymentSuccess, isPaymentSuccessful]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!qrCodeUrl) {
+    return <div className="text-red-500">无法生成支付二维码</div>;
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <h2 className="text-xl font-bold mb-4">请使用微信扫描二维码支付</h2>
+      <div className="relative">
+        <QRCode value={qrCodeUrl} size={256} />
+        {paymentStatus === 'success' && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80">
+            <svg
+              className="w-16 h-16 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <p className="mt-4 text-xl font-bold text-green-600">支付成功！</p>
+            <p className="mt-2 text-gray-600">感谢您的购买，祝您使用愉快！</p>
+          </div>
+        )}
+      </div>
+      <p className="mt-4">金额: ¥{(amount / 100).toFixed(2)}</p>
+      <p>描述: {description}</p>
+    </div>
+  );
+};
+
+export default WeChatPayQRCode;

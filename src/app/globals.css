@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+
+html {
+  scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */
+  scrollbar-width: thin; /* 滚动条宽度 */
+}
+ 
+/* 修改特定容器的滚动条样式 */
+.scrollbar-style {
+  scrollbar-color: #e8e8e8;
+  scrollbar-width: thin;
+  scroll-behavior: smooth; /* 平滑滚动 */
+}
+
+.scrollbar-style::-webkit-scrollbar {
+  width: 12px; /* 对于Google Chrome、Safari和新版的Firefox */
+}
+ 
+.scrollbar-style::-webkit-scrollbar-track {
+  background: #2e2e2e; /* 对于Google Chrome、Safari和新版的Firefox */
+}
+ 
+.scrollbar-style::-webkit-scrollbar-thumb {
+  background: #ff6347; /* 对于Google Chrome、Safari和新版的Firefox */
+}
+ 
+.scrollbar-style {
+  scroll-behavior: smooth; /* 平滑滚动 */
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.6s ease-out forwards;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientFlow 3s ease infinite;
+}
+
+#nprogress .bar {
+  background: #29d;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
