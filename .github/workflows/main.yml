@@ -34,3 +34,11 @@ jobs:
         run: |
           git merge template/main --no-commit --allow-unrelated-histories || true
           git commit -am "Sync template updates" || true
+          
+      - name: Push changes
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://$TOKEN@github.com/mvpfast/mvpfast-web.git main
+          echo "Push complete"
+
