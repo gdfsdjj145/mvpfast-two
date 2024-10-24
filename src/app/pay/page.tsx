@@ -129,7 +129,7 @@ export default function PaymentPage() {
   };
 
   const LoadingSpinner = () => (
-    <div className="flex justify-center items-center h-64">
+    <div className="flex justify-center items-center h-64 w-full">
       <div className="animate-bounce">
         <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
@@ -150,30 +150,35 @@ export default function PaymentPage() {
 
     if (paymentStatus === 'success') {
       return (
-        <div className="bg-white p-8 rounded-lg shadow-md w-full">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">订单详情</h2>
-          <div className="space-y-4">
-            <p>
-              <span className="font-semibold">订单号：</span>
-              {orderInfo.orderId}
-            </p>
-            <p>
-              <span className="font-semibold">交易号：</span>
+        <div className="mt-4 md:mt-6 bg-green-50 rounded-lg shadow-md p-4 md:p-6">
+          <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-green-800">
+            支付成功
+          </h3>
+          <div className="mb-2">
+            <span className="font-semibold text-green-700">交易号：</span>
+            <span className="text-green-600">
               {paymentResult.transactionId}
-            </p>
-            <p>
-              <span className="font-semibold">支付金额：</span>¥
-              {(orderInfo.amount / 100).toFixed(2)}
-            </p>
-            <p>
-              <span className="font-semibold">支付时间：</span>
-              {paymentResult.paidAt}
-            </p>
-            <p>
-              <span className="font-semibold">商品描述：</span>
-              {orderInfo.description}
-            </p>
+            </span>
           </div>
+          <div className="mb-2">
+            <span className="font-semibold text-green-700">支付时间：</span>
+            <span className="text-green-600">{paymentResult.paidAt}</span>
+          </div>
+          <div className="mb-2">
+            <div className="font-semibold text-green-700 mb-2">客服微信：</div>
+            <span className="text-green-600">
+              <img
+                className="w-28 md:w-36"
+                src="/wechat.jpg"
+                alt=""
+                srcSet=""
+              />
+            </span>
+          </div>
+          <div className="text-gray-500 text-sm md:text-base">
+            添加客服微信获取模板
+          </div>
+
           <div className="mt-8">
             <Link href="/dashboard/order" className="btn btn-primary w-full">
               前往个人页面
@@ -186,9 +191,6 @@ export default function PaymentPage() {
     if (paymentStatus === 'pending') {
       return (
         <>
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">
-            微信扫码支付
-          </h2>
           <div className="bg-white p-8 rounded-lg shadow-md">
             <WeChatPayQRCode
               amount={orderInfo.amount}
@@ -205,81 +207,79 @@ export default function PaymentPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* 左侧：商品信息 */}
-      <div className="w-1/2 p-8 bg-white">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 flex justify-between">
-          <a href="/" className="text-xl">
-            👈返回
-          </a>
-          <span>订单详情</span>
-        </h2>
-        <div className="bg-gray-50 rounded-lg shadow-md p-6">
-          <div className="mb-4">
-            <span className="font-semibold text-gray-700">订单号：</span>
-            <span className="text-gray-600">{orderInfo.orderId}</span>
+    <div className="flex justify-center items-center p-4 md:p-8 bg-[#ffffff] min-h-screen">
+      <div className="flex flex-col md:flex-row flex-1 w-full max-w-[1200px] bg-white rounded-[20px] shadow-xl relative">
+        <Link
+          href="/"
+          className="max-lg:hidden absolute flex text-xl bg-black text-white py-2 px-4 -top-8 rounded-tl-3xl rounded-tr-3xl cursor-pointer group"
+        >
+          <div className=" group-hover:scale-105 group-hover:-rotate-12 group-hover:mr-1 transition-all ">
+            👈
           </div>
-          <div className="mb-4">
-            <span className="font-semibold text-gray-700">商品描述：</span>
-            <span className="text-gray-600">{orderInfo.description}</span>
-          </div>
-          <div className="mb-4">
-            <span className="font-semibold text-gray-700">支付金额：</span>
-            <span className="text-xl font-bold text-red-500">
-              ¥{(orderInfo.amount / 100).toFixed(2)}
-            </span>
-          </div>
-          <div className="mb-4 flex">
-            <span className="font-semibold text-gray-700 flex items-center">
-              推广者
-              <span
-                className="tooltip mx-2 tooltip-right"
-                data-tip={`
-                  推广者验证成功后
-                  可以获得${config.sharePrice}元的优惠额度`}
-              >
-                <FaInfoCircle></FaInfoCircle>
-              </span>
-              ：
-            </span>
-            <span className="text-gray-600">{orderInfo.shareId || '-'}</span>
-          </div>
-          <div className="mb-4">
-            <span className="font-semibold text-gray-700">创建时间：</span>
-            <span className="text-gray-600">{orderInfo.createdAt}</span>
-          </div>
-        </div>
-        {paymentStatus === 'success' && (
-          <div className="mt-6 bg-green-50 rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold mb-4 text-green-800">支付成功</h3>
-            <div className="mb-2">
-              <span className="font-semibold text-green-700">交易号：</span>
-              <span className="text-green-600">
-                {paymentResult.transactionId}
-              </span>
+          <div>返回</div>
+        </Link>
+        {/* 左侧支付表单 */}
+        <div className="w-full md:w-[55%] p-6 md:p-12 bg-white">
+          <div className="flex justify-between">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 flex items-center gap-2">
+              <img
+                src="/logo.png"
+                alt=""
+                className="w-10 h-10 md:w-12 md:h-12"
+              />
+              <span>订单详情</span>
+            </h1>
+            <div className="max-lg:block hidden">
+              <Link href="/" className="btn">
+                返回
+              </Link>
             </div>
-            <div className="mb-2">
-              <span className="font-semibold text-green-700">支付时间：</span>
-              <span className="text-green-600">{paymentResult.paidAt}</span>
-            </div>
-            <div className="mb-2">
-              <span className="font-semibold text-green-700">客服微信：</span>
-              <span className="text-green-600">
-                <img className="w-36" src="/wechat.jpg" alt="" srcSet="" />
-              </span>
-            </div>
-            <div className="text-gray-500">添加客服微信获取模板</div>
           </div>
-        )}
-        <div className="mt-6 text-sm text-gray-500">
-          <p>请在15分钟内完成支付，否则订单将自动取消。</p>
-          <p>如遇到问题，请联系客服wx：13022051583</p>
-        </div>
-      </div>
+          <p className="text-[#575757] text-base md:text-lg mb-6 md:mb-8">
+            以下是订单的详细内容，请认真核对！
+          </p>
+          <div className="space-y-4 md:space-y-6">
+            <div className="space-y-2">
+              <label className="text-[#575757] text-lg md:text-xl font-bold">
+                订单号
+              </label>
+              <div>{orderInfo.orderId}</div>
+            </div>
 
-      {/* 右侧：支付二维码或订单详情 */}
-      <div className="w-1/2 p-8 flex flex-col items-center justify-center bg-gray-50">
-        {renderRightContent()}
+            <div className="space-y-2">
+              <label className="text-[#575757] text-lg md:text-xl font-bold">
+                商品描述
+              </label>
+              <div>{orderInfo.description}</div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[#575757] text-lg md:text-xl font-bold">
+                支付金额
+              </label>
+              <div>￥{(orderInfo.amount / 100).toFixed(2)}</div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[#575757] text-lg md:text-xl font-bold">
+                创建时间
+              </label>
+              <div>{orderInfo.createdAt}</div>
+            </div>
+
+            <div className="mt-4 md:mt-6 text-xs md:text-sm text-gray-500">
+              <p>请在15分钟内完成支付，否则订单将自动取消。</p>
+              <p>如遇到问题，请联系客服wx：13022051583</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 右侧订单摘要 */}
+        <div className="flex flex-col w-full md:w-[45%] items-center justify-center bg-[#f8f8f8] p-6 md:p-12 relative overflow-hidden">
+          <div className="w-full p-4 md:p-8 flex flex-col items-center justify-center">
+            {renderRightContent()}
+          </div>
+        </div>
       </div>
     </div>
   );
