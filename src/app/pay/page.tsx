@@ -7,7 +7,6 @@ import { useSession } from 'next-auth/react';
 import { config } from '@/config';
 import { createOrder, checkUserPayment, checkUserById } from './actions';
 import { useSearchParams } from 'next/navigation';
-import { FaInfoCircle } from 'react-icons/fa';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -31,7 +30,7 @@ export default function PaymentPage() {
     shareId: '',
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [paymentStatus, setPaymentStatus] = useState('pending'); // 'pending', 'success', 'failed'
+  const [paymentStatus, setPaymentStatus] = useState(''); // 'pending', 'success', 'failed'
   const [paymentResult, setPaymentResult] = useState({
     transactionId: '',
     paidAt: '',
@@ -65,12 +64,13 @@ export default function PaymentPage() {
           } else {
             setPaymentStatus('pending');
           }
+          setIsLoading(false);
         } catch (error) {
           console.error('检查支付状态失败:', error);
           setPaymentStatus('failed');
+          setIsLoading(false);
         }
       }
-      setIsLoading(false);
     };
 
     const getShare = async () => {
@@ -122,6 +122,7 @@ export default function PaymentPage() {
   };
 
   const handleCreateOrder = (order: any) => {
+    console.log(order, orderInfo, paymentResult);
     setOrderInfo((prevState) => ({
       ...prevState,
       ...order,
@@ -190,20 +191,20 @@ export default function PaymentPage() {
 
     if (paymentStatus === 'pending') {
       return (
-        <>
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <WeChatPayQRCode
-              amount={orderInfo.amount}
-              description={good.name}
-              onPaymentSuccess={handlePaymentSuccess}
-              onCreateOrder={handleCreateOrder}
-            />
-          </div>
-        </>
+        <div className="bg-white p-8 rounded-lg shadow-md">
+          <WeChatPayQRCode
+            amount={orderInfo.amount}
+            description={good.name}
+            onPaymentSuccess={handlePaymentSuccess}
+            onCreateOrder={handleCreateOrder}
+          />
+        </div>
       );
     }
 
-    return <p>加载失败，请刷新页面重试</p>;
+    if (paymentStatus === 'failed') {
+      return <p>加载失败，请刷新页面重试</p>;
+    }
   };
 
   return (
