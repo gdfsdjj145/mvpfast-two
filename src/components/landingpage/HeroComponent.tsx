@@ -35,15 +35,14 @@ export default function HeroComponent() {
                   </span>
                 </Link>
                 <p className="text-sm text-gray-500 flex justify-center items-center gap-2 md:text-sm">
-                  🛒前50名购买可以获得
                   <span className="text-green-500 flex gap-1 items-center font-bold text-lg">
                     <IoGiftOutline
                       size={30}
                       className="animate-bounce"
                     ></IoGiftOutline>
-                    30元
+                    70元
                   </span>
-                  优惠，联系作者获得链接
+                  🛒优惠名额还剩下32个（每日更新）
                 </p>
               </div>
               <p className="text-xl font-bold text-purple-600 animate-pulse">
