@@ -42,7 +42,7 @@ export default function HeroComponent() {
                     ></IoGiftOutline>
                     70元
                   </span>
-                  🛒优惠名额还剩下32个（每日更新）
+                  🛒优惠名额还剩下31个（每日更新）
                 </p>
               </div>
               <p className="text-xl font-bold text-purple-600 animate-pulse">
