@@ -45,6 +45,7 @@ model Order {
   name           String?
   promoter       String?
   promotionPrice Float?   @default(0)
+  Inviter        String?
 }
 
 model Promotion {

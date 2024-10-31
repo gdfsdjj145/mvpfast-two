@@ -16,6 +16,13 @@
   }
 }
 
+:root {
+  --p: #9462ff;
+}
+
+[data-theme='dark'] {
+  --p: #9462ff;
+}
 
 html {
   scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */

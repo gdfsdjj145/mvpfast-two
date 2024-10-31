@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
-import { createOrder, checkUserPayment, checkUserById } from './actions';
+import { createOrder, checkUserPayment } from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -20,7 +20,8 @@ export default function PaymentPage() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const goodKey = searchParams.get('key');
-  const shareId = searchParams.get('shareid');
+  const shareCode = searchParams.get('sharecode');
+
   const good = config.goods.filter((good) => good.key === goodKey)[0];
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
@@ -28,6 +29,10 @@ export default function PaymentPage() {
     description: good.description,
     createdAt: '',
     shareId: '',
+  });
+  const [shareOption, setShareOption] = useState({
+    code: '',
+    sharePrice: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState(''); // 'pending', 'success', 'failed'
@@ -73,26 +78,34 @@ export default function PaymentPage() {
       }
     };
 
-    const getShare = async () => {
+    const getShare = () => {
       if (status === 'authenticated' && session) {
-        const user = await checkUserById(shareId);
-        if (user.data) {
-          setOrderInfo((prevState) => ({
-            ...prevState,
-            amount: orderInfo.amount - config.sharePrice * 100,
-            shareId: shareId,
-          }));
-          toast.success(`推广人验证成功，获得${config.sharePrice}元优惠额度`);
-        } else {
-          toast.error('推广人id有误，无法享受优惠');
-        }
+        const option = config.shareCode.filter(
+          (item) => item.code === shareCode
+        )[0] || {
+          code: '',
+          sharePrice: 0,
+        };
+        setShareOption(option);
       }
     };
-    if (shareId) {
+
+    if (shareCode) {
       getShare();
     }
     checkPayment();
   }, [status, session]);
+
+  useEffect(() => {
+    if (shareOption && shareOption.code) {
+      toast.success('检测为合格优惠链接，获得优惠');
+      setOrderInfo((prevState) => ({
+        ...prevState,
+        amount: orderInfo.amount - shareOption.sharePrice * 100,
+        shareId: shareOption.code,
+      }));
+    }
+  }, [shareOption]);
 
   const handlePaymentSuccess = async (result: {
     transactionId: string;
@@ -114,15 +127,14 @@ export default function PaymentPage() {
       orderType: good.key,
       price: orderInfo.amount / 100,
       name: good.name,
-      promoter: orderInfo.shareId,
-      promotionPrice: config.sharePrice,
+      promoter: shareOption.code,
+      promotionPrice: shareOption.sharePrice,
     };
 
     await createOrder(order);
   };
 
   const handleCreateOrder = (order: any) => {
-    console.log(order, orderInfo, paymentResult);
     setOrderInfo((prevState) => ({
       ...prevState,
       ...order,
