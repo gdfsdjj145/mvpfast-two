@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
+import { ThemeProviders } from '@/components/theme/ThemeProvider';
 const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
   ssr: false,
 });
@@ -38,12 +39,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh" data-theme="cupcake">
+    <html lang="zh">
       <body className={cn(fonts.variable, inter.className)}>
         <PageProgressBar />
-        <SessionProvider>
-          <ReduxProvider>{children}</ReduxProvider>
-        </SessionProvider>
+        <ThemeProviders attribute="data-theme" defaultTheme="light">
+          <SessionProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </SessionProvider>
+        </ThemeProviders>
         <Toaster></Toaster>
         <Analytics></Analytics>
         <Script

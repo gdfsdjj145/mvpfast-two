@@ -8,9 +8,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#e400de',
-      },
       fontFamily: {
         xft: ['var(--font-xft)', 'sans-serif'],
       },
@@ -76,40 +73,7 @@ const config: Config = {
   darkMode: ['class', '[data-theme="dark"]'],
   plugins: [require('daisyui'), require('@tailwindcss/typography')],
   daisyui: {
-    themes: [
-      'light',
-      'dark',
-      'cupcake',
-      'bumblebee',
-      'emerald',
-      'corporate',
-      'synthwave',
-      'retro',
-      'cyberpunk',
-      'valentine',
-      'halloween',
-      'garden',
-      'forest',
-      'aqua',
-      'lofi',
-      'pastel',
-      'fantasy',
-      'wireframe',
-      'black',
-      'luxury',
-      'dracula',
-      'cmyk',
-      'autumn',
-      'business',
-      'acid',
-      'lemonade',
-      'night',
-      'coffee',
-      'winter',
-      'dim',
-      'nord',
-      'sunset',
-    ],
+    themes: true,
   },
 };
 export default config;

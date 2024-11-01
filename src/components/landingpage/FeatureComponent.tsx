@@ -82,7 +82,7 @@ export default function FeatureComponent() {
     <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
       <div>
         <div className="mx-auto max-w-2xl lg:text-center lg:px-0 px-6">
-          <h2 className="text-base font-semibold leading-7 text-primary mb-4">
+          <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
             快速构建网页应用
           </h2>
           <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -100,8 +100,8 @@ export default function FeatureComponent() {
                   key={feature.name}
                   onClick={() => setSelectedFeature(index)}
                   className={cn(
-                    'flex flex-col items-center justify-center gap-3 select-none cursor-pointer p-2 duration-100 custom-cursor-on-hover text-base md:text-lg',
-                    index === selectedFeature ? 'text-primary' : ''
+                    'flex flex-col text-base items-center justify-center gap-3 select-none cursor-pointer p-2 duration-100 custom-cursor-on-hover text-base md:text-lg',
+                    index === selectedFeature ? 'text-secondary' : ''
                   )}
                 >
                   {feature.icon}
@@ -122,7 +122,7 @@ export default function FeatureComponent() {
                       <li className="mt-1 flex gap-6 items-center" key={index}>
                         <span className="w-[16px]">
                           <CheckCircle
-                            className=" text-primary"
+                            className=" text-secondary"
                             strokeWidth={2}
                           />
                         </span>
