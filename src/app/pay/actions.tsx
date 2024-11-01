@@ -25,7 +25,6 @@ export const checkUserPayment = async (userId: string) => {
         identifier: userId,
       },
     });
-    console.log('existingOrder', existingOrder);
     return {
       code: 0,
       data: {

@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               </span>
             </a>
           </li>
-          <li>
+          {/* <li>
             <a className="flex gap-2 group" href="/dashboard/share">
               <GoShareAndroid
                 size={20}
@@ -33,7 +33,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 推广记录
               </span>
             </a>
-          </li>
+          </li> */}
         </ul>
         {children}
       </main>

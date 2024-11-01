@@ -77,6 +77,9 @@ importers:
       next-mdx-remote:
         specifier: ^5.0.0
         version: https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
+      next-themes:
+        specifier: ^0.3.0
+        version: 0.3.0(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       nextjs-progressbar:
         specifier: ^0.0.16
         version: 0.0.16(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
@@ -122,6 +125,9 @@ importers:
       wechatpay-node-v3:
         specifier: ^2.2.1
         version: https://registry.npmmirror.com/wechatpay-node-v3/-/wechatpay-node-v3-2.2.1.tgz
+      zustand:
+        specifier: ^5.0.1
+        version: 5.0.1(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(immer@10.1.1)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(use-sync-external-store@1.2.2(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))
     devDependencies:
       '@types/node':
         specifier: ^20
@@ -1683,6 +1689,9 @@ packages:
     version: 1.3.0
     engines: {node: '>=14.0.0'}
 
+  immer@10.1.1:
+    resolution: {integrity: sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==}
+
   immer@https://registry.npmmirror.com/immer/-/immer-10.1.1.tgz:
     resolution: {integrity: sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==, tarball: https://registry.npmmirror.com/immer/-/immer-10.1.1.tgz}
     version: 10.1.1
@@ -2389,6 +2398,13 @@ packages:
     engines: {node: '>=14', npm: '>=7'}
     peerDependencies:
       react: '>=16'
+
+  next-themes@0.3.0:
+    resolution: {integrity: sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==}
+    version: 0.3.0
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+      react-dom: ^16.8 || ^17 || ^18
 
   next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz:
     resolution: {integrity: sha512-R8/V7vugY+822rsQGQCjoLhMuC9oFj9SOi4Cl4b2wjDrseD0LRZ10W7R6Czo4w9ZznVSshKjuIomsRjvm9EKJQ==, tarball: https://registry.npmmirror.com/next/-/next-14.2.4.tgz}
@@ -3101,6 +3117,12 @@ packages:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==, tarball: https://registry.npmmirror.com/unist-util-visit/-/unist-util-visit-5.0.0.tgz}
     version: 5.0.0
 
+  use-sync-external-store@1.2.2:
+    resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
+    version: 1.2.2
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+
   use-sync-external-store@https://registry.npmmirror.com/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz:
     resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==, tarball: https://registry.npmmirror.com/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz}
     version: 1.2.2
@@ -3221,6 +3243,25 @@ packages:
   zod@https://registry.npmmirror.com/zod/-/zod-3.23.8.tgz:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==, tarball: https://registry.npmmirror.com/zod/-/zod-3.23.8.tgz}
     version: 3.23.8
+
+  zustand@5.0.1:
+    resolution: {integrity: sha512-pRET7Lao2z+n5R/HduXMio35TncTlSW68WsYBq2Lg1ASspsNGjpwLAsij3RpouyV6+kHMwwwzP0bZPD70/Jx/w==}
+    version: 5.0.1
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
   zwitch@https://registry.npmmirror.com/zwitch/-/zwitch-2.0.4.tgz:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==, tarball: https://registry.npmmirror.com/zwitch/-/zwitch-2.0.4.tgz}
@@ -4634,6 +4675,9 @@ snapshots:
 
   imagescript@https://registry.npmmirror.com/imagescript/-/imagescript-1.3.0.tgz: {}
 
+  immer@10.1.1:
+    optional: true
+
   immer@https://registry.npmmirror.com/immer/-/immer-10.1.1.tgz: {}
 
   inflection@https://registry.npmmirror.com/inflection/-/inflection-2.0.1.tgz: {}
@@ -5619,6 +5663,11 @@ snapshots:
       - '@types/react'
       - supports-color
 
+  next-themes@0.3.0(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
+    dependencies:
+      react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
+      react-dom: https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
+
   next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
     dependencies:
       '@next/env': https://registry.npmmirror.com/@next/env/-/env-14.2.4.tgz
@@ -6315,6 +6364,11 @@ snapshots:
       unist-util-is: https://registry.npmmirror.com/unist-util-is/-/unist-util-is-6.0.0.tgz
       unist-util-visit-parents: https://registry.npmmirror.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz
 
+  use-sync-external-store@1.2.2(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
+    dependencies:
+      react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
+    optional: true
+
   use-sync-external-store@https://registry.npmmirror.com/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz):
     dependencies:
       react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
@@ -6427,5 +6481,12 @@ snapshots:
       yargs-parser: https://registry.npmmirror.com/yargs-parser/-/yargs-parser-21.1.1.tgz
 
   zod@https://registry.npmmirror.com/zod/-/zod-3.23.8.tgz: {}
+
+  zustand@5.0.1(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(immer@10.1.1)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(use-sync-external-store@1.2.2(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)):
+    optionalDependencies:
+      '@types/react': https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz
+      immer: 10.1.1
+      react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
+      use-sync-external-store: 1.2.2(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
 
   zwitch@https://registry.npmmirror.com/zwitch/-/zwitch-2.0.4.tgz: {}

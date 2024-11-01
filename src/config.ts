@@ -9,7 +9,12 @@ export const config = {
   // wx 微信登录  phone 手机登录 email 邮箱登录
   loginTypes: ['wx', 'email'],
   // 推广优惠
-  sharePrice: 30,
+  shareCode: [
+    {
+      code: 'MVPFASTFXYX',
+      sharePrice: 30,
+    },
+  ],
   // 商品信息
   goods: [
     {
