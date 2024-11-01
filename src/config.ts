@@ -14,6 +14,10 @@ export const config = {
       code: 'MVPFASTFXYX',
       sharePrice: 30,
     },
+    {
+      code: 'MVPFASTFXATS',
+      sharePrice: 30,
+    },
   ],
   // 商品信息
   goods: [
