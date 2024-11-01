@@ -10,6 +10,7 @@ import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProviders } from '@/components/theme/ThemeProvider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
   ssr: false,
 });
@@ -49,6 +50,7 @@ export default function RootLayout({
         </ThemeProviders>
         <Toaster></Toaster>
         <Analytics></Analytics>
+        <SpeedInsights></SpeedInsights>
         <Script
           strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=G-B315FBSZWP`}
