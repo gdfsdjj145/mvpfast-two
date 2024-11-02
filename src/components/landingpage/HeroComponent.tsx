@@ -62,28 +62,28 @@ export default function HeroComponent() {
       <section className="bg-white p-8 md:p-12 flex flex-wrap items-center justify-center gap-10 md:gap-12">
         <a
           href="https://nextjs.org/"
-          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-primary rounded-lg px-2 transition-all"
+          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
           <img src="/nextjs-logo.png" alt="NextJs" className="w-10 h-10" />
           NextJs <span className="px-2">126K⭐</span>
         </a>
         <a
           href="https://tailwindcss.com/"
-          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-primary rounded-lg px-2 transition-all"
+          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
           <img src="/tailwindcss.png" alt="TailWindCss" className="w-10 h-10" />
           TailWindCss <span className="px-2">82K⭐</span>
         </a>
         <a
           href="https://www.mongodb.com/zh-cn/cloud/atlas/register"
-          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-primary rounded-lg px-2 transition-all"
+          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
           <img src="/mongodb.png" alt="Mongo" className="w-10 h-10" />
           Mongodb <span className="px-2">26K⭐</span>
         </a>
         <a
           href="https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
-          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-primary rounded-lg px-2 transition-all"
+          className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
           <img src="/wx.png" alt="WeChat" className="w-10 h-10" />
           WeChat

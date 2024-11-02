@@ -82,7 +82,7 @@ export default function page() {
                       {order.name}
                     </h2>
                     <div className="space-y-2">
-                      <p className="text-lg font-semibold text-primary">
+                      <p className="text-lg font-semibold text-secondary">
                         <i className="fas fa-money-bill-wave mr-2"></i>推广金额:
                         ¥{order.promotionPrice}
                       </p>

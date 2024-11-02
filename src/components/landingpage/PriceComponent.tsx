@@ -35,14 +35,14 @@ export default function CtaComponent() {
                     <h3
                       id={good.key}
                       className={classNames(
-                        good.mostPopular ? 'text-primary' : 'text-gray-900',
-                        'text-lg font-semibold leading-8'
+                        good.mostPopular ? 'text-secondary' : 'text-gray-900',
+                        'text-lg font-bold leading-8'
                       )}
                     >
                       {good.name}
                     </h3>
                     {good.mostPopular ? (
-                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-primary">
+                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1  font-semibold leading-5 text-base text-secondary">
                         🔥
                       </p>
                     ) : null}
@@ -67,7 +67,7 @@ export default function CtaComponent() {
                   >
                     {good.includedFeatures.map((feature) => (
                       <li key={feature} className="flex gap-x-3">
-                        <span className="h-6 w-5 flex-none text-primary">
+                        <span className="h-6 w-5 flex-none text-secondary text-base">
                           √
                         </span>
                         {feature}
@@ -80,8 +80,8 @@ export default function CtaComponent() {
                   aria-describedby={good.key}
                   className={classNames(
                     good.mostPopular
-                      ? 'bg-primary text-white shadow-sm hover:bg-primary/60'
-                      : 'text-primary ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
+                      ? ' text-white btn btn-secondary text-base shadow-sm'
+                      : 'text-secondary ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
                     'mt-8 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                   )}
                 >
