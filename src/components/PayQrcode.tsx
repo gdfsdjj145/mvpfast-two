@@ -23,30 +23,50 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   const [paymentStatus, setPaymentStatus] = useState('pending');
   const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
+  const createOrderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // 创建订单的函数
+  const createOrder = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post('/api/wx/create-wechat-order', {
+        amount,
+        description,
+      });
+      onCreateOrder({
+        orderId: data.data.outTradeNo,
+        createdAt: data.data.createdAt,
+      });
+      setQrCodeUrl(data.data.qrCodeUrl);
+      setOutTradeNo(data.data.outTradeNo);
+    } catch (err) {
+      setError('创建支付订单失败');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 使用防抖处理 amount 变化
   useEffect(() => {
-    const createOrder = async () => {
-      try {
-        const { data } = await axios.post('/api/wx/create-wechat-order', {
-          amount,
-          description,
-        });
-        onCreateOrder({
-          orderId: data.data.outTradeNo,
-          createdAt: data.data.createdAt,
-        });
-        setQrCodeUrl(data.data.qrCodeUrl);
-        setOutTradeNo(data.data.outTradeNo);
-      } catch (err) {
-        setError('创建支付订单失败');
-      } finally {
-        setIsLoading(false);
+    // 清除之前的定时器
+    if (createOrderTimeoutRef.current) {
+      clearTimeout(createOrderTimeoutRef.current);
+    }
+
+    // 设置新的定时器，1秒后执行
+    createOrderTimeoutRef.current = setTimeout(() => {
+      createOrder();
+    }, 1000); // 1秒的防抖时间
+
+    // 清理函数
+    return () => {
+      if (createOrderTimeoutRef.current) {
+        clearTimeout(createOrderTimeoutRef.current);
       }
     };
-
-    createOrder();
   }, [amount]);
 
+  // 检查订单状态的 useEffect 保持不变
   useEffect(() => {
     if (!outTradeNo || isPaymentSuccessful) return;
 
@@ -72,7 +92,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       }
     };
 
-    intervalIdRef.current = setInterval(checkOrderStatus, 5000); // 每5秒检查一次
+    intervalIdRef.current = setInterval(checkOrderStatus, 5000);
 
     return () => {
       if (intervalIdRef.current) {
@@ -80,6 +100,18 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       }
     };
   }, [outTradeNo, onPaymentSuccess, isPaymentSuccessful]);
+
+  // 组件卸载时清理所有定时器
+  useEffect(() => {
+    return () => {
+      if (createOrderTimeoutRef.current) {
+        clearTimeout(createOrderTimeoutRef.current);
+      }
+      if (intervalIdRef.current) {
+        clearInterval(intervalIdRef.current);
+      }
+    };
+  }, []);
 
   if (isLoading) {
     return (
