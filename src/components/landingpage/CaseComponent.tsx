@@ -1,3 +1,4 @@
+import Image from 'next/image';
 const posts = [
   {
     id: 1,
@@ -40,8 +41,10 @@ export default function Example() {
               key={post.id}
               className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80"
             >
-              <img
-                alt=""
+              <Image
+                width={0}
+                height={0}
+                alt={post.title}
                 src={post.imageUrl}
                 className="absolute inset-0 -z-10 h-full w-full object-cover"
               />

@@ -58,7 +58,13 @@ export default function FooterComponent() {
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
           <div className="flex  flex-col mr-4 justify-start">
             <Link href="/" className="flex gap-3">
-              <img className="w-6 h-6" src="/logo.png" alt="" />
+              <Image
+                width={0}
+                height={0}
+                className="w-6 h-6"
+                src="/logo.png"
+                alt=""
+              />
               <span className="font-bold">MvpFast</span>
             </Link>
             <p className="mt-3 mb-3 text-sm text-base-content/80 leading-relaxed">
@@ -72,7 +78,9 @@ export default function FooterComponent() {
               <div className="flex gap-2 items-center group justify-center">
                 <span className="hidden md:block">使用</span>
                 <span className="font-bold flex gap-0.5 items-center tracking-tight">
-                  <img
+                  <Image
+                    width={0}
+                    height={0}
                     className="w-6 h-6 group-hover:scale-110 group-hover:rotate-45 transition-all mr-1"
                     src="/logo.png"
                     alt=""
@@ -100,7 +108,13 @@ export default function FooterComponent() {
                       className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-4"
                     >
                       {link.logo && (
-                        <img src={`/${link.logo}`} alt="" className="w-6 h-6" />
+                        <Image
+                          width={0}
+                          height={0}
+                          src={`/${link.logo}`}
+                          alt=""
+                          className="w-6 h-6"
+                        />
                       )}
                       {link.name}
                     </a>

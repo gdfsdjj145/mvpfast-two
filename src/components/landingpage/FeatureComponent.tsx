@@ -100,7 +100,7 @@ export default function FeatureComponent() {
                   key={feature.name}
                   onClick={() => setSelectedFeature(index)}
                   className={cn(
-                    'flex flex-col text-base items-center justify-center gap-3 select-none cursor-pointer p-2 duration-100 custom-cursor-on-hover text-base md:text-lg',
+                    'flex flex-col  items-center justify-center gap-3 select-none cursor-pointer p-2 duration-100 custom-cursor-on-hover text-base md:text-lg',
                     index === selectedFeature ? 'text-secondary' : ''
                   )}
                 >
