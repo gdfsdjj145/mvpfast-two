@@ -58,7 +58,7 @@ export default function page() {
           </h2>
           <p className="text-xl text-gray-600 mb-8">立即分享，获取收益！</p>
           <ClipboardCopyButton
-            text={`${location.host}/pay?key=most&shareid=${session?.user?.id}`}
+            text={`${location.host}/pay?key=most&sharecode=${session?.user?.id}`}
             cb={() => {
               toast.success('复制连接成功');
             }}
@@ -83,7 +83,7 @@ export default function page() {
                     </h2>
                     <div className="space-y-2">
                       <p className="text-lg font-semibold text-secondary">
-                        <i className="fas fa-money-bill-wave mr-2"></i>推广金额:
+                        <i className="fas fa-money-bill-wave mr-2"></i>推广优惠:
                         ¥{order.promotionPrice}
                       </p>
                       <p className="text-sm text-gray-600">
@@ -102,7 +102,7 @@ export default function page() {
           ))}
           <div className="text-center">
             <ClipboardCopyButton
-              text={`${location.host}/pay?key=most&shareid=${session?.user?.id}`}
+              text={`${location.host}/pay?key=most&sharecode=${session?.user?.id}`}
               cb={() => {
                 toast.success('复制连接成功');
               }}

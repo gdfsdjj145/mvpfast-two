@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
-import { createOrder, checkUserPayment } from './actions';
+import { createOrder, checkUserPayment, checkUserById } from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -21,6 +21,7 @@ export default function PaymentPage() {
   const searchParams = useSearchParams();
   const goodKey = searchParams.get('key');
   const shareCode = searchParams.get('sharecode');
+  const initialized = useRef(false);
 
   const good = config.goods.filter((good) => good.key === goodKey)[0];
   const [orderInfo, setOrderInfo] = useState({
@@ -42,10 +43,28 @@ export default function PaymentPage() {
   });
 
   useEffect(() => {
+    const getShare = async () => {
+      if (status === 'authenticated' && session) {
+        const { data } = await checkUserById(shareCode);
+        if (data) {
+          setShareOption({
+            code: data.id,
+            sharePrice: 30,
+          });
+        } else {
+          setShareOption({
+            code: '',
+            sharePrice: 0,
+          });
+        }
+      }
+    };
+
     const checkPayment = async () => {
       if (status === 'authenticated' && session) {
+        let result: any = { data: null };
         try {
-          const result = await checkUserPayment(session.user.id);
+          result = await checkUserPayment(session.user.id);
           if (result.data.hasPaid) {
             setPaymentStatus('success');
             setPaymentResult({
@@ -69,6 +88,10 @@ export default function PaymentPage() {
           } else {
             setPaymentStatus('pending');
           }
+          if (shareCode && !result.data.hasPaid) {
+            getShare();
+          }
+
           setIsLoading(false);
         } catch (error) {
           console.error('检查支付状态失败:', error);
@@ -77,27 +100,12 @@ export default function PaymentPage() {
         }
       }
     };
-
-    const getShare = () => {
-      if (status === 'authenticated' && session) {
-        const option = config.shareCode.filter(
-          (item) => item.code === shareCode
-        )[0] || {
-          code: '',
-          sharePrice: 0,
-        };
-        setShareOption(option);
-      }
-    };
-
-    if (shareCode) {
-      getShare();
-    }
     checkPayment();
   }, [status, session]);
 
   useEffect(() => {
-    if (shareOption && shareOption.code) {
+    if (shareOption && shareOption.code && !initialized.current) {
+      initialized.current = true;
       toast.success('检测为合格优惠链接，获得优惠');
       setOrderInfo((prevState) => ({
         ...prevState,
@@ -193,7 +201,7 @@ export default function PaymentPage() {
           </div>
 
           <div className="mt-8">
-            <Link href="/dashboard/order" className="btn btn-primary w-full">
+            <Link href="/dashboard/order" className="btn btn-secondary w-full">
               前往个人页面
             </Link>
           </div>

@@ -1,33 +1,45 @@
-import { useState } from 'react';
+'use client';
+
+import { useEffect, useRef } from 'react';
 import Clipboard from 'clipboard';
 
-const ClipboardCopyButton = (props) => {
-  const { children, cb, text } = props;
+interface ClipboardCopyButtonProps {
+  children: React.ReactNode;
+  cb: () => void;
+  text: string;
+}
 
-  const handleClick = () => {
-    const clipboard: any = new Clipboard('.copy-button', {
+const ClipboardCopyButton = ({
+  children,
+  cb,
+  text,
+}: ClipboardCopyButtonProps) => {
+  const clipboardRef = useRef<Clipboard | null>(null);
+
+  useEffect(() => {
+    // 创建 Clipboard 实例
+    clipboardRef.current = new Clipboard('.copy-button', {
       text: () => text,
     });
 
-    clipboard.on('success', () => {
+    // 绑定事件监听
+    clipboardRef.current.on('success', () => {
       cb();
-      // Reset success message after 3 seconds
-      clipboard.destroy(); // Cleanup clipboard instance
     });
 
-    clipboard.on('error', (e) => {
+    clipboardRef.current.on('error', (e) => {
       console.error('Failed to copy:', e);
-      clipboard.destroy(); // Cleanup clipboard instance
     });
 
-    // clipboard.onClick({ delegateTarget: { className: 'copy-button' } });
-  };
+    // 清理函数
+    return () => {
+      if (clipboardRef.current) {
+        clipboardRef.current.destroy();
+      }
+    };
+  }, [text, cb]);
 
-  return (
-    <div className="copy-button" onClick={handleClick}>
-      {children}
-    </div>
-  );
+  return <div className="copy-button">{children}</div>;
 };
 
 export default ClipboardCopyButton;
