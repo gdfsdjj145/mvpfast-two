@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaCartShopping } from 'react-icons/fa6';
 import { IoGiftOutline } from 'react-icons/io5';
 
@@ -42,17 +43,47 @@ export default function HeroComponent() {
                     ></IoGiftOutline>
                     70元
                   </span>
-                  🛒优惠名额还剩下27个（每日更新）
+                  🛒优惠名额还剩下9个（每日更新）
                 </p>
               </div>
-              <p className="text-xl font-bold text-purple-600 animate-pulse">
-                一次购买，享用所有技术支持和更新！
-              </p>
+              <div className="flex gap-2">
+                <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+                  <div className="avatar">
+                    <div className="w-12">
+                      <img src="/a1.jpg" alt="MvpFast" />
+                    </div>
+                  </div>
+                  <div className="avatar">
+                    <div className="w-12">
+                      <img src="/a2.jpg" alt="MvpFast" />
+                    </div>
+                  </div>
+                  <div className="avatar">
+                    <div className="w-12">
+                      <img src="/a3.jpg" alt="MvpFast" />
+                    </div>
+                  </div>
+                  <div className="avatar">
+                    <div className="w-12">
+                      <img src="/a4.jpg" alt="MvpFast" />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <p>🌟🌟🌟🌟🌟</p>
+                  <p>
+                    <span className="font-bold">54名</span>
+                    <span className="text-gray-500">
+                      程序员开始构建自己的产品
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="lg:w-1/2 ">
               <img
                 src="/banner.png"
-                alt=""
+                alt="MvpFast"
                 className="w-full max-w-xl mx-auto rounded-lg"
               />
             </div>
@@ -64,28 +95,52 @@ export default function HeroComponent() {
           href="https://nextjs.org/"
           className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
-          <img src="/nextjs-logo.png" alt="NextJs" className="w-10 h-10" />
+          <Image
+            src="/nextjs-logo.png"
+            width={0}
+            height={0}
+            alt="NextJs"
+            className="w-10 h-10"
+          />
           NextJs <span className="px-2">126K⭐</span>
         </a>
         <a
           href="https://tailwindcss.com/"
           className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
-          <img src="/tailwindcss.png" alt="TailWindCss" className="w-10 h-10" />
+          <Image
+            width={0}
+            height={0}
+            src="/tailwindcss.png"
+            alt="TailWindCss"
+            className="w-10 h-10"
+          />
           TailWindCss <span className="px-2">82K⭐</span>
         </a>
         <a
           href="https://www.mongodb.com/zh-cn/cloud/atlas/register"
           className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
-          <img src="/mongodb.png" alt="Mongo" className="w-10 h-10" />
+          <Image
+            width={0}
+            height={0}
+            src="/mongodb.png"
+            alt="Mongo"
+            className="w-10 h-10"
+          />
           Mongodb <span className="px-2">26K⭐</span>
         </a>
         <a
           href="https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
           className="flex flex-row items-center gap-2 hover:scale-105 hover:shadow-lg hover:text-base rounded-lg px-2 transition-all"
         >
-          <img src="/wx.png" alt="WeChat" className="w-10 h-10" />
+          <Image
+            width={0}
+            height={0}
+            src="/wx.png"
+            alt="WeChat"
+            className="w-10 h-10"
+          />
           WeChat
         </a>
       </section>
