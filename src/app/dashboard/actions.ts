@@ -26,7 +26,7 @@ export const gerShareByUserId = async (userId: string) => {
   try {
     const promotions = await prisma.promotion.findMany({
       where: {
-        identifier: userId,
+        purchaser: userId,
       },
       orderBy: {
         createdAt: 'desc',
