@@ -36,7 +36,7 @@ export const config = {
         '技术支持服务',
       ],
       original: 299,
-      price: 30.1,
+      price: 229,
       mostPopular: true,
       href: '/pay?key=most',
     },
