@@ -43,7 +43,7 @@ export default function HeroComponent() {
                     ></IoGiftOutline>
                     70元
                   </span>
-                  🛒优惠名额还剩下9个（每日更新）
+                  🛒优惠名额还剩下7个（每日更新）
                 </p>
               </div>
               <div className="flex gap-2">
@@ -72,7 +72,7 @@ export default function HeroComponent() {
                 <div>
                   <p>🌟🌟🌟🌟🌟</p>
                   <p>
-                    <span className="font-bold">54名</span>
+                    <span className="font-bold">58名</span>
                     <span className="text-gray-500">
                       程序员开始构建自己的产品
                     </span>
