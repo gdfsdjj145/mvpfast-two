@@ -1,9 +1,9 @@
+import React from 'react';
 import Link from 'next/link';
 import { compareDesc, format, parseISO } from 'date-fns';
 import { zhCN } from 'date-fns/locale'; // 导入中文本地化
 import { allBlogPosts } from 'contentlayer/generated';
 import Image from 'next/image';
-import Header from '@/components/Header';
 
 function PostCard(post: any) {
   const coverImagePath = post.coverImage
@@ -43,22 +43,19 @@ function PostCard(post: any) {
   );
 }
 
-export default function BlogPage() {
+export default function page() {
   const posts = allBlogPosts.sort((a, b) =>
     compareDesc(new Date(a.date), new Date(b.date))
   );
 
   return (
-    <div>
-      <Header />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8">博客文章</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post, idx) => (
-            <PostCard key={idx} {...post} />
-          ))}
-        </div>
-      </main>
+    <div className="pb-60">
+      <h1 className="text-3xl font-bold text-center mb-8">博客文章</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post, idx) => (
+          <PostCard key={idx} {...post} />
+        ))}
+      </div>
     </div>
   );
 }

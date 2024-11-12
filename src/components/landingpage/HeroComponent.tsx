@@ -72,7 +72,7 @@ export default function HeroComponent() {
                 <div>
                   <p>🌟🌟🌟🌟🌟</p>
                   <p>
-                    <span className="font-bold">67名</span>
+                    <span className="font-bold">74名</span>
                     <span className="text-gray-500">
                       程序员开始构建自己的产品
                     </span>
