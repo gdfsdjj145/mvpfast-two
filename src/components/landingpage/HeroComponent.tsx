@@ -41,7 +41,7 @@ export default function HeroComponent() {
                       size={30}
                       className="animate-bounce"
                     ></IoGiftOutline>
-                    100元
+                    70元
                   </span>
                   🛒优惠名额还剩下9个（每日更新）
                 </p>
