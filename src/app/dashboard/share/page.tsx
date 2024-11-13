@@ -70,7 +70,32 @@ export default function page() {
         </div>
       ) : (
         <div className="space-y-6">
-          {promotions.map((order) => (
+          <div className="overflow-x-auto bg-white">
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>推广优惠</th>
+                  <th>核销状态</th>
+                  <th>支付时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* row 1 */}
+                {promotions.map((row, index) => (
+                  <tr>
+                    <th>{index + 1}</th>
+                    <td>¥{row.promotionPrice}</td>
+                    <td>{row.checkout ? '是' : '否'}</td>
+                    <td>{new Date(row.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* {promotions.map((order) => (
             <div
               key={order.id}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
@@ -99,7 +124,7 @@ export default function page() {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
           <div className="text-center">
             <ClipboardCopyButton
               text={`${location.host}/pay?key=most&sharecode=${session?.user?.id}`}

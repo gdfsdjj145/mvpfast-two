@@ -42,7 +42,7 @@ export default function CtaComponent() {
                       {good.name}
                     </h3>
                     {good.mostPopular ? (
-                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1  font-semibold leading-5 text-base text-secondary">
+                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1  font-semibold leading-5 text-base text-secondary animate-bounce">
                         🔥
                       </p>
                     ) : null}
@@ -82,10 +82,15 @@ export default function CtaComponent() {
                     good.mostPopular
                       ? ' text-white btn btn-secondary text-base shadow-sm'
                       : 'text-secondary ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
-                    'mt-8 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                    'flex group items-center justify-center gap-3 mt-8 rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                   )}
                 >
-                  立刻购买
+                  <span className="group-hover:scale-125 transition-all">
+                    立刻购买
+                  </span>
+                  <span className="group-hover:scale-125 group-hover:-rotate-45 transition-all">
+                    🚀
+                  </span>
                 </a>
                 <p className="mt-6 text-center text-xs leading-5 text-gray-600">
                   提示：如购买后需要退款，可联系作者协商

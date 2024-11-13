@@ -49,22 +49,22 @@ export default function HeroComponent() {
               <div className="flex gap-2">
                 <div className="avatar-group -space-x-6 rtl:space-x-reverse">
                   <div className="avatar">
-                    <div className="w-12">
+                    <div className="w-12 hover:scale-110 transition-all duration-500">
                       <img src="/a1.jpg" alt="MvpFast" />
                     </div>
                   </div>
                   <div className="avatar">
-                    <div className="w-12">
+                    <div className="w-12 hover:scale-110 transition-all duration-500">
                       <img src="/a2.jpg" alt="MvpFast" />
                     </div>
                   </div>
                   <div className="avatar">
-                    <div className="w-12">
+                    <div className="w-12 hover:scale-110 transition-all duration-500">
                       <img src="/a3.jpg" alt="MvpFast" />
                     </div>
                   </div>
                   <div className="avatar">
-                    <div className="w-12">
+                    <div className="w-12 hover:scale-110 transition-all duration-500">
                       <img src="/a4.jpg" alt="MvpFast" />
                     </div>
                   </div>
@@ -72,7 +72,7 @@ export default function HeroComponent() {
                 <div>
                   <p>🌟🌟🌟🌟🌟</p>
                   <p>
-                    <span className="font-bold">67名</span>
+                    <span className="font-bold">74名</span>
                     <span className="text-gray-500">
                       程序员开始构建自己的产品
                     </span>
@@ -80,7 +80,7 @@ export default function HeroComponent() {
                 </div>
               </div>
             </div>
-            <div className="lg:w-1/2 ">
+            <div className="lg:w-1/2 hover:scale-105 transition-all duration-500">
               <img
                 src="/banner.png"
                 alt="MvpFast"
