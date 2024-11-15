@@ -7,6 +7,8 @@ import { sendCode, createQrCode, checkQrCode } from './actions';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import WxChatPc from '@/components/weChat/WeChatPc';
+import WeChatMobile from '@/components/weChat/WeChatMobile';
 
 const LOGIN_HASH = {
   wx: '💬 微信登录',
@@ -14,80 +16,39 @@ const LOGIN_HASH = {
   email: '📫 邮箱登录',
 };
 
-const WxCode = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  let timer: any = null;
-  const [codeState, setCodeState] = useState({
-    ticket: '',
-    qrcode: '',
-  });
-  const [loading, setLoading] = useState(true);
-  const hasRunEffect = useRef(false);
-
-  const getWxQrCode = async () => {
-    if (hasRunEffect.current) return; // 如果已经执行过，直接返回
-    hasRunEffect.current = true; // 标记为已执行
-
-    setLoading(true);
-    const data = await get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode`
-    );
-    createQrCode(data.ticket);
-    pollQrCode(data.ticket);
-    setCodeState(data);
-    setLoading(false);
-  };
-
-  const pollQrCode = async (ticket: string) => {
-    timer = setInterval(async () => {
-      const data: any = await checkQrCode(ticket);
-      if (data.isScan) {
-        clearInterval(timer);
-        timer = null;
-        const res = await signIn('credentials', {
-          type: 'wx',
-          identifier: data.openId,
-          redirect: false,
-        });
-        console.log(res);
-        if (res?.error) {
-          toast.error(res?.error);
-        } else {
-          const callbackUrl = searchParams.get('redirect') || '/';
-          window.location.href = callbackUrl;
-        }
-      }
-    }, 2000);
-  };
+const WeChatLogin = () => {
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    getWxQrCode();
+    // 检查初始窗口大小
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768); // 768px 作为断点
+    };
+
+    // 首次执行
+    checkDevice();
+
+    // 添加窗口大小变化监听
+    window.addEventListener('resize', checkDevice);
+
+    // 清理监听器
     return () => {
-      if (timer) {
-        clearInterval(timer);
-      }
+      window.removeEventListener('resize', checkDevice);
     };
   }, []);
 
   return (
-    <Suspense>
-      <figure className="relative">
-        {loading && (
-          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-10">
-            <div className="text-white text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white mr-2"></div>
-              <span>加载中...</span>
-            </div>
-          </div>
-        )}
-        {codeState.ticket ? (
-          <img src={codeState.qrcode} alt="wx-code" className="w-full h-auto" />
-        ) : (
-          <div className="p-10 text-center">获取微信登录二维码中...</div>
-        )}
-      </figure>
-    </Suspense>
+    <div className="card bg-base-100 w-80 shadow-xl mx-auto">
+      {isMobile ? <WeChatMobile /> : <WxChatPc />}
+      <div className="card-body gap-3">
+        <h2 className="card-title justify-center">
+          {isMobile ? '请使用微信登录' : '请使用微信扫码登录'}
+        </h2>
+        <p className="mt-6 text-center text-xs leading-5 text-gray-600">
+          {isMobile ? '点击按钮后跳转微信' : '扫码后等待几秒'}
+        </p>
+      </div>
+    </div>
   );
 };
 
@@ -237,15 +198,7 @@ export default function SignInPage() {
 
             {type === 'wx' && (
               <div className="card bg-base-100 w-80 shadow-xl mx-auto">
-                <WxCode></WxCode>
-                <div className="card-body gap-3">
-                  <h2 className="card-title justify-center">
-                    请使用微信扫码登录
-                  </h2>
-                  <p className="mt-6 text-center text-xs leading-5 text-gray-600">
-                    扫码后等待几秒
-                  </p>
-                </div>
+                <WeChatLogin />
               </div>
             )}
 
