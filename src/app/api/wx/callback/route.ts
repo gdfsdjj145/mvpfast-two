@@ -17,9 +17,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`
-    );
+    const data = await axios({
+      method: 'post',
+      url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
+      data: {
+        code: code,
+      },
+    });
 
     console.log(data, 'data ===================');
 
