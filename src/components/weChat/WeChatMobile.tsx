@@ -21,7 +21,7 @@ const WeChatMobile = () => {
   const searchParams = useSearchParams();
 
   const handleWxLogin = async () => {
-    const authUrl = generateOAuthUrl('https://www.mvpfast.top/wx/callback');
+    const authUrl = generateOAuthUrl('https://www.mvpfast.top/api/wx/callback');
     window.location.href = authUrl;
   };
 
