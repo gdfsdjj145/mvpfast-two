@@ -23,8 +23,13 @@ export async function GET(request: NextRequest) {
 
     console.log(data, 'data ===================');
 
-    const redirect_uri = '/';
-    return redirect_uri;
+    return NextResponse.json(
+      {
+        data: {},
+        message: '',
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('微信回调处理失败', error);
     return NextResponse.redirect(
