@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
 
 export async function GET(request: NextRequest) {
   console.log(request, '++++++++++');
@@ -15,9 +16,15 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-    console.log(code, '================');
+
+    const data = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`
+    );
+
+    console.log(data, 'data ===================');
+
     const redirect_uri = '/';
-    return NextResponse.redirect(redirect_uri);
+    return redirect_uri;
   } catch (error) {
     console.error('微信回调处理失败', error);
     return NextResponse.redirect(
