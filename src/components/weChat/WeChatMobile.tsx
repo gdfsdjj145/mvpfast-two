@@ -8,11 +8,11 @@ import toast from 'react-hot-toast';
 
 const generateOAuthUrl = (redirectUri: string, state: string = ''): string => {
   const params = new URLSearchParams({
-    appid: 'wx42ef93fe62769b78',
-    redirect_uri: encodeURIComponent(redirectUri),
+    appid: process.env.NEXT_PUBLIC_WECHAT_APPID,
+    redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'snsapi_userinfo',
-    state: '123',
+    state: '',
   });
   return `https://open.weixin.qq.com/connect/oauth2/authorize?${params.toString()}#wechat_redirect`;
 };
@@ -21,8 +21,7 @@ const WeChatMobile = () => {
   const searchParams = useSearchParams();
 
   const handleWxLogin = async () => {
-    console.log(process.env.NEXT_PUBLIC_WECHAT_APPID);
-    const authUrl = generateOAuthUrl('https://www.mvpfast.top/');
+    const authUrl = generateOAuthUrl('https://www.mvpfast.top/wx/callback');
     window.location.href = authUrl;
   };
 
