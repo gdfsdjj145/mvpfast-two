@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data }: any = await axios({
+    const data: any = await axios({
       method: 'post',
       url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
       data: {
@@ -25,13 +25,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(data, 'data===================');
-
-    const { openid } = data;
+    console.log(data, data.openid, 'data===================');
 
     const res: any = await authenticateCredentials('credentials', {
       type: 'wx',
-      identifier: openid,
+      identifier: data.openid,
       redireact: false,
     });
 
