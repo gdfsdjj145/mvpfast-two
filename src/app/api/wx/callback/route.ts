@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(data, data.openid, 'data===================');
+    console.log(data.openid, data.data, 'data===================');
 
     const res: any = await authenticateCredentials('credentials', {
       type: 'wx',
