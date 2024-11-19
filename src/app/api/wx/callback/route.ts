@@ -34,6 +34,9 @@ export async function GET(request: NextRequest) {
       identifier: openid,
       redireact: false,
     });
+
+    console.log(res, 'res ==============');
+
     if (!res?.token) {
       console.error('微信回调处理失败', res);
     } else {
