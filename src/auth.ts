@@ -28,7 +28,7 @@ declare module 'next-auth' {
   }
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions: any = {
   providers: [
     CredentialsProvider({
       id: 'credentials',
@@ -189,4 +189,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
   },
-});
+};
+
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);

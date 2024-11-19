@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { signIn } from 'next-auth/react';
 
 export async function GET(request: NextRequest) {
   console.log(request, '++++++++++');
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await axios({
+    const data: any = await axios({
       method: 'post',
       url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
       data: {
@@ -25,7 +26,18 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(data, 'data ===================');
+    const { openid } = data;
+
+    const res: any = await signIn('credentials', {
+      type: 'wx',
+      identifier: openid,
+      redireact: false,
+    });
+    if (res?.error) {
+      console.error('微信回调处理失败', res.error);
+    } else {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
 
     return NextResponse.json(
       {
