@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { authenticateCredentials, setAuthCookies } from '@/lib/serverAuth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,21 +23,20 @@ export async function GET(request: NextRequest) {
         code: code,
       },
     });
+    const opneid = data.data.openid || '';
 
-    const res: any = await authenticateCredentials('credentials', {
-      type: 'wx',
-      identifier: data.data.openid,
-      redireact: false,
-      code: '',
-    });
-
-    console.log(res, 'res ==============');
-
-    if (!res?.token) {
-      console.error('微信回调处理失败', res);
+    if (!opneid) {
+      console.error('微信回调处理失败', opneid);
     } else {
-      setAuthCookies(res.token);
-      return NextResponse.redirect(new URL('/', request.url));
+      const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
+      redirectUrl.searchParams.set('id', opneid);
+      redirectUrl.searchParams.set('type', 'wxlogin');
+
+      console.log('Redirecting to:', redirectUrl.toString());
+
+      return NextResponse.redirect(redirectUrl, {
+        status: 302,
+      });
     }
 
     return NextResponse.json(

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const generateOAuthUrl = (redirectUri: string, state: string = ''): string => {
   const params = new URLSearchParams({
@@ -21,8 +22,9 @@ const WeChatMobile = () => {
   const searchParams = useSearchParams();
 
   const handleWxLogin = async () => {
-    const authUrl = generateOAuthUrl('https://www.mvpfast.top/api/wx/callback');
-    window.location.href = authUrl;
+    // const authUrl = generateOAuthUrl('https://www.mvpfast.top/api/wx/callback');
+    // window.location.href = authUrl;
+    axios.get('/api/wx/callback');
   };
 
   // 检查是否在微信浏览器中
@@ -31,26 +33,30 @@ const WeChatMobile = () => {
     return ua.indexOf('micromessenger') !== -1;
   };
 
-  // 处理微信回调
-  const handleWxCallback = async (code) => {
-    try {
+  useEffect(() => {
+    // 检查 URL 参数中是否有 code
+    const id = searchParams.get('id');
+    const type = searchParams.get('type');
+
+    const checkLogin = async (id) => {
       const res = await signIn('credentials', {
         type: 'wx',
-        code,
+        identifier: id,
         redirect: false,
       });
-
+      console.log(res);
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(res?.error);
       } else {
         const callbackUrl = searchParams.get('redirect') || '/';
-        router.push(callbackUrl);
+        window.location.href = callbackUrl;
       }
-    } catch (error) {
-      console.error('微信登录失败', error);
-      toast.error('登录失败，请稍后重试');
+    };
+
+    if (id && type === 'wxlogin') {
+      checkLogin(id);
     }
-  };
+  }, [searchParams, router]); // 依赖项包含 searchParams 和 router
 
   return (
     <div className="w-full p-4 flex flex-col items-center">

@@ -1,6 +1,7 @@
+// serverAuth.ts
 import { cookies } from 'next/headers';
 import { encode } from 'next-auth/jwt';
-import { authOptions } from '@/auth';
+import { authorizeUser } from '@/auth';
 
 interface AuthResult {
   user: any;
@@ -14,46 +15,39 @@ export async function authenticateCredentials(
   try {
     console.log('1. authenticateCredentials called with:', {
       providerId,
-      credentials: { ...credentials },
+      credentials: {
+        ...credentials,
+        code: '[REDACTED]',
+      },
     });
 
-    // 检查 authOptions 是否正确加载
-    console.log(
-      '2. authOptions providers:',
-      authOptions.providers.map((p) => p.id)
-    );
+    // 清理 credentials
+    const cleanedCredentials = {
+      type: credentials.type,
+      identifier: credentials.identifier,
+      code: credentials.code,
+    };
 
-    const provider = authOptions.providers.find((p) => p.id === providerId);
-
-    console.log('3. Found provider:', provider ? provider.id : 'not found');
-
-    if (!provider || !('authorize' in provider)) {
-      console.log('4. Provider validation failed');
-      throw new Error(`Provider ${providerId} not found or invalid`);
-    }
-
-    console.log('5. Calling provider.authorize');
-    const user = await provider.authorize(credentials, null);
-    console.log('6. authorize result:', user);
+    // 直接使用导出的 authorizeUser 函数
+    console.log('2. Calling authorize function');
+    const user = await authorizeUser(cleanedCredentials);
+    console.log('3. Authorization result:', user);
 
     if (!user) {
-      console.log('7. No user returned from authorize');
+      console.log('4. No user returned from authorize');
       throw new Error('Authentication failed: Invalid credentials');
     }
 
-    // 创建token
+    console.log('5. Creating token');
     const token = {
       name: user.name,
       email: user.email,
-      picture: user.image,
       sub: user.id,
       phone: user.phone,
       wechatOpenId: user.wechatOpenId,
       nickName: user.nickName,
-      ...user,
     };
 
-    console.log('8. Creating token');
     const encodedToken = await encode({
       token,
       secret: process.env.NEXTAUTH_SECRET!,
@@ -62,7 +56,7 @@ export async function authenticateCredentials(
 
     return { user, token: encodedToken };
   } catch (error) {
-    console.error('Authentication error in authenticateCredentials:', error);
+    console.error('Authentication error:', error);
     throw error;
   }
 }
