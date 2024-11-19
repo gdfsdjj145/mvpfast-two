@@ -14,7 +14,7 @@ export async function authenticateCredentials(
   try {
     console.log('1. authenticateCredentials called with:', {
       providerId,
-      credentials: { ...credentials, code: '[REDACTED]' },
+      credentials: { ...credentials },
     });
 
     // 检查 authOptions 是否正确加载
