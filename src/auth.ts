@@ -35,7 +35,7 @@ export const authOptions: any = {
       async authorize(credentials) {
         const { identifier, code, type } = credentials;
 
-        console.log('credentials ===========================', credentials);
+        console.log('A. Authorize function called with:', credentials);
 
         const verifyState = await verifyCode(type as string, {
           identifier,
