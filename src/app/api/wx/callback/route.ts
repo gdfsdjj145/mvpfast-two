@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { signIn } from 'next-auth/react';
+import { authenticateCredentials, setAuthCookies } from '@/lib/serverAuth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,14 +29,15 @@ export async function GET(request: NextRequest) {
 
     const { openid } = data;
 
-    const res: any = await signIn('credentials', {
+    const res: any = await authenticateCredentials('credentials', {
       type: 'wx',
       identifier: openid,
       redireact: false,
     });
-    if (res?.error) {
-      console.error('微信回调处理失败', res.error);
+    if (!res?.token) {
+      console.error('微信回调处理失败', res);
     } else {
+      setAuthCookies(res.token);
       return NextResponse.redirect(new URL('/', request.url));
     }
 
