@@ -22,9 +22,8 @@ const WeChatMobile = () => {
   const searchParams = useSearchParams();
 
   const handleWxLogin = async () => {
-    // const authUrl = generateOAuthUrl('https://www.mvpfast.top/api/wx/callback');
-    // window.location.href = authUrl;
-    axios.get('/api/wx/callback');
+    const authUrl = generateOAuthUrl('https://www.mvpfast.top/api/wx/callback');
+    window.location.href = authUrl;
   };
 
   // 检查是否在微信浏览器中
