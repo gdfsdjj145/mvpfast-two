@@ -25,11 +25,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(data, data.data, data.openid, 'data===================');
-
     const res: any = await authenticateCredentials('credentials', {
       type: 'wx',
-      identifier: data.openid,
+      identifier: data.data.openid,
       redireact: false,
     });
 
