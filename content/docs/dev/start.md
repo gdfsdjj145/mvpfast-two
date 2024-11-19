@@ -88,7 +88,7 @@ ALIYUN_ACCESS_KEY_SECRET = 阿里云access_secret_key;
 ALIYUN_SMS_SIGN_NAME = sms服务签名;
 ALIYUN_SMS_TEMPLATE_CODE = sms服务模板代码;
 // 微信体系
-WECHAT_APPID = 公众号id;
+NEXT_PUBLIC_WECHAT_APPID = 公众号id;
 WECHAT_MCHID = 商家号id;
 WECHAT_API_V3_KEY = v3接口私钥;
 NEXT_PUBLIC_API_URL = 云托管服务访问地址;

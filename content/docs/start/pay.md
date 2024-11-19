@@ -13,7 +13,7 @@ description: 支付的介绍
 
 ```js
 NEXT_PUBLIC_API_URL = 支付回调地址; // 你的vercel部署域名
-WECHAT_APPID = 公众号id;
+NEXT_PUBLIC_WECHAT_APPID = 公众号id;
 WECHAT_MCHID = 商家号;
 WECHAT_API_V3_KEY = v3支付私钥;
 WECHAT_SERIAL_NO = 证书序列号;
