@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth';
-import type { DefaultSession, Session, NextAuthConfig, User } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import NextAuth, { type DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode } from './app/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
+
 import prisma from './lib/prisma';
 
 declare module 'next-auth' {
@@ -15,119 +15,132 @@ declare module 'next-auth' {
       role?: string;
       wechatOpenId?: string | null;
       nickName?: string | null;
-    } & DefaultSession['user'];
+      // 其他需要的属性
+    };
   }
 
   interface User {
-    id?: string;
-    phone?: string | null;
-    wechatOpenId?: string | null;
-    role?: string | null;
-    nickName?: string | null;
+    phone?: string;
+    wechatOpenId?: string;
+    role?: string;
+    nickName?: string;
+    // 其他需要的属性
   }
 }
 
-export const authOptions: NextAuthConfig = {
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
       id: 'credentials',
-      name: 'Credentials',
-      credentials: {
-        identifier: { label: 'Identifier', type: 'text' },
-        code: { label: 'Code', type: 'text' },
-        type: { label: 'Type', type: 'text' },
-      },
-      async authorize(credentials: any) {
-        try {
-          if (!credentials) {
-            console.log('No credentials provided');
-            return null;
-          }
+      async authorize(credentials) {
+        const { identifier, code, type } = credentials;
 
-          const { identifier, code, type } = credentials;
-          console.log('A. Authorize function called with:', {
-            type,
-            identifier,
-            code: code ? '[REDACTED]' : undefined,
-          });
+        console.log('credentials', credentials);
 
-          // 微信登录特殊处理
-          if (type === 'wx') {
-            console.log('B. Processing WeChat login');
-            const user = await prisma.user.findFirst({
-              where: {
-                wechatOpenId: identifier,
-              },
-            });
+        const verifyState = await verifyCode(type as string, {
+          identifier,
+          code,
+        });
 
-            if (user) {
-              console.log('C. Existing WeChat user found');
-              return user;
-            }
-
-            console.log('D. Creating new WeChat user');
-            // 创建新用户
-            const newUser = await prisma.user.create({
-              data: {
-                wechatOpenId: identifier,
-                nickName: getGeneratorName(),
-                createdDate: new Date(),
-              },
-            });
-
-            console.log('E. New WeChat user created:', newUser);
-            return newUser;
-          }
-
-          // 其他登录类型需要验证码
-          console.log('F. Verifying code for type:', type);
-          const verifyState = await verifyCode(type, { identifier, code });
-
-          if (!verifyState) {
-            console.log('G. Code verification failed');
-            return null;
-          }
-
-          // 根据登录类型查找或创建用户
-          let user;
+        if (verifyState || type === 'wx') {
+          let res = null;
+          const params = {
+            email: null,
+            wechatOpenId: null,
+            phone: null,
+            nickName: '',
+            createdDate: new Date(),
+          };
           if (type === 'email') {
-            user = await prisma.user.findFirst({
-              where: { email: identifier },
+            res = await prisma.user.findFirst({
+              where: {
+                email: identifier as string,
+              },
             });
-            if (!user) {
-              user = await prisma.user.create({
-                data: {
-                  email: identifier,
-                  nickName: getGeneratorName(),
-                  createdDate: new Date(),
-                },
-              });
-            }
-          } else if (type === 'phone') {
-            user = await prisma.user.findFirst({
-              where: { phone: identifier },
-            });
-            if (!user) {
-              user = await prisma.user.create({
-                data: {
-                  phone: identifier,
-                  nickName: getGeneratorName(),
-                  createdDate: new Date(),
-                },
-              });
-            }
+            params.email = identifier as string;
           }
-
-          console.log('H. User result:', user);
-          return user || null;
-        } catch (error) {
-          console.error('Error in authorize:', error);
-          return null;
+          if (type === 'phone') {
+            res = await prisma.user.findFirst({
+              where: {
+                phone: identifier as string,
+              },
+            });
+            params.phone = identifier as string;
+          }
+          if (type === 'wx') {
+            res = await prisma.user.findFirst({
+              where: {
+                wechatOpenId: identifier as string,
+              },
+            });
+            params.wechatOpenId = identifier as string;
+          }
+          console.log(params, 'params');
+          if (res) {
+            return res;
+          } else {
+            params.nickName = getGeneratorName();
+            await prisma.user.create({
+              data: params,
+            });
+            return params;
+          }
         }
       },
     }),
   ],
-  // ... 其他配置保持不变
-};
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
+    maxAge: 2 * 60 * 60, // 2小时
+    updateAge: 60 * 60,
+  },
+  pages: {
+    signIn: '/auth/signin',
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
+  callbacks: {
+    async session({ token, session }) {
+      if (session.user) {
+        if (token.sub) {
+          session.user.id = token.sub;
+        }
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
+        if (token.email) {
+          session.user.email = token.email;
+        }
+
+        if (token.phone) {
+          session.user.phone = token.phone as string;
+        }
+
+        if (token.wechatOpenId) {
+          session.user.wechatOpenId = token.wechatOpenId as string;
+          session.user.nickName = token.nickName as string;
+        }
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.phone = user.phone;
+        token.wechatOpenId = user.wechatOpenId;
+        token.nickName = user.nickName;
+      }
+      return token;
+    },
+  },
+});
