@@ -88,52 +88,6 @@ export const authOptions: any = {
         }
       },
     }),
-    CredentialsProvider({
-      id: 'WeChat',
-      name: 'WeChat',
-      credentials: {
-        code: { type: 'text' },
-      },
-      async authorize(credentials) {
-        if (!credentials?.code) {
-          throw new Error('Missing code');
-        }
-
-        try {
-          // 获取access_token
-          const tokenResponse = await fetch(
-            `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${process.env.WECHAT_APP_ID}&secret=${process.env.WECHAT_APP_SECRET}&code=${credentials.code}&grant_type=authorization_code`
-          );
-
-          const tokenData = await tokenResponse.json();
-
-          if (!tokenData.access_token) {
-            throw new Error('Failed to get access token');
-          }
-
-          // 获取用户信息
-          const userResponse = await fetch(
-            `https://api.weixin.qq.com/sns/userinfo?access_token=${tokenData.access_token}&openid=${tokenData.openid}&lang=zh_CN`
-          );
-
-          const userData = await userResponse.json();
-
-          if (!userData.openid) {
-            throw new Error('Failed to get user info');
-          }
-
-          return {
-            id: userData.openid,
-            name: userData.nickname,
-            image: userData.headimgurl,
-            email: `${userData.openid}@wechat.com`, // 微信不提供邮箱，这里用openid代替
-          };
-        } catch (error) {
-          console.error('WeChat authentication error:', error);
-          return null;
-        }
-      },
-    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),

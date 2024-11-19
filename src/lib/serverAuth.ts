@@ -18,6 +18,8 @@ export async function authenticateCredentials(
     throw new Error(`Provider ${providerId} not found or invalid`);
   }
 
+  console.log(provider, 'provider===================');
+
   // 调用provider的authorize方法
   const user = await provider.authorize(credentials, null);
 
