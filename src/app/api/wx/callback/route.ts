@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data: any = await axios({
+    const { data }: any = await axios({
       method: 'post',
       url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
       data: {
