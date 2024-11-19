@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
       type: 'wx',
       identifier: data.data.openid,
       redireact: false,
+      code: '',
     });
 
     console.log(res, 'res ==============');
