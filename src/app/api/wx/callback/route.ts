@@ -4,7 +4,6 @@ import axios from 'axios';
 import { signIn } from 'next-auth/react';
 
 export async function GET(request: NextRequest) {
-  console.log(request, '++++++++++');
   try {
     const code = request.nextUrl.searchParams.get('code');
 
@@ -25,6 +24,8 @@ export async function GET(request: NextRequest) {
         code: code,
       },
     });
+
+    console.log(data, 'data===================');
 
     const { openid } = data;
 
