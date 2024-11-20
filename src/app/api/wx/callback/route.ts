@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
 export async function GET(request: NextRequest) {
-  console.log(request, '++++++++++');
   try {
     const code = request.nextUrl.searchParams.get('code');
 
@@ -17,15 +16,28 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const data = await axios({
+    const { data }: any = await axios({
       method: 'post',
       url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
       data: {
         code: code,
       },
     });
+    const opneid = data.data.openid || '';
 
-    console.log(data, 'data ===================');
+    if (!opneid) {
+      console.error('微信回调处理失败', opneid);
+    } else {
+      const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
+      redirectUrl.searchParams.set('id', opneid);
+      redirectUrl.searchParams.set('type', 'wxlogin');
+
+      console.log('Redirecting to:', redirectUrl.toString());
+
+      return NextResponse.redirect(redirectUrl, {
+        status: 302,
+      });
+    }
 
     return NextResponse.json(
       {

@@ -43,7 +43,7 @@ export async function createNativeOrder(orderInfo: OrderInfo) {
   const nonce = generateNonce();
 
   const body = JSON.stringify({
-    appid: process.env.WECHAT_APPID,
+    appid: process.env.NEXT_PUBLIC_WECHAT_APPID,
     mchid: process.env.WECHAT_MCHID,
     description: orderInfo.description,
     out_trade_no: orderInfo.outTradeNo,

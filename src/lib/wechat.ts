@@ -43,7 +43,7 @@ async function getAccessToken() {
 
     // 从微信服务器获取新的 access_token
     const response = await fetch(
-      `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${process.env.WECHAT_APPID}&secret=${process.env.WX_APP_SECRET}`
+      `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${process.env.NEXT_PUBLIC_WECHAT_APPID}&secret=${process.env.WX_APP_SECRET}`
     );
 
     const data = await response.json();
