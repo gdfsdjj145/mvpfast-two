@@ -124,9 +124,9 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="relative h-svh w-full flex justify-center items-center bg-slate-100">
-      <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <a href="/" className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="h-screen w-full flex justify-center items-center bg-slate-100">
+      <div className="flex flex-col justify-center w-full max-w-[480px] px-4">
+        <a href="/" className="mx-auto">
           <img
             alt="Your Company"
             src="/logo.png"
@@ -137,8 +137,8 @@ export default function SignInPage() {
           </h2>
         </a>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
+        <div className="mt-10">
+          <div className="bg-white px-6 py-8 shadow sm:rounded-lg sm:px-12">
             {type !== 'wx' && (
               <div className="space-y-6">
                 <div>
@@ -224,7 +224,7 @@ export default function SignInPage() {
             </div>
           </div>
 
-          <div className="mt-10 text-center flex gap-4 justify-center">
+          <div className="mt-6 text-center flex gap-4 justify-center">
             <span className="text-sm text-secondary">
               第一次登录时会创建帐号，并且会生成有趣的昵称💡
             </span>
