@@ -5,46 +5,57 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './content/**/*.{md,mdx}',
   ],
   theme: {
     extend: {
       fontFamily: {
         xft: ['var(--font-xft)', 'sans-serif'],
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
-      typography: (theme) => ({
+      typography: {
         DEFAULT: {
           css: {
-            pre: {
-              backgroundColor: theme('colors.gray.100'),
-              color: theme('colors.gray.900'),
-              padding: theme('spacing.4'),
-              borderRadius: theme('borderRadius.md'),
-              border: `1px solid ${theme('colors.gray.200')}`,
-              overflowX: 'auto',
-            },
-            'pre code': {
-              backgroundColor: 'transparent',
-              borderWidth: '0',
-              borderRadius: '0',
-              padding: '0',
-              fontWeight: '400',
-              color: 'inherit',
-              fontSize: 'inherit',
-              fontFamily: 'inherit',
-              lineHeight: 'inherit',
-            },
+            color: '#374151',
+            maxWidth: '100%',
             code: {
-              color: theme('colors.gray.900'),
-              backgroundColor: theme('colors.gray.100'),
-              fontWeight: '400',
-              fontSize: '0.875em',
-              padding: '0.25em 0.5em',
+              color: '#111827',
+              backgroundColor: '#F3F4F6',
+              fontWeight: '500',
+              padding: '0.2em 0.4em',
               borderRadius: '0.25rem',
+              '&::before': {
+                content: 'none',
+              },
+              '&::after': {
+                content: 'none',
+              },
+            },
+            pre: {
+              color: '#F3F4F6',
+              backgroundColor: '#1a1b26',
+              borderRadius: '0.5rem',
+              padding: '1rem',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+              margin: '1.5rem 0',
+              '& code': {
+                backgroundColor: 'transparent',
+                border: 'none',
+                color: 'inherit',
+                fontSize: 'inherit',
+                fontFamily:
+                  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                padding: '0',
+              },
+              // 移除任何默认的块级显示属性
+              display: 'block',
+              width: '100%',
+              overflow: 'auto',
+              whiteSpace: 'pre',
+            },
+            'div pre': {
+              margin: '0',
+              padding: '1rem',
             },
             'code::before': {
               content: 'none',
@@ -54,20 +65,7 @@ const config: Config = {
             },
           },
         },
-        dark: {
-          css: {
-            pre: {
-              backgroundColor: theme('colors.gray.800'),
-              color: theme('colors.gray.100'),
-              border: `1px solid ${theme('colors.gray.700')}`,
-            },
-            code: {
-              color: theme('colors.gray.100'),
-              backgroundColor: theme('colors.gray.800'),
-            },
-          },
-        },
-      }),
+      },
     },
   },
   darkMode: ['class', '[data-theme="dark"]'],
@@ -76,4 +74,5 @@ const config: Config = {
     themes: true,
   },
 };
+
 export default config;
