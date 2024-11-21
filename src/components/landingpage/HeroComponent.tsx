@@ -70,7 +70,7 @@ export default function HeroComponent() {
                 <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
                   <span className="flex items-center text-green-500 font-bold text-lg">
                     <IoGiftOutline size={24} className="animate-bounce mr-1" />
-                    70元
+                    100元
                   </span>
                   <span className="text-gray-500">
                     🛒优惠名额还剩下9个（每日更新）
