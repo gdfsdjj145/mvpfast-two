@@ -20,7 +20,7 @@ export const config = {
         '前端代码（NextJs + Tailwindcss）',
         '微信公众号服务代码',
       ],
-      price: 129,
+      price: 199,
       mostPopular: false,
       href: '/pay?key=normal',
     },
@@ -30,29 +30,17 @@ export const config = {
       description:
         '包含开发模板代码所有内容、从0到1的Nextjs全栈开发课程所有内容',
       includedFeatures: [
-        '包含MvpFast模板代码所有内容',
+        '登录 + 数据库 + 支付功能等封装能力',
+        '前端代码（NextJs + Tailwindcss）',
+        '微信公众号服务代码',
         '从0到1的Nextjs全栈开发课程',
         '课程学习过程的内容解答',
         '技术支持服务',
       ],
-      original: 299,
-      price: 229,
+      original: 399,
+      price: 299,
       mostPopular: true,
       href: '/pay?key=most',
-    },
-    {
-      key: 'last',
-      name: '从0到1Nextjs全栈开发课程',
-      description:
-        '从0到1的Nextjs全栈开发课程，课程内容包含Nextjs基础、Mongo数据库基础、微信云开发、网站部署等多个内容，非常适合编程小白和学习Nextjs全栈开发编程技能的人，学习完之后，你可以做到能独自开发和部署商业项目。',
-      includedFeatures: [
-        '从0到1的Nextjs全栈开发课程',
-        '课程学习过程的内容解答',
-        '技术支持服务',
-      ],
-      price: 229,
-      mostPopular: false,
-      href: '/pay?key=last',
     },
   ],
 };

@@ -4,15 +4,24 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { usePathname } from 'next/navigation';
+import { ImAccessibility } from 'react-icons/im';
 import { TbReportMoney } from 'react-icons/tb';
 import { GoShareAndroid } from 'react-icons/go';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname().split('/').filter(Boolean).pop() || '';
 
-  console.log(pathname);
-
   const tabList = [
+    {
+      label: '用户管理（demo）',
+      key: 'user',
+      icon: (
+        <ImAccessibility
+          size={20}
+          className="group-hover:mr-2 group-hover:-rotate-45 transition-all"
+        ></ImAccessibility>
+      ),
+    },
     {
       label: '购买记录',
       key: 'order',

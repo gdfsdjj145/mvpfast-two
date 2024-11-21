@@ -60,7 +60,7 @@ export default function HeroComponent() {
               {/* CTA 区域 */}
               <motion.div variants={itemVariants} className="space-y-6">
                 <Link
-                  href="/#price"
+                  href="/pay?key=most"
                   className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group"
                 >
                   <FaCartShopping className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
