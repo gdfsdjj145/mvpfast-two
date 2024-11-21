@@ -101,12 +101,9 @@ export default makeSource({
   markdown: {
     remarkPlugins: [
       remarkGfm, // 这个插件支持 GFM 表格
-      remarkParse,
-      [remarkRehype, { allowDangerousHtml: true }],
     ],
     rehypePlugins: [
       rehypeSlug,
-      [rehypePrettyCode, prettyCodeOptions],
       [
         rehypeAutolinkHeadings,
         {
@@ -117,7 +114,6 @@ export default makeSource({
           behavior: 'wrap',
         },
       ],
-      [rehypeStringify, { allowDangerousHtml: true }],
     ],
   },
 });
