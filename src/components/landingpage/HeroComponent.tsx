@@ -60,7 +60,7 @@ export default function HeroComponent() {
               {/* CTA 区域 */}
               <motion.div variants={itemVariants} className="space-y-6">
                 <Link
-                  href="/#price"
+                  href="/pay?key=most"
                   className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group"
                 >
                   <FaCartShopping className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
@@ -70,7 +70,7 @@ export default function HeroComponent() {
                 <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
                   <span className="flex items-center text-green-500 font-bold text-lg">
                     <IoGiftOutline size={24} className="animate-bounce mr-1" />
-                    70元
+                    100元
                   </span>
                   <span className="text-gray-500">
                     🛒优惠名额还剩下9个（每日更新）

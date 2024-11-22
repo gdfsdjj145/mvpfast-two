@@ -1,5 +1,7 @@
 import React from 'react';
 import { config } from '@/config';
+import { ImCheckmark2 } from 'react-icons/im';
+import { IoGiftOutline } from 'react-icons/io5';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -8,95 +10,98 @@ function classNames(...classes) {
 export default function CtaComponent() {
   const { goods } = config;
   return (
-    <section id="price" className="bg-white pb-24 sm:pb-32">
-      <div className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl sm:text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              购买MvpFast
+    <section id="price" className="bg-white ">
+      <div className="overflow-hidden ">
+        <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <p className="text-base/7 font-semibold text-secondary">价格</p>
+            <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
+              获取模板并快速上线你的网站，去赚取第一桶金
             </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              节省你的时间，让编程小白、开发者和初创企业能快速的上线网站
+          </div>
+          <div className="relative mt-6">
+            <p className="text-sm md:text-base flex justify-center items-center gap-2 ">
+              <span className="flex items-center text-green-500 font-bold text-lg">
+                <IoGiftOutline size={24} className="animate-bounce mr-1" />
+                100元
+              </span>
+              <span className="text-gray-500">
+                🛒优惠名额还剩下9个（75名程序员开始构建）
+              </span>
             </p>
           </div>
-          <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {goods.map((good, index) => (
-              <div
-                key={good.key}
-                className={classNames(
-                  good.mostPopular ? 'lg:z-10 lg:rounded-b-none' : 'lg:mt-8',
-                  index === 0 ? 'lg:rounded-r-none' : '',
-                  index === goods.length - 1 ? 'lg:rounded-l-none' : '',
-                  'flex flex-col justify-between rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10'
-                )}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-x-4">
-                    <h3
-                      id={good.key}
-                      className={classNames(
-                        good.mostPopular ? 'text-secondary' : 'text-gray-900',
-                        'text-lg font-bold leading-8'
-                      )}
-                    >
-                      {good.name}
-                    </h3>
-                    {good.mostPopular ? (
-                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1  font-semibold leading-5 text-base text-secondary animate-bounce">
-                        🔥
-                      </p>
-                    ) : null}
-                  </div>
-                  <p className="mt-4 text-sm leading-6 text-gray-600">
-                    {good.description}
-                  </p>
-                  <p className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-4xl font-bold tracking-tight text-gray-900 flex items-center">
-                      {good.original && (
-                        <span className="relative opacity-80 text-base px-2 text-[#acacac]">
-                          <span className="absolute bg-[#acacac] h-[1.5px] inset-x-0 top-[48%]"></span>
-                          <span>￥{good.original}</span>
-                        </span>
-                      )}
-                      ￥{good.price}
-                    </span>
-                  </p>
-                  <ul
-                    role="list"
-                    className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
+        </div>
+        <div className="flow-root bg-white pb-24 sm:pb-32">
+          <div className="-mt-80">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+                {goods.map((good) => (
+                  <div
+                    key={good.key}
+                    className={`relative ${
+                      good.mostPopular ? 'border-2 border-secondary' : ''
+                    } flex flex-col justify-between rounded-3xl bg-white p-8  ring-1 ring-gray-900/10 sm:p-10`}
                   >
-                    {good.includedFeatures.map((feature) => (
-                      <li key={feature} className="flex gap-x-3">
-                        <span className="h-6 w-5 flex-none text-secondary text-base">
-                          √
+                    {good.mostPopular && (
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                        <span className="badge  badge-secondary text-xs badge-lg ">
+                          最多人购买
+                          <span className="animate-bounce">🔥</span>
                         </span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <a
-                  href={good.href}
-                  aria-describedby={good.key}
-                  className={classNames(
-                    good.mostPopular
-                      ? ' text-white btn btn-secondary text-base shadow-sm'
-                      : 'text-secondary ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
-                    'flex group items-center justify-center gap-3 mt-8 rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-                  )}
-                >
-                  <span className="group-hover:scale-125 transition-all">
-                    立刻购买
-                  </span>
-                  <span className="group-hover:scale-125 group-hover:-rotate-45 transition-all">
-                    🚀
-                  </span>
-                </a>
-                <p className="mt-6 text-center text-xs leading-5 text-gray-600">
-                  提示：如购买后需要退款，可联系作者协商
-                </p>
+                      </div>
+                    )}
+                    <div>
+                      <h3
+                        id={good.key}
+                        className="text-base/7 font-semibold text-secondary"
+                      >
+                        {good.name}
+                      </h3>
+                      <div className="mt-4 flex items-baseline gap-x-2">
+                        <div className="flex gap-4 justify-between items-end text-5xl font-semibold tracking-tight text-gray-900">
+                          <div>￥{good.price}</div>
+                          <div className="relative text-lg opacity-80">
+                            <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[48%]"></span>
+                            {good.original && (
+                              <span className="text-gray-400">
+                                ￥{good.original}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <p className="mt-6 text-base/7 text-gray-600">
+                        {good.description}
+                      </p>
+                      <ul
+                        role="list"
+                        className="mt-10 space-y-4 text-sm/6 text-gray-600"
+                      >
+                        {good.includedFeatures.map((feature) => (
+                          <li key={feature} className="flex gap-x-3">
+                            <ImCheckmark2
+                              aria-hidden="true"
+                              className="h-6 w-5 flex-none text-secondary"
+                            />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <a
+                      href={good.href}
+                      aria-describedby={good.key}
+                      className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+                    >
+                      立刻购买 🚀
+                    </a>
+                    <p className="text-center mt-4 text-gray-400">
+                      如有退款问题，可联系客服
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>

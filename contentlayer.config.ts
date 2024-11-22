@@ -1,12 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
 import path from 'path';
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import remarkGfm from 'remark-gfm';
-import rehypeStringify from 'rehype-stringify';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
 
 const prettyCodeOptions = {
   theme: 'github-dark',
@@ -97,27 +90,5 @@ export const BlogPost = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'content',
-  documentTypes: [DocPage],
-  markdown: {
-    remarkPlugins: [
-      remarkGfm, // 这个插件支持 GFM 表格
-      remarkParse,
-      [remarkRehype, { allowDangerousHtml: true }],
-    ],
-    rehypePlugins: [
-      rehypeSlug,
-      [rehypePrettyCode, prettyCodeOptions],
-      [
-        rehypeAutolinkHeadings,
-        {
-          properties: {
-            className: ['anchor'],
-            ariaLabel: 'Link to section',
-          },
-          behavior: 'wrap',
-        },
-      ],
-      [rehypeStringify, { allowDangerousHtml: true }],
-    ],
-  },
+  documentTypes: [DocPage, BlogPost],
 });
