@@ -73,7 +73,7 @@ export default function HeroComponent() {
                     100元
                   </span>
                   <span className="text-gray-500">
-                    🛒优惠名额还剩下9个（每日更新）
+                    🛒优惠名额还剩下14个（每日更新）
                   </span>
                 </div>
               </motion.div>
@@ -106,7 +106,7 @@ export default function HeroComponent() {
                     {'★'.repeat(5)}
                   </div>
                   <p>
-                    <span className="font-bold">75名</span>
+                    <span className="font-bold">76名</span>
                     <span className="text-gray-500 ml-1">
                       程序员开始构建自己的产品
                     </span>

@@ -14,7 +14,7 @@ export default function CtaComponent() {
       <div className="overflow-hidden ">
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
           <div className="mx-auto max-w-4xl">
-            <p className="text-base/7 font-semibold text-secondary">价格</p>
+            <p className="text-base/7 font-semibold text-secondary mb-2">价格</p>
             <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
               获取模板并快速上线你的网站，去赚取第一桶金
             </h2>
@@ -26,7 +26,7 @@ export default function CtaComponent() {
                 100元
               </span>
               <span className="text-gray-500">
-                🛒优惠名额还剩下9个（75名程序员开始构建）
+                🛒优惠名额还剩下14个（76名程序员开始构建）
               </span>
             </p>
           </div>
