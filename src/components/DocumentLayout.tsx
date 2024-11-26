@@ -20,17 +20,20 @@ interface DocGroup {
 
 // 文件夹名称映射
 const folderNames: { [key: string]: any } = {
-  start: {
-    label: '功能',
-    icon: <FiBookOpen />,
-  },
   dev: {
     label: '开始',
     icon: <BsCaretRightSquare />,
+    order: 1,
+  },
+  start: {
+    label: '功能',
+    icon: <FiBookOpen />,
+    order: 2,
   },
   components: {
     label: '组件',
     icon: <BsGrid1X2Fill />,
+    order: 3,
   },
   // 添加更多文件夹映射...
 };
@@ -73,7 +76,14 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
       groups[folder].sort((a, b) => a.order - b.order);
     });
 
-    return groups;
+    // 返回按文件夹顺序排序的文档
+    return Object.fromEntries(
+      Object.entries(groups).sort(([folderA], [folderB]) => {
+        const orderA = folderNames[folderA]?.order || 999;
+        const orderB = folderNames[folderB]?.order || 999;
+        return orderA - orderB;
+      })
+    );
   }, []);
 
   const renderDocLink = useCallback(
