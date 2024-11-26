@@ -1,0 +1,20 @@
+---
+order: 1
+key: header
+title: Header组件
+description: Header组件
+---
+
+响应式的 Header 组件，左边为 Logo，中间为导航，右边为功能。在手机显示时导航栏会隐藏。登录状态会出现用户显示。Logo 图片可以放在`/public`里面进行引用。
+
+![image-20241126110138344](/docs/assets/components/header.png)
+
+```tsx
+import Header from '@/components/Header';
+```
+
+#### 建议
+
+- 你的 Logo 尽量做得精致一点，不需要花太多精力在 Logo 设计上，除非你是大品牌
+- 在导航上放上购买链接，让用户方便购买
+- 可使用[LogoCook-Logo 厨师](https://www.logocook.shop)制作你的 Logo

@@ -99,7 +99,7 @@ const components = {
   ),
   // 添加其他基础组件
   h1: ({ children }: { children: React.ReactNode }) => (
-    <h1 className="text-3xl font-bold mt-8 mb-4 text-gray-900 dark:text-gray-100">
+    <h1 className="flex items-center gap-2 font-bold text-3xl lg:text-5xl tracking-tight text-base-content flex-wrap">
       {children}
     </h1>
   ),

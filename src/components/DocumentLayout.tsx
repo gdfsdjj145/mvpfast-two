@@ -9,8 +9,9 @@ import React, {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { allDocPages } from 'contentlayer/generated';
-import { FaBook, FaBars, FaChevronDown } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import { BsCaretRightSquare } from 'react-icons/bs';
+import { BsGrid1X2Fill } from 'react-icons/bs';
 import { FiBookOpen } from 'react-icons/fi';
 
 interface DocGroup {
@@ -29,7 +30,7 @@ const folderNames: { [key: string]: any } = {
   },
   components: {
     label: '组件',
-    icon: <></>,
+    icon: <BsGrid1X2Fill />,
   },
   // 添加更多文件夹映射...
 };
@@ -81,10 +82,10 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
         <Link
           href={doc.url}
           prefetch
-          className={`flex items-center p-2 hover:bg-base-300 rounded-lg transition-colors duration-200 ${
+          className={`flex items-center p-2 hover:text-secondary rounded-lg transition-colors duration-200 ${
             selectedDocUrl === doc.url
-              ? 'bg-[#e300dd] font-medium text-white'
-              : 'text-base-content'
+              ? 'bg-primary font-bold text-secondary/50'
+              : 'font-medium'
           }`}
         >
           {doc.title}
@@ -95,10 +96,10 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
   );
 
   return (
-    <aside className="h-full overflow-y-auto sm:w-64">
+    <aside className="h-full overflow-y-auto sm:w-64 bg-[#fcfcfc] border-r-2 border-[#eae9f1]">
       <a
         href="/"
-        className="sticky top-0 z-30 bg-opacity-90 backdrop-blur px-4 py-2 flex items-center gap-2"
+        className="sticky top-0 z-30 bg-base-100 bg-opacity-90 backdrop-blur px-4 py-2 flex items-center gap-2"
       >
         <img
           src="/title-logo.png"
@@ -114,7 +115,6 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
               <span className="font-bold flex-1">
                 {folderNames[folder].label || folder}
               </span>
-              <FaChevronDown />
             </div>
             <ul className="ml-4">{docs.map(renderDocLink)}</ul>
           </li>
@@ -161,7 +161,7 @@ const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center">
-        <div className="w-full navbar bg-base-300 lg:hidden">
+        <div className="w-full navbar bg-base-100 shadow-md lg:hidden">
           <div className="flex-none">
             <label htmlFor="my-drawer-2" className="btn btn-square btn-ghost">
               <FaBars className="inline-block w-6 h-6 stroke-current" />
@@ -175,7 +175,9 @@ const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-        <Sidebar selectedDocUrl={selectedDocUrl} />
+        <div className="bg-base-100 h-full">
+          <Sidebar selectedDocUrl={selectedDocUrl} />
+        </div>
       </div>
     </div>
   );
