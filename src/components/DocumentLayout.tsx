@@ -20,12 +20,16 @@ interface DocGroup {
 // 文件夹名称映射
 const folderNames: { [key: string]: any } = {
   start: {
-    label: '开发教程',
+    label: '功能',
     icon: <FiBookOpen />,
   },
   dev: {
     label: '开始',
     icon: <BsCaretRightSquare />,
+  },
+  components: {
+    label: '组件',
+    icon: <></>,
   },
   // 添加更多文件夹映射...
 };
@@ -129,6 +133,14 @@ const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
   const selectedDocUrl = useMemo(() => {
     return allDocPages.find((doc) => doc.url === pathname)?.url || '';
   }, [pathname]);
+
+  // 在内容加载后更新标题
+  useEffect(() => {
+    const doc = allDocPages.find((doc) => doc.url === selectedDocUrl);
+    if (doc) {
+      document.title = `${doc.title} | MvpFast-快速构建网站应用`; // 更新网页标题
+    }
+  }, [selectedDocUrl]);
 
   const renderContent = useCallback(() => {
     if (isLoading) {
