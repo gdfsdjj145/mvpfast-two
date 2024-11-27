@@ -2,6 +2,7 @@ import { allDocPages } from 'contentlayer/generated';
 import DocPageClient from './DocPageClient';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { Suspense } from 'react';
 
 // 缓存文档查找函数
 const getDoc = cache((slug: string) => {
@@ -14,13 +15,12 @@ export const generateStaticParams = async () => {
   }));
 };
 
-// 禁用所有动态行为和 Suspense
+// 只保留有效的静态生成配置
 export const dynamic = 'force-static';
 export const revalidate = false;
 export const fetchCache = 'force-cache';
 export const runtime = 'nodejs';
 export const preferredRegion = 'auto';
-export const suspense = false;
 
 const DocPage = ({ params }: { params: { slug: string[] } }) => {
   const slug = params.slug.join('/');
@@ -30,7 +30,11 @@ const DocPage = ({ params }: { params: { slug: string[] } }) => {
     notFound();
   }
 
-  return <DocPageClient doc={doc} />;
+  return (
+    <Suspense fallback={null}>
+      <DocPageClient doc={doc} />
+    </Suspense>
+  );
 };
 
 export default DocPage;

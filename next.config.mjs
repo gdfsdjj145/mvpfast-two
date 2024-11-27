@@ -8,6 +8,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     missingSuspenseWithCSRBailout: false,
+    esmExternals: 'loose'
   },
   images: {
     unoptimized: true,
