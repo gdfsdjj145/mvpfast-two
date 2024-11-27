@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@alicloud/pop-core':
         specifier: ^1.7.13
-        version: https://registry.npmmirror.com/@alicloud/pop-core/-/pop-core-1.7.13.tgz(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/@alicloud/pop-core/-/pop-core-1.7.13.tgz(supports-color@8.1.1)
       '@emotion/is-prop-valid':
         specifier: ^1.3.1
         version: https://registry.npmmirror.com/@emotion/is-prop-valid/-/is-prop-valid-1.3.1.tgz
@@ -46,7 +46,7 @@ importers:
         version: https://registry.npmmirror.com/clipboard/-/clipboard-2.0.11.tgz
       contentlayer:
         specifier: ^0.3.4
-        version: https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       daisyui:
         specifier: ^4.12.10
         version: https://registry.npmmirror.com/daisyui/-/daisyui-4.12.10.tgz(postcss@https://registry.npmmirror.com/postcss/-/postcss-8.0.0.tgz)
@@ -79,10 +79,10 @@ importers:
         version: https://registry.npmmirror.com/next-auth/-/next-auth-5.0.0-beta.20.tgz(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(nodemailer@https://registry.npmmirror.com/nodemailer/-/nodemailer-6.9.14.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       next-contentlayer:
         specifier: ^0.3.4
-        version: https://registry.npmmirror.com/next-contentlayer/-/next-contentlayer-0.3.4.tgz(contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0))(esbuild@0.24.0)(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/next-contentlayer/-/next-contentlayer-0.3.4.tgz(contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1))(esbuild@0.24.0)(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1)
       next-mdx-remote:
         specifier: ^5.0.0
-        version: https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1)
       next-themes:
         specifier: ^0.3.0
         version: https://registry.npmmirror.com/next-themes/-/next-themes-0.3.0.tgz(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
@@ -115,7 +115,7 @@ importers:
         version: https://registry.npmmirror.com/react-icons/-/react-icons-5.3.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       react-markdown:
         specifier: ^9.0.1
-        version: https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1)
       react-redux:
         specifier: ^9.1.2
         version: https://registry.npmmirror.com/react-redux/-/react-redux-9.1.2.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(redux@https://registry.npmmirror.com/redux/-/redux-5.0.1.tgz)
@@ -139,10 +139,10 @@ importers:
         version: https://registry.npmmirror.com/rehype-stringify/-/rehype-stringify-10.0.1.tgz
       remark-gfm:
         specifier: ^4.0.0
-        version: https://registry.npmmirror.com/remark-gfm/-/remark-gfm-4.0.0.tgz(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/remark-gfm/-/remark-gfm-4.0.0.tgz(supports-color@8.1.1)
       remark-parse:
         specifier: ^11.0.0
-        version: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@8.1.1)
       remark-rehype:
         specifier: ^11.1.1
         version: https://registry.npmmirror.com/remark-rehype/-/remark-rehype-11.1.1.tgz
@@ -150,11 +150,11 @@ importers:
         specifier: ^1.23.1
         version: https://registry.npmmirror.com/shiki/-/shiki-1.23.1.tgz
       supports-color:
-        specifier: ^9.4.0
-        version: 9.4.0
+        specifier: ^8.1.1
+        version: 8.1.1
       wechatpay-node-v3:
         specifier: ^2.2.1
-        version: https://registry.npmmirror.com/wechatpay-node-v3/-/wechatpay-node-v3-2.2.1.tgz(supports-color@9.4.0)
+        version: https://registry.npmmirror.com/wechatpay-node-v3/-/wechatpay-node-v3-2.2.1.tgz(supports-color@8.1.1)
       zustand:
         specifier: ^5.0.1
         version: https://registry.npmmirror.com/zustand/-/zustand-5.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(immer@10.1.1)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(use-sync-external-store@1.2.2(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))
@@ -1645,6 +1645,10 @@ packages:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==, tarball: https://registry.npmmirror.com/gray-matter/-/gray-matter-4.0.3.tgz}
     version: 4.0.3
     engines: {node: '>=6.0'}
+
+  has-flag@4.0.0:
+    resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
+    engines: {node: '>=8'}
 
   has-own-prop@https://registry.npmmirror.com/has-own-prop/-/has-own-prop-2.0.0.tgz:
     resolution: {integrity: sha512-Pq0h+hvsVm6dDEa8x82GnLSYHOzNDt7f0ddFa3FqcQlgzEiptPqL+XrOJNavjOzSYiYWIrgeVYYgGlLmnxwilQ==, tarball: https://registry.npmmirror.com/has-own-prop/-/has-own-prop-2.0.0.tgz}
@@ -3147,9 +3151,9 @@ packages:
     engines: {node: '>=6.4.0 <13 || >=14'}
     deprecated: Please upgrade to v9.0.0+ as we have fixed a public vulnerability with formidable dependency. Note that v9.0.0+ requires Node.js v14.18.0+. See https://github.com/ladjs/superagent/pull/1800 for insight. This project is supported and maintained by the team at Forward Email @ https://forwardemail.net
 
-  supports-color@9.4.0:
-    resolution: {integrity: sha512-VL+lNrEoIXww1coLPOmiEmK/0sGigko5COxI09KzHc2VJXJsQ37UaQ+8quuxjDeA7+KnLGTWRyOXSLLR2Wb4jw==}
-    engines: {node: '>=12'}
+  supports-color@8.1.1:
+    resolution: {integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==}
+    engines: {node: '>=10'}
 
   supports-preserve-symlinks-flag@https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==, tarball: https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz}
@@ -3447,10 +3451,10 @@ packages:
 
 snapshots:
 
-  '@alicloud/pop-core@https://registry.npmmirror.com/@alicloud/pop-core/-/pop-core-1.7.13.tgz(supports-color@9.4.0)':
+  '@alicloud/pop-core@https://registry.npmmirror.com/@alicloud/pop-core/-/pop-core-1.7.13.tgz(supports-color@8.1.1)':
     dependencies:
-      debug: https://registry.npmmirror.com/debug/-/debug-3.2.7.tgz(supports-color@9.4.0)
-      httpx: https://registry.npmmirror.com/httpx/-/httpx-2.3.3.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-3.2.7.tgz(supports-color@8.1.1)
+      httpx: https://registry.npmmirror.com/httpx/-/httpx-2.3.3.tgz(supports-color@8.1.1)
       json-bigint: https://registry.npmmirror.com/json-bigint/-/json-bigint-1.0.0.tgz
       kitx: https://registry.npmmirror.com/kitx/-/kitx-1.3.0.tgz
       xml2js: https://registry.npmmirror.com/xml2js/-/xml2js-0.5.0.tgz
@@ -3483,9 +3487,9 @@ snapshots:
     dependencies:
       regenerator-runtime: https://registry.npmmirror.com/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz
 
-  '@contentlayer/cli@https://registry.npmmirror.com/@contentlayer/cli/-/cli-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@contentlayer/cli@https://registry.npmmirror.com/@contentlayer/cli/-/cli-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
       clipanion: https://registry.npmmirror.com/clipanion/-/clipanion-3.2.1.tgz(typanion@https://registry.npmmirror.com/typanion/-/typanion-3.14.0.tgz)
       typanion: https://registry.npmmirror.com/typanion/-/typanion-3.14.0.tgz
@@ -3495,25 +3499,25 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/client@https://registry.npmmirror.com/@contentlayer/client/-/client-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@contentlayer/client@https://registry.npmmirror.com/@contentlayer/client/-/client-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
       - esbuild
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/core@https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@contentlayer/core@https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
       camel-case: https://registry.npmmirror.com/camel-case/-/camel-case-4.1.2.tgz
       comment-json: https://registry.npmmirror.com/comment-json/-/comment-json-4.2.5.tgz
       gray-matter: https://registry.npmmirror.com/gray-matter/-/gray-matter-4.0.3.tgz
-      mdx-bundler: https://registry.npmmirror.com/mdx-bundler/-/mdx-bundler-9.2.1.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      mdx-bundler: https://registry.npmmirror.com/mdx-bundler/-/mdx-bundler-9.2.1.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       rehype-stringify: https://registry.npmmirror.com/rehype-stringify/-/rehype-stringify-9.0.4.tgz
       remark-frontmatter: https://registry.npmmirror.com/remark-frontmatter/-/remark-frontmatter-4.0.1.tgz
-      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@9.4.0)
+      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@8.1.1)
       remark-rehype: https://registry.npmmirror.com/remark-rehype/-/remark-rehype-10.1.0.tgz
       source-map-support: https://registry.npmmirror.com/source-map-support/-/source-map-support-0.5.21.tgz
       type-fest: https://registry.npmmirror.com/type-fest/-/type-fest-3.13.1.tgz
@@ -3524,9 +3528,9 @@ snapshots:
       - '@effect-ts/otel-node'
       - supports-color
 
-  '@contentlayer/source-files@https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@contentlayer/source-files@https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
       chokidar: https://registry.npmmirror.com/chokidar/-/chokidar-3.6.0.tgz
       fast-glob: https://registry.npmmirror.com/fast-glob/-/fast-glob-3.3.2.tgz
@@ -3543,10 +3547,10 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/source-remote-files@https://registry.npmmirror.com/@contentlayer/source-remote-files/-/source-remote-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@contentlayer/source-remote-files@https://registry.npmmirror.com/@contentlayer/source-remote-files/-/source-remote-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
-      '@contentlayer/source-files': https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
+      '@contentlayer/source-files': https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
@@ -3613,10 +3617,10 @@ snapshots:
 
   '@emotion/memoize@https://registry.npmmirror.com/@emotion/memoize/-/memoize-0.9.0.tgz': {}
 
-  '@esbuild-plugins/node-resolve@https://registry.npmmirror.com/@esbuild-plugins/node-resolve/-/node-resolve-0.1.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@esbuild-plugins/node-resolve@https://registry.npmmirror.com/@esbuild-plugins/node-resolve/-/node-resolve-0.1.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
       '@types/resolve': https://registry.npmmirror.com/@types/resolve/-/resolve-1.20.6.tgz
-      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1)
       esbuild: 0.24.0
       escape-string-regexp: https://registry.npmmirror.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz
       resolve: https://registry.npmmirror.com/resolve/-/resolve-1.22.8.tgz
@@ -3749,16 +3753,16 @@ snapshots:
       jsbi: https://registry.npmmirror.com/jsbi/-/jsbi-4.3.0.tgz
       tslib: https://registry.npmmirror.com/tslib/-/tslib-2.8.1.tgz
 
-  '@mdx-js/esbuild@https://registry.npmmirror.com/@mdx-js/esbuild/-/esbuild-2.3.0.tgz(esbuild@0.24.0)(supports-color@9.4.0)':
+  '@mdx-js/esbuild@https://registry.npmmirror.com/@mdx-js/esbuild/-/esbuild-2.3.0.tgz(esbuild@0.24.0)(supports-color@8.1.1)':
     dependencies:
-      '@mdx-js/mdx': https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-2.3.0.tgz(supports-color@9.4.0)
+      '@mdx-js/mdx': https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-2.3.0.tgz(supports-color@8.1.1)
       esbuild: 0.24.0
       node-fetch: https://registry.npmmirror.com/node-fetch/-/node-fetch-3.3.2.tgz
       vfile: https://registry.npmmirror.com/vfile/-/vfile-5.3.7.tgz
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/mdx@https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-2.3.0.tgz(supports-color@9.4.0)':
+  '@mdx-js/mdx@https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-2.3.0.tgz(supports-color@8.1.1)':
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/mdx': https://registry.npmmirror.com/@types/mdx/-/mdx-2.0.13.tgz
@@ -3766,11 +3770,11 @@ snapshots:
       estree-util-is-identifier-name: https://registry.npmmirror.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-2.1.0.tgz
       estree-util-to-js: https://registry.npmmirror.com/estree-util-to-js/-/estree-util-to-js-1.2.0.tgz
       estree-walker: https://registry.npmmirror.com/estree-walker/-/estree-walker-3.0.3.tgz
-      hast-util-to-estree: https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-2.3.3.tgz(supports-color@9.4.0)
+      hast-util-to-estree: https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-2.3.3.tgz(supports-color@8.1.1)
       markdown-extensions: https://registry.npmmirror.com/markdown-extensions/-/markdown-extensions-1.1.1.tgz
       periscopic: https://registry.npmmirror.com/periscopic/-/periscopic-3.1.0.tgz
-      remark-mdx: https://registry.npmmirror.com/remark-mdx/-/remark-mdx-2.3.0.tgz(supports-color@9.4.0)
-      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@9.4.0)
+      remark-mdx: https://registry.npmmirror.com/remark-mdx/-/remark-mdx-2.3.0.tgz(supports-color@8.1.1)
+      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@8.1.1)
       remark-rehype: https://registry.npmmirror.com/remark-rehype/-/remark-rehype-10.1.0.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-10.1.2.tgz
       unist-util-position-from-estree: https://registry.npmmirror.com/unist-util-position-from-estree/-/unist-util-position-from-estree-1.1.2.tgz
@@ -3780,7 +3784,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/mdx@https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-3.1.0.tgz(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(supports-color@9.4.0)':
+  '@mdx-js/mdx@https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-3.1.0.tgz(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(supports-color@8.1.1)':
     dependencies:
       '@types/estree': https://registry.npmmirror.com/@types/estree/-/estree-1.0.6.tgz
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
@@ -3791,14 +3795,14 @@ snapshots:
       estree-util-is-identifier-name: https://registry.npmmirror.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-3.0.0.tgz
       estree-util-scope: https://registry.npmmirror.com/estree-util-scope/-/estree-util-scope-1.0.0.tgz
       estree-walker: https://registry.npmmirror.com/estree-walker/-/estree-walker-3.0.3.tgz
-      hast-util-to-jsx-runtime: https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@9.4.0)
+      hast-util-to-jsx-runtime: https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@8.1.1)
       markdown-extensions: https://registry.npmmirror.com/markdown-extensions/-/markdown-extensions-2.0.0.tgz
       recma-build-jsx: https://registry.npmmirror.com/recma-build-jsx/-/recma-build-jsx-1.0.0.tgz
       recma-jsx: https://registry.npmmirror.com/recma-jsx/-/recma-jsx-1.0.0.tgz(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)
       recma-stringify: https://registry.npmmirror.com/recma-stringify/-/recma-stringify-1.0.0.tgz
-      rehype-recma: https://registry.npmmirror.com/rehype-recma/-/rehype-recma-1.0.0.tgz(supports-color@9.4.0)
-      remark-mdx: https://registry.npmmirror.com/remark-mdx/-/remark-mdx-3.1.0.tgz(supports-color@9.4.0)
-      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@9.4.0)
+      rehype-recma: https://registry.npmmirror.com/rehype-recma/-/rehype-recma-1.0.0.tgz(supports-color@8.1.1)
+      remark-mdx: https://registry.npmmirror.com/remark-mdx/-/remark-mdx-3.1.0.tgz(supports-color@8.1.1)
+      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@8.1.1)
       remark-rehype: https://registry.npmmirror.com/remark-rehype/-/remark-rehype-11.1.1.tgz
       source-map: https://registry.npmmirror.com/source-map/-/source-map-0.7.4.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-11.0.5.tgz
@@ -4332,13 +4336,13 @@ snapshots:
 
   component-emitter@https://registry.npmmirror.com/component-emitter/-/component-emitter-1.3.1.tgz: {}
 
-  contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0):
+  contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1):
     dependencies:
-      '@contentlayer/cli': https://registry.npmmirror.com/@contentlayer/cli/-/cli-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
-      '@contentlayer/client': https://registry.npmmirror.com/@contentlayer/client/-/client-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
-      '@contentlayer/source-files': https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
-      '@contentlayer/source-remote-files': https://registry.npmmirror.com/@contentlayer/source-remote-files/-/source-remote-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/cli': https://registry.npmmirror.com/@contentlayer/cli/-/cli-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
+      '@contentlayer/client': https://registry.npmmirror.com/@contentlayer/client/-/client-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
+      '@contentlayer/source-files': https://registry.npmmirror.com/@contentlayer/source-files/-/source-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
+      '@contentlayer/source-remote-files': https://registry.npmmirror.com/@contentlayer/source-remote-files/-/source-remote-files-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
@@ -4386,17 +4390,17 @@ snapshots:
 
   dayjs@https://registry.npmmirror.com/dayjs/-/dayjs-1.11.12.tgz: {}
 
-  debug@https://registry.npmmirror.com/debug/-/debug-3.2.7.tgz(supports-color@9.4.0):
+  debug@https://registry.npmmirror.com/debug/-/debug-3.2.7.tgz(supports-color@8.1.1):
     dependencies:
       ms: https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz
     optionalDependencies:
-      supports-color: 9.4.0
+      supports-color: 8.1.1
 
-  debug@https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0):
+  debug@https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1):
     dependencies:
       ms: https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz
     optionalDependencies:
-      supports-color: 9.4.0
+      supports-color: 8.1.1
 
   decode-named-character-reference@https://registry.npmmirror.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz:
     dependencies:
@@ -4686,6 +4690,8 @@ snapshots:
       section-matter: https://registry.npmmirror.com/section-matter/-/section-matter-1.0.0.tgz
       strip-bom-string: https://registry.npmmirror.com/strip-bom-string/-/strip-bom-string-1.0.0.tgz
 
+  has-flag@4.0.0: {}
+
   has-own-prop@https://registry.npmmirror.com/has-own-prop/-/has-own-prop-2.0.0.tgz: {}
 
   has-property-descriptors@https://registry.npmmirror.com/has-property-descriptors/-/has-property-descriptors-1.0.2.tgz:
@@ -4778,7 +4784,7 @@ snapshots:
       web-namespaces: https://registry.npmmirror.com/web-namespaces/-/web-namespaces-2.0.1.tgz
       zwitch: https://registry.npmmirror.com/zwitch/-/zwitch-2.0.4.tgz
 
-  hast-util-to-estree@https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-2.3.3.tgz(supports-color@9.4.0):
+  hast-util-to-estree@https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-2.3.3.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree': https://registry.npmmirror.com/@types/estree/-/estree-1.0.6.tgz
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
@@ -4788,8 +4794,8 @@ snapshots:
       estree-util-attach-comments: https://registry.npmmirror.com/estree-util-attach-comments/-/estree-util-attach-comments-2.1.1.tgz
       estree-util-is-identifier-name: https://registry.npmmirror.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-2.1.0.tgz
       hast-util-whitespace: https://registry.npmmirror.com/hast-util-whitespace/-/hast-util-whitespace-2.0.1.tgz
-      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@9.4.0)
-      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@8.1.1)
+      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@8.1.1)
       property-information: https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz
       space-separated-tokens: https://registry.npmmirror.com/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz
       style-to-object: https://registry.npmmirror.com/style-to-object/-/style-to-object-0.4.4.tgz
@@ -4798,7 +4804,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  hast-util-to-estree@https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-3.1.0.tgz(supports-color@9.4.0):
+  hast-util-to-estree@https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-3.1.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree': https://registry.npmmirror.com/@types/estree/-/estree-1.0.6.tgz
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
@@ -4808,9 +4814,9 @@ snapshots:
       estree-util-attach-comments: https://registry.npmmirror.com/estree-util-attach-comments/-/estree-util-attach-comments-3.0.0.tgz
       estree-util-is-identifier-name: https://registry.npmmirror.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-3.0.0.tgz
       hast-util-whitespace: https://registry.npmmirror.com/hast-util-whitespace/-/hast-util-whitespace-3.0.0.tgz
-      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@9.4.0)
-      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@9.4.0)
-      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@9.4.0)
+      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@8.1.1)
+      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@8.1.1)
+      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@8.1.1)
       property-information: https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz
       space-separated-tokens: https://registry.npmmirror.com/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz
       style-to-object: https://registry.npmmirror.com/style-to-object/-/style-to-object-0.4.4.tgz
@@ -4847,7 +4853,7 @@ snapshots:
       stringify-entities: https://registry.npmmirror.com/stringify-entities/-/stringify-entities-4.0.4.tgz
       zwitch: https://registry.npmmirror.com/zwitch/-/zwitch-2.0.4.tgz
 
-  hast-util-to-jsx-runtime@https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@9.4.0):
+  hast-util-to-jsx-runtime@https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree': https://registry.npmmirror.com/@types/estree/-/estree-1.0.6.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
@@ -4856,9 +4862,9 @@ snapshots:
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
       estree-util-is-identifier-name: https://registry.npmmirror.com/estree-util-is-identifier-name/-/estree-util-is-identifier-name-3.0.0.tgz
       hast-util-whitespace: https://registry.npmmirror.com/hast-util-whitespace/-/hast-util-whitespace-3.0.0.tgz
-      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@9.4.0)
-      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@9.4.0)
-      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@9.4.0)
+      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@8.1.1)
+      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@8.1.1)
+      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@8.1.1)
       property-information: https://registry.npmmirror.com/property-information/-/property-information-6.5.0.tgz
       space-separated-tokens: https://registry.npmmirror.com/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz
       style-to-object: https://registry.npmmirror.com/style-to-object/-/style-to-object-1.0.8.tgz
@@ -4931,10 +4937,10 @@ snapshots:
 
   html-void-elements@https://registry.npmmirror.com/html-void-elements/-/html-void-elements-3.0.0.tgz: {}
 
-  httpx@https://registry.npmmirror.com/httpx/-/httpx-2.3.3.tgz(supports-color@9.4.0):
+  httpx@https://registry.npmmirror.com/httpx/-/httpx-2.3.3.tgz(supports-color@8.1.1):
     dependencies:
       '@types/node': https://registry.npmmirror.com/@types/node/-/node-20.0.0.tgz
-      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5097,13 +5103,13 @@ snapshots:
       unist-util-is: https://registry.npmmirror.com/unist-util-is/-/unist-util-is-6.0.0.tgz
       unist-util-visit-parents: https://registry.npmmirror.com/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz
 
-  mdast-util-from-markdown@https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0):
+  mdast-util-from-markdown@https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-3.0.15.tgz
       '@types/unist': https://registry.npmmirror.com/@types/unist/-/unist-2.0.11.tgz
       decode-named-character-reference: https://registry.npmmirror.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz
       mdast-util-to-string: https://registry.npmmirror.com/mdast-util-to-string/-/mdast-util-to-string-3.2.0.tgz
-      micromark: https://registry.npmmirror.com/micromark/-/micromark-3.2.0.tgz(supports-color@9.4.0)
+      micromark: https://registry.npmmirror.com/micromark/-/micromark-3.2.0.tgz(supports-color@8.1.1)
       micromark-util-decode-numeric-character-reference: https://registry.npmmirror.com/micromark-util-decode-numeric-character-reference/-/micromark-util-decode-numeric-character-reference-1.1.0.tgz
       micromark-util-decode-string: https://registry.npmmirror.com/micromark-util-decode-string/-/micromark-util-decode-string-1.1.0.tgz
       micromark-util-normalize-identifier: https://registry.npmmirror.com/micromark-util-normalize-identifier/-/micromark-util-normalize-identifier-1.1.0.tgz
@@ -5114,14 +5120,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-from-markdown@https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0):
+  mdast-util-from-markdown@https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       '@types/unist': https://registry.npmmirror.com/@types/unist/-/unist-3.0.3.tgz
       decode-named-character-reference: https://registry.npmmirror.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
       mdast-util-to-string: https://registry.npmmirror.com/mdast-util-to-string/-/mdast-util-to-string-4.0.0.tgz
-      micromark: https://registry.npmmirror.com/micromark/-/micromark-4.0.1.tgz(supports-color@9.4.0)
+      micromark: https://registry.npmmirror.com/micromark/-/micromark-4.0.1.tgz(supports-color@8.1.1)
       micromark-util-decode-numeric-character-reference: https://registry.npmmirror.com/micromark-util-decode-numeric-character-reference/-/micromark-util-decode-numeric-character-reference-2.0.2.tgz
       micromark-util-decode-string: https://registry.npmmirror.com/micromark-util-decode-string/-/micromark-util-decode-string-2.0.1.tgz
       micromark-util-normalize-identifier: https://registry.npmmirror.com/micromark-util-normalize-identifier/-/micromark-util-normalize-identifier-2.0.1.tgz
@@ -5145,84 +5151,84 @@ snapshots:
       mdast-util-find-and-replace: https://registry.npmmirror.com/mdast-util-find-and-replace/-/mdast-util-find-and-replace-3.0.1.tgz
       micromark-util-character: https://registry.npmmirror.com/micromark-util-character/-/micromark-util-character-2.1.1.tgz
 
-  mdast-util-gfm-footnote@https://registry.npmmirror.com/mdast-util-gfm-footnote/-/mdast-util-gfm-footnote-2.0.0.tgz(supports-color@9.4.0):
+  mdast-util-gfm-footnote@https://registry.npmmirror.com/mdast-util-gfm-footnote/-/mdast-util-gfm-footnote-2.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
       micromark-util-normalize-identifier: https://registry.npmmirror.com/micromark-util-normalize-identifier/-/micromark-util-normalize-identifier-2.0.1.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm-strikethrough@https://registry.npmmirror.com/mdast-util-gfm-strikethrough/-/mdast-util-gfm-strikethrough-2.0.0.tgz(supports-color@9.4.0):
+  mdast-util-gfm-strikethrough@https://registry.npmmirror.com/mdast-util-gfm-strikethrough/-/mdast-util-gfm-strikethrough-2.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm-table@https://registry.npmmirror.com/mdast-util-gfm-table/-/mdast-util-gfm-table-2.0.0.tgz(supports-color@9.4.0):
+  mdast-util-gfm-table@https://registry.npmmirror.com/mdast-util-gfm-table/-/mdast-util-gfm-table-2.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
       markdown-table: https://registry.npmmirror.com/markdown-table/-/markdown-table-3.0.4.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm-task-list-item@https://registry.npmmirror.com/mdast-util-gfm-task-list-item/-/mdast-util-gfm-task-list-item-2.0.0.tgz(supports-color@9.4.0):
+  mdast-util-gfm-task-list-item@https://registry.npmmirror.com/mdast-util-gfm-task-list-item/-/mdast-util-gfm-task-list-item-2.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-gfm@https://registry.npmmirror.com/mdast-util-gfm/-/mdast-util-gfm-3.0.0.tgz(supports-color@9.4.0):
+  mdast-util-gfm@https://registry.npmmirror.com/mdast-util-gfm/-/mdast-util-gfm-3.0.0.tgz(supports-color@8.1.1):
     dependencies:
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-gfm-autolink-literal: https://registry.npmmirror.com/mdast-util-gfm-autolink-literal/-/mdast-util-gfm-autolink-literal-2.0.1.tgz
-      mdast-util-gfm-footnote: https://registry.npmmirror.com/mdast-util-gfm-footnote/-/mdast-util-gfm-footnote-2.0.0.tgz(supports-color@9.4.0)
-      mdast-util-gfm-strikethrough: https://registry.npmmirror.com/mdast-util-gfm-strikethrough/-/mdast-util-gfm-strikethrough-2.0.0.tgz(supports-color@9.4.0)
-      mdast-util-gfm-table: https://registry.npmmirror.com/mdast-util-gfm-table/-/mdast-util-gfm-table-2.0.0.tgz(supports-color@9.4.0)
-      mdast-util-gfm-task-list-item: https://registry.npmmirror.com/mdast-util-gfm-task-list-item/-/mdast-util-gfm-task-list-item-2.0.0.tgz(supports-color@9.4.0)
+      mdast-util-gfm-footnote: https://registry.npmmirror.com/mdast-util-gfm-footnote/-/mdast-util-gfm-footnote-2.0.0.tgz(supports-color@8.1.1)
+      mdast-util-gfm-strikethrough: https://registry.npmmirror.com/mdast-util-gfm-strikethrough/-/mdast-util-gfm-strikethrough-2.0.0.tgz(supports-color@8.1.1)
+      mdast-util-gfm-table: https://registry.npmmirror.com/mdast-util-gfm-table/-/mdast-util-gfm-table-2.0.0.tgz(supports-color@8.1.1)
+      mdast-util-gfm-task-list-item: https://registry.npmmirror.com/mdast-util-gfm-task-list-item/-/mdast-util-gfm-task-list-item-2.0.0.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-expression@https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@9.4.0):
+  mdast-util-mdx-expression@https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-2.3.10.tgz
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-3.0.15.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-1.5.0.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-expression@https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@9.4.0):
+  mdast-util-mdx-expression@https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-jsx@https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-2.1.4.tgz(supports-color@9.4.0):
+  mdast-util-mdx-jsx@https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-2.1.4.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-2.3.10.tgz
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-3.0.15.tgz
       '@types/unist': https://registry.npmmirror.com/@types/unist/-/unist-2.0.11.tgz
       ccount: https://registry.npmmirror.com/ccount/-/ccount-2.0.1.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-1.5.0.tgz
       parse-entities: https://registry.npmmirror.com/parse-entities/-/parse-entities-4.0.1.tgz
       stringify-entities: https://registry.npmmirror.com/stringify-entities/-/stringify-entities-4.0.4.tgz
@@ -5232,7 +5238,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-jsx@https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@9.4.0):
+  mdast-util-mdx-jsx@https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
@@ -5240,7 +5246,7 @@ snapshots:
       '@types/unist': https://registry.npmmirror.com/@types/unist/-/unist-3.0.3.tgz
       ccount: https://registry.npmmirror.com/ccount/-/ccount-2.0.1.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
       parse-entities: https://registry.npmmirror.com/parse-entities/-/parse-entities-4.0.1.tgz
       stringify-entities: https://registry.npmmirror.com/stringify-entities/-/stringify-entities-4.0.4.tgz
@@ -5249,43 +5255,43 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx@https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-2.0.1.tgz(supports-color@9.4.0):
+  mdast-util-mdx@https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-2.0.1.tgz(supports-color@8.1.1):
     dependencies:
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0)
-      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@9.4.0)
-      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-2.1.4.tgz(supports-color@9.4.0)
-      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1)
+      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-1.3.2.tgz(supports-color@8.1.1)
+      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-2.1.4.tgz(supports-color@8.1.1)
+      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-1.5.0.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx@https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-3.0.0.tgz(supports-color@9.4.0):
+  mdast-util-mdx@https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-3.0.0.tgz(supports-color@8.1.1):
     dependencies:
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
-      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@9.4.0)
-      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@9.4.0)
-      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
+      mdast-util-mdx-expression: https://registry.npmmirror.com/mdast-util-mdx-expression/-/mdast-util-mdx-expression-2.0.1.tgz(supports-color@8.1.1)
+      mdast-util-mdx-jsx: https://registry.npmmirror.com/mdast-util-mdx-jsx/-/mdast-util-mdx-jsx-3.1.3.tgz(supports-color@8.1.1)
+      mdast-util-mdxjs-esm: https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdxjs-esm@https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@9.4.0):
+  mdast-util-mdxjs-esm@https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-1.3.1.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-2.3.10.tgz
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-3.0.15.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-1.5.0.tgz
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdxjs-esm@https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@9.4.0):
+  mdast-util-mdxjs-esm@https://registry.npmmirror.com/mdast-util-mdxjs-esm/-/mdast-util-mdxjs-esm-2.0.1.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree-jsx': https://registry.npmmirror.com/@types/estree-jsx/-/estree-jsx-1.0.5.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       mdast-util-to-markdown: https://registry.npmmirror.com/mdast-util-to-markdown/-/mdast-util-to-markdown-2.1.2.tgz
     transitivePeerDependencies:
       - supports-color
@@ -5354,12 +5360,12 @@ snapshots:
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
 
-  mdx-bundler@https://registry.npmmirror.com/mdx-bundler/-/mdx-bundler-9.2.1.tgz(esbuild@0.24.0)(supports-color@9.4.0):
+  mdx-bundler@https://registry.npmmirror.com/mdx-bundler/-/mdx-bundler-9.2.1.tgz(esbuild@0.24.0)(supports-color@8.1.1):
     dependencies:
       '@babel/runtime': https://registry.npmmirror.com/@babel/runtime/-/runtime-7.26.0.tgz
-      '@esbuild-plugins/node-resolve': https://registry.npmmirror.com/@esbuild-plugins/node-resolve/-/node-resolve-0.1.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@esbuild-plugins/node-resolve': https://registry.npmmirror.com/@esbuild-plugins/node-resolve/-/node-resolve-0.1.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@fal-works/esbuild-plugin-global-externals': https://registry.npmmirror.com/@fal-works/esbuild-plugin-global-externals/-/esbuild-plugin-global-externals-2.1.2.tgz
-      '@mdx-js/esbuild': https://registry.npmmirror.com/@mdx-js/esbuild/-/esbuild-2.3.0.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@mdx-js/esbuild': https://registry.npmmirror.com/@mdx-js/esbuild/-/esbuild-2.3.0.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       esbuild: 0.24.0
       gray-matter: https://registry.npmmirror.com/gray-matter/-/gray-matter-4.0.3.tgz
       remark-frontmatter: https://registry.npmmirror.com/remark-frontmatter/-/remark-frontmatter-4.0.1.tgz
@@ -5812,10 +5818,10 @@ snapshots:
 
   micromark-util-types@https://registry.npmmirror.com/micromark-util-types/-/micromark-util-types-2.0.1.tgz: {}
 
-  micromark@https://registry.npmmirror.com/micromark/-/micromark-3.2.0.tgz(supports-color@9.4.0):
+  micromark@https://registry.npmmirror.com/micromark/-/micromark-3.2.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/debug': https://registry.npmmirror.com/@types/debug/-/debug-4.1.12.tgz
-      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1)
       decode-named-character-reference: https://registry.npmmirror.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz
       micromark-core-commonmark: https://registry.npmmirror.com/micromark-core-commonmark/-/micromark-core-commonmark-1.1.0.tgz
       micromark-factory-space: https://registry.npmmirror.com/micromark-factory-space/-/micromark-factory-space-1.1.0.tgz
@@ -5834,10 +5840,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  micromark@https://registry.npmmirror.com/micromark/-/micromark-4.0.1.tgz(supports-color@9.4.0):
+  micromark@https://registry.npmmirror.com/micromark/-/micromark-4.0.1.tgz(supports-color@8.1.1):
     dependencies:
       '@types/debug': https://registry.npmmirror.com/@types/debug/-/debug-4.1.12.tgz
-      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1)
       decode-named-character-reference: https://registry.npmmirror.com/decode-named-character-reference/-/decode-named-character-reference-1.0.2.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
       micromark-core-commonmark: https://registry.npmmirror.com/micromark-core-commonmark/-/micromark-core-commonmark-2.0.2.tgz
@@ -5897,11 +5903,11 @@ snapshots:
     optionalDependencies:
       nodemailer: https://registry.npmmirror.com/nodemailer/-/nodemailer-6.9.14.tgz
 
-  next-contentlayer@https://registry.npmmirror.com/next-contentlayer/-/next-contentlayer-0.3.4.tgz(contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0))(esbuild@0.24.0)(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0):
+  next-contentlayer@https://registry.npmmirror.com/next-contentlayer/-/next-contentlayer-0.3.4.tgz(contentlayer@https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1))(esbuild@0.24.0)(next@https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1):
     dependencies:
-      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      '@contentlayer/core': https://registry.npmmirror.com/@contentlayer/core/-/core-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       '@contentlayer/utils': https://registry.npmmirror.com/@contentlayer/utils/-/utils-0.3.4.tgz
-      contentlayer: https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@9.4.0)
+      contentlayer: https://registry.npmmirror.com/contentlayer/-/contentlayer-0.3.4.tgz(esbuild@0.24.0)(supports-color@8.1.1)
       next: https://registry.npmmirror.com/next/-/next-14.2.4.tgz(@opentelemetry/api@https://registry.npmmirror.com/@opentelemetry/api/-/api-1.9.0.tgz)(react-dom@https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz))(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
       react-dom: https://registry.npmmirror.com/react-dom/-/react-dom-18.0.0.tgz(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
@@ -5911,10 +5917,10 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  next-mdx-remote@https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0):
+  next-mdx-remote@https://registry.npmmirror.com/next-mdx-remote/-/next-mdx-remote-5.0.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1):
     dependencies:
       '@babel/code-frame': https://registry.npmmirror.com/@babel/code-frame/-/code-frame-7.26.2.tgz
-      '@mdx-js/mdx': https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-3.1.0.tgz(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(supports-color@9.4.0)
+      '@mdx-js/mdx': https://registry.npmmirror.com/@mdx-js/mdx/-/mdx-3.1.0.tgz(acorn@https://registry.npmmirror.com/acorn/-/acorn-8.14.0.tgz)(supports-color@8.1.1)
       '@mdx-js/react': https://registry.npmmirror.com/@mdx-js/react/-/react-3.1.0.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)
       react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
       unist-util-remove: https://registry.npmmirror.com/unist-util-remove/-/unist-util-remove-3.1.1.tgz
@@ -6180,16 +6186,16 @@ snapshots:
 
   react-is@https://registry.npmmirror.com/react-is/-/react-is-16.13.1.tgz: {}
 
-  react-markdown@https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@9.4.0):
+  react-markdown@https://registry.npmmirror.com/react-markdown/-/react-markdown-9.0.1.tgz(@types/react@https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz)(react@https://registry.npmmirror.com/react/-/react-18.0.0.tgz)(supports-color@8.1.1):
     dependencies:
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
       '@types/react': https://registry.npmmirror.com/@types/react/-/react-18.0.0.tgz
       devlop: https://registry.npmmirror.com/devlop/-/devlop-1.1.0.tgz
-      hast-util-to-jsx-runtime: https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@9.4.0)
+      hast-util-to-jsx-runtime: https://registry.npmmirror.com/hast-util-to-jsx-runtime/-/hast-util-to-jsx-runtime-2.3.2.tgz(supports-color@8.1.1)
       html-url-attributes: https://registry.npmmirror.com/html-url-attributes/-/html-url-attributes-3.0.1.tgz
       mdast-util-to-hast: https://registry.npmmirror.com/mdast-util-to-hast/-/mdast-util-to-hast-13.2.0.tgz
       react: https://registry.npmmirror.com/react/-/react-18.0.0.tgz
-      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@9.4.0)
+      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@8.1.1)
       remark-rehype: https://registry.npmmirror.com/remark-rehype/-/remark-rehype-11.1.1.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-11.0.5.tgz
       unist-util-visit: https://registry.npmmirror.com/unist-util-visit/-/unist-util-visit-5.0.0.tgz
@@ -6305,11 +6311,11 @@ snapshots:
       hast-util-raw: https://registry.npmmirror.com/hast-util-raw/-/hast-util-raw-9.1.0.tgz
       vfile: https://registry.npmmirror.com/vfile/-/vfile-6.0.3.tgz
 
-  rehype-recma@https://registry.npmmirror.com/rehype-recma/-/rehype-recma-1.0.0.tgz(supports-color@9.4.0):
+  rehype-recma@https://registry.npmmirror.com/rehype-recma/-/rehype-recma-1.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/estree': https://registry.npmmirror.com/@types/estree/-/estree-1.0.6.tgz
       '@types/hast': https://registry.npmmirror.com/@types/hast/-/hast-3.0.4.tgz
-      hast-util-to-estree: https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-3.1.0.tgz(supports-color@9.4.0)
+      hast-util-to-estree: https://registry.npmmirror.com/hast-util-to-estree/-/hast-util-to-estree-3.1.0.tgz(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6340,12 +6346,12 @@ snapshots:
       micromark-extension-frontmatter: https://registry.npmmirror.com/micromark-extension-frontmatter/-/micromark-extension-frontmatter-1.1.1.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-10.1.2.tgz
 
-  remark-gfm@https://registry.npmmirror.com/remark-gfm/-/remark-gfm-4.0.0.tgz(supports-color@9.4.0):
+  remark-gfm@https://registry.npmmirror.com/remark-gfm/-/remark-gfm-4.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
-      mdast-util-gfm: https://registry.npmmirror.com/mdast-util-gfm/-/mdast-util-gfm-3.0.0.tgz(supports-color@9.4.0)
+      mdast-util-gfm: https://registry.npmmirror.com/mdast-util-gfm/-/mdast-util-gfm-3.0.0.tgz(supports-color@8.1.1)
       micromark-extension-gfm: https://registry.npmmirror.com/micromark-extension-gfm/-/micromark-extension-gfm-3.0.0.tgz
-      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@9.4.0)
+      remark-parse: https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@8.1.1)
       remark-stringify: https://registry.npmmirror.com/remark-stringify/-/remark-stringify-11.0.0.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-11.0.5.tgz
     transitivePeerDependencies:
@@ -6358,32 +6364,32 @@ snapshots:
       js-yaml: https://registry.npmmirror.com/js-yaml/-/js-yaml-4.1.0.tgz
       toml: https://registry.npmmirror.com/toml/-/toml-3.0.0.tgz
 
-  remark-mdx@https://registry.npmmirror.com/remark-mdx/-/remark-mdx-2.3.0.tgz(supports-color@9.4.0):
+  remark-mdx@https://registry.npmmirror.com/remark-mdx/-/remark-mdx-2.3.0.tgz(supports-color@8.1.1):
     dependencies:
-      mdast-util-mdx: https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-2.0.1.tgz(supports-color@9.4.0)
+      mdast-util-mdx: https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-2.0.1.tgz(supports-color@8.1.1)
       micromark-extension-mdxjs: https://registry.npmmirror.com/micromark-extension-mdxjs/-/micromark-extension-mdxjs-1.0.1.tgz
     transitivePeerDependencies:
       - supports-color
 
-  remark-mdx@https://registry.npmmirror.com/remark-mdx/-/remark-mdx-3.1.0.tgz(supports-color@9.4.0):
+  remark-mdx@https://registry.npmmirror.com/remark-mdx/-/remark-mdx-3.1.0.tgz(supports-color@8.1.1):
     dependencies:
-      mdast-util-mdx: https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-3.0.0.tgz(supports-color@9.4.0)
+      mdast-util-mdx: https://registry.npmmirror.com/mdast-util-mdx/-/mdast-util-mdx-3.0.0.tgz(supports-color@8.1.1)
       micromark-extension-mdxjs: https://registry.npmmirror.com/micromark-extension-mdxjs/-/micromark-extension-mdxjs-3.0.0.tgz
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@9.4.0):
+  remark-parse@https://registry.npmmirror.com/remark-parse/-/remark-parse-10.0.2.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-3.0.15.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-1.3.1.tgz(supports-color@8.1.1)
       unified: https://registry.npmmirror.com/unified/-/unified-10.1.2.tgz
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@9.4.0):
+  remark-parse@https://registry.npmmirror.com/remark-parse/-/remark-parse-11.0.0.tgz(supports-color@8.1.1):
     dependencies:
       '@types/mdast': https://registry.npmmirror.com/@types/mdast/-/mdast-4.0.4.tgz
-      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@9.4.0)
+      mdast-util-from-markdown: https://registry.npmmirror.com/mdast-util-from-markdown/-/mdast-util-from-markdown-2.0.2.tgz(supports-color@8.1.1)
       micromark-util-types: https://registry.npmmirror.com/micromark-util-types/-/micromark-util-types-2.0.1.tgz
       unified: https://registry.npmmirror.com/unified/-/unified-11.0.5.tgz
     transitivePeerDependencies:
@@ -6559,11 +6565,11 @@ snapshots:
       pirates: https://registry.npmmirror.com/pirates/-/pirates-4.0.6.tgz
       ts-interface-checker: https://registry.npmmirror.com/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz
 
-  superagent@https://registry.npmmirror.com/superagent/-/superagent-8.0.6.tgz(supports-color@9.4.0):
+  superagent@https://registry.npmmirror.com/superagent/-/superagent-8.0.6.tgz(supports-color@8.1.1):
     dependencies:
       component-emitter: https://registry.npmmirror.com/component-emitter/-/component-emitter-1.3.1.tgz
       cookiejar: https://registry.npmmirror.com/cookiejar/-/cookiejar-2.1.4.tgz
-      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@9.4.0)
+      debug: https://registry.npmmirror.com/debug/-/debug-4.3.7.tgz(supports-color@8.1.1)
       fast-safe-stringify: https://registry.npmmirror.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz
       form-data: https://registry.npmmirror.com/form-data/-/form-data-4.0.1.tgz
       formidable: https://registry.npmmirror.com/formidable/-/formidable-2.1.2.tgz
@@ -6574,7 +6580,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  supports-color@9.4.0: {}
+  supports-color@8.1.1:
+    dependencies:
+      has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz: {}
 
@@ -6792,10 +6800,10 @@ snapshots:
 
   web-streams-polyfill@https://registry.npmmirror.com/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz: {}
 
-  wechatpay-node-v3@https://registry.npmmirror.com/wechatpay-node-v3/-/wechatpay-node-v3-2.2.1.tgz(supports-color@9.4.0):
+  wechatpay-node-v3@https://registry.npmmirror.com/wechatpay-node-v3/-/wechatpay-node-v3-2.2.1.tgz(supports-color@8.1.1):
     dependencies:
       '@fidm/x509': https://registry.npmmirror.com/@fidm/x509/-/x509-1.2.1.tgz
-      superagent: https://registry.npmmirror.com/superagent/-/superagent-8.0.6.tgz(supports-color@9.4.0)
+      superagent: https://registry.npmmirror.com/superagent/-/superagent-8.0.6.tgz(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
