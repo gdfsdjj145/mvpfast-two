@@ -1,11 +1,5 @@
 'use client';
-import React, {
-  useEffect,
-  useMemo,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-} from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { allDocPages } from 'contentlayer/generated';
@@ -36,26 +30,6 @@ const folderNames: { [key: string]: any } = {
     order: 3,
   },
   // 添加更多文件夹映射...
-};
-
-// 自定义 hook 用于处理加载状态
-const useLoading = (pathname: string) => {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const isClientRef = useRef(false);
-
-  useLayoutEffect(() => {
-    isClientRef.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (isClientRef.current) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [pathname]);
-
-  return isLoading;
 };
 
 // 导航栏组件
@@ -138,7 +112,6 @@ Sidebar.displayName = 'Sidebar';
 
 const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const isLoading = useLoading(pathname);
 
   const selectedDocUrl = useMemo(() => {
     return allDocPages.find((doc) => doc.url === pathname)?.url || '';
@@ -148,24 +121,9 @@ const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const doc = allDocPages.find((doc) => doc.url === selectedDocUrl);
     if (doc) {
-      document.title = `${doc.title} | MvpFast-快速构建网站应用`; // 更新网页标题
+      document.title = `${doc.title} | MvpFast-快速构建网站应用`;
     }
   }, [selectedDocUrl]);
-
-  const renderContent = useCallback(() => {
-    if (isLoading) {
-      return (
-        <div className="flex justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-        </div>
-      );
-    }
-    return (
-      <div className="transition-opacity duration-300 ease-in-out">
-        {children}
-      </div>
-    );
-  }, [isLoading, children]);
 
   return (
     <div className="drawer lg:drawer-open">
@@ -181,7 +139,11 @@ const DocLayout = React.memo(({ children }: { children: React.ReactNode }) => {
             <span className="text-lg font-bold">文档</span>
           </div>
         </div>
-        <div className="p-4 w-full">{renderContent()}</div>
+        <div className="p-4 w-full">
+          <div className="transition-opacity duration-300 ease-in-out">
+            {children}
+          </div>
+        </div>
       </div>
       <div className="drawer-side">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>

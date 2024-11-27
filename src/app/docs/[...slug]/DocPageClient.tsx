@@ -117,19 +117,33 @@ const languageMap: { [key: string]: string } = {
 
 // Markdown 组件配置
 const components = {
-  img: ({ src, alt }: { src?: string; alt?: string }) => (
-    <div className="relative w-full h-[400px] my-6">
-      {src && (
-        <Image
-          src={src}
-          alt={alt || ''}
-          fill
-          className="object-contain"
-          quality={100}
-        />
-      )}
-    </div>
-  ),
+  img: ({ src, alt }: { src?: string; alt?: string }) => {
+    // 使用 useMemo 来确保组件在服务端和客户端渲染结果一致
+    return React.useMemo(
+      () => (
+        <div className="relative my-8 flex justify-center">
+          {src && (
+            <div className="relative w-full max-w-3xl">
+              <Image
+                src={src}
+                alt={alt || ''}
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="rounded-lg w-full h-auto"
+                priority={true}
+                quality={100}
+                style={{
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
+          )}
+        </div>
+      ),
+      [src, alt]
+    );
+  },
   a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
     <Link href={href || ''} className="text-primary hover:text-primary/80">
       {children}
@@ -222,21 +236,29 @@ const components = {
 
 // 主要的文档页面组件
 const DocPageClient = ({ doc }: { doc: any }) => {
+  // 使用 React.useMemo 缓存渲染结果
+  const content = React.useMemo(
+    () => (
+      <article className="prose prose-lg dark:prose-invert max-w-none">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
+          components={components}
+        >
+          {doc.body.raw}
+        </ReactMarkdown>
+      </article>
+    ),
+    [doc.body.raw]
+  );
+
   return (
     <DocLayout>
       <div className="max-w-4xl px-6 py-10">
         <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-gray-100">
           {doc.title}
         </h1>
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-            components={components}
-          >
-            {doc.body.raw}
-          </ReactMarkdown>
-        </article>
+        {content}
       </div>
     </DocLayout>
   );

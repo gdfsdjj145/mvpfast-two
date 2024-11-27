@@ -120,3 +120,15 @@
 .prose .code-container {
   @apply rounded-lg overflow-hidden shadow-lg my-6;
 }
+
+/* 添加全局过渡效果 */
+.prose * {
+  @apply transition-colors duration-300;
+}
+
+/* 确保代码块的过渡效果平滑 */
+.prose pre,
+.prose pre code,
+.prose code {
+  @apply transition-colors duration-300;
+}
