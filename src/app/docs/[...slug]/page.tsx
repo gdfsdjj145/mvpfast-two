@@ -1,13 +1,12 @@
 import { allDocPages } from 'contentlayer/generated';
 import DocPageClient from './DocPageClient';
 import { notFound } from 'next/navigation';
-import { cache } from 'react';
 import { Suspense } from 'react';
 
 // 缓存文档查找函数
-const getDoc = cache((slug: string) => {
+const getDoc = (slug: string) => {
   return allDocPages.find((doc) => doc.url === `/docs/${slug}`);
-});
+};
 
 export const generateStaticParams = async () => {
   return allDocPages.map((doc) => ({
