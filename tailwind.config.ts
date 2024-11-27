@@ -17,51 +17,89 @@ const config: Config = {
           css: {
             color: '#374151',
             maxWidth: '100%',
+            lineHeight: '1.8',
+            p: {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+              fontSize: '1.05rem',
+              lineHeight: '1.75',
+            },
+            h1: {
+              marginTop: '2em',
+              marginBottom: '1em',
+              fontSize: '2.25rem',
+              fontWeight: '700',
+              lineHeight: '1.3',
+            },
+            h2: {
+              marginTop: '1.75em',
+              marginBottom: '0.75em',
+              fontSize: '1.75rem',
+              fontWeight: '600',
+              lineHeight: '1.35',
+            },
+            h3: {
+              marginTop: '1.5em',
+              marginBottom: '0.75em',
+              fontSize: '1.375rem',
+              fontWeight: '600',
+              lineHeight: '1.4',
+            },
+            ul: {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+              paddingLeft: '1.625em',
+              li: {
+                marginTop: '0.5em',
+                marginBottom: '0.5em',
+              },
+            },
+            ol: {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
+              paddingLeft: '1.625em',
+              li: {
+                marginTop: '0.5em',
+                marginBottom: '0.5em',
+              },
+            },
             code: {
-              color: '#111827',
-              backgroundColor: '#F3F4F6',
-              fontWeight: '500',
-              padding: '0.2em 0.4em',
-              borderRadius: '0.25rem',
-              '&::before': {
-                content: 'none',
-              },
-              '&::after': {
-                content: 'none',
-              },
+              backgroundColor: 'transparent',
+              padding: '0',
+              fontWeight: '400',
+              '&::before': { content: 'none' },
+              '&::after': { content: 'none' },
             },
             pre: {
-              color: '#F3F4F6',
-              backgroundColor: '#1a1b26',
-              borderRadius: '0.5rem',
-              padding: '1rem',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-              margin: '1.5rem 0',
-              '& code': {
-                backgroundColor: 'transparent',
-                border: 'none',
-                color: 'inherit',
-                fontSize: 'inherit',
-                fontFamily:
-                  'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                padding: '0',
-              },
-              // 移除任何默认的块级显示属性
-              display: 'block',
-              width: '100%',
-              overflow: 'auto',
-              whiteSpace: 'pre',
-            },
-            'div pre': {
+              padding: '0',
               margin: '0',
-              padding: '1rem',
+              backgroundColor: 'transparent',
             },
-            'code::before': {
-              content: 'none',
+            blockquote: {
+              marginTop: '1.5em',
+              marginBottom: '1.5em',
+              paddingLeft: '1.25em',
+              borderLeftWidth: '4px',
+              borderLeftColor: '#E5E7EB',
+              fontStyle: 'italic',
+              color: '#4B5563',
             },
-            'code::after': {
-              content: 'none',
+            table: {
+              marginTop: '1.5em',
+              marginBottom: '1.5em',
+              fontSize: '0.95em',
+            },
+            hr: {
+              marginTop: '2em',
+              marginBottom: '2em',
+              borderColor: '#E5E7EB',
+            },
+            a: {
+              color: '#2563EB',
+              textDecoration: 'none',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
             },
           },
         },

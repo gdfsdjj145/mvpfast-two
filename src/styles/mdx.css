@@ -1,6 +1,24 @@
 /* styles/mdx.css */
 .prose pre {
-  @apply bg-gray-900 rounded-lg overflow-x-auto my-4 p-4;
+  @apply bg-[#1e1e1e] overflow-hidden my-6 relative;
+  margin: 0;
+}
+
+.prose pre code {
+  @apply block overflow-x-auto text-sm leading-6;
+  background: none;
+  border-radius: 0;
+  padding: 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.prose code:not(pre code) {
+  @apply px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-mono;
+}
+
+.prose .copy-button {
+  @apply absolute right-3 top-3 rounded-md bg-black/30 px-2 py-1 text-sm 
+         text-gray-300 hover:bg-black/40 transition-colors duration-200;
 }
 
 .prose pre [data-line] {
@@ -9,10 +27,6 @@
 
 .prose pre [data-highlighted-line] {
   @apply border-l-blue-400 bg-blue-400/10;
-}
-
-.prose pre [data-highlighted-word] {
-  @apply bg-blue-400/10 rounded;
 }
 
 .prose .anchor {
@@ -45,10 +59,6 @@
 
 .prose p {
   @apply leading-7 mb-4;
-}
-
-.prose code:not(pre code) {
-  @apply px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-mono;
 }
 
 .prose ul {
@@ -105,4 +115,8 @@
 /* 确保表格容器可以水平滚动 */
 .prose .table-container {
   @apply overflow-x-auto my-6 rounded-lg border border-gray-200 dark:border-gray-700;
+}
+
+.prose .code-container {
+  @apply rounded-lg overflow-hidden shadow-lg my-6;
 }
