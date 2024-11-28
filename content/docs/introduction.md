@@ -2,7 +2,7 @@
 order: 1
 key: introduction
 title: 快速开始
-description: 快速开始
+description: MvpFast的介绍
 ---
 
 欢迎来到 MvpFast🙋
