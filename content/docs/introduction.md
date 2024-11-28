@@ -2,7 +2,7 @@
 order: 1
 key: introduction
 title: 快速开始
-description: 快速构建现代 Web 应用的全栈开发模板
+description: 快速开始
 ---
 
 欢迎来到 MvpFast🙋
