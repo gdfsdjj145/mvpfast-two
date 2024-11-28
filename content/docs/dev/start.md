@@ -5,15 +5,13 @@ title: 开始开发
 description: 开始开发
 ---
 
-# 开发
-
 > 请确保 Node 环境>= 20.0.0 （作者使用的环境）
 
 ### 获取 MvpFast 代码
 
 通过 github 获取模板代码之后，了解代码结构，分别是`mvpfast`和`mvpfast-wx-server`两个项目
 
-```
+```js
 // mvpfast
 content //内容文件（博客、文章）
 | content/blog

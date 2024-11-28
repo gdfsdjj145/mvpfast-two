@@ -5,8 +5,6 @@ title: 部署到Vercel
 description: Vercel的介绍
 ---
 
-# Vercel（CI/CD）
-
 Vercel 是一个现代化的云平台，专为前端开发者和团队设计。它提供了一种简单而强大的方式来部署和扩展 Web 应用程序。Vercel 和 NEXTJS 都是出自他们团队，可以说这两个工具配合开发，用起来无比顺滑。
 
 ### 1.注册 vercel

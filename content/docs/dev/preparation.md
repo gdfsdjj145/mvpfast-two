@@ -5,8 +5,6 @@ title: 准备工作
 description: 开始开发前的准备工作
 ---
 
-## 技术栈概览
-
 MVPFAST 使用以下主要技术：
 
 1. [Next.js](https://nextjs.org/) - React 框架

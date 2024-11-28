@@ -8,6 +8,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     missingSuspenseWithCSRBailout: false,
+    esmExternals: 'loose'
   },
   images: {
     unoptimized: true,
@@ -20,11 +21,17 @@ const nextConfig = {
     ],
   },
   // 如果您使用了 Contentlayer，可能需要以下配置
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.md$/,
       use: 'raw-loader',
     });
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        'supports-color': false,
+      };
+    }
     return config;
   },
 };
