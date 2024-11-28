@@ -126,7 +126,7 @@ export default function Header() {
   console.log(theme);
   const navigation = [
     { name: '首页', href: '/' },
-    { name: '文档', href: '/docs/dev/introduction', target: '_blank' },
+    { name: '文档', href: '/docs/introduction', target: '_blank' },
     { name: '博客', href: '/blog' },
     { name: '价格', href: '/#price' },
     { name: '购买须知', href: '/blog/commercial' },
