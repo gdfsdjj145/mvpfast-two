@@ -5,8 +5,6 @@ title: 谷歌统计
 description: 谷歌统计
 ---
 
-# 谷歌统计
-
 在`src/app/layout.tsx`文件修改对应 id，id 的获取可以通过申请谷歌统计来获取 key
 
 ![google](/docs/assets/google.png)

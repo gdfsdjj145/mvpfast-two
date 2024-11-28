@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { allDocPages } from 'contentlayer/generated';
 import { FaBars } from 'react-icons/fa';
-import { BsCaretRightSquare } from 'react-icons/bs';
 import { BsGrid1X2Fill } from 'react-icons/bs';
 import { FiBookOpen } from 'react-icons/fi';
+import { VscDebugStart } from 'react-icons/vsc';
+import { FaBookTanakh } from 'react-icons/fa6';
 
 interface DocGroup {
   [key: string]: typeof allDocPages;
@@ -15,8 +16,8 @@ interface DocGroup {
 // 文件夹名称映射
 const folderNames: { [key: string]: any } = {
   dev: {
-    label: '开始',
-    icon: <BsCaretRightSquare />,
+    label: '教程',
+    icon: <FaBookTanakh />,
     order: 1,
   },
   start: {
@@ -29,53 +30,80 @@ const folderNames: { [key: string]: any } = {
     icon: <BsGrid1X2Fill />,
     order: 3,
   },
-  // 添加更多文件夹映射...
+  articles: {
+    introduction: <VscDebugStart />,
+  },
 };
 
 // 导航栏组件
 const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
-  // 按文件夹分组文档
-  const groupedDocs = useMemo(() => {
-    const groups = allDocPages.reduce((acc: DocGroup, doc) => {
-      const folder = doc.folder || 'root';
-      if (!acc[folder]) {
-        acc[folder] = [];
-      }
-      acc[folder].push(doc);
-      return acc;
-    }, {});
+  // 修改文档分组逻辑
+  const { groupedDocs, ungroupedDocs } = useMemo(() => {
+    const grouped: DocGroup = {};
+    const ungrouped: typeof allDocPages = [];
 
-    // 对每个分组内的文档按 order 排序
-    Object.keys(groups).forEach((folder) => {
-      groups[folder].sort((a, b) => a.order - b.order);
+    allDocPages.forEach((doc) => {
+      if (doc.folder && doc.folder !== 'root') {
+        if (!grouped[doc.folder]) {
+          grouped[doc.folder] = [];
+        }
+        grouped[doc.folder].push(doc);
+      } else {
+        ungrouped.push(doc);
+      }
     });
 
+    // 对每个分组内的文档按 order 排序
+    Object.keys(grouped).forEach((folder) => {
+      grouped[folder].sort((a, b) => a.order - b.order);
+    });
+
+    // 对未分组文档排序
+    ungrouped.sort((a, b) => a.order - b.order);
+
     // 返回按文件夹顺序排序的文档
-    return Object.fromEntries(
-      Object.entries(groups).sort(([folderA], [folderB]) => {
+    const sortedGroups = Object.fromEntries(
+      Object.entries(grouped).sort(([folderA], [folderB]) => {
         const orderA = folderNames[folderA]?.order || 999;
         const orderB = folderNames[folderB]?.order || 999;
         return orderA - orderB;
       })
     );
+
+    return { groupedDocs: sortedGroups, ungroupedDocs: ungrouped };
   }, []);
 
   const renderDocLink = useCallback(
-    (doc: any) => (
-      <li key={doc._id}>
-        <Link
-          href={doc.url}
-          prefetch
-          className={`flex items-center p-2 hover:text-secondary rounded-lg transition-colors duration-200 ${
-            selectedDocUrl === doc.url
-              ? 'bg-primary font-bold text-secondary/50'
-              : 'font-medium'
-          }`}
-        >
-          {doc.title}
-        </Link>
-      </li>
-    ),
+    (doc: any) => {
+      const urlParts = doc.url.split('/');
+      const key = urlParts[urlParts.length - 1];
+      const isSelected = selectedDocUrl === doc.url;
+
+      return (
+        <li key={doc._id}>
+          <Link
+            href={doc.url}
+            prefetch
+            className={`flex items-center p-2 hover:text-secondary rounded-lg transition-colors duration-200 text-base ${
+              isSelected
+                ? 'bg-primary font-bold text-secondary/50'
+                : 'font-medium'
+            }`}
+          >
+            {folderNames.articles[key] && (
+              <span
+                className={`mr-2 transition-transform duration-200 ${
+                  isSelected ? 'scale-125' : 'scale-100'
+                }`}
+              >
+                {folderNames.articles[key]}
+              </span>
+            )}
+            {doc.title}
+          </Link>
+        </li>
+      );
+    },
     [selectedDocUrl]
   );
 
@@ -92,15 +120,19 @@ const Sidebar = React.memo(({ selectedDocUrl }: { selectedDocUrl: string }) => {
         />
       </a>
       <ul className="menu menu-compact flex flex-col p-4 space-y-2">
+        {/* 先渲染未分组的文档 */}
+        {ungroupedDocs.map(renderDocLink)}
+
+        {/* 然后渲染分组的文档 */}
         {Object.entries(groupedDocs).map(([folder, docs]) => (
           <li key={folder}>
-            <div className="flex items-center justify-between p-2 gap-2 font-medium">
-              {folderNames[folder].icon}
-              <span className="font-bold flex-1">
-                {folderNames[folder].label || folder}
+            <div className="flex items-center justify-between p-2 gap-3">
+              <span className="text-xl"> {folderNames[folder]?.icon}</span>
+              <span className="flex-1 text-base">
+                {folderNames[folder]?.label || folder}
               </span>
             </div>
-            <ul className="ml-4">{docs.map(renderDocLink)}</ul>
+            <ul className="ml-4 text-sm">{docs.map(renderDocLink)}</ul>
           </li>
         ))}
       </ul>

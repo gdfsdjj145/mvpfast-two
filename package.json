@@ -38,6 +38,7 @@
     "nextjs-progressbar": "^0.0.16",
     "nodemailer": "^6.9.14",
     "nprogress": "^0.2.0",
+    "prism-react-renderer": "^2.4.0",
     "prisma": "^5.14.0",
     "qrcode.react": "^3.1.0",
     "react": "^18.0.0",

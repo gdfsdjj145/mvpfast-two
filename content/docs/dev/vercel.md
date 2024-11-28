@@ -1,7 +1,7 @@
 ---
 order: 4
 key: vercel
-title: 部署到Vercel
+title: Vercel部署
 description: Vercel的介绍
 ---
 
