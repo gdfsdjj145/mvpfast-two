@@ -1,11 +1,11 @@
 ---
 order: 2
 key: preparation
-title: 准备工作
-description: 开始开发前的准备工作
+title: 了解
+description: 了解
 ---
 
-MVPFAST 使用以下主要技术：
+**MvpFast** 使用以下主要技术：
 
 1. [Next.js](https://nextjs.org/) - React 框架
 2. [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
@@ -17,34 +17,82 @@ MVPFAST 使用以下主要技术：
 8. [GitHub](https://github.com/) - 代码托管平台
 9. [微信开发](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html) - 公众号开发
 
-## 环境变量配置
+<br />
 
-在项目根目录创建 `.env` 文件，添加以下环境变量：
+**MvpFast** 里面还包含了很多的组件文件，它们可以帮助你快速的构建自己想要的内容。
 
-```bash
-env
-数据库
-DATABASE_URL="your_database_url"
-NextAuth.js
-NEXTAUTH_SECRET="your_nextauth_secret" // mvpfast默认值
-NEXTAUTH_SALT="your_nextauth_salt" // mvpfast默认值
-邮件服务（用于邮箱验证码登录）
-MAIL_HOST=邮箱服务的 host
-MAIL_PORT=邮箱服务的端口
-MAIL_USER=邮箱服务的发出用户
-MAIL_PASS=邮箱服务的发出用户的密码
-短信服务（用于手机验证码登录）
-ALIYUN_ACCESS_KEY_ID=阿里云账号 ACCESS_KEY
-ALIYUN_ACCESS_KEY_SECRET=阿里云账号 SECRET_KEY
-ALIYUN_SMS_SIGN_NAME=sms 服务签名
-ALIYUN_SMS_TEMPLATE_CODE=sms 发送模板
-微信登录（如需使用）
-NEXT_PUBLIC_API_URL=支付回调地址 // 你的vercel部署域名
-NEXT_PUBLIC_WECHAT_APPID=公众号id
-WECHAT_MCHID=商家号
-WECHAT_API_V3_KEY=v3支付私钥
-WECHAT_SERIAL_NO=证书序列号
-WECHAT_PRIVATE_KEY=证书密钥
+在`/components`文件夹里面你可以找到你需要的组件，包括但不限于 Hero、Price 等等组件，你可以看文档的**components** 部分。
+
+根布局组件在`src/app/layout.tsx`，它是整个网站的最根部的布局组件，包含一些网站监听，数据传输，主题选择等等功能，你也可以通过**metadata**来做你的**seo**修改。
+
+```tsx
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
+import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
+import './globals.css';
+import { ReduxProvider } from '@/store';
+import { Toaster } from 'react-hot-toast';
+import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProviders } from '@/components/theme/ThemeProvider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
+  ssr: false,
+});
+
+const inter = Inter({ subsets: ['latin'] });
+
+const fonts = localFont({
+  src: [
+    {
+      path: '../../public/fonts/xft.ttf',
+    },
+  ],
+  variable: '--font-xft',
+});
+
+export const metadata: Metadata = {
+  title: 'MvpFast-快速构建网站应用',
+  description:
+    '这是一款能帮助你快速构建个人网站的应用，使用最新的前端技术栈，集成登录、鉴权、手机、邮箱、数据库、博客、文章、支付等等网站所需要的功能，你只需要花几个小时开发你的核心功能就可以上线，一次购买，永久拥有',
+  keywords:
+    '开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="zh">
+      <body className={cn(fonts.variable, inter.className)}>
+        <PageProgressBar />
+        <ThemeProviders attribute="data-theme" defaultTheme="light">
+          <SessionProvider>
+            <ReduxProvider>{children}</ReduxProvider>
+          </SessionProvider>
+        </ThemeProviders>
+        <Toaster></Toaster>
+        <Analytics></Analytics>
+        <SpeedInsights></SpeedInsights>
+        <Script
+          strategy="lazyOnload"
+          src={`https://www.googletagmanager.com/gtag/js?id=xxx`}
+        />
+        <Script id="ga-script" strategy="lazyOnload">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'xxx');
+          `}
+        </Script>
+      </body>
+    </html>
+  );
+}
 ```
-
-请根据实际情况替换上述占位符。

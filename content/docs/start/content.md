@@ -5,8 +5,6 @@ title: 文档、博客
 description: 文档、博客的介绍
 ---
 
-# 文档、博客
-
 ### 简介
 
 MvpFast 目前使用`next-contentlayer`作为整个模板的内容输出引擎，封装了完好的功能。

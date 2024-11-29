@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import Image from 'next/image';
 import Link from 'next/link';
 import '@/styles/mdx.css';
+import { Highlight, themes } from 'prism-react-renderer';
 
 // 复制按钮组件
 const CopyButton = ({ text }: { text: string }) => {
@@ -21,7 +22,7 @@ const CopyButton = ({ text }: { text: string }) => {
   return (
     <button
       onClick={copy}
-      className="absolute right-2 top-2 rounded-md bg-white/10 px-2 py-1 text-sm text-white/80 hover:bg-white/20"
+      className="absolute right-2 top-2 rounded-md bg-white/10 px-2 py-1 text-sm text-white/80 hover:bg-white/20 z-10"
     >
       {copied ? (
         <span className="flex items-center gap-1">
@@ -65,54 +66,26 @@ const CopyButton = ({ text }: { text: string }) => {
 
 // 语言映射配置
 const languageMap: { [key: string]: string } = {
-  js: 'JavaScript',
-  javascript: 'JavaScript',
-  jsx: 'React JSX',
-  ts: 'TypeScript',
-  tsx: 'React TSX',
-  typescript: 'TypeScript',
-  bash: 'Bash',
-  shell: 'Shell',
-  sh: 'Shell',
-  python: 'Python',
-  py: 'Python',
-  ruby: 'Ruby',
-  rb: 'Ruby',
-  java: 'Java',
-  cpp: 'C++',
-  'c++': 'C++',
-  css: 'CSS',
-  scss: 'SCSS',
-  less: 'Less',
-  html: 'HTML',
-  xml: 'XML',
-  markdown: 'Markdown',
-  md: 'Markdown',
-  json: 'JSON',
-  yaml: 'YAML',
-  yml: 'YAML',
-  sql: 'SQL',
-  graphql: 'GraphQL',
-  rust: 'Rust',
-  go: 'Go',
-  golang: 'Go',
-  php: 'PHP',
-  docker: 'Docker',
-  dockerfile: 'Dockerfile',
-  nginx: 'Nginx',
-  apache: 'Apache',
-  powershell: 'PowerShell',
-  ps1: 'PowerShell',
-  swift: 'Swift',
-  kotlin: 'Kotlin',
-  dart: 'Dart',
-  r: 'R',
-  perl: 'Perl',
-  lua: 'Lua',
-  vue: 'Vue',
-  svelte: 'Svelte',
-  prisma: 'Prisma',
-  env: 'Environment',
+  js: 'javascript',
+  javascript: 'javascript',
+  jsx: 'jsx',
+  ts: 'typescript',
+  tsx: 'tsx',
+  typescript: 'typescript',
+  bash: 'bash',
+  shell: 'shell',
+  python: 'python',
+  java: 'java',
+  cpp: 'cpp',
+  css: 'css',
+  html: 'html',
+  json: 'json',
+  yaml: 'yaml',
+  sql: 'sql',
+  graphql: 'graphql',
+  rust: 'rust',
+  go: 'go',
+  php: 'php',
 };
 
 // Markdown 组件配置
@@ -145,7 +118,10 @@ const components = {
     );
   },
   a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
-    <Link href={href || ''} className="text-primary hover:text-primary/80">
+    <Link
+      href={href || ''}
+      className="text-secondary hover:text-secondary transition-colors duration-200 font-weight-600"
+    >
       {children}
     </Link>
   ),
@@ -161,7 +137,7 @@ const components = {
     const codeString = codeElement?.props?.children || '';
     const rawLanguage =
       codeElement?.props?.className?.replace('language-', '') || '';
-    const language = languageMap[rawLanguage] || rawLanguage || 'Plain Text';
+    const language = languageMap[rawLanguage] || rawLanguage || 'plain';
 
     return (
       <div className="relative my-6">
@@ -174,12 +150,48 @@ const components = {
           </div>
         </div>
         <div className="relative bg-[#1e1e1e] rounded-b-lg">
-          <pre className="overflow-x-auto p-4 text-sm leading-6">
+          <div className="overflow-x-auto p-4">
             <CopyButton
               text={typeof codeString === 'string' ? codeString : ''}
             />
-            {children}
-          </pre>
+            <Highlight
+              theme={themes.nightOwl}
+              code={typeof codeString === 'string' ? codeString.trim() : ''}
+              language={language}
+            >
+              {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                <pre
+                  className={`${className} text-sm leading-6`}
+                  style={{ ...style, background: 'transparent' }}
+                >
+                  {tokens.map((line, i) => (
+                    <div
+                      key={i}
+                      {...getLineProps({ line, key: i })}
+                      style={{ display: 'table-row' }}
+                    >
+                      <span
+                        style={{
+                          display: 'table-cell',
+                          textAlign: 'right',
+                          paddingRight: '1em',
+                          userSelect: 'none',
+                          opacity: 0.5,
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span style={{ display: 'table-cell' }}>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token, key })} />
+                        ))}
+                      </span>
+                    </div>
+                  ))}
+                </pre>
+              )}
+            </Highlight>
+          </div>
         </div>
       </div>
     );

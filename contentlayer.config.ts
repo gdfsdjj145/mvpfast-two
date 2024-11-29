@@ -24,6 +24,7 @@ export const DocPage = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     description: { type: 'string', required: true },
     order: { type: 'number', required: true },
+    rootOrder: { type: 'number', required: false },
   },
   computedFields: {
     url: {
