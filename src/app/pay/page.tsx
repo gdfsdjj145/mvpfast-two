@@ -9,6 +9,7 @@ import { createOrder, checkUserPayment, checkUserById } from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 // 动态导入 WeChatPayQRCode 组件
 const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
@@ -41,6 +42,8 @@ export default function PaymentPage() {
     transactionId: '',
     paidAt: '',
   });
+
+  const [payType, setPayType] = useState('wechat');
 
   useEffect(() => {
     const getShare = async () => {
@@ -164,6 +167,38 @@ export default function PaymentPage() {
     </div>
   );
 
+  const renderPaymentMethods = () => {
+    return (
+      <div className="mb-6 flex flex-col gap-4">
+        <h3 className="text-lg font-semibold text-gray-700">选择支付方式</h3>
+        <div className="flex gap-4">
+          <div
+            className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
+              payType === 'wechat'
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => setPayType('wechat')}
+          >
+            <Image src="/微信支付.png" alt="" width={30} height={30} />
+            <span className="font-medium hidden md:block">微信支付</span>
+          </div>
+          <div
+            className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
+              payType === 'third'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-blue-300'
+            }`}
+            onClick={() => setPayType('third')}
+          >
+            <Image src="/yungou.png" alt="" width={30} height={30} />
+            <span className="font-medium hidden md:block">YunGou</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderRightContent = () => {
     if (isLoading) {
       return <LoadingSpinner />;
@@ -212,6 +247,7 @@ export default function PaymentPage() {
     if (paymentStatus === 'pending') {
       return (
         <div className="bg-white p-8 rounded-lg shadow-md">
+          {renderPaymentMethods()}
           <WeChatPayQRCode
             amount={orderInfo.amount}
             description={good.name}
