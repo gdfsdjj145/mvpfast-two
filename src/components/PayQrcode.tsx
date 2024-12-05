@@ -3,23 +3,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
 import { paySign } from '@/lib/pay/sign';
+import { config } from '@/config';
+import { checkYungouOrderStatus } from '@/app/pay/actions';
 
-const yungouosConfig = {
-  mchId: '1700276063',
-  apiKey: 'DD751561961448F994612913DB5D6EAE',
-};
-
-const type = 'yungouos';
+const yungouosConfig = config.yungouosConfig;
 
 interface WeChatPayQRCodeProps {
   amount: number;
   description: string;
+  payType: string;
   onPaymentSuccess: (result: { transactionId: string; paidAt: string }) => void;
   onCreateOrder: (order: any) => void;
 }
 
 const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   amount,
+  payType,
   description,
   onPaymentSuccess,
   onCreateOrder,
@@ -33,12 +32,15 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const createOrderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  console.log(payType);
+
   // 创建订单的函数
   const createOrder = async () => {
     try {
       setIsLoading(true);
       let resData = null;
-      if (type === 'yungouos') {
+      let sign = '';
+      if (payType === 'yungouos') {
         const outTradeNo = `yungouos${new Date().getTime()}`;
         const params = {
           out_trade_no: outTradeNo,
@@ -46,7 +48,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
           mch_id: yungouosConfig.mchId,
           body: description,
         };
-        const sign = paySign(params, yungouosConfig.apiKey);
+        sign = paySign(params, yungouosConfig.apiKey);
         const { data } = await axios({
           url: 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay',
           method: 'post',
@@ -57,6 +59,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
             ...params,
             auto: '0',
             sign,
+            notify_url: `${location.origin}/api/yungou/notify`,
           },
         });
         resData = {
@@ -73,10 +76,10 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         });
         resData = data;
       }
-      console.log(resData);
       onCreateOrder({
         orderId: resData.data.outTradeNo,
         createdAt: resData.data.createdAt,
+        sign: sign,
       });
       setQrCodeUrl(resData.data.qrCodeUrl);
       setOutTradeNo(resData.data.outTradeNo);
@@ -105,12 +108,13 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         clearTimeout(createOrderTimeoutRef.current);
       }
     };
-  }, [amount]);
+  }, [amount, payType]);
 
   // 检查订单状态的 useEffect 保持不变
   useEffect(() => {
     if (!outTradeNo || isPaymentSuccessful) return;
 
+    // 检测微信支付订单状态
     const checkOrderStatus = async () => {
       try {
         const { data } = await axios.get(
@@ -133,8 +137,27 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       }
     };
 
-    if (type !== 'yungouos') {
+    // 检测yungou订单状态
+    const checkYungouOrderStatusFn = async () => {
+      const payOrder = await checkYungouOrderStatus(outTradeNo);
+      if (payOrder.status === 'success') {
+        setPaymentStatus('success');
+        setIsPaymentSuccessful(true);
+        onPaymentSuccess({
+          transactionId: payOrder.sign,
+          paidAt: new Date().toLocaleString(),
+        });
+        if (intervalIdRef.current) {
+          clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
+        }
+      }
+    };
+
+    if (payType === 'wechat') {
       intervalIdRef.current = setInterval(checkOrderStatus, 5000);
+    } else if (payType === 'yungouos') {
+      intervalIdRef.current = setInterval(checkYungouOrderStatusFn, 5000);
     }
 
     return () => {

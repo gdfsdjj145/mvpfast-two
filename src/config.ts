@@ -8,6 +8,27 @@ export const config = {
   // 登录方式 最少一个
   // wx 微信登录  phone 手机登录 email 邮箱登录
   loginTypes: ['wx', 'email'],
+  // 支付方式
+  payConfig: [
+    {
+      key: 'wechat',
+      name: '微信支付',
+      icon: '/微信支付.png',
+      activeColor: 'green',
+      use: true,
+    },
+    {
+      key: 'yungou',
+      name: 'YunGou',
+      icon: '/yungou.png',
+      activeColor: 'blue',
+      use: true,
+    },
+  ],
+  yungouosConfig: {
+    mchId: '1700276063',
+    apiKey: 'DD751561961448F994612913DB5D6EAE',
+  },
   // 商品信息
   goods: [
     {

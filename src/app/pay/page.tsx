@@ -5,7 +5,12 @@ import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
-import { createOrder, checkUserPayment, checkUserById } from './actions';
+import {
+  createOrder,
+  checkUserPayment,
+  checkUserById,
+  createPayOrder,
+} from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -145,7 +150,16 @@ export default function PaymentPage() {
     await createOrder(order);
   };
 
-  const handleCreateOrder = (order: any) => {
+  const handleCreateOrder = async (order: any) => {
+    if (payType === 'yungou') {
+      await createPayOrder({
+        identifier: order.orderId,
+        status: 'pending',
+        orderType: good.key,
+        price: orderInfo.amount / 100,
+        sign: order.sign,
+      });
+    }
     setOrderInfo((prevState) => ({
       ...prevState,
       ...order,
@@ -168,32 +182,31 @@ export default function PaymentPage() {
   );
 
   const renderPaymentMethods = () => {
+    const availablePayments = config.payConfig.filter((payment) => payment.use);
+
+    // 如果只有一个可用的支付方式，不显示选择器
+    if (availablePayments.length <= 1) return null;
+
     return (
       <div className="mb-6 flex flex-col gap-4">
-        <h3 className="text-lg font-semibold text-gray-700">选择支付方式</h3>
+        <h3 className="text-lg font-semibold text-gray-700">选择支付商</h3>
         <div className="flex gap-4">
-          <div
-            className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
-              payType === 'wechat'
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 hover:border-green-300'
-            }`}
-            onClick={() => setPayType('wechat')}
-          >
-            <Image src="/微信支付.png" alt="" width={30} height={30} />
-            <span className="font-medium hidden md:block">微信支付</span>
-          </div>
-          <div
-            className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
-              payType === 'third'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-blue-300'
-            }`}
-            onClick={() => setPayType('third')}
-          >
-            <Image src="/yungou.png" alt="" width={30} height={30} />
-            <span className="font-medium hidden md:block">YunGou</span>
-          </div>
+          {availablePayments.map((payment) => (
+            <div
+              key={payment.key}
+              className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
+                payType === payment.key
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-green-300'
+              }`}
+              onClick={() => setPayType(payment.key)}
+            >
+              <Image src={payment.icon} alt="" width={30} height={30} />
+              <span className="font-medium hidden md:block">
+                {payment.name}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -249,6 +262,7 @@ export default function PaymentPage() {
         <div className="bg-white p-8 rounded-lg shadow-md">
           {renderPaymentMethods()}
           <WeChatPayQRCode
+            payType={payType}
             amount={orderInfo.amount}
             description={good.name}
             onPaymentSuccess={handlePaymentSuccess}

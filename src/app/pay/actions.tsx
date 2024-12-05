@@ -1,6 +1,7 @@
 'use server';
 import prisma from '@/lib/prisma';
 
+// 创建已支付的订单
 export const createOrder = async (order: any) => {
   const newOrder = await prisma.order.create({
     data: order,
@@ -16,6 +17,24 @@ export const createOrder = async (order: any) => {
     });
   }
   return newOrder;
+};
+
+// 创建待支付的订单，用于yungou支付
+export const createPayOrder = async (order: any) => {
+  const newOrder = await prisma.payOrder.create({
+    data: order,
+  });
+  return newOrder;
+};
+
+// 检测yungou订单状态
+export const checkYungouOrderStatus = async (identifier: string) => {
+  const payOrder = await prisma.payOrder.findFirst({
+    where: {
+      identifier: identifier,
+    },
+  });
+  return payOrder;
 };
 
 export const checkUserPayment = async (userId: string) => {
