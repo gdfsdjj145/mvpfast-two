@@ -32,6 +32,30 @@ NEXT_PUBLIC_YUNGOUOS_API_KEY=xxxx // 支付密钥
 NEXT_PUBLIC_YUNGOUOS_MCH_ID=xxxx // 商家号
 ```
 
+修改`src/config.ts`中的主要配置
+
+```ts
+ // 支付方式
+
+// use 可以都修改为true，为多个选项
+  payConfig: [
+    {
+      key: 'wechat',
+      name: '微信支付',
+      icon: '/微信支付.png',
+      activeColor: 'green',
+      use: true,
+    },
+    {
+      key: 'yungou',
+      name: 'YunGou',
+      icon: '/yungou.png',
+      activeColor: 'blue',
+      use: false, // 修改成true为使用yungou
+    },
+  ],
+```
+
 修改`/components/PayQrcode`中的`yungouos`配置
 
 ```tsx
