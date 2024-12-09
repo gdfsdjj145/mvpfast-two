@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
 import { paySign } from '@/lib/pay/sign';
-import { config } from '@/config';
 import { checkYungouOrderStatus } from '@/app/pay/actions';
-
-const yungouosConfig = config.yungouosConfig;
 
 interface WeChatPayQRCodeProps {
   amount: number;
@@ -42,13 +39,14 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       let sign = '';
       if (payType === 'yungouos') {
         const outTradeNo = `yungouos${new Date().getTime()}`;
+        // yungou
         const params = {
           out_trade_no: outTradeNo,
-          total_fee: `0.01`,
-          mch_id: yungouosConfig.mchId,
+          total_fee: `0.01`, // 修改成为 amount 0.01为测试
+          mch_id: process.env.NEXT_PUBLIC_YUNGOUOS_MCH_ID,
           body: description,
         };
-        sign = paySign(params, yungouosConfig.apiKey);
+        sign = paySign(params, process.env.NEXT_PUBLIC_YUNGOUOS_API_KEY);
         const { data } = await axios({
           url: 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay',
           method: 'post',
@@ -59,7 +57,6 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
             ...params,
             auto: '0',
             sign,
-            notify_url: `${location.origin}/api/yungou/notify`,
           },
         });
         resData = {
