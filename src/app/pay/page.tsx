@@ -185,7 +185,10 @@ export default function PaymentPage() {
     const availablePayments = config.payConfig.filter((payment) => payment.use);
 
     // 如果只有一个可用的支付方式，不显示选择器
-    if (availablePayments.length <= 1) return null;
+    if (availablePayments.length <= 1) {
+      setPayType(availablePayments[0].key);
+      return null;
+    }
 
     return (
       <div className="mb-6 flex flex-col gap-4">
