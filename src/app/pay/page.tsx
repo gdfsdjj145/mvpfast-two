@@ -5,10 +5,16 @@ import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
-import { createOrder, checkUserPayment, checkUserById } from './actions';
+import {
+  createOrder,
+  checkUserPayment,
+  checkUserById,
+  createPayOrder,
+} from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 // 动态导入 WeChatPayQRCode 组件
 const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
@@ -41,6 +47,8 @@ export default function PaymentPage() {
     transactionId: '',
     paidAt: '',
   });
+
+  const [payType, setPayType] = useState('wechat');
 
   useEffect(() => {
     const getShare = async () => {
@@ -142,7 +150,16 @@ export default function PaymentPage() {
     await createOrder(order);
   };
 
-  const handleCreateOrder = (order: any) => {
+  const handleCreateOrder = async (order: any) => {
+    if (payType === 'yungou') {
+      await createPayOrder({
+        identifier: order.orderId,
+        status: 'pending',
+        orderType: good.key,
+        price: orderInfo.amount / 100,
+        sign: order.sign,
+      });
+    }
     setOrderInfo((prevState) => ({
       ...prevState,
       ...order,
@@ -163,6 +180,40 @@ export default function PaymentPage() {
       </div>
     </div>
   );
+
+  const renderPaymentMethods = () => {
+    const availablePayments = config.payConfig.filter((payment) => payment.use);
+
+    // 如果只有一个可用的支付方式，不显示选择器
+    if (availablePayments.length <= 1) {
+      setPayType(availablePayments[0].key);
+      return null;
+    }
+
+    return (
+      <div className="mb-6 flex flex-col gap-4">
+        <h3 className="text-lg font-semibold text-gray-700">选择支付商</h3>
+        <div className="flex gap-4">
+          {availablePayments.map((payment) => (
+            <div
+              key={payment.key}
+              className={`flex items-center gap-2 p-4 rounded-lg cursor-pointer border-2 transition-all ${
+                payType === payment.key
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-gray-200 hover:border-green-300'
+              }`}
+              onClick={() => setPayType(payment.key)}
+            >
+              <Image src={payment.icon} alt="" width={30} height={30} />
+              <span className="font-medium hidden md:block">
+                {payment.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const renderRightContent = () => {
     if (isLoading) {
@@ -212,7 +263,9 @@ export default function PaymentPage() {
     if (paymentStatus === 'pending') {
       return (
         <div className="bg-white p-8 rounded-lg shadow-md">
+          {renderPaymentMethods()}
           <WeChatPayQRCode
+            payType={payType}
             amount={orderInfo.amount}
             description={good.name}
             onPaymentSuccess={handlePaymentSuccess}

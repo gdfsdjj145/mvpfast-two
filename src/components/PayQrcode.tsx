@@ -2,16 +2,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
+import { paySign } from '@/lib/pay/sign';
+import { checkYungouOrderStatus } from '@/app/pay/actions';
 
 interface WeChatPayQRCodeProps {
   amount: number;
   description: string;
+  payType: string;
   onPaymentSuccess: (result: { transactionId: string; paidAt: string }) => void;
   onCreateOrder: (order: any) => void;
 }
 
 const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   amount,
+  payType,
   description,
   onPaymentSuccess,
   onCreateOrder,
@@ -25,20 +29,57 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const createOrderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  console.log(payType);
+
   // 创建订单的函数
   const createOrder = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.post('/api/wx/create-wechat-order', {
-        amount,
-        description,
-      });
+      let resData = null;
+      let sign = '';
+      if (payType === 'yungouos') {
+        const outTradeNo = `yungouos${new Date().getTime()}`;
+        // yungou
+        const params = {
+          out_trade_no: outTradeNo,
+          total_fee: `0.01`, // 修改成为 amount 0.01为测试
+          mch_id: process.env.NEXT_PUBLIC_YUNGOUOS_MCH_ID,
+          body: description,
+        };
+        sign = paySign(params, process.env.NEXT_PUBLIC_YUNGOUOS_API_KEY);
+        const { data } = await axios({
+          url: 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay',
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: {
+            ...params,
+            auto: '0',
+            sign,
+          },
+        });
+        resData = {
+          data: {
+            qrCodeUrl: data.data,
+            outTradeNo: outTradeNo,
+            createdAt: new Date().toLocaleString(),
+          },
+        };
+      } else {
+        const { data } = await axios.post('/api/wx/create-wechat-order', {
+          amount,
+          description,
+        });
+        resData = data;
+      }
       onCreateOrder({
-        orderId: data.data.outTradeNo,
-        createdAt: data.data.createdAt,
+        orderId: resData.data.outTradeNo,
+        createdAt: resData.data.createdAt,
+        sign: sign,
       });
-      setQrCodeUrl(data.data.qrCodeUrl);
-      setOutTradeNo(data.data.outTradeNo);
+      setQrCodeUrl(resData.data.qrCodeUrl);
+      setOutTradeNo(resData.data.outTradeNo);
     } catch (err) {
       setError('创建支付订单失败');
     } finally {
@@ -64,12 +105,13 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         clearTimeout(createOrderTimeoutRef.current);
       }
     };
-  }, [amount]);
+  }, [amount, payType]);
 
   // 检查订单状态的 useEffect 保持不变
   useEffect(() => {
     if (!outTradeNo || isPaymentSuccessful) return;
 
+    // 检测微信支付订单状态
     const checkOrderStatus = async () => {
       try {
         const { data } = await axios.get(
@@ -92,7 +134,28 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       }
     };
 
-    intervalIdRef.current = setInterval(checkOrderStatus, 5000);
+    // 检测yungou订单状态
+    const checkYungouOrderStatusFn = async () => {
+      const payOrder = await checkYungouOrderStatus(outTradeNo);
+      if (payOrder.status === 'success') {
+        setPaymentStatus('success');
+        setIsPaymentSuccessful(true);
+        onPaymentSuccess({
+          transactionId: payOrder.sign,
+          paidAt: new Date().toLocaleString(),
+        });
+        if (intervalIdRef.current) {
+          clearInterval(intervalIdRef.current);
+          intervalIdRef.current = null;
+        }
+      }
+    };
+
+    if (payType === 'wechat') {
+      intervalIdRef.current = setInterval(checkOrderStatus, 5000);
+    } else if (payType === 'yungouos') {
+      intervalIdRef.current = setInterval(checkYungouOrderStatusFn, 5000);
+    }
 
     return () => {
       if (intervalIdRef.current) {
