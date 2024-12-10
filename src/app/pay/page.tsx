@@ -123,6 +123,13 @@ export default function PaymentPage() {
     }
   }, [shareOption]);
 
+  useEffect(() => {
+    const availablePayments = config.payConfig.filter((payment) => payment.use);
+    if (availablePayments.length === 1) {
+      setPayType(availablePayments[0].key);
+    }
+  }, []);
+
   const handlePaymentSuccess = async (result: {
     transactionId: string;
     paidAt: string;
@@ -184,9 +191,7 @@ export default function PaymentPage() {
   const renderPaymentMethods = () => {
     const availablePayments = config.payConfig.filter((payment) => payment.use);
 
-    // 如果只有一个可用的支付方式，不显示选择器
     if (availablePayments.length <= 1) {
-      setPayType(availablePayments[0].key);
       return null;
     }
 
