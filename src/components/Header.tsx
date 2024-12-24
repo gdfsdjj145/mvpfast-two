@@ -218,6 +218,11 @@ export default function Header() {
             </div>
           </div>
           <UserMenu />
+          <div className="flex items-center gap-4">
+            <Link href="/auth/signin" className="btn btn-secondary">
+              登录
+            </Link>
+          </div>
         </div>
       </div>
     </header>
