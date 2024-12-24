@@ -39,6 +39,10 @@ Altas 是 mongodb 提供的一种免费的 Daas 解决方案，既云数据平�
 
 ![mongo4](/docs/assets/mongo4.png)
 
+> **注意，从这里复制的数据库连接串缺少了数据库的字段，请对比本章最后代码添加数据库的字段**
+
+</br>
+
 ### 4.创建数据库
 
 集群创建完成之后，需要我们创建数据库，返回**集群页面**，点击进入**集群详情页面**
@@ -62,3 +66,9 @@ Altas 是 mongodb 提供的一种免费的 Daas 解决方案，既云数据平�
 ```json
 DATABASE_URL="mongodb+srv://你的链接密钥/数据库名称?retryWrites=true&w=majority&appName=集群名称"
 ```
+
+#### 提示
+
+如果字符串是对的情况下，还是无法链接数据库，请在**Network**菜单添加**IP**。
+
+![image-20241212162706403](/docs/assets/mongo8.png)
