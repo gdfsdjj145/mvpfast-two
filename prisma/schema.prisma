@@ -14,6 +14,7 @@ model User {
   nickName     String
   phone        String?
   email        String?
+  avatar       String?
 
   @@unique([wechatOpenId, phone, email])
 }
@@ -68,4 +69,10 @@ model PayOrder {
   orderType  String
   price      Float
   sign       String?
+}
+
+model DbUserDemo {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate DateTime @default(now()) @map("created_time")
+  nickName    String
 }

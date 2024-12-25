@@ -10,17 +10,32 @@ const nextConfig = {
     missingSuspenseWithCSRBailout: false,
     esmExternals: 'loose'
   },
+  serverOptions: {
+    maxHeaderSize: 32768,
+  },
   images: {
     unoptimized: true,
-    domains: ['localhost'], // 如果您在本地开发，保留这个
+    domains: ['localhost'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // 允许所有域名，您可以根据需要限制
+        hostname: '**',
       },
     ],
   },
-  // 如果您使用了 Contentlayer，可能需要以下配置
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Accept-Encoding',
+            value: 'gzip, deflate, br',
+          },
+        ],
+      },
+    ]
+  },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.md$/,
@@ -34,23 +49,7 @@ const nextConfig = {
     }
     return config;
   },
-  async headers () {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-        ],
-      },
-    ]
-  },
 };
 
 export default withContentlayer(nextConfig);
+

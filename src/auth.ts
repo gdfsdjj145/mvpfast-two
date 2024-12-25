@@ -15,6 +15,7 @@ declare module 'next-auth' {
       role?: string;
       wechatOpenId?: string | null;
       nickName?: string | null;
+      avatar?: string | null;
       // 其他需要的属性
     };
   }
@@ -24,6 +25,7 @@ declare module 'next-auth' {
     wechatOpenId?: string;
     role?: string;
     nickName?: string;
+    avatar?: string;
     // 其他需要的属性
   }
 }
@@ -75,15 +77,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
             params.wechatOpenId = identifier as string;
           }
-          console.log(params, 'params');
           if (res) {
             return res;
           } else {
             params.nickName = getGeneratorName();
-            await prisma.user.create({
+            const newUser = await prisma.user.create({
               data: params,
             });
-            return params;
+            return newUser;
           }
         }
       },
@@ -113,32 +114,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async session({ token, session }) {
       if (session.user) {
-        if (token.sub) {
-          session.user.id = token.sub;
-        }
+        const user = await prisma.user.findUnique({
+          where: { id: token.sub as string },
+        });
 
-        if (token.email) {
-          session.user.email = token.email;
-        }
-
-        if (token.phone) {
-          session.user.phone = token.phone as string;
-        }
-
-        if (token.wechatOpenId) {
-          session.user.wechatOpenId = token.wechatOpenId as string;
-          session.user.nickName = token.nickName as string;
+        if (user) {
+          session.user.id = user.id;
+          session.user.email = user.email;
+          session.user.phone = user.phone;
+          session.user.wechatOpenId = user.wechatOpenId;
+          session.user.avatar = user.avatar;
+          session.user.nickName = user.nickName;
         }
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.sub = user.id;
         token.email = user.email;
         token.phone = user.phone;
         token.wechatOpenId = user.wechatOpenId;
         token.nickName = user.nickName;
+        token.avatar = user.avatar;
+      } else {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub as string },
+        });
+        if (dbUser) {
+          token.email = dbUser.email;
+          token.phone = dbUser.phone;
+          token.wechatOpenId = dbUser.wechatOpenId;
+          token.nickName = dbUser.nickName;
+          token.avatar = dbUser.avatar;
+        }
       }
       return token;
     },
