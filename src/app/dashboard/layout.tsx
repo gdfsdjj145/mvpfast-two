@@ -7,6 +7,7 @@ import { ImAccessibility } from 'react-icons/im';
 import { TbReportMoney } from 'react-icons/tb';
 import { GoShareAndroid } from 'react-icons/go';
 import { IoGiftOutline } from 'react-icons/io5';
+import { User } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import {
@@ -96,6 +97,11 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           className="group-hover:mr-2 group-hover:-rotate-45 transition-all"
         ></GoShareAndroid>
       ),
+    },
+    {
+      label: '个人信息',
+      key: 'person',
+      icon: <User size={20} />,
     },
   ];
 

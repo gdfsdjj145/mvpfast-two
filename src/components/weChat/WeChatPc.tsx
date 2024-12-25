@@ -23,7 +23,7 @@ const WxCode = () => {
 
     setLoading(true);
     const data = await get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode?key=1000`
     );
     createQrCode(data.ticket);
     pollQrCode(data.ticket);
