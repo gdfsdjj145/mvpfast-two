@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import ClipboardCopyButton from '@/components/ClipboardBtn';
-import { gerShareByUserId } from '../home/actions';
+import { gerShareByUserId } from './actions';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
