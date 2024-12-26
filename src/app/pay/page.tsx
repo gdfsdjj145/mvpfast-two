@@ -73,6 +73,7 @@ export default function PaymentPage() {
         let result: any = { data: null };
         try {
           result = await checkUserPayment(session.user.id);
+          console.log(result.data);
           if (result.data.hasPaid) {
             setPaymentStatus('success');
             setPaymentResult({
@@ -82,6 +83,8 @@ export default function PaymentPage() {
             const order = config.goods.filter(
               (good) => good.key === result.data.orderType
             )[0];
+
+            console.log(order);
 
             setOrderInfo((prevState) => ({
               ...prevState,

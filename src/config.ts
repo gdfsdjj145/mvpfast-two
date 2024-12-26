@@ -29,14 +29,9 @@ export const config = {
   goods: [
     {
       key: 'normal',
-      name: '开发模板代码',
-      description:
-        '包含了基础的网站开发功能，例如用户登录，数据库，博客，文章，支付等能力的集成方案。购买后，你可以永久的使用MvpFast的模板，并且享受该模板后续版本的更新功能，在网站上线过程中如遇到问题，可以享受作者的技术支持服务，帮你解决一切的技术问题。',
-      includedFeatures: [
-        '登录 + 数据库 + 支付功能等封装能力',
-        '前端代码（NextJs + Tailwindcss）',
-        '微信公众号服务代码',
-      ],
+      name: '商品1',
+      description: '快来购买啊',
+      includedFeatures: ['独孤九剑', '少林大力金刚脚', '铁头功'],
       price: 199,
       original: 299,
       mostPopular: false,
@@ -44,16 +39,14 @@ export const config = {
     },
     {
       key: 'most',
-      name: '开发模板代码 + 从0到1Nextjs全栈开发课程',
-      description:
-        '包含开发模板代码所有内容、从0到1的Nextjs全栈开发课程所有内容',
+      name: '商品2',
+      description: '快来购买鸭',
       includedFeatures: [
-        '登录 + 数据库 + 支付功能等封装能力',
-        '前端代码（NextJs + Tailwindcss）',
-        '微信公众号服务代码',
-        '从0到1的Nextjs全栈开发课程',
-        '课程学习过程的内容解答',
-        '技术支持服务',
+        '独孤九剑',
+        '少林大力金刚脚',
+        '铁头功',
+        '铁掌水上漂',
+        '旋风扫荡腿',
       ],
       original: 349,
       price: 249,

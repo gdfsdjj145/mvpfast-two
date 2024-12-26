@@ -23,59 +23,22 @@ export default function FeatureComponent() {
 
   const features = [
     {
-      name: '登录',
+      name: '功能1',
       icon: <CircleUser className="w-6 h-6" />,
-      description:
-        '邮箱、手机号、微信公众号，三种登录方式可选，涵盖国内主流生态的登录方式，一键配置',
-      list: [
-        '邮箱登录，利用邮箱的SMTP协议，实现邮箱登录',
-        '手机号登录，利用手机号的短信协议，实现手机号登录',
-        '微信公众号登录，利用微信公众号的OAuth2.0协议，实现微信公众号登录',
-      ],
+      description: '展示出你产品的特色能力',
+      list: ['有无敌的功能', '一键配置', '太牛了'],
     },
     {
-      name: '支付',
+      name: '功能2',
       icon: <BadgeJapaneseYen className="w-6 h-6" />,
-      description: '使用微信商家支付能力，通过微信支付体系完成支付功能',
-      list: ['设置公众号ID配置', '生成商家号V3支付密钥', '生成商家号支付证书'],
+      description: '别人没有的你也有',
+      list: ['独步武林', '独孤九剑', '吸星大法'],
     },
     {
-      name: '鉴权',
+      name: '功能3',
       icon: <Shield className="w-6 h-6" />,
-      description:
-        '利用NextAuth的jwt登录鉴权，可以提高网站的安全性，只需配置登录密钥即可',
-      list: ['jwt登录鉴权，只需配置登录密钥即可', '用户数据保存在Altas里面'],
-    },
-    {
-      name: '数据库',
-      icon: <DatabaseZap className="w-6 h-6" />,
-      description:
-        '利用mongodb提供的云数据库能力，无需费用，轻松配置后即可使用',
-      list: [
-        'mongodb提供的云数据库能力，无需费用，轻松配置后即可使用',
-        'altas提供简单易用的数据库后台，查看数据',
-        'prisma作为数据库的ORM框架，可以轻松管理数据库',
-      ],
-    },
-    {
-      name: '样式',
-      icon: <CarFront className="w-6 h-6" />,
-      description:
-        '使用TailwindCss作为样式框架，可以轻松实现样式配置，无需额外配置',
-      list: [
-        'TailwindCss作为样式框架，可以轻松实现样式配置，无需额外配置',
-        'daysui拥有丰富的组件库，多个主题，能快速实现好看的样式',
-      ],
-    },
-    {
-      name: '微信',
-      icon: <MessageCircleMore className="w-6 h-6" />,
-      description:
-        '使用微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯',
-      list: [
-        '微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯',
-        '公众号可以作为推广渠道，通过公众号的推广，可以快速推广你的产品',
-      ],
+      description: '前面两个不够，还有第三个',
+      list: ['激光炮', 'ak47'],
     },
   ];
 
@@ -84,19 +47,19 @@ export default function FeatureComponent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
-            快速构建网页应用
+            展示你网站的功能
           </h2>
           <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            用最短的时间上线MVP，验证你的想法
+            这一部分用于展示你的网站功能
           </p>
           <p className="mt-10 text-lg leading-8 mb-12 text-gray-600">
-            使用目前最流行的技术搭建你产品的Mvp，快速验证你的产品idea，这套模板包含了一个小产品的最基础功能，集成了登录，鉴权，邮箱，数据库，微信公众号等能力。
+            这一部分展示客户喜欢的功能，对客户有用的功能信息（下面是编的示例）
           </p>
         </div>
 
         <div className="mt-16">
           <div className="mx-auto max-w-3xl">
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-8 mb-12">
+            <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8 mb-12 justify-center">
               {features.map((feature, index) => (
                 <button
                   key={feature.name}

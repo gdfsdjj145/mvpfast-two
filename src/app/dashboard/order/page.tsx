@@ -159,7 +159,7 @@ export default function OrderPage() {
             <p className="text-gray-600 mb-4">适合个人开发者使用</p>
             <p className="text-2xl font-bold text-primary mb-4">¥99</p>
             <button
-              onClick={() => handlePurchase('basic', 99, '基础版')}
+              onClick={() => handlePurchase('normal', 99, '基础版')}
               className="w-full btn btn-primary"
             >
               立即购买
@@ -171,7 +171,7 @@ export default function OrderPage() {
             <p className="text-gray-600 mb-4">适合团队使用</p>
             <p className="text-2xl font-bold text-primary mb-4">¥299</p>
             <button
-              onClick={() => handlePurchase('pro', 299, '专业版')}
+              onClick={() => handlePurchase('most', 299, '专业版')}
               className="w-full btn btn-primary"
             >
               立即购买
