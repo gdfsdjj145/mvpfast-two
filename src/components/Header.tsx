@@ -55,6 +55,15 @@ const UserMenu = () => {
   }
 
   const renderName = () => {
+    if (session?.user?.avatar) {
+      return (
+        <img
+          src={session.user.avatar}
+          alt="头像"
+          className="w-full h-full object-cover"
+        />
+      );
+    }
     if (session?.user?.email) return session.user.email[0];
     if (session?.user?.phone) return session.user.phone[0];
     if (session?.user?.wechatOpenId) return session.user.nickName[0];
@@ -218,11 +227,13 @@ export default function Header() {
             </div>
           </div>
           <UserMenu />
-          <div className="flex items-center gap-4">
-            <Link href="/auth/signin" className="btn btn-secondary">
-              登录
-            </Link>
-          </div>
+          {status === 'unauthenticated' && (
+            <div className="flex items-center gap-4">
+              <Link href="/auth/signin" className="btn btn-secondary">
+                登录
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>

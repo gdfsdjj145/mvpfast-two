@@ -7,6 +7,7 @@ import { ImAccessibility } from 'react-icons/im';
 import { TbReportMoney } from 'react-icons/tb';
 import { GoShareAndroid } from 'react-icons/go';
 import { IoGiftOutline } from 'react-icons/io5';
+import { Database, BarChart2 } from 'lucide-react';
 import { User } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -21,12 +22,23 @@ import {
 } from 'lucide-react';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname().split('/').filter(Boolean).pop() || '';
+  const pathname = usePathname();
+  const currentPath =
+    pathname === '/dashboard'
+      ? 'home'
+      : pathname.split('/').filter(Boolean).pop() || 'home';
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [user, setUser] = useState(session?.user);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser(session.user);
+    }
+  }, [session]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,56 +58,57 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     router.push(result.url);
   };
 
+  // 渲染头像
   const renderName = () => {
-    if (session?.user?.email) return session.user.email[0];
-    if (session?.user?.phone) return session.user.phone[0];
-    if (session?.user?.wechatOpenId) return session.user.nickName[0];
+    if (user?.avatar) {
+      return (
+        <img
+          src={user.avatar}
+          alt="头像"
+          className="w-full h-full object-cover"
+        />
+      );
+    }
+    if (user?.nickName) return user.nickName[0];
     return '?';
   };
 
-  const renderFullName = () => {
-    if (session?.user?.email) return session.user.email;
-    if (session?.user?.phone) return session.user.phone;
-    if (session?.user?.wechatOpenId) return session.user.nickName;
-    return '未知用户';
+  const renderUserType = () => {
+    if (user?.email) return '邮箱用户';
+    if (user?.phone) return '手机用户';
+    if (user?.wechatOpenId) return '微信用户';
+    return '未知';
   };
 
-  const renderUserType = () => {
-    if (session?.user?.email) return '邮箱用户';
-    if (session?.user?.phone) return '手机用户';
-    if (session?.user?.wechatOpenId) return '微信用户';
-    return '未知';
+  const renderFullName = () => {
+    if (user?.email) return user.email;
+    if (user?.phone) return user.phone;
+    if (user?.wechatOpenId) return user.nickName;
+    return '未知用户';
   };
 
   const tabList = [
     {
-      label: '用户管理（demo）',
-      key: 'user',
-      icon: (
-        <ImAccessibility
-          size={20}
-          className="group-hover:mr-2 group-hover:-rotate-45 transition-all"
-        ></ImAccessibility>
-      ),
+      label: '仪表盘',
+      key: 'home',
+      description: '数据统计和分析demo',
+      icon: <BarChart2 size={20} />,
     },
     {
-      label: '购买记录',
+      label: '数据库操作展示',
+      key: 'dbdemo',
+      description: '数据库增删改查demo',
+      icon: <Database size={20} />,
+    },
+    {
+      label: '购买操作展示',
       key: 'order',
+      description: '模拟购买操作demo',
       icon: (
         <TbReportMoney
           size={20}
           className="group-hover:mr-2 group-hover:-rotate-45 transition-all"
         ></TbReportMoney>
-      ),
-    },
-    {
-      label: '推广记录',
-      key: 'share',
-      icon: (
-        <GoShareAndroid
-          size={20}
-          className="group-hover:mr-2 group-hover:-rotate-45 transition-all"
-        ></GoShareAndroid>
       ),
     },
     {
@@ -138,7 +151,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <li
                 key={tab.key}
                 className={`${
-                  tab.key === pathname ? 'bg-secondary/50 font-bold' : ''
+                  currentPath === tab.key ? 'bg-secondary/50 font-bold' : ''
                 } rounded-xl`}
               >
                 <Link
@@ -213,15 +226,21 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
-        <main className="p-6 container mx-auto max-w-5xl">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold">
-              {tabList.find((tab) => tab.key === pathname)?.label ||
-                'Dashboard'}
-            </h1>
+      <div className="flex-1 h-screen">
+        <main className="h-full overflow-y-auto scrollbar-style">
+          <div className="p-6 container mx-auto max-w-5xl">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold">
+                {tabList.find((tab) => tab.key === currentPath)?.label ||
+                  'Dashboard'}
+              </h1>
+              <p className="text-sm text-base-content/70 mt-2">
+                {tabList.find((tab) => tab.key === currentPath)?.description ||
+                  ''}
+              </p>
+            </div>
+            {children}
           </div>
-          {children}
         </main>
       </div>
     </div>

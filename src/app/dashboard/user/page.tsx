@@ -6,38 +6,7 @@ import AddUserModal from './modal/AddUserModal';
 export default function page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [user, setUser] = useState([
-    {
-      name: 'mvpfast',
-      createAt: '2024-10-30',
-      payAt: '2024-10-31',
-      goodKey: 'most',
-    },
-    {
-      name: 'mvpfast',
-      createAt: '2024-10-30',
-      payAt: '2024-10-31',
-      goodKey: 'most',
-    },
-    {
-      name: 'mvpfast',
-      createAt: '2024-10-30',
-      payAt: '2024-10-31',
-      goodKey: 'most',
-    },
-    {
-      name: 'mvpfast',
-      createAt: '2024-10-30',
-      payAt: '2024-10-31',
-      goodKey: 'most',
-    },
-    {
-      name: 'mvpfast',
-      createAt: '2024-10-30',
-      payAt: '2024-10-31',
-      goodKey: 'most',
-    },
-  ]);
+  const [user, setUser] = useState([]);
   const goodsHash = {};
   config.goods.forEach((good) => {
     goodsHash[good.key] = good;
