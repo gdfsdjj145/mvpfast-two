@@ -14,19 +14,24 @@ export default function CtaComponent() {
       <div className="overflow-hidden ">
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
           <div className="mx-auto max-w-4xl">
-            <p className="text-base/7 font-semibold text-secondary mb-2">价格</p>
+            <p className="text-base/7 font-semibold text-secondary mb-2">
+              展示你的套餐
+            </p>
             <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
-              获取模板并快速上线你的网站，去赚取第一桶金
+              提供套餐的详细信息，让用户放心购买
             </h2>
           </div>
           <div className="relative mt-6">
             <p className="text-sm md:text-base flex justify-center items-center gap-2 ">
-              <span className="flex items-center text-green-500 font-bold text-lg">
-                <IoGiftOutline size={24} className="animate-bounce mr-1" />
-                100元
-              </span>
               <span className="text-gray-500">
-                🛒优惠名额还剩下14个（76名程序员开始构建）
+                这是demo展示，如果想要购买，请到官网购买，目前还在100元优惠阶段
+                <a
+                  href="https://www.mvpfast.top/#price"
+                  className="btn btn-secondary btn-outline btn-sm ml-3"
+                >
+                  立即购买
+                  <IoGiftOutline className="ml-2" />
+                </a>
               </span>
             </p>
           </div>
@@ -88,13 +93,13 @@ export default function CtaComponent() {
                         ))}
                       </ul>
                     </div>
-                    <a
-                      href={good.href}
+                    <button
+                      disabled
                       aria-describedby={good.key}
                       className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
                     >
                       立刻购买 🚀
-                    </a>
+                    </button>
                     <p className="text-center mt-4 text-gray-400">
                       如有退款问题，可联系客服
                     </p>

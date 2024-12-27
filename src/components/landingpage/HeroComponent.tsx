@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaCartShopping } from 'react-icons/fa6';
+import { FaPlay, FaBook } from 'react-icons/fa';
 import { IoGiftOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
@@ -60,20 +60,25 @@ export default function HeroComponent() {
               {/* CTA 区域 */}
               <motion.div variants={itemVariants} className="space-y-6">
                 <Link
-                  href="/pay?key=most"
-                  className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group"
+                  href="/dashboard/home"
+                  className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group mr-4"
                 >
-                  <FaCartShopping className="mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                  立即获取模板
+                  <FaPlay className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  开始使用
+                </Link>
+
+                <Link
+                  href="/docs/introduction"
+                  target="_blank"
+                  className="inline-flex items-center px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-full transition-all duration-300 hover:bg-gray-200 hover:scale-105 group"
+                >
+                  <FaBook className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
+                  文档
                 </Link>
 
                 <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
-                  <span className="flex items-center text-green-500 font-bold text-lg">
-                    <IoGiftOutline size={24} className="animate-bounce mr-1" />
-                    100元
-                  </span>
                   <span className="text-gray-500">
-                    🛒优惠名额还剩下13个（每日更新）
+                    这是模板的demo展示，使用模板将为你节省大量时间
                   </span>
                 </div>
               </motion.div>
@@ -84,7 +89,7 @@ export default function HeroComponent() {
                 className="flex items-center gap-4 bg-gray-50 rounded-2xl p-4"
               >
                 <div className="flex -space-x-4">
-                  {['/a1.jpg', '/a2.jpg', '/a3.jpg', '/a4.jpg'].map(
+                  {['/a1.jpg', '/a1.jpg', '/a1.jpg', '/a1.jpg'].map(
                     (src, i) => (
                       <div
                         key={i}
@@ -106,7 +111,7 @@ export default function HeroComponent() {
                     {'★'.repeat(5)}
                   </div>
                   <p>
-                    <span className="font-bold">77名</span>
+                    <span className="font-bold">999名</span>
                     <span className="text-gray-500 ml-1">
                       程序员开始构建自己的产品
                     </span>
@@ -186,6 +191,22 @@ export default function HeroComponent() {
               )}
             </a>
           ))}
+        </motion.div>
+      </section>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="relative rounded-2xl overflow-hidden shadow-xl"
+        >
+          <Image
+            src="/banner-1.png"
+            alt="后台预览"
+            width={1920}
+            height={1080}
+            className="w-full h-auto object-cover"
+          />
         </motion.div>
       </section>
     </>

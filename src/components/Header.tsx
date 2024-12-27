@@ -97,7 +97,7 @@ const UserMenu = () => {
           </li>
           <li className="hover:bg-base-200 rounded-lg">
             <Link
-              href="/dashboard/order"
+              href="/dashboard/home"
               className="justify-center py-1 text-sm font-medium"
             >
               我的
@@ -132,13 +132,12 @@ const UserMenu = () => {
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
+  const { status } = useSession();
   console.log(theme);
   const navigation = [
-    { name: '首页', href: '/' },
+    { name: '价格', href: '/#price' },
     { name: '文档', href: '/docs/introduction', target: '_blank' },
     { name: '博客', href: '/blog' },
-    { name: '价格', href: '/#price' },
-    { name: '购买须知', href: '/blog/commercial' },
     {
       name: '关于我们',
       href: 'https://www.islandspage.com/EM-T',
