@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
-import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { IoGridOutline } from 'react-icons/io5';
+import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 const THEMES = [
   'light',
@@ -42,38 +43,45 @@ const THEMES = [
 ];
 
 const UserMenu = () => {
-  const { data: session, status } = useSession();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    const result = await signOut({ redirect: false, callbackUrl: '/' });
-    router.push(result.url);
+    const result = await supabase.auth.signOut();
+    console.log(result);
+    document.cookie =
+      'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie =
+      'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    router.push('/');
   };
 
-  if (status === 'unauthenticated' || status === 'loading') {
+  if (loading) {
     return <></>;
   }
 
+  console.log(user);
+
   const renderName = () => {
-    if (session?.user?.avatar) {
+    if (user?.avatar) {
       return (
         <img
-          src={session.user.avatar}
+          src={user.avatar}
           alt="头像"
           className="w-full h-full object-cover"
         />
       );
     }
-    if (session?.user?.email) return session.user.email[0];
-    if (session?.user?.phone) return session.user.phone[0];
-    if (session?.user?.wechatOpenId) return session.user.nickName[0];
+    if (user?.email) return user.email[0];
+    if (user?.phone) return user.phone[0];
+    if (user?.wechatOpenId) return user.nickName[0];
     return '?';
   };
 
   const renderFullName = () => {
-    if (session?.user?.email) return session.user.email;
-    if (session?.user?.phone) return session.user.phone;
-    if (session?.user?.wechatOpenId) return session.user.nickName;
+    if (user?.email) return user.email;
+    if (user?.phone) return user.phone;
+    if (user?.wechatOpenId) return user.nickName;
     return '未知用户';
   };
 
@@ -132,8 +140,7 @@ const UserMenu = () => {
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
-  const { status } = useSession();
-  console.log(theme);
+  const { user, loading } = useAuth();
   const navigation = [
     { name: '价格', href: '/#price' },
     { name: '文档', href: '/docs/introduction', target: '_blank' },
@@ -225,8 +232,9 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <UserMenu />
-          {status === 'unauthenticated' && (
+          {user ? (
+            <UserMenu />
+          ) : (
             <div className="flex items-center gap-4">
               <Link href="/auth/signin" className="btn btn-secondary">
                 登录

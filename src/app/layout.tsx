@@ -8,7 +8,7 @@ import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
-import { SessionProvider } from 'next-auth/react';
+import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProviders } from '@/components/theme/ThemeProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
@@ -44,9 +44,9 @@ export default function RootLayout({
       <body className={cn(fonts.variable, inter.className)}>
         <PageProgressBar />
         <ThemeProviders attribute="data-theme" defaultTheme="light">
-          <SessionProvider>
+          <AuthProvider>
             <ReduxProvider>{children}</ReduxProvider>
-          </SessionProvider>
+          </AuthProvider>
         </ThemeProviders>
         <Toaster></Toaster>
         <Analytics></Analytics>

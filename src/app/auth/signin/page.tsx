@@ -1,15 +1,11 @@
 'use client';
 import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { get } from '@/app/services/index';
 import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { sendCode, createQrCode, checkQrCode } from './actions';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import WxChatPc from '@/components/weChat/WeChatPc';
-import WeChatMobile from '@/components/weChat/WeChatMobile';
-import { sendOTPEmail, verifyOTP } from '@/lib/supabase';
+import { requestOTP, verifyOTP } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 const LOGIN_HASH = {
   supabase: '📧 Supabase登录',
@@ -70,73 +66,6 @@ export default function SignInPage() {
     });
   };
 
-  const handleLogin = async () => {
-    if (!form.identifier) {
-      toast.error('请输入邮箱!');
-      return;
-    }
-    if (!form.code) {
-      toast.error('请输入验证码!');
-      return;
-    }
-
-    try {
-      const res = await signIn('supabase', {
-        email: form.identifier,
-        token: form.code,
-        redirect: false,
-      });
-
-      if (res?.error) {
-        toast.error('验证码错误，请重新输入');
-      } else {
-        const callbackUrl = searchParams.get('redirect') || '/';
-        router.push(callbackUrl);
-      }
-    } catch (error: any) {
-      toast.error('验证失败，请重试');
-    }
-  };
-
-  const handleSendOTP = async () => {
-    if (!supabaseEmail) {
-      toast.error('请输入邮箱');
-      return;
-    }
-
-    try {
-      await sendOTPEmail(supabaseEmail);
-      setOtpSent(true);
-      toast.success('验证码已发送到邮箱');
-    } catch (error: any) {
-      toast.error(error.message || '发送失败');
-    }
-  };
-
-  const handleSupabaseLogin = async () => {
-    if (!supabaseEmail || !otpCode) {
-      toast.error('请输入邮箱和验证码');
-      return;
-    }
-
-    try {
-      const res = await signIn('supabase', {
-        email: supabaseEmail,
-        token: otpCode,
-        redirect: false,
-      });
-
-      if (res?.error) {
-        toast.error('登录失败: ' + res.error);
-      } else {
-        const callbackUrl = searchParams.get('redirect') || '/';
-        router.push(callbackUrl);
-      }
-    } catch (error: any) {
-      toast.error(error.message || '验证失败');
-    }
-  };
-
   const handleSendCode = async () => {
     if (!form.identifier) {
       toast.error('请输入邮箱');
@@ -144,12 +73,47 @@ export default function SignInPage() {
     }
 
     try {
-      await sendOTPEmail(form.identifier);
+      const data = await requestOTP(form.identifier);
       setOtpSent(true);
       toast.success('验证码已发送到邮箱');
     } catch (error: any) {
-      toast.error(error.message || '发送失败');
-      throw error; // 抛出错误以触发按钮重置
+      if (error.message?.toLowerCase().includes('rate limit')) {
+        toast.error('发送太频繁，请稍后再试');
+      } else {
+        toast.error(error.message || '发送失败');
+      }
+      throw error;
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: form.identifier,
+        token: form.code,
+        type: 'email',
+      });
+
+      if (error) throw error;
+
+      // 获取 session
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        // 设置 cookies
+        document.cookie = `sb-access-token=${session.access_token}; path=/`;
+        document.cookie = `sb-refresh-token=${session.refresh_token}; path=/`;
+
+        const callbackUrl = searchParams.get('redirect') || '/dashboard/home';
+        router.push(callbackUrl);
+      } else {
+        throw new Error('Session not established');
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || '验证失败');
     }
   };
 

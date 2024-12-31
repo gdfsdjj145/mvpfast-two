@@ -20,6 +20,7 @@ import {
   FileText,
   ChevronUp,
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -27,18 +28,20 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     pathname === '/dashboard'
       ? 'home'
       : pathname.split('/').filter(Boolean).pop() || 'home';
-  const { data: session, status } = useSession();
+  const { user, loading } = useAuth();
+  const [userState, setUserState] = useState(user);
   const router = useRouter();
-  const [user, setUser] = useState(session?.user);
+
+  console.log(user);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (session?.user) {
-      setUser(session.user);
+    if (user) {
+      setUserState(user);
     }
-  }, [session]);
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,16 +63,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 渲染头像
   const renderName = () => {
-    if (user?.avatar) {
+    if (userState?.avatar) {
       return (
         <img
-          src={user.avatar}
+          src={userState.avatar}
           alt="头像"
           className="w-full h-full object-cover"
         />
       );
     }
-    if (user?.nickName) return user.nickName[0];
+    if (userState?.email) return userState.email[0];
     return '?';
   };
 
