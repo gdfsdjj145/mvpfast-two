@@ -1,11 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { IoGridOutline } from 'react-icons/io5';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { getUserInfo } from '@/app/dashboard/person/actions';
 
 const THEMES = [
   'light',
@@ -44,7 +45,27 @@ const THEMES = [
 
 const UserMenu = () => {
   const { user, loading } = useAuth();
+  const [userState, setUserState] = useState<any>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user) {
+        const {
+          data: { user: supabaseUser },
+        } = await supabase.auth.getUser();
+
+        getUserInfo(user.id).then((res) => {
+          setUserState({
+            ...res,
+            nickName: supabaseUser?.user_metadata?.nickName || res.nickName,
+          });
+        });
+      }
+    };
+
+    fetchUser();
+  }, [user]);
 
   const handleLogout = async () => {
     const result = await supabase.auth.signOut();
@@ -60,28 +81,33 @@ const UserMenu = () => {
     return <></>;
   }
 
-  console.log(user);
-
   const renderName = () => {
-    if (user?.avatar) {
+    if (userState?.avatar) {
       return (
-        <img
-          src={user.avatar}
-          alt="头像"
-          className="w-full h-full object-cover"
-        />
+        <div className="w-full h-full bg-neutral">
+          <img
+            src={userState.avatar}
+            alt="头像"
+            className="w-full h-full object-cover"
+          />
+        </div>
       );
     }
-    if (user?.email) return user.email[0];
-    if (user?.phone) return user.phone[0];
-    if (user?.wechatOpenId) return user.nickName[0];
-    return '?';
+    return (
+      <div className="w-full h-full bg-neutral text-neutral-content flex items-center justify-center">
+        {userState?.nickName
+          ? userState.nickName[0]
+          : userState?.email
+          ? userState.email[0]
+          : '?'}
+      </div>
+    );
   };
 
   const renderFullName = () => {
+    if (userState?.nickName) return userState.nickName;
     if (user?.email) return user.email;
     if (user?.phone) return user.phone;
-    if (user?.wechatOpenId) return user.nickName;
     return '未知用户';
   };
 
@@ -90,11 +116,7 @@ const UserMenu = () => {
       {/* PC端显示 */}
       <div className="hidden sm:block dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full">
-            <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center text-base">
-              <span>{renderName()}</span>
-            </div>
-          </div>
+          <div className="w-10 rounded-full">{renderName()}</div>
         </label>
         <ul
           tabIndex={0}

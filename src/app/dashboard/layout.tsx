@@ -3,24 +3,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ImAccessibility } from 'react-icons/im';
 import { TbReportMoney } from 'react-icons/tb';
-import { GoShareAndroid } from 'react-icons/go';
 import { IoGiftOutline } from 'react-icons/io5';
 import { Database, BarChart2 } from 'lucide-react';
 import { User } from 'lucide-react';
-import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import {
-  Settings,
-  Layout,
-  Sun,
-  LogOut,
-  Home,
-  FileText,
-  ChevronUp,
-} from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { LogOut, Home, FileText, ChevronUp } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { getUserInfo } from './person/actions';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -29,18 +20,29 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       ? 'home'
       : pathname.split('/').filter(Boolean).pop() || 'home';
   const { user, loading } = useAuth();
-  const [userState, setUserState] = useState(user);
+  const [userState, setUserState] = useState<any>(null);
   const router = useRouter();
-
-  console.log(user);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (user) {
-      setUserState(user);
-    }
+    const fetchUser = async () => {
+      if (user) {
+        const {
+          data: { user: supabaseUser },
+        } = await supabase.auth.getUser();
+
+        getUserInfo(user.id).then((res) => {
+          setUserState({
+            ...res,
+            nickName: supabaseUser?.user_metadata?.nickName || res.nickName,
+          });
+        });
+      }
+    };
+
+    fetchUser();
   }, [user]);
 
   useEffect(() => {
@@ -57,23 +59,37 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const handleLogout = async () => {
-    const result = await signOut({ redirect: false, callbackUrl: '/' });
-    router.push(result.url);
+    const result = await supabase.auth.signOut();
+    console.log(result);
+    document.cookie =
+      'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    document.cookie =
+      'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    router.push('/');
   };
 
   // 渲染头像
   const renderName = () => {
     if (userState?.avatar) {
       return (
-        <img
-          src={userState.avatar}
-          alt="头像"
-          className="w-full h-full object-cover"
-        />
+        <div className="w-full h-full bg-neutral">
+          <img
+            src={userState.avatar}
+            alt="头像"
+            className="w-full h-full object-cover"
+          />
+        </div>
       );
     }
-    if (userState?.email) return userState.email[0];
-    return '?';
+    return (
+      <div className="w-full h-full bg-neutral text-neutral-content flex items-center justify-center">
+        {userState?.nickName
+          ? userState.nickName[0]
+          : userState?.email
+          ? userState.email[0]
+          : '?'}
+      </div>
+    );
   };
 
   const renderUserType = () => {
@@ -84,9 +100,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   const renderFullName = () => {
+    if (userState?.nickName) return userState.nickName;
     if (user?.email) return user.email;
     if (user?.phone) return user.phone;
-    if (user?.wechatOpenId) return user.nickName;
     return '未知用户';
   };
 
@@ -177,7 +193,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           >
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center text-base">
+                <div className="text-neutral-content w-full h-full flex items-center justify-center text-base">
                   <span>{renderName()}</span>
                 </div>
               </div>

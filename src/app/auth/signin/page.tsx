@@ -6,9 +6,12 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { requestOTP, verifyOTP } from '@/lib/supabase';
 import { supabase } from '@/lib/supabase';
+import { handleUserLogin } from './actions';
 
 const LOGIN_HASH = {
   supabase: '📧 Supabase登录',
+  github: '🐱 Github登录',
+  google: '🔍 Google登录',
 };
 
 const VerificationButton = (props: { onClick: () => Promise<void> }) => {
@@ -86,15 +89,46 @@ export default function SignInPage() {
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (type: string) => {
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: form.identifier,
-        token: form.code,
-        type: 'email',
-      });
+      if (type === 'email') {
+        const { data, error } = await supabase.auth.verifyOtp({
+          email: form.identifier,
+          token: form.code,
+          type: 'email',
+        });
 
-      if (error) throw error;
+        if (error) throw error;
+      }
+
+      if (type === 'github') {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'github',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              redirect_to: searchParams.get('redirect') || '/dashboard/home',
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        return;
+      }
+
+      if (type === 'google') {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              redirect_to: searchParams.get('redirect') || '/dashboard/home',
+            },
+          },
+        });
+        if (error) throw error;
+      }
 
       // 获取 session
       const {
@@ -102,9 +136,13 @@ export default function SignInPage() {
       } = await supabase.auth.getSession();
 
       if (session) {
-        // 设置 cookies
         document.cookie = `sb-access-token=${session.access_token}; path=/`;
         document.cookie = `sb-refresh-token=${session.refresh_token}; path=/`;
+        console.log('session', session);
+
+        const user = await handleUserLogin(session);
+
+        console.log('user', user);
 
         const callbackUrl = searchParams.get('redirect') || '/dashboard/home';
         router.push(callbackUrl);
@@ -113,7 +151,14 @@ export default function SignInPage() {
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      toast.error(error.message || '验证失败');
+      toast.error(error.message || '登录失败');
+    }
+  };
+
+  const handleLoginType = (type: string) => {
+    if (type === 'github' || type === 'google') {
+      handleLogin(type);
+      return;
     }
   };
 
@@ -190,7 +235,7 @@ export default function SignInPage() {
                     {type !== item && (
                       <button
                         className="btn flex-1"
-                        onClick={() => setType(item)}
+                        onClick={() => handleLoginType(item)}
                       >
                         {LOGIN_HASH[item]}
                       </button>

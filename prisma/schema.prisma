@@ -9,15 +9,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  wechatOpenId String?
-  createdDate  DateTime @default(now())
-  nickName     String
-  phone        String?
-  email        String?
-  avatar       String?
+  id          String   @id @default(uuid())
+  supabaseId  String?
+  createdDate DateTime @default(now())
+  nickName    String
+  phone       String?
+  email       String?
+  avatar      String?
 
-  @@unique([wechatOpenId, phone, email])
+  @@unique([supabaseId, phone, email])
 }
 
 model VerificationCode {

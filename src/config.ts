@@ -7,7 +7,7 @@ export const config = {
   loginType: 'email',
   // 登录方式 最少一个
   // wx 微信登录  phone 手机登录 email 邮箱登录
-  loginTypes: ['email'],
+  loginTypes: ['email', 'github', 'google'],
   // 支付方式
   payConfig: [
     {

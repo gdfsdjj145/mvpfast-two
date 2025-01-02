@@ -12,11 +12,6 @@ export async function middleware(req: NextRequest) {
     const refreshToken = req.cookies.get('sb-refresh-token');
     const accessToken = req.cookies.get('sb-access-token');
 
-    // 添加调试日志
-    console.log('Auth Header:', !!authHeader);
-    console.log('Refresh Token:', !!refreshToken);
-    console.log('Access Token:', !!accessToken);
-
     // 检查访问的路径是否需要认证
     if (req.nextUrl.pathname.startsWith('/dashboard')) {
       const {
