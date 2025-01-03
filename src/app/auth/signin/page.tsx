@@ -216,7 +216,7 @@ export default function SignInPage() {
                 <div>
                   <button
                     className="btn btn-primary w-full"
-                    onClick={handleLogin}
+                    onClick={() => handleLogin('email')}
                   >
                     登录
                   </button>
