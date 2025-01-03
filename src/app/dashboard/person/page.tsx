@@ -105,7 +105,6 @@ export default function PersonPage() {
   const renderUserType = () => {
     if (userState?.email) return '邮箱用户';
     if (userState?.phone) return '手机用户';
-    if (userState?.wechatOpenId) return '微信用户';
     return '未知';
   };
 

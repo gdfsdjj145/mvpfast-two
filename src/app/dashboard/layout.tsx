@@ -95,7 +95,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const renderUserType = () => {
     if (user?.email) return '邮箱用户';
     if (user?.phone) return '手机用户';
-    if (user?.wechatOpenId) return '微信用户';
     return '未知';
   };
 

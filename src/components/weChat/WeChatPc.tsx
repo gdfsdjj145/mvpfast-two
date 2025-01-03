@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense, useRef } from 'react';
 import { get } from '@/app/services/index';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { createQrCode, checkQrCode } from '@/app/auth/signin/actions';
+import { createQrCode } from '@/app/auth/signin/actions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
@@ -26,31 +26,8 @@ const WxCode = () => {
       `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode?key=1000`
     );
     createQrCode(data.ticket);
-    pollQrCode(data.ticket);
     setCodeState(data);
     setLoading(false);
-  };
-
-  const pollQrCode = async (ticket: string) => {
-    timer = setInterval(async () => {
-      const data: any = await checkQrCode(ticket);
-      if (data.isScan) {
-        clearInterval(timer);
-        timer = null;
-        const res = await signIn('credentials', {
-          type: 'wx',
-          identifier: data.openId,
-          redirect: false,
-        });
-        console.log(res);
-        if (res?.error) {
-          toast.error(res?.error);
-        } else {
-          const callbackUrl = searchParams.get('redirect') || '/';
-          window.location.href = callbackUrl;
-        }
-      }
-    }, 2000);
   };
 
   useEffect(() => {

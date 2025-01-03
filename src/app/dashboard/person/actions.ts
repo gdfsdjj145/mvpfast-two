@@ -12,15 +12,7 @@ export const getUserInfo = async (userId: string) => {
 
 export const updateUserInfo = async (userId: string, data: any) => {
   try {
-    const {
-      id,
-      email,
-      emailVerified,
-      image,
-      wechatOpenId,
-      phone,
-      ...updateData
-    } = data;
+    const { id, email, emailVerified, image, phone, ...updateData } = data;
 
     const user = await prisma.user.update({
       where: {
