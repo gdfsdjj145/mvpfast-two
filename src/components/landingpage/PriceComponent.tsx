@@ -1,13 +1,20 @@
+'use client';
 import React from 'react';
 import { config } from '@/config';
 import { ImCheckmark2 } from 'react-icons/im';
 import { IoGiftOutline } from 'react-icons/io5';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { createCheckoutSession } from '@/lib/stripe';
+import { useAuth } from '@/context/AuthContext';
 
 export default function CtaComponent() {
+  const { user } = useAuth();
+
+  const createPayPage = async (key: string) => {
+    const url = await createCheckoutSession(key, user?.id);
+    console.log(url);
+    window.open(url, '_blank');
+  };
+
   const { goods } = config;
   return (
     <section id="price" className="bg-white ">
@@ -93,13 +100,13 @@ export default function CtaComponent() {
                         ))}
                       </ul>
                     </div>
-                    <a
-                      href="https://buy.stripe.com/test_3cscNh3jhcoJbeMbII"
+                    <button
+                      onClick={() => createPayPage(good.key)}
                       aria-describedby={good.key}
                       className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
                     >
                       立刻购买 🚀
-                    </a>
+                    </button>
                     <p className="text-center mt-4 text-gray-400">
                       如有退款问题，可联系客服
                     </p>
