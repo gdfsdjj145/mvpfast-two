@@ -12,7 +12,7 @@ export default function CtaComponent() {
   const createPayPage = async (key: string) => {
     const url = await createCheckoutSession(key, user?.id);
     console.log(url);
-    window.open(url, '_blank');
+    window.location.href = url;
   };
 
   const { goods } = config;

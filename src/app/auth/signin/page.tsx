@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { requestOTP, verifyOTP } from '@/lib/supabase';
+import { requestOTP } from '@/lib/supabase';
 import { supabase } from '@/lib/supabase';
 import { handleUserLogin } from './actions';
 
@@ -138,11 +138,8 @@ export default function SignInPage() {
       if (session) {
         document.cookie = `sb-access-token=${session.access_token}; path=/`;
         document.cookie = `sb-refresh-token=${session.refresh_token}; path=/`;
-        console.log('session', session);
 
         const user = await handleUserLogin(session);
-
-        console.log('user', user);
 
         const callbackUrl = searchParams.get('redirect') || '/dashboard/home';
         router.push(callbackUrl);

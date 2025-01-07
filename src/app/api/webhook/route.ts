@@ -44,29 +44,28 @@ export async function POST(req: Request) {
         const customerId = session.customer;
         const paymentIntentId = session.payment_intent;
         const amountTotal = session.amount_total;
-        const metadata = session.metadata; // 如果在创建支付时设置了metadata
+        const metadata: any = session.metadata; // 如果在创建支付时设置了metadata
 
-        console.log('支付成功:', {
+        console.log('支session付成功:', {
           customerId,
           paymentIntentId,
           amountTotal,
           metadata,
         });
 
-        // 更新订单状态
-        await prisma.order.create({
-          data: {
-            identifier: metadata.orderId,
-            orderId: metadata.orderId,
-            transactionId: paymentIntentId,
-            price: amountTotal,
-          },
-        });
-
-        // TODO: 在这里更新您的数据库
-        // 1. 更新订单状态
-        // 2. 发送邮件通知
-        // 3. 更新用户权限等
+        if (metadata.userId && paymentIntentId) {
+          // 更新订单状态
+          await prisma.order.create({
+            data: {
+              identifier: metadata.userId,
+              orderId: session.id,
+              transactionId: paymentIntentId as string,
+              price: amountTotal / 100,
+              orderType: metadata.goodType,
+              name: metadata.goodName,
+            },
+          });
+        }
       }
       break;
   }
