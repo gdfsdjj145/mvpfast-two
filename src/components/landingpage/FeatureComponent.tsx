@@ -10,9 +10,13 @@ import {
   CarFront,
   MessageCircleMore,
   CheckCircle,
+  icons,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { landingpageConfig } from '../../store/landingpage';
+
+const { feature: featureConfig } = landingpageConfig;
 
 export default function FeatureComponent() {
   const [ref, isIntersecting] = useIntersectionObserver({
@@ -21,48 +25,32 @@ export default function FeatureComponent() {
   });
   const [selectedFeature, setSelectedFeature] = useState(0);
 
-  const features = [
-    {
-      name: '功能1',
-      icon: <CircleUser className="w-6 h-6" />,
-      description: '展示出你产品的特色能力',
-      list: ['有无敌的功能', '一键配置', '太牛了'],
-    },
-    {
-      name: '功能2',
-      icon: <BadgeJapaneseYen className="w-6 h-6" />,
-      description: '别人没有的你也有',
-      list: ['独步武林', '独孤九剑', '吸星大法'],
-    },
-    {
-      name: '功能3',
-      icon: <Shield className="w-6 h-6" />,
-      description: '前面两个不够，还有第三个',
-      list: ['激光炮', 'ak47'],
-    },
-  ];
+  const renderIcon = (icon: string) => {
+    const LucideIcon = icons[icon as keyof typeof icons];
+    return <LucideIcon className="w-6 h-6" />;
+  };
 
   return (
     <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
-            展示你网站的功能
+            {featureConfig.title}
           </h2>
           <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            这一部分用于展示你的网站功能
+            {featureConfig.subtitle}
           </p>
           <p className="mt-10 text-lg leading-8 mb-12 text-gray-600">
-            这一部分展示客户喜欢的功能，对客户有用的功能信息（下面是编的示例）
+            {featureConfig.description}
           </p>
         </div>
 
         <div className="mt-16">
           <div className="mx-auto max-w-3xl">
             <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8 mb-12 justify-center">
-              {features.map((feature, index) => (
+              {featureConfig.items.map((item, index) => (
                 <button
-                  key={feature.name}
+                  key={item.name}
                   onClick={() => setSelectedFeature(index)}
                   className={cn(
                     'group flex flex-col items-center justify-center gap-3 p-4 rounded-lg transition-all duration-300 hover:bg-gray-100',
@@ -77,10 +65,10 @@ export default function FeatureComponent() {
                       index === selectedFeature ? 'scale-110' : ''
                     )}
                   >
-                    {feature.icon}
+                    {renderIcon(item.icon)}
                   </div>
                   <span className="font-medium text-sm md:text-base text-center">
-                    {feature.name}
+                    {item.name}
                   </span>
                 </button>
               ))}
@@ -99,21 +87,23 @@ export default function FeatureComponent() {
               >
                 <div className="max-w-3xl mx-auto">
                   <p className="font-bold text-gray-900 text-lg md:text-xl mb-8">
-                    {features[selectedFeature].description}
+                    {featureConfig.items[selectedFeature].description}
                   </p>
                   <ul className="space-y-4">
-                    {features[selectedFeature].list.map((item, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="flex items-start gap-4"
-                      >
-                        <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
-                        <span className="text-gray-600">{item}</span>
-                      </motion.li>
-                    ))}
+                    {featureConfig.items[selectedFeature].list.map(
+                      (item, index) => (
+                        <motion.li
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="flex items-start gap-4"
+                        >
+                          <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
+                          <span className="text-gray-600">{item}</span>
+                        </motion.li>
+                      )
+                    )}
                   </ul>
                 </div>
               </motion.div>

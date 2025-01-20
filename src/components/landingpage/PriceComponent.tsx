@@ -2,6 +2,8 @@ import React from 'react';
 import { config } from '@/config';
 import { ImCheckmark2 } from 'react-icons/im';
 import { IoGiftOutline } from 'react-icons/io5';
+import { landingpageConfig } from '@/store/landingpage';
+const { price: priceConfig } = landingpageConfig;
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -15,16 +17,16 @@ export default function CtaComponent() {
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <p className="text-base/7 font-semibold text-secondary mb-2">
-              展示你的套餐
+              {priceConfig.title}
             </p>
             <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
-              提供套餐的详细信息，让用户放心购买
+              {priceConfig.subtitle}
             </h2>
           </div>
           <div className="relative mt-6">
             <p className="text-sm md:text-base flex justify-center items-center gap-2 ">
               <span className="text-gray-500">
-                这是demo展示，如果想要购买，请到官网购买，目前还在100元优惠阶段
+                {priceConfig.description}
                 <a
                   href="https://www.mvpfast.top/#price"
                   className="btn btn-secondary btn-outline btn-sm ml-3"
