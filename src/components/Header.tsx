@@ -7,6 +7,9 @@ import { IoGridOutline } from 'react-icons/io5';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { getUserInfo } from '@/app/dashboard/person/actions';
+import { landingpageConfig } from '@/store/landingpage';
+
+const { header } = landingpageConfig;
 
 const THEMES = [
   'light',
@@ -162,29 +165,22 @@ const UserMenu = () => {
 export default function Header() {
   const { theme, setTheme } = useTheme();
   const { user, loading } = useAuth();
-  const navigation = [
-    { name: '价格', href: '/#price' },
-    { name: '文档', href: '/docs/introduction', target: '_blank' },
-    { name: '博客', href: '/blog' },
-    {
-      name: '关于我们',
-      href: 'https://www.islandspage.com/EM-T',
-      target: '_blank',
-      rel: 'external',
-    },
-  ];
 
   return (
     <header className="bg-white shadow-sm">
       <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
           <a href="/" className="normal-case text-xl p-0">
-            <img alt="MvpFast" src="/title-logo.png" className="h-10 w-auto" />
+            <img
+              alt={header.logo.alt}
+              src={header.logo.url}
+              className="h-10 w-auto"
+            />
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 gap-1">
-            {navigation.map((item) => (
+            {header.nav.items.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.href}

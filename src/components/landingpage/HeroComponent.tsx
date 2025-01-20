@@ -5,6 +5,13 @@ import Image from 'next/image';
 import { FaPlay, FaBook } from 'react-icons/fa';
 import { IoGiftOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
+import { landingpageConfig } from '@/store/landingpage';
+
+const {
+  hero: heroConfig,
+  brand: brandConfig,
+  admin: adminConfig,
+} = landingpageConfig;
 
 export default function HeroComponent() {
   const containerVariants = {
@@ -46,78 +53,79 @@ export default function HeroComponent() {
               <motion.div variants={itemVariants} className="space-y-4">
                 <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight">
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-3">
-                    在一天之内构建
+                    {heroConfig.title}
                   </span>
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
-                    你的网站应用
+                    {heroConfig.subtitle}
                   </span>
                 </h1>
                 <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
-                  NextJs的开发模板，包含登录、支付、文章、博客和微信开发等模块功能，附带学习课程，让你学会快速打造网站应用，赚取第一桶金。
+                  {heroConfig.description}
                 </p>
               </motion.div>
 
               {/* CTA 区域 */}
               <motion.div variants={itemVariants} className="space-y-6">
                 <Link
-                  href="/dashboard/home"
+                  href={heroConfig.cta.start.href}
                   className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group mr-4"
                 >
                   <FaPlay className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                  开始使用
+                  {heroConfig.cta.start.label}
                 </Link>
 
                 <Link
-                  href="/docs/introduction"
+                  href={heroConfig.cta.docs.href}
                   target="_blank"
                   className="inline-flex items-center px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-full transition-all duration-300 hover:bg-gray-200 hover:scale-105 group"
                 >
                   <FaBook className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                  文档
+                  {heroConfig.cta.docs.label}
                 </Link>
-
-                <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
-                  <span className="text-gray-500">
-                    这是模板的demo展示，使用模板将为你节省大量时间
-                  </span>
-                </div>
+                {heroConfig.discount && (
+                  <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
+                    <span className="text-gray-500">
+                      {heroConfig.discount.description}
+                    </span>
+                  </div>
+                )}
               </motion.div>
 
               {/* 社会证明 */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center gap-4 bg-gray-50 rounded-2xl p-4"
-              >
-                <div className="flex -space-x-4">
-                  {['/a1.jpg', '/a1.jpg', '/a1.jpg', '/a1.jpg'].map(
-                    (src, i) => (
+              {heroConfig.case && (
+                <motion.div
+                  variants={itemVariants}
+                  className="flex items-center gap-4 bg-gray-50 rounded-2xl p-4"
+                >
+                  <div className="flex -space-x-4">
+                    {heroConfig.case.items.map((item, i) => (
                       <div
                         key={i}
                         className="w-12 h-12 rounded-full border-2 border-white overflow-hidden hover:scale-110 transition-transform duration-300"
                       >
                         <Image
-                          src={src}
+                          src={item.user}
                           alt={`User ${i + 1}`}
                           width={48}
                           height={48}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                    )
-                  )}
-                </div>
-                <div>
-                  <div className="flex gap-0.5 text-yellow-400 mb-1">
-                    {'★'.repeat(5)}
+                    ))}
                   </div>
-                  <p>
-                    <span className="font-bold">999名</span>
-                    <span className="text-gray-500 ml-1">
-                      程序员开始构建自己的产品
-                    </span>
-                  </p>
-                </div>
-              </motion.div>
+                  <div>
+                    <div className="flex gap-0.5 text-yellow-400 mb-1">
+                      {'★'.repeat(5)}
+                    </div>
+                    <p>
+                      <span className="font-bold">{heroConfig.case.num}名</span>
+                      <span className="text-gray-500 ml-1">
+                        {heroConfig.case.description}
+                      </span>
+                    </p>
+                  </div>
+                </motion.div>
+              )}
             </div>
 
             {/* 右侧图片 */}
@@ -125,8 +133,8 @@ export default function HeroComponent() {
               <div className="">
                 <div className="-inset-4 bg-gradient-to-r rounded-xl blur-2xl opacity-30 group-hover:opacity-40 transition duration-500" />
                 <Image
-                  src="/banner.png"
-                  alt="MvpFast Preview"
+                  src={heroConfig.banner.url}
+                  alt={heroConfig.banner.alt}
                   width={800}
                   height={600}
                   className="rounded-xl  hover:scale-[1.02] transition-transform duration-500"
@@ -145,32 +153,7 @@ export default function HeroComponent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          {[
-            {
-              name: 'NextJs',
-              logo: '/nextjs-logo.png',
-              stars: '126K⭐',
-              href: 'https://nextjs.org/',
-            },
-            {
-              name: 'TailWindCss',
-              logo: '/tailwindcss.png',
-              stars: '82K⭐',
-              href: 'https://tailwindcss.com/',
-            },
-            {
-              name: 'Mongodb',
-              logo: '/mongodb.png',
-              stars: '26K⭐',
-              href: 'https://www.mongodb.com/zh-cn/cloud/atlas/register',
-            },
-            {
-              name: 'WeChat',
-              logo: '/wx.png',
-              stars: '',
-              href: 'https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html',
-            },
-          ].map((tech) => (
+          {brandConfig.items.map((tech) => (
             <a
               key={tech.name}
               href={tech.href}
@@ -193,22 +176,24 @@ export default function HeroComponent() {
           ))}
         </motion.div>
       </section>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="relative rounded-2xl overflow-hidden shadow-xl"
-        >
-          <Image
-            src="/banner-1.png"
-            alt="后台预览"
-            width={1920}
-            height={1080}
-            className="w-full h-auto object-cover"
-          />
-        </motion.div>
-      </section>
+      {adminConfig && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="relative rounded-2xl overflow-hidden shadow-xl"
+          >
+            <Image
+              src={adminConfig.banner.url}
+              alt={adminConfig.banner.alt}
+              width={1920}
+              height={1080}
+              className="w-full h-auto object-cover"
+            />
+          </motion.div>
+        </section>
+      )}
     </>
   );
 }
