@@ -1,17 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import {
-  AtSign,
-  BadgeJapaneseYen,
-  CircleUser,
-  Shield,
-  DatabaseZap,
-  CarFront,
-  MessageCircleMore,
-  CheckCircle,
-  icons,
-} from 'lucide-react';
+import { CheckCircle, icons } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { landingpageConfig } from '../../store/landingpage';
