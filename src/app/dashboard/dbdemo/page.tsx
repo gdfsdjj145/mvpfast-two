@@ -4,6 +4,7 @@ import AddUserModal from './modal/AddUserModal';
 import { getUser, addUser, updateUser, deleteUser } from './actions';
 import { toast } from 'react-hot-toast';
 import dayjs from 'dayjs';
+import Table from '@/components/dashboard/table';
 import 'dayjs/locale/zh-cn';
 
 dayjs.locale('zh-cn'); // 全局使用中文
@@ -12,6 +13,7 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [user, setUser] = useState([]);
+  const [pageInfo, setPageInfo] = useState<any>({});
 
   // 打开弹框
   const handleOpenModal = () => {
@@ -70,14 +72,54 @@ const Page = () => {
     setEditingUser(null);
   };
 
-  const init = async () => {
-    const res = await getUser();
-    setUser(res);
+  const init = async (page = pageInfo.page) => {
+    const res = await getUser(page, pageInfo.pageSize);
+    console.log(res);
+    setPageInfo(res.pagination);
+    setUser(res.data);
+  };
+
+  const handlePageChange = (page: number) => {
+    setPageInfo({ ...pageInfo, page });
+    init(page);
   };
 
   useEffect(() => {
     init();
   }, []);
+
+  const columns = [
+    {
+      label: '用户名',
+      prop: 'nickName',
+    },
+    {
+      label: '创建时间',
+      prop: 'createdDate',
+      render: (row: any) =>
+        dayjs(row.createdDate).format('YYYY年MM月DD日 HH:mm:ss'),
+    },
+    {
+      label: '操作',
+      prop: 'action',
+      render: (row: any) => (
+        <div className="flex gap-2">
+          <button
+            className="btn btn-sm btn-outline"
+            onClick={() => handleEdit(row)}
+          >
+            编辑
+          </button>
+          <button
+            className="btn btn-sm btn-error btn-outline"
+            onClick={() => handleDelete(row.id)}
+          >
+            删除
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="overflow-x-auto bg-white">
@@ -89,51 +131,14 @@ const Page = () => {
           </button>
         </div>
       </div>
-
-      <table className="table">
-        {/* head */}
-        <thead>
-          <tr>
-            <th></th>
-            <th>用户名</th>
-            <th>创建时间</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* row 1 */}
-          {user.map((row, index) => (
-            <tr key={index}>
-              <th>{index + 1}</th>
-              <td>{row.nickName}</td>
-              <td>
-                {dayjs(row.createdDate).format('YYYY年MM月DD日 HH:mm:ss')}
-              </td>
-              <td>
-                <div className="flex gap-2">
-                  <button
-                    className="btn btn-sm btn-outline"
-                    onClick={() => handleEdit(row)}
-                  >
-                    编辑
-                  </button>
-                  <button
-                    className="btn btn-sm btn-error btn-outline"
-                    onClick={() => handleDelete(row.id)}
-                  >
-                    删除
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="p-4 flex justify-between items-center">
-        <div>共 {user.length} 条记录</div>
-        <div className="pagination">{/* 添加分页组件 */}</div>
-      </div>
+      <Table
+        data={user}
+        columns={columns}
+        options={{
+          change: (val) => handlePageChange(val),
+        }}
+        pagination={pageInfo}
+      ></Table>
 
       <AddUserModal
         isOpen={isModalOpen}
