@@ -1,8 +1,7 @@
 import React from 'react';
-import { landingpageConfig } from '@/store/landingpage';
-const { faq: faqConfig } = landingpageConfig;
 
-export default function FaqComponents() {
+export default function FaqComponents({ items }: { items: any }) {
+  const faqConfig = items;
   return (
     <section className="bg-white" id="faq">
       <div className="mx-auto max-w-7xl px-6 py-24 sm:pt-32 lg:px-8 lg:py-40">

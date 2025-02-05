@@ -1,4 +1,4 @@
-export const landingpageConfig = {
+export const landingpageConfig: any = {
   header: {
     logo: {
       url: '/title-logo.png',
@@ -123,61 +123,61 @@ export const landingpageConfig = {
     ],
   },
   // Grid 风格的feature
-  // featureGrid: [
-  //   {
-  //     icon: 'CircleUser',
-  //     title: '功能1',
-  //     description: '展示出你产品的特色能力',
-  //   },
-  //   {
-  //     icon: 'Package',
-  //     title: '功能1',
-  //     description: '展示出你产品的特色能力',
-  //   },
-  //   {
-  //     icon: 'Moon',
-  //     title: '功能1',
-  //     description: '展示出你产品的特色能力',
-  //   },
-  //   {
-  //     icon: 'MessageCircleMore',
-  //     title: '功能1',
-  //     description: '展示出你产品的特色能力',
-  //   },
-  //   {
-  //     icon: 'File',
-  //     title: '功能1',
-  //     description: '展示出你产品的特色能力',
-  //   },
-  // ],
+  featureGrid: [
+    {
+      icon: 'CircleUser',
+      title: '功能1',
+      description: '展示出你产品的特色能力',
+    },
+    {
+      icon: 'Package',
+      title: '功能1',
+      description: '展示出你产品的特色能力',
+    },
+    {
+      icon: 'Moon',
+      title: '功能1',
+      description: '展示出你产品的特色能力',
+    },
+    {
+      icon: 'MessageCircleMore',
+      title: '功能1',
+      description: '展示出你产品的特色能力',
+    },
+    {
+      icon: 'File',
+      title: '功能1',
+      description: '展示出你产品的特色能力',
+    },
+  ],
 
   // card 风格的feature
-  // featureCard: [
-  //   {
-  //     title: '后台管理1',
-  //     description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
-  //     image: {
-  //       src: 'banner-1.png',
-  //       alt: '',
-  //     },
-  //   },
-  //   {
-  //     title: '后台管理2',
-  //     description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
-  //     image: {
-  //       src: 'banner-1.png',
-  //       alt: '',
-  //     },
-  //   },
-  //   {
-  //     title: '后台管理3',
-  //     description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
-  //     image: {
-  //       src: 'banner-1.png',
-  //       alt: '',
-  //     },
-  //   },
-  // ],
+  featureCard: [
+    {
+      title: '后台管理1',
+      description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
+      image: {
+        src: 'banner-1.png',
+        alt: '',
+      },
+    },
+    {
+      title: '后台管理2',
+      description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
+      image: {
+        src: 'banner-1.png',
+        alt: '',
+      },
+    },
+    {
+      title: '后台管理3',
+      description: '拥有后台管理，可以管理用户、角色、权限、菜单、日志等',
+      image: {
+        src: 'banner-1.png',
+        alt: '',
+      },
+    },
+  ],
   case: {
     title: '用MvpFast搭建的网站',
     subtitle: '已经使用MvpFast搭建多个网站产品，以下产品均已上线',
@@ -247,26 +247,26 @@ export const landingpageConfig = {
     ],
   },
   // list 风格的faq
-  // faqList: [
-  //   {
-  //     title: 'MvpFast的支付问题',
-  //     answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。`,
-  //   },
-  //   {
-  //     title: '购买后得到什么',
-  //     answer: `购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。
-  //         之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。
-  //         `,
-  //   },
-  //   {
-  //     title: '购买MvpFast之后，我可以做什么',
-  //     answer: `你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。`,
-  //   },
-  //   {
-  //     title: '如何部署MvpFast',
-  //     answer: `部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。`,
-  //   },
-  // ],
+  faqList: [
+    {
+      title: 'MvpFast的支付问题',
+      answer: `MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。`,
+    },
+    {
+      title: '购买后得到什么',
+      answer: `购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。
+          之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。
+          `,
+    },
+    {
+      title: '购买MvpFast之后，我可以做什么',
+      answer: `你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。`,
+    },
+    {
+      title: '如何部署MvpFast',
+      answer: `部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。`,
+    },
+  ],
   footer: {
     title: 'MvpFast',
     subtitle: '用最短的时间快速创建你个人应用的开发模板',

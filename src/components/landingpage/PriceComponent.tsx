@@ -2,14 +2,9 @@ import React from 'react';
 import { config } from '@/config';
 import { ImCheckmark2 } from 'react-icons/im';
 import { IoGiftOutline } from 'react-icons/io5';
-import { landingpageConfig } from '@/store/landingpage';
-const { price: priceConfig } = landingpageConfig;
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
-export default function CtaComponent() {
+export default function PriceComponent({ items }: { items: any }) {
+  const priceConfig = items;
   const { goods } = config;
   return (
     <section id="price" className="bg-white ">

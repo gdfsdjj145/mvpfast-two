@@ -1,5 +1,7 @@
 import Header from '@/components/Header';
 import HeroComponent from '@/components/landingpage/HeroComponent';
+import BrandComponent from '@/components/landingpage/BrandComponent';
+import AdminComponent from '@/components/landingpage/AdminComponent';
 import FeatureComponent from '@/components/landingpage/FeatureComponent';
 import FeaturesCard from '@/components/landingpage/FeaturesCardComponent';
 import FeaturesGrid from '@/components/landingpage/FeaturesGridComponent';
@@ -15,17 +17,35 @@ export default function Home() {
     <div className="font-xft">
       <Header></Header>
       <main>
-        <HeroComponent></HeroComponent>
-        <FeatureComponent></FeatureComponent>
+        {landingpageConfig.hero && (
+          <HeroComponent hero={landingpageConfig.hero}></HeroComponent>
+        )}
+        {landingpageConfig.brand && (
+          <BrandComponent brand={landingpageConfig.brand}></BrandComponent>
+        )}
+        {landingpageConfig.admin && (
+          <AdminComponent admin={landingpageConfig.admin}></AdminComponent>
+        )}
+        {landingpageConfig.feature && (
+          <FeatureComponent
+            feature={landingpageConfig.feature}
+          ></FeatureComponent>
+        )}
         {landingpageConfig.featureCard && (
           <FeaturesCard features={landingpageConfig.featureCard}></FeaturesCard>
         )}
         {landingpageConfig.featureGrid && (
           <FeaturesGrid features={landingpageConfig.featureGrid}></FeaturesGrid>
         )}
-        <CaseComponent></CaseComponent>
-        <PriceComponent></PriceComponent>
-        <FaqComponents></FaqComponents>
+        {landingpageConfig.case && (
+          <CaseComponent items={landingpageConfig.case}></CaseComponent>
+        )}
+        {landingpageConfig.price && (
+          <PriceComponent items={landingpageConfig.price}></PriceComponent>
+        )}
+        {landingpageConfig.faq && (
+          <FaqComponents items={landingpageConfig.faq}></FaqComponents>
+        )}
         {landingpageConfig.faqList && (
           <FaqListComponent
             items={landingpageConfig.faqList}
