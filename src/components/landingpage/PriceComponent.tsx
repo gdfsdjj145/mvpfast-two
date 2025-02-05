@@ -1,10 +1,7 @@
-'use client';
 import React from 'react';
 import { config } from '@/config';
 import { ImCheckmark2 } from 'react-icons/im';
 import { IoGiftOutline } from 'react-icons/io5';
-import { createCheckoutSession } from '@/lib/stripe';
-import { useAuth } from '@/context/AuthContext';
 import { landingpageConfig } from '@/store/landingpage';
 const { price: priceConfig } = landingpageConfig;
 
@@ -13,14 +10,6 @@ function classNames(...classes) {
 }
 
 export default function CtaComponent() {
-  const { user } = useAuth();
-
-  const createPayPage = async (key: string) => {
-    const url = await createCheckoutSession(key, user?.id);
-    console.log(url);
-    window.location.href = url;
-  };
-
   const { goods } = config;
   return (
     <section id="price" className="bg-white ">
@@ -107,7 +96,7 @@ export default function CtaComponent() {
                       </ul>
                     </div>
                     <button
-                      onClick={() => createPayPage(good.key)}
+                      disabled
                       aria-describedby={good.key}
                       className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
                     >

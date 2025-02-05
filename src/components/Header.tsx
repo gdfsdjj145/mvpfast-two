@@ -1,12 +1,10 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { IoGridOutline } from 'react-icons/io5';
-import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/lib/supabase';
-import { getUserInfo } from '@/app/dashboard/person/actions';
 import { landingpageConfig } from '@/store/landingpage';
 
 const { header } = landingpageConfig;
@@ -47,69 +45,38 @@ const THEMES = [
 ];
 
 const UserMenu = () => {
-  const { user, loading } = useAuth();
-  const [userState, setUserState] = useState<any>(null);
+  const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (user) {
-        const {
-          data: { user: supabaseUser },
-        } = await supabase.auth.getUser();
-
-        getUserInfo(user.id).then((res) => {
-          setUserState({
-            ...res,
-            nickName: supabaseUser?.user_metadata?.nickName || res.nickName,
-          });
-        });
-      }
-    };
-
-    fetchUser();
-  }, [user]);
-
   const handleLogout = async () => {
-    const result = await supabase.auth.signOut();
-    document.cookie =
-      'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    document.cookie =
-      'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    router.push('/');
+    const result = await signOut({ redirect: false, callbackUrl: '/' });
+    router.push(result.url);
   };
 
-  if (loading) {
+  if (status === 'unauthenticated' || status === 'loading') {
     return <></>;
   }
 
   const renderName = () => {
-    if (userState?.avatar) {
+    if (session?.user?.avatar) {
       return (
-        <div className="w-full h-full bg-neutral">
-          <img
-            src={userState.avatar}
-            alt="头像"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <img
+          src={session.user.avatar}
+          alt="头像"
+          className="w-full h-full object-cover"
+        />
       );
     }
-    return (
-      <div className="w-full h-full bg-neutral text-neutral-content flex items-center justify-center">
-        {userState?.nickName
-          ? userState.nickName[0]
-          : userState?.email
-          ? userState.email[0]
-          : '?'}
-      </div>
-    );
+    if (session?.user?.email) return session.user.email[0];
+    if (session?.user?.phone) return session.user.phone[0];
+    if (session?.user?.wechatOpenId) return session.user.nickName[0];
+    return '?';
   };
 
   const renderFullName = () => {
-    if (userState?.nickName) return userState.nickName;
-    if (user?.email) return user.email;
-    if (user?.phone) return user.phone;
+    if (session?.user?.email) return session.user.email;
+    if (session?.user?.phone) return session.user.phone;
+    if (session?.user?.wechatOpenId) return session.user.nickName;
     return '未知用户';
   };
 
@@ -118,7 +85,11 @@ const UserMenu = () => {
       {/* PC端显示 */}
       <div className="hidden sm:block dropdown dropdown-end">
         <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-          <div className="w-10 rounded-full">{renderName()}</div>
+          <div className="w-10 rounded-full">
+            <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center text-base">
+              <span>{renderName()}</span>
+            </div>
+          </div>
         </label>
         <ul
           tabIndex={0}
@@ -164,7 +135,7 @@ const UserMenu = () => {
 
 export default function Header() {
   const { theme, setTheme } = useTheme();
-  const { user, loading } = useAuth();
+  const { status } = useSession();
 
   return (
     <header className="bg-white shadow-sm">
@@ -249,9 +220,8 @@ export default function Header() {
               </div>
             </div>
           </div>
-          {user ? (
-            <UserMenu />
-          ) : (
+          <UserMenu />
+          {status === 'unauthenticated' && (
             <div className="flex items-center gap-4">
               <Link href="/auth/signin" className="btn btn-secondary">
                 登录

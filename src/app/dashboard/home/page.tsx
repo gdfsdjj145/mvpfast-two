@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,7 +16,6 @@ import {
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { getDashboardStats } from './actions';
 import { FiUsers, FiShoppingCart, FiDollarSign, FiEye } from 'react-icons/fi';
-import { useAuth } from '@/context/AuthContext';
 
 // 注册 ChartJS 组件
 ChartJS.register(
@@ -31,7 +31,7 @@ ChartJS.register(
 );
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { data: session } = useSession();
   const [stats, setStats] = useState<any>({
     totalUsers: 0,
     totalOrders: 0,

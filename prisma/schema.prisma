@@ -3,41 +3,40 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String   @id @default(uuid())
-  supabaseId  String?
-  createdDate DateTime @default(now())
-  nickName    String
-  phone       String?
-  email       String?
-  avatar      String?
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  wechatOpenId String?
+  createdDate  DateTime @default(now()) @map("created_time")
+  nickName     String
+  phone        String?
+  email        String?
+  avatar       String?
 
-  @@unique([supabaseId, phone, email])
+  @@unique([wechatOpenId, phone, email])
 }
 
 model VerificationCode {
-  id         String   @id @default(uuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
-  expiresAt  DateTime @default(now())
+  expiresAt  DateTime @default(now()) @map("created_time")
   createdAt  DateTime @default(now())
   code       String
 }
 
 model VerificationWxQrCode {
-  id         String   @id @default(uuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String   @unique
   isScan     Boolean
-  expires    DateTime @default(now())
+  expires    DateTime @default(now()) @map("created_time")
   openId     String?
 }
 
 model Order {
-  id             String   @id @default(uuid())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier     String
   createdAt      DateTime @default(now())
   orderId        String   @unique
@@ -51,7 +50,7 @@ model Order {
 }
 
 model Promotion {
-  id             String   @id @default(uuid())
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   // 推广人
   identifier     String
   createdAt      DateTime @default(now())
@@ -63,7 +62,7 @@ model Promotion {
 }
 
 model PayOrder {
-  id         String   @id @default(uuid())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   createdAt  DateTime @default(now())
   status     String
@@ -73,7 +72,7 @@ model PayOrder {
 }
 
 model DbUserDemo {
-  id          String   @id @default(uuid())
-  createdDate DateTime @default(now())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdDate DateTime @default(now()) @map("created_time")
   nickName    String
 }
