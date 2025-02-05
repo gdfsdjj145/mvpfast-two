@@ -2,11 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { landingpageConfig } from '../../store/landingpage';
 
-const { case: caseConfig } = landingpageConfig;
-
-export default function CaseComponent() {
+export default function CaseComponent({ items }: { items: any }) {
+  const caseConfig = items;
   const sectionRef = useRef<HTMLElement>(null);
   const postRefs = useRef<(HTMLElement | null)[]>([]);
 

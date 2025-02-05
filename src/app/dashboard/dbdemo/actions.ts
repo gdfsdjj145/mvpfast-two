@@ -1,9 +1,29 @@
 'use server';
 import prisma from '@/lib/prisma';
 
-export const getUser = async () => {
-  const user = await prisma.dbUserDemo.findMany();
-  return user;
+export const getUser = async (page: number = 1, pageSize: number = 10) => {
+  const skip = (page - 1) * pageSize;
+  
+  const [total, users] = await Promise.all([
+    prisma.dbUserDemo.count(),
+    prisma.dbUserDemo.findMany({
+      skip,
+      take: pageSize,
+      orderBy: {
+        createdDate: 'desc'  // 按 时间 降序排序，你可以根据需要修改排序字段
+      }
+    })
+  ]);
+
+  return {
+    data: users,
+    pagination: {
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize)
+    }
+  };
 };
 
 export const addUser = async (data: any): Promise<any> => {
