@@ -1,13 +1,22 @@
 'use server';
 import prisma from '@/lib/prisma';
 
+export const getUserInfo = async (userId: string) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      supabaseId: userId,
+    },
+  });
+  return user;
+};
+
 export const updateUserInfo = async (userId: string, data: any) => {
   try {
-    const { id, email, emailVerified, image, wechatOpenId, phone, ...updateData } = data;
-    
+    const { id, email, emailVerified, image, phone, ...updateData } = data;
+
     const user = await prisma.user.update({
       where: {
-        id: userId
+        id: userId,
       },
       data: updateData,
     });
@@ -22,7 +31,7 @@ export const updateUserInfo = async (userId: string, data: any) => {
     return {
       code: 1,
       message: '更新用户信息失败',
-      error: error instanceof Error ? error.message : '未知错误'
+      error: error instanceof Error ? error.message : '未知错误',
     };
   }
 };

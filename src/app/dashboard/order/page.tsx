@@ -4,31 +4,32 @@ import { useSession } from 'next-auth/react';
 import { getOrdersByUserId, createMockOrder, deleteOrder } from './actions';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/AuthContext';
 
 export default function OrderPage() {
-  const { data: session, status } = useSession();
+  const { user, loading } = useAuth();
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (status === 'authenticated' && session?.user?.id) {
+      if (user?.id) {
         try {
           setIsLoading(true);
-          const result = await getOrdersByUserId(session.user.id);
+          const result = await getOrdersByUserId(user.id);
           setOrders(result.data || []);
         } catch (error) {
           console.error('获取订单失败:', error);
         } finally {
           setIsLoading(false);
         }
-      } else if (status !== 'loading') {
+      } else if (loading !== true) {
         setIsLoading(false);
       }
     };
 
     fetchOrders();
-  }, [status, session]);
+  }, [user]);
 
   const renderLoading = () => (
     <div className="flex justify-center items-center h-64">
@@ -46,7 +47,7 @@ export default function OrderPage() {
   );
 
   const handlePurchase = async (type: string, price: number, name: string) => {
-    if (!session?.user?.id) {
+    if (!user?.id) {
       toast.error('请先登录');
       return;
     }
@@ -57,12 +58,12 @@ export default function OrderPage() {
       name,
     };
 
-    const result = await createMockOrder(session.user.id, orderData);
+    const result = await createMockOrder(user.id, orderData);
 
     if (result.success) {
       toast.success('购买成功');
       // 刷新订单列表
-      const ordersResult = await getOrdersByUserId(session.user.id);
+      const ordersResult = await getOrdersByUserId(user.id);
       setOrders(ordersResult.data || []);
     } else {
       toast.error('购买失败');
@@ -75,7 +76,7 @@ export default function OrderPage() {
       if (result.success) {
         toast.success('删除成功');
         // 刷新订单列表
-        const ordersResult = await getOrdersByUserId(session?.user?.id);
+        const ordersResult = await getOrdersByUserId(user?.id);
         setOrders(ordersResult.data || []);
       } else {
         toast.error('删除失败');

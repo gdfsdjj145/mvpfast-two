@@ -1,59 +1,21 @@
 'use client';
 import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { get } from '@/app/services/index';
 import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { sendCode, createQrCode, checkQrCode } from './actions';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import WxChatPc from '@/components/weChat/WeChatPc';
-import WeChatMobile from '@/components/weChat/WeChatMobile';
+import { requestOTP } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
+import { handleUserLogin } from './actions';
 
 const LOGIN_HASH = {
-  wx: '💬 微信登录',
-  phone: '📱 手机登录',
-  email: '📫 邮箱登录',
+  supabase: '📧 Supabase登录',
+  github: '🐱 Github登录',
+  google: '🔍 Google登录',
 };
 
-const WeChatLogin = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // 检查初始窗口大小
-    const checkDevice = () => {
-      setIsMobile(window.innerWidth < 768); // 768px 作为断点
-    };
-
-    // 首次执行
-    checkDevice();
-
-    // 添加窗口大小变化监听
-    window.addEventListener('resize', checkDevice);
-
-    // 清理监听器
-    return () => {
-      window.removeEventListener('resize', checkDevice);
-    };
-  }, []);
-
-  return (
-    <div className="card bg-base-100 w-80 shadow-xl mx-auto">
-      {isMobile ? <WeChatMobile /> : <WxChatPc />}
-      <div className="card-body gap-3">
-        <h2 className="card-title justify-center">
-          {isMobile ? '请使用微信登录' : '请使用微信扫码登录'}
-        </h2>
-        <p className="mt-6 text-center text-xs leading-5 text-gray-600">
-          {isMobile ? '点击按钮后跳转微信' : '扫码后等待几秒'}
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const VerificationButton = (props) => {
-  const { type, form } = props;
+const VerificationButton = (props: { onClick: () => Promise<void> }) => {
+  const { onClick } = props;
   const [counter, setCounter] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
@@ -67,21 +29,20 @@ const VerificationButton = (props) => {
   }, [counter]);
 
   const handleClick = async () => {
-    // 开始倒计时
     setCounter(60);
     setButtonDisabled(true);
-    // 生成验证码或其他操作
-    const data: any = await sendCode(type, {
-      identifier: form.identifier,
-    });
-
-    toast.success(data.message);
+    try {
+      await onClick();
+    } catch (error) {
+      setCounter(0);
+      setButtonDisabled(false);
+    }
   };
 
   return (
     <button
-      className="btn btn-active btn-primary w-32"
-      onClick={() => handleClick()}
+      className="btn btn-primary w-32"
+      onClick={handleClick}
       disabled={buttonDisabled}
     >
       {buttonDisabled ? `重新获取(${counter}s)` : '获取验证码'}
@@ -97,6 +58,9 @@ export default function SignInPage() {
     code: '',
   });
   const searchParams = useSearchParams();
+  const [supabaseEmail, setSupabaseEmail] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
 
   const handleFormChnage = (key, value) => {
     setForm({
@@ -105,21 +69,93 @@ export default function SignInPage() {
     });
   };
 
-  const handleLogin = async () => {
-    if (!form.identifier || !form.code) {
-      toast.error('请输入正确验证码或邮箱!');
+  const handleSendCode = async () => {
+    if (!form.identifier) {
+      toast.error('请输入邮箱');
       return;
     }
-    const res = await signIn('credentials', {
-      type,
-      ...form,
-      redirect: false,
-    });
-    if (res?.error) {
-      toast.error(res?.error);
-    } else {
-      const callbackUrl = searchParams.get('redirect') || '/';
-      router.push(callbackUrl);
+
+    try {
+      const data = await requestOTP(form.identifier);
+      setOtpSent(true);
+      toast.success('验证码已发送到邮箱');
+    } catch (error: any) {
+      if (error.message?.toLowerCase().includes('rate limit')) {
+        toast.error('发送太频繁，请稍后再试');
+      } else {
+        toast.error(error.message || '发送失败');
+      }
+      throw error;
+    }
+  };
+
+  const handleLogin = async (type: string) => {
+    try {
+      if (type === 'email') {
+        const { data, error } = await supabase.auth.verifyOtp({
+          email: form.identifier,
+          token: form.code,
+          type: 'email',
+        });
+
+        if (error) throw error;
+      }
+
+      if (type === 'github') {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'github',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              redirect_to: searchParams.get('redirect') || '/dashboard/home',
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        return;
+      }
+
+      if (type === 'google') {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              redirect_to: searchParams.get('redirect') || '/dashboard/home',
+            },
+          },
+        });
+        if (error) throw error;
+      }
+
+      // 获取 session
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        document.cookie = `sb-access-token=${session.access_token}; path=/`;
+        document.cookie = `sb-refresh-token=${session.refresh_token}; path=/`;
+
+        const user = await handleUserLogin(session);
+
+        const callbackUrl = searchParams.get('redirect') || '/dashboard/home';
+        router.push(callbackUrl);
+      } else {
+        throw new Error('Session not established');
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast.error(error.message || '登录失败');
+    }
+  };
+
+  const handleLoginType = (type: string) => {
+    if (type === 'github' || type === 'google') {
+      handleLogin(type);
+      return;
     }
   };
 
@@ -139,47 +175,36 @@ export default function SignInPage() {
 
         <div className="mt-10">
           <div className="bg-white px-6 py-8 shadow sm:rounded-lg sm:px-12">
-            {type !== 'wx' && (
+            {type === 'email' && (
               <div className="space-y-6">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    {type === 'email' ? '邮箱' : '手机号'}
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                    邮箱
                   </label>
-                  <div className="mt-2 flex gap-4">
+                  <div className="mt-2 flex flex-row gap-4">
                     <input
-                      value={form.identifier}
-                      type="text"
-                      placeholder={
-                        type === 'email' ? '请输入邮箱' : '请输入手机号'
-                      }
+                      type="email"
+                      placeholder="请输入邮箱"
                       className="input input-bordered w-full"
+                      value={form.identifier}
                       onChange={(e) =>
                         handleFormChnage('identifier', e.target.value)
                       }
                     />
-                    <VerificationButton
-                      form={form}
-                      type={type}
-                    ></VerificationButton>
+                    <VerificationButton onClick={handleSendCode} />
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
                     验证码
                   </label>
                   <div className="mt-2">
                     <input
-                      value={form.code}
                       type="text"
-                      placeholder="请填写验证码"
+                      placeholder="请输入验证码"
                       className="input input-bordered w-full"
+                      value={form.code}
                       onChange={(e) => handleFormChnage('code', e.target.value)}
                     />
                   </div>
@@ -188,17 +213,11 @@ export default function SignInPage() {
                 <div>
                   <button
                     className="btn btn-primary w-full"
-                    onClick={() => handleLogin()}
+                    onClick={() => handleLogin('email')}
                   >
                     登录
                   </button>
                 </div>
-              </div>
-            )}
-
-            {type === 'wx' && (
-              <div className="card bg-base-100 w-80 shadow-xl mx-auto">
-                <WeChatLogin />
               </div>
             )}
 
@@ -213,7 +232,7 @@ export default function SignInPage() {
                     {type !== item && (
                       <button
                         className="btn flex-1"
-                        onClick={() => setType(item)}
+                        onClick={() => handleLoginType(item)}
                       >
                         {LOGIN_HASH[item]}
                       </button>

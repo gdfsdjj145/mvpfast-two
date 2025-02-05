@@ -1,89 +1,111 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { updateUserInfo } from './actions';
 import toast from 'react-hot-toast';
+import { useAuth } from '@/context/AuthContext';
+import { ImageUpload } from '@/components/ImageUpload';
+import { getUserInfo, updateUserInfo } from './actions';
+import { supabase } from '@/lib/supabase';
 
 export default function PersonPage() {
-  const { data: session, status, update: updateSession } = useSession();
-  const [user, setUser] = React.useState<any>(null);
-  const [avatar, setAvatar] = React.useState<string | null>(null);
+  const { user } = useAuth();
+  const [userState, setUserState] = React.useState<any>(null);
 
-  const handleAvatarClick = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const base64 = e.target?.result as string;
-          setAvatar(base64);
-          // 这里可以添加上传到服务器的逻辑
-        };
-        reader.readAsDataURL(file);
+  const handleAvatarUploadComplete = async (url: string) => {
+    if (!userState?.id) return;
+
+    try {
+      const res = await updateUserInfo(userState.id, {
+        avatar: url,
+      });
+
+      if (res.code === 0) {
+        // 更新 supabase 用户信息
+        const { data, error } = await supabase.auth.updateUser({
+          data: {
+            avatar: url,
+          },
+        });
+
+        if (!error) {
+          // 更新本地状态
+          setUserState({
+            ...userState,
+            avatar: url,
+          });
+
+          toast.success('头像更新成功');
+        } else {
+          toast.error('头像更新失败');
+        }
+      } else {
+        toast.error('头像更新失败');
       }
-    };
-    input.click();
-  };
-
-  useEffect(() => {
-    if (session?.user) {
-      console.log(session.user);
-      setUser(session.user);
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      toast.error('头像更新失败');
     }
-  }, [session]);
-
-  // 渲染头像
-  const renderName = () => {
-    if (avatar) {
-      return (
-        <img src={avatar} alt="头像" className="w-full h-full object-cover" />
-      );
-    }
-    if (user?.avatar) {
-      return (
-        <img
-          src={user.avatar}
-          alt="头像"
-          className="w-full h-full object-cover"
-        />
-      );
-    }
-    if (user?.nickName) return user.nickName[0];
-    return '?';
-  };
-
-  const renderUserType = () => {
-    if (user?.email) return '邮箱用户';
-    if (user?.phone) return '手机用户';
-    if (user?.wechatOpenId) return '微信用户';
-    return '未知';
   };
 
   const handleSave = async () => {
-    if (!session?.user?.id) return;
-
-    const res = await updateUserInfo(session.user.id, {
-      avatar: avatar,
-      nickName: user.nickName,
+    const res = await updateUserInfo(userState.id, {
+      nickName: userState.nickName,
     });
-
     if (res.code === 0) {
-      // 更新 session
-      await updateSession({
-        ...session,
-        user: {
-          ...session.user,
-          avatar: avatar,
-          nickName: user.nickName,
+      // 更新 supabase 用户信息
+      const { data, error } = await supabase.auth.updateUser({
+        data: {
+          nickName: userState.nickName,
         },
       });
-      toast.success('保存成功');
+
+      if (!error) {
+        // 更新全局用户状态
+        toast.success('保存成功');
+      } else {
+        toast.error('保存失败');
+      }
     } else {
       toast.error('保存失败');
     }
+  };
+
+  useEffect(() => {
+    if (user) {
+      getUserInfo(user.id).then((res) => {
+        console.log(res);
+        setUserState(res);
+      });
+    }
+  }, [user]);
+
+  // 渲染头像
+  const renderName = () => {
+    if (userState?.avatar) {
+      return (
+        <div className="w-full h-full bg-neutral">
+          <img
+            src={userState.avatar}
+            alt="头像"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      );
+    }
+    return (
+      <div className="w-full h-full bg-neutral text-neutral-content flex items-center justify-center">
+        {userState?.nickName
+          ? userState.nickName[0]
+          : userState?.email
+          ? userState.email[0]
+          : '?'}
+      </div>
+    );
+  };
+
+  const renderUserType = () => {
+    if (userState?.email) return '邮箱用户';
+    if (userState?.phone) return '手机用户';
+    return '未知';
   };
 
   return (
@@ -97,10 +119,16 @@ export default function PersonPage() {
         {/* 头像设置 */}
         <div className="space-y-2">
           <h2 className="text-lg font-semibold">您的头像</h2>
-          <p className="text-gray-500 text-sm">当前无法修改头像</p>
-          <div className="w-24 h-24 rounded-full bg-neutral flex items-center justify-center text-white text-3xl cursor-pointer overflow-hidden">
-            {renderName()}
-          </div>
+          <p className="text-gray-500 text-sm">点击头像即可更换</p>
+          {userState && (
+            <ImageUpload
+              defaultImage={userState.avatar || ''}
+              bucket="avatars"
+              onUploadComplete={handleAvatarUploadComplete}
+              className="w-24 h-24 rounded-full"
+              userId={userState.id}
+            />
+          )}
         </div>
 
         {/* 语言设置 */}
@@ -122,8 +150,10 @@ export default function PersonPage() {
             type="text"
             placeholder="输入姓名"
             className="input input-bordered w-full max-w-xs"
-            value={user?.nickName}
-            onChange={(e) => setUser({ ...user, nickName: e.target.value })}
+            value={userState?.nickName}
+            onChange={(e) =>
+              setUserState({ ...userState, nickName: e.target.value })
+            }
           />
         </div>
 

@@ -1,166 +1,38 @@
 'use server';
 import prisma from '@/lib/prisma';
 import { getGeneratorName } from '@/lib/generatorName';
-import sendEmail from '@/lib/email';
-import sendPhone from '@/lib/phone';
 
-const handlerSendCode = async (type: string, params: any, code: string) => {
-  const { identifier } = params;
+export const handleUserLogin = async (session: any) => {
+  console.log('session', session);
 
-  const res = await prisma.verificationCode.findFirst({
+  if (!session) {
+    throw new Error('用户未登录');
+  }
+
+  // 检查用户是否存在
+  const existingUser = await prisma.user.findFirst({
     where: {
-      identifier,
-      expiresAt: {
-        gt: new Date(), //验证是否有效
-      },
+      supabaseId: session.user.id,
     },
   });
 
-  if (res) {
-    return {
-      code: 0,
-      data: {},
-      message: '验证码已发送，验证码在有效期内',
-    };
-  }
-
-  if (type === 'email') {
-    const info = await sendEmail({
-      to: identifier,
-      code,
-    });
-
-    return info;
-  }
-
-  if (type === 'phone') {
-    const info = await sendPhone(identifier, code);
-    return info;
-  }
-};
-
-// 发送验证码
-export const sendCode = async (type: string, params: any) => {
-  const { identifier } = params;
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
-
-  const info: any = await handlerSendCode(type, params, code);
-
-  if (info.success) {
-    // 保存验证码到数据库
-    await prisma.verificationCode.create({
+  // 如果用户不存在，创建新用户
+  if (!existingUser) {
+    const res = await prisma.user.create({
       data: {
-        identifier,
-        code,
-        expiresAt,
+        email: session.user.email,
+        nickName: getGeneratorName(), // 生成随机昵称
+        avatar: session.user.user_metadata?.avatar_url || null,
+        supabaseId: session.user.id,
       },
     });
-  }
-
-  return {
-    code: 0,
-    data: {},
-    message: '验证码发送成功',
-  };
-};
-
-// 验证码校验
-export const verifyCode = async (type: string, params: any) => {
-  const { identifier, code } = params;
-
-  const res = await prisma.verificationCode.findFirst({
-    where: {
-      identifier,
-      code,
-      expiresAt: {
-        gt: new Date(), //验证是否有效
-      },
-    },
-  });
-
-  if (res) {
-    // 验证成功
-    await prisma.verificationCode.delete({
-      where: { id: res.id },
-    });
-    return true;
-  } else {
-    // 验证失败
-    return false;
-  }
-};
-
-// 生成微信二维码
-export const createQrCode = async (ticket: string) => {
-  await prisma.verificationWxQrCode.create({
-    data: {
-      identifier: ticket,
-      expires: new Date(Date.now() + 60),
-      isScan: false,
-    },
-  });
-
-  return {
-    code: 0,
-    data: {},
-    message: '',
-  };
-};
-
-export const checkQrCode = async (
-  ticket: string
-): Promise<{
-  openId: string;
-  isScan: boolean;
-}> => {
-  const qrcode: any = await prisma.verificationWxQrCode.findUnique({
-    where: {
-      identifier: ticket,
-    },
-    select: {
-      isScan: true,
-      openId: true,
-    },
-  });
-  if (!qrcode?.isScan) {
-    return {
-      isScan: false,
-      openId: '',
-    };
+    return res;
   }
 
   const user = await prisma.user.findFirst({
     where: {
-      wechatOpenId: qrcode.openId as string,
+      supabaseId: session.user.id,
     },
   });
-
-  console.log(user, 'user');
-
-  if (!user) {
-    // 没用用户 创建用户
-
-    await prisma.user.create({
-      data: {
-        wechatOpenId: qrcode.openId as string,
-        createdDate: new Date(),
-        nickName: getGeneratorName(),
-        phone: null,
-        email: null,
-      },
-    });
-
-    return {
-      openId: qrcode.openId as string,
-      isScan: true,
-    };
-  }
-
-  // 已创建用户
-
-  return {
-    openId: user.wechatOpenId,
-    isScan: true,
-  };
+  return user;
 };
