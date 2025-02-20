@@ -17,10 +17,18 @@ import toast from 'react-hot-toast';
 import Image from 'next/image';
 
 // 动态导入 WeChatPayQRCode 组件
-const WeChatPayQRCode = dynamic(() => import('@/components/PayQrcode'), {
+const WeChatPcPay = dynamic(() => import('@/components/weChat/WeChatPcPay'), {
   loading: () => <p>加载支付二维码...</p>,
   ssr: false,
 });
+
+const WeChatMobilePay = dynamic(
+  () => import('@/components/weChat/WeChatMobilePay'),
+  {
+    loading: () => <p>加载支付二维码...</p>,
+    ssr: false,
+  }
+);
 
 export default function PaymentPage() {
   const { data: session, status } = useSession();
@@ -269,16 +277,29 @@ export default function PaymentPage() {
     }
 
     if (paymentStatus === 'pending') {
+      if (isH5Browser) {
+        return (
+          <WeChatMobilePay
+            amount={orderInfo.amount}
+            description={good.name}
+            orderId={orderInfo.orderId}
+            onPaymentSuccess={handlePaymentSuccess}
+          />
+        );
+      }
       return (
         <div className="bg-white p-8 rounded-lg shadow-md">
           {renderPaymentMethods()}
-          <WeChatPayQRCode
-            payType={payType}
-            amount={orderInfo.amount}
-            description={good.name}
-            onPaymentSuccess={handlePaymentSuccess}
-            onCreateOrder={handleCreateOrder}
-          />
+          {!isH5Browser && (
+            <WeChatPcPay
+              orderId={orderInfo.orderId}
+              payType={payType}
+              amount={orderInfo.amount}
+              description={good.name}
+              onPaymentSuccess={handlePaymentSuccess}
+              onCreateOrder={handleCreateOrder}
+            />
+          )}
         </div>
       );
     }
