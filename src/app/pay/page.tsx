@@ -57,6 +57,7 @@ export default function PaymentPage() {
   });
 
   const [payType, setPayType] = useState('wechat');
+  const [isH5Browser, setIsH5Browser] = useState(false);
 
   useEffect(() => {
     const getShare = async () => {
@@ -139,6 +140,19 @@ export default function PaymentPage() {
     if (availablePayments.length === 1) {
       setPayType(availablePayments[0].key);
     }
+    setOrderInfo((prevState) => ({
+      ...prevState,
+      orderId: `ORDER_${Date.now()}`,
+    }));
+  }, []);
+
+  useEffect(() => {
+    // 检测是否为移动设备
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        window.navigator.userAgent
+      );
+    setIsH5Browser(isMobile);
   }, []);
 
   const handlePaymentSuccess = async (result: {

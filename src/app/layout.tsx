@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import './globals.css';
 import { ReduxProvider } from '@/store';
+import WeSdk from '@/components/weChat/WeSdk';
 import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
@@ -63,6 +64,7 @@ export default function RootLayout({
             gtag('config', 'G-B315FBSZWP');
           `}
         </Script>
+        {/* <WeSdk></WeSdk> */}
       </body>
     </html>
   );

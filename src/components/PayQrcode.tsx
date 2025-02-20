@@ -6,6 +6,7 @@ import { paySign } from '@/lib/pay/sign';
 import { checkYungouOrderStatus } from '@/app/pay/actions';
 
 interface WeChatPayQRCodeProps {
+  orderId: string;
   amount: number;
   description: string;
   payType: string;
@@ -14,6 +15,7 @@ interface WeChatPayQRCodeProps {
 }
 
 const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
+  orderId,
   amount,
   payType,
   description,
@@ -28,8 +30,6 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const createOrderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  console.log(payType);
 
   // 创建订单的函数
   const createOrder = async () => {
@@ -70,6 +70,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         const { data } = await axios.post('/api/wx/create-wechat-order', {
           amount,
           description,
+          outTradeNo: orderId,
         });
         resData = data;
       }

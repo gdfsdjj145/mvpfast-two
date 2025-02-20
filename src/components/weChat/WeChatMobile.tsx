@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 
 const generateOAuthUrl = (redirectUri: string, state: string = ''): string => {
   const params = new URLSearchParams({
@@ -26,6 +25,7 @@ const WeChatMobile = () => {
     // 获取当前域名
     const currentDomain = window.location.origin;
     const authUrl = generateOAuthUrl(`${currentDomain}/api/wx/callback`);
+
     window.location.href = authUrl;
   };
 
