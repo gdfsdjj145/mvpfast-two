@@ -2,9 +2,12 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function CaseComponent({ items }: { items: any }) {
-  const caseConfig = items;
+  const t = useTranslations('Case');
+  const messages = useMessages();
+  const caseConfig = messages.Case as any;
   const sectionRef = useRef<HTMLElement>(null);
   const postRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -54,10 +57,10 @@ export default function CaseComponent({ items }: { items: any }) {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-            {caseConfig.title}
+            {t('title')}
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            {caseConfig.subtitle}
+            {t('description')}
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
@@ -92,12 +95,12 @@ export default function CaseComponent({ items }: { items: any }) {
                   className="group outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
                 >
                   <span className="absolute inset-0" />
-                  {item.title}
+                  {t(`items.${index}.title`)}
                   <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
                 </a>
               </h3>
               <div className="mt-3 text-sm text-white opacity-90 line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
-                {item.des}
+                {t(`items.${index}.des`)}
               </div>
             </article>
           ))}

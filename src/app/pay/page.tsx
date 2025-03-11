@@ -15,6 +15,7 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { useMessages } from 'next-intl';
 
 // 动态导入 WeChatPayQRCode 组件
 const WeChatPcPay = dynamic(() => import('@/components/weChat/WeChatPcPay'), {
@@ -37,7 +38,23 @@ export default function PaymentPage() {
   const shareCode = searchParams.get('sharecode');
   const initialized = useRef(false);
 
-  const good = config.goods.filter((good) => good.key === goodKey)[0];
+  // 使用 next-intl 获取商品信息，与 PriceComponent 保持一致
+  const messages = useMessages();
+  const priceConfig = messages.Price as any;
+  const goodsObj = priceConfig.goods;
+  const goods = Object.keys(goodsObj).map((key) => ({
+    ...goodsObj[key],
+    key,
+  }));
+
+  // 根据 goodKey 查找对应的商品
+  const good = goods.find((item) => item.key === goodKey) || {
+    key: '',
+    price: 0,
+    description: '',
+    name: '',
+  };
+
   const [orderInfo, setOrderInfo] = useState({
     orderId: 'xxxxxxxxx',
     amount: good.price * 100,
@@ -89,9 +106,14 @@ export default function PaymentPage() {
               transactionId: result.data.transactionId,
               paidAt: new Date(result.data.createdAt).toLocaleString(),
             });
-            const order = config.goods.filter(
-              (good) => good.key === result.data.orderType
-            )[0];
+
+            // 使用新的商品查找方式
+            const order = goods.find(
+              (item) => item.key === result.data.orderType
+            ) || {
+              description: '',
+              name: '',
+            };
 
             console.log(order);
 
@@ -121,7 +143,7 @@ export default function PaymentPage() {
       }
     };
     checkPayment();
-  }, [status, session]);
+  }, [status, session, goods]);
 
   useEffect(() => {
     if (shareOption && shareOption.code && !initialized.current) {

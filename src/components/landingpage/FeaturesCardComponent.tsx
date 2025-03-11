@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations, useMessages } from 'next-intl';
 
 interface Feature {
   title: string;
@@ -17,11 +18,14 @@ interface FeaturesSection {
 }
 
 export default function FeaturesSection({ features = [] }: FeaturesSection) {
+  const t = useTranslations('FeatureCard');
+  const messages = useMessages();
+  const featuresConfig = messages.FeatureCard as any;
   return (
     <section className="py-12 sm:py-16 lg:py-24 overflow-hidden bg-base-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-16">
-          {features.map((feature, index) => (
+          {featuresConfig.items.map((feature, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -53,10 +57,10 @@ export default function FeaturesSection({ features = [] }: FeaturesSection) {
               >
                 <div className="space-y-4">
                   <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                    {feature.title}
+                    {t(`items.${index}.title`)}
                   </h3>
                   <p className="text-lg text-base-content/70 leading-relaxed">
-                    {feature.description}
+                    {t(`items.${index}.description`)}
                   </p>
                 </div>
               </div>

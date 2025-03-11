@@ -3,10 +3,13 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaPlay, FaBook } from 'react-icons/fa';
+import { useTranslations, useMessages } from 'next-intl';
 import { motion } from 'framer-motion';
 
 export default function HeroComponent({ hero }: { hero: any }) {
-  const heroConfig = hero;
+  const t = useTranslations('Hero');
+  const messages = useMessages();
+  const heroConfig = messages.Hero as any;
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -45,14 +48,14 @@ export default function HeroComponent({ hero }: { hero: any }) {
             <motion.div variants={itemVariants} className="space-y-4">
               <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight">
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-3">
-                  {heroConfig.title}
+                  {t('title')}
                 </span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
-                  {heroConfig.subtitle}
+                  {t('subtitle')}
                 </span>
               </h1>
               <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
-                {heroConfig.description}
+                {t('description')}
               </p>
             </motion.div>
 
@@ -63,7 +66,7 @@ export default function HeroComponent({ hero }: { hero: any }) {
                 className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group mr-4"
               >
                 <FaPlay className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                {heroConfig.cta.start.label}
+                {t('cta.start.label')}
               </Link>
 
               <Link
@@ -72,12 +75,12 @@ export default function HeroComponent({ hero }: { hero: any }) {
                 className="inline-flex items-center px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-full transition-all duration-300 hover:bg-gray-200 hover:scale-105 group"
               >
                 <FaBook className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
-                {heroConfig.cta.docs.label}
+                {t('cta.docs.label')}
               </Link>
               {heroConfig.discount && (
                 <div className="flex items-center justify-center lg:justify-start gap-3 text-sm">
                   <span className="text-gray-500">
-                    {heroConfig.discount.description}
+                    {t('discount.description')}
                   </span>
                 </div>
               )}
@@ -112,7 +115,7 @@ export default function HeroComponent({ hero }: { hero: any }) {
                   <p>
                     <span className="font-bold">{heroConfig.case.num}名</span>
                     <span className="text-gray-500 ml-1">
-                      {heroConfig.case.description}
+                      {t('case.description')}
                     </span>
                   </p>
                 </div>

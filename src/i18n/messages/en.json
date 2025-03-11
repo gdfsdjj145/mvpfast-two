@@ -1,0 +1,362 @@
+{
+  "Header": {
+    "logo": {
+      "url": "/title-logo.png",
+      "alt": "MvpFast"
+    },
+    "nav": {
+      "items": [
+        { "name": "Pricing", "href": "/#price" },
+        { "name": "Docs", "href": "/docs/introduction", "target": "_blank" },
+        { "name": "Blog", "href": "/blog" },
+        {
+          "name": "About Us",
+          "href": "https://www.islandspage.com/EM-T",
+          "target": "_blank",
+          "rel": "external"
+        }
+      ]
+    },
+    "login": {
+      "label": "Login"
+    },
+    "theme": {
+      "label": "Theme"
+    }
+  },
+  "Hero": {
+    "title": "Build in a day",
+    "subtitle": "your web application",
+    "description": "NextJs development template with login, payment, articles, blog and WeChat development modules, along with learning courses to help you quickly build web applications and earn your first bucket of gold.",
+    "cta": {
+      "start": {
+        "label": "Get Started",
+        "href": "/dashboard/home"
+      },
+      "docs": {
+        "label": "Documentation",
+        "href": "/docs/introduction",
+        "target": "_blank"
+      }
+    },
+    "discount": {
+      "price": "",
+      "description": "This is a template demo, using the template will save you a lot of time"
+    },
+    "case": {
+      "num": "999",
+      "description": "developers started building their own products",
+      "items": [
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        }
+      ]
+    },
+    "banner": {
+      "url": "/banner.png",
+      "alt": "MvpFast Preview"
+    }
+  },
+  "Brand": {
+    "items": [
+      {
+        "name": "NextJs",
+        "logo": "/nextjs-logo.png",
+        "stars": "126K⭐",
+        "href": "https://nextjs.org/"
+      },
+      {
+        "name": "TailWindCss",
+        "logo": "/tailwindcss.png",
+        "stars": "82K⭐",
+        "href": "https://tailwindcss.com/"
+      },
+      {
+        "name": "Mongodb",
+        "logo": "/mongodb.png",
+        "stars": "26K⭐",
+        "href": "https://www.mongodb.com/cloud/atlas/register"
+      },
+      {
+        "name": "WeChat",
+        "logo": "/wx.png",
+        "stars": "",
+        "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
+      }
+    ]
+  },
+  "Admin": {
+    "banner": {
+      "url": "/banner-1.png",
+      "alt": "Admin Preview"
+    }
+  },
+  "Feature": {
+    "title": "Showcase your website features",
+    "subtitle": "This section is for showcasing your website features",
+    "description": "This section showcases features that customers love, useful feature information for customers (examples below are made up)",
+    "items": [
+      {
+        "name": "Feature 1",
+        "icon": "CircleUser",
+        "description": "Showcase your product's special capabilities",
+        "list": [
+          "Invincible functionality",
+          "One-click configuration",
+          "Amazing"
+        ]
+      },
+      {
+        "name": "Feature 2",
+        "icon": "BadgeJapaneseYen",
+        "description": "What others don't have, you do",
+        "list": [
+          "Unparalleled in the industry",
+          "Unique sword technique",
+          "Advanced capabilities"
+        ]
+      },
+      {
+        "name": "Feature 3",
+        "icon": "Shield",
+        "description": "If the first two aren't enough, here's a third",
+        "list": ["Laser cannon", "ak47"]
+      }
+    ]
+  },
+  "FeatureGrid": {
+    "title": "MvpFast's main features",
+    "items": [
+      {
+        "icon": "CircleUser",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "Package",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "Moon",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "MessageCircleMore",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "File",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      }
+    ]
+  },
+  "FeatureCard": {
+    "items": [
+      {
+        "title": "Admin Management 1",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      },
+      {
+        "title": "Admin Management 2",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      },
+      {
+        "title": "Admin Management 3",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      }
+    ]
+  },
+  "Case": {
+    "title": "Websites built with MvpFast",
+    "subtitle": "Multiple website products have been built using MvpFast, all of the following products are live",
+    "description": "",
+    "items": [
+      {
+        "id": 1,
+        "title": "LogoCook-Logo Chef",
+        "href": "https://www.logocook.shop",
+        "imageUrl": "/f1.png",
+        "des": "LogoCook is a fast and free logo generator that allows you to quickly create the logo you want through online editing, including free logo downloads, cute logo property designs, uploading custom svg files, meeting the needs of individuals and businesses to quickly create logos",
+        "gradient": "from-pink-500 to-rose-500",
+        "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600"
+      },
+      {
+        "id": 2,
+        "title": "WeFight-Let's fight together!",
+        "href": "https://www.wefight.cn",
+        "imageUrl": "/f2.png",
+        "des": "WeFight is a website that helps you achieve goals through mutual check-ins and competitive rankings. By creating goal task groups, inviting friends to join, completing daily check-in tasks, and using daily check-ins to cultivate good habits and achieve goals, it's suitable for fitness, learning, reading, work, and various social scenarios",
+        "gradient": "from-cyan-500 to-blue-500",
+        "hoverGradient": "group-hover:from-cyan-600 group-hover:to-blue-600"
+      },
+      {
+        "id": 3,
+        "title": "IMessageU-Idea Message User",
+        "href": "https://www.imessageu.shop",
+        "imageUrl": "/f3.png",
+        "des": "A product that quickly opens user feedback channels, creating your panel to receive user voices and suggestions, helping developers build better products, helping developers reduce the development of false requirements, and helping developers avoid useless work",
+        "gradient": "from-purple-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-purple-600 group-hover:to-indigo-600"
+      }
+    ]
+  },
+  "Price": {
+    "title": "Showcase your plans",
+    "subtitle": "Provide detailed information about your plans to reassure users when purchasing",
+    "description": "This is a demo display, if you want to purchase, please go to the official website, currently still in the 100 yuan discount stage",
+    "buy": "Buy Now",
+    "more": "Most Popular",
+    "tips": "For refund issues, please contact customer service",
+    "goods": {
+      "normal": {
+        "key": "normal",
+        "name": "Development Template Code",
+        "description": "Includes basic website development functions, such as user login, database, blog, articles, payment and other integration solutions. After purchase, you can use the MvpFast template permanently, and enjoy the updated functions of subsequent versions of the template. If you encounter problems during the website launch process, you can enjoy the author's technical support service to help you solve all technical problems.",
+        "includedFeatures": [
+          "Login + Database + Payment functionality and other encapsulation capabilities",
+          "Frontend code (NextJs + Tailwindcss)",
+          "WeChat public account service code"
+        ],
+        "price": 299,
+        "original": 399,
+        "mostPopular": false,
+        "href": "/pay?key=normal"
+      },
+      "most": {
+        "key": "most",
+        "name": "Development Template Code + NextJs Full Stack Development Course from 0 to 1",
+        "description": "Includes all content of the development template code and all content of the NextJs full stack development course from 0 to 1",
+        "includedFeatures": [
+          "Login + Database + Payment functionality and other encapsulation capabilities",
+          "Frontend code (NextJs + Tailwindcss)",
+          "WeChat public account service code",
+          "NextJs full stack development course from 0 to 1"
+        ],
+        "price": 399,
+        "original": 449,
+        "mostPopular": true,
+        "href": "/pay?key=most"
+      }
+    }
+  },
+  "Faq": {
+    "title": "Common questions about MvpFast",
+    "subtitle": "If your question has an answer here, you can contact us in the following ways",
+    "call": {
+      "email": "freecloud@emong.com.cn",
+      "wechat": "jiajiandu"
+    },
+    "items": [
+      {
+        "question": "MvpFast payment issues",
+        "answer": "MvpFast template's payment function is completely in accordance with relevant national regulations, currently using WeChat's payment method. To connect to the payment module, developers need to verify as a WeChat merchant and bind payment keys to use the payment function."
+      },
+      {
+        "question": "What do I get after purchase",
+        "answer": "After purchase, you will get all the code of the template: including login module, payment module, UI module, frontend code, WeChat public account code, etc. Afterwards, you can use the template to quickly implement your ideas, and when you encounter any problems with MvpFast code, processes, or related issues, you can add WeChat jiajiandu to ask questions, and I will reply within 24 hours."
+      },
+      {
+        "question": "What can I do after purchasing MvpFast",
+        "answer": "You can use this template to build any type and number of websites and quickly commercialize them, or simply learn from the code template. However, you are not allowed to privately resell the MvpFast template code, nor are you allowed to share it on related code platforms. If discovered, legal responsibility will be pursued."
+      },
+      {
+        "question": "How to deploy MvpFast",
+        "answer": "Deploying MvpFast is very simple, just submit the code to your personal git repository, then deploy with one click through Vercel, the entire process takes only 1 minute."
+      }
+    ]
+  },
+  "FaqList": [
+    {
+      "title": "MvpFast payment issues",
+      "answer": "MvpFast template's payment function is completely in accordance with relevant national regulations, currently using WeChat's payment method. To connect to the payment module, developers need to verify as a WeChat merchant and bind payment keys to use the payment function."
+    },
+    {
+      "title": "What do I get after purchase",
+      "answer": "After purchase, you will get all the code of the template: including login module, payment module, UI module, frontend code, WeChat public account code, etc. Afterwards, you can use the template to quickly implement your ideas, and when you encounter any problems with MvpFast code, processes, or related issues, you can add WeChat jiajiandu to ask questions, and I will reply within 24 hours."
+    },
+    {
+      "title": "What can I do after purchasing MvpFast",
+      "answer": "You can use this template to build any type and number of websites and quickly commercialize them, or simply learn from the code template. However, you are not allowed to privately resell the MvpFast template code, nor are you allowed to share it on related code platforms. If discovered, legal responsibility will be pursued."
+    },
+    {
+      "title": "How to deploy MvpFast",
+      "answer": "Deploying MvpFast is very simple, just submit the code to your personal git repository, then deploy with one click through Vercel, the entire process takes only 1 minute."
+    }
+  ],
+  "Footer": {
+    "title": "MvpFast",
+    "subtitle": "Development template to quickly create your personal application in the shortest time",
+    "items": [
+      {
+        "title": "Friendly Links",
+        "links": [
+          {
+            "name": "ez Word Learning",
+            "href": "https://ezbdc.dashu.ai",
+            "title": "A minimalist English word learning application that makes learning English very convenient and efficient, with challenging word memorization modes, no registration required, download and use.",
+            "logo": "ezbbc-logo.png"
+          },
+          {
+            "name": "LogoCook",
+            "href": "https://www.logocook.shop/",
+            "title": "LogoCook is a fast and free logo generator that allows you to quickly create the logo you want through online editing, including free logo downloads, cute logo property designs, uploading custom svg files, meeting the needs of individuals and businesses to quickly create logos",
+            "logo": "cook-logo.png"
+          },
+          {
+            "name": "IMessageU",
+            "href": "https://www.imessageu.shop/",
+            "title": "A product that quickly opens user feedback channels, creating your panel to receive user voices and suggestions, helping developers build better products, helping developers reduce the development of false requirements, and helping developers avoid useless work",
+            "logo": "want-logo.png"
+          },
+          {
+            "name": "WeFight",
+            "href": "https://www.wefight.cn/",
+            "title": "A product that quickly opens user feedback channels, creating your panel to receive user voices and suggestions, helping developers build better products, helping developers reduce the development of false requirements, and helping developers avoid useless work",
+            "logo": "fight-logo.png"
+          }
+        ]
+      },
+      {
+        "title": "Technical Documentation",
+        "links": [
+          { "name": "TailwindCSS", "href": "https://tailwindcss.com/" },
+          { "name": "Next", "href": "https://nextjs.org/" },
+          { "name": "Prisma", "href": "https://www.prisma.io/" },
+          { "name": "DaisyUI", "href": "https://daisyui.com/" },
+          { "name": "NextAuth.js", "href": "https://next-auth.js.org/" }
+        ]
+      },
+      {
+        "title": "More",
+        "links": [
+          { "name": "Commercial Agreement", "href": "/blog/commercial" }
+        ]
+      }
+    ]
+  }
+}

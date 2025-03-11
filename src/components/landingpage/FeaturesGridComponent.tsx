@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { icons } from 'lucide-react';
+import { useTranslations, useMessages } from 'next-intl';
 
 interface Feature {
   icon: string;
@@ -14,6 +15,9 @@ interface FeaturesGridProps {
 }
 
 export default function FeaturesGrid({ features }: FeaturesGridProps) {
+  const t = useTranslations('FeatureGrid');
+  const messages = useMessages();
+  const featuresConfig = messages.FeatureGrid as any;
   const renderIcon = (icon: string) => {
     const LucideIcon = icons[icon as keyof typeof icons];
     return <LucideIcon className="w-6 h-6" />;
@@ -29,11 +33,11 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
             viewport={{ once: true }}
             className="text-3xl font-bold text-center mb-16 sm:text-4xl text-secondary"
           >
-            MvpFast的主要特点
+            {t('title')}
           </motion.h2>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature, index) => (
+            {featuresConfig.items.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -43,8 +47,12 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
                 className="relative overflow-hidden rounded-lg border bg-background p-8"
               >
                 <div className="mb-4 text-4xl">{renderIcon(feature.icon)}</div>
-                <h3 className="mb-2 text-xl font-bold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <h3 className="mb-2 text-xl font-bold">
+                  {t(`items.${index}.title`)}
+                </h3>
+                <p className="text-muted-foreground">
+                  {t(`items.${index}.description`)}
+                </p>
               </motion.div>
             ))}
           </div>

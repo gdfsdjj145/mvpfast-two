@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { useTranslations, useMessages } from 'next-intl';
 
 interface FaqItem {
   title: string;
@@ -14,7 +15,9 @@ interface FaqSectionProps {
 
 export default function FaqSection({ items = [] }: FaqSectionProps) {
   const [openIndexes, setOpenIndexes] = useState<number[]>([0]);
-
+  const t = useTranslations('Faq');
+  const messages = useMessages();
+  const faqConfig = messages.Faq as any;
   const toggleItem = (index: number) => {
     setOpenIndexes((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
@@ -31,7 +34,7 @@ export default function FaqSection({ items = [] }: FaqSectionProps) {
             viewport={{ once: true }}
             className="text-3xl font-bold text-center mb-16 sm:text-4xl text-secondary"
           >
-            关于MvpFast的常见问题
+            {t('title')}
           </motion.h2>
 
           <motion.div
@@ -50,10 +53,12 @@ export default function FaqSection({ items = [] }: FaqSectionProps) {
                   onClick={() => toggleItem(index)}
                 >
                   <div className="collapse-title text-lg font-medium py-4 pr-12">
-                    {item.title}
+                    {t(`items.${index}.question`)}
                   </div>
                   <div className="collapse-content">
-                    <p className="text-base-content/80 pb-4">{item.answer}</p>
+                    <p className="text-base-content/80 pb-4">
+                      {t(`items.${index}.answer`)}
+                    </p>
                   </div>
                 </div>
               ))}

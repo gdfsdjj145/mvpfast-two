@@ -12,6 +12,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProviders } from '@/components/theme/ThemeProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+
 const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
   ssr: false,
 });
@@ -35,20 +38,25 @@ export const metadata: Metadata = {
     '开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html lang="zh">
       <body className={cn(fonts.variable, inter.className)}>
         <PageProgressBar />
-        <ThemeProviders attribute="data-theme" defaultTheme="light">
-          <SessionProvider>
-            <ReduxProvider>{children}</ReduxProvider>
-          </SessionProvider>
-        </ThemeProviders>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ThemeProviders attribute="data-theme" defaultTheme="light">
+            <SessionProvider>
+              <ReduxProvider>{children}</ReduxProvider>
+            </SessionProvider>
+          </ThemeProviders>
+        </NextIntlClientProvider>
         <Toaster></Toaster>
         <Analytics></Analytics>
         <SpeedInsights></SpeedInsights>

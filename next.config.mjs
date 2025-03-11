@@ -1,4 +1,5 @@
 import { withContentlayer } from 'next-contentlayer'
+import createNextIntlPlugin from 'next-intl/plugin';
 
 /** @type {import('next').NextConfig} */
 
@@ -23,7 +24,7 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
+  async headers () {
     return [
       {
         source: '/:path*',
@@ -51,5 +52,7 @@ const nextConfig = {
   },
 };
 
-export default withContentlayer(nextConfig);
+const withNextIntl = createNextIntlPlugin();
+
+export default withContentlayer(withNextIntl(nextConfig));
 

@@ -2,9 +2,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function BrandComponent({ brand }: { brand: any }) {
-  const brandConfig = brand;
+  const t = useTranslations('Brand');
+  const messages = useMessages();
+  const brandConfig = messages.Brand as any;
   return (
     <section className="bg-gray-50/50 border-y border-gray-100">
       <motion.div

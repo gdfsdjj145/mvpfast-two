@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { config } from '@/config';
+import { useMessages } from 'next-intl';
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -23,6 +23,15 @@ export default function AddUserModal({
     payAt: '',
     goodKey: '',
   });
+
+  // 使用 next-intl 获取商品信息，与 PriceComponent 保持一致
+  const messages = useMessages();
+  const priceConfig = messages.Price as any;
+  const goodsObj = priceConfig.goods;
+  const goods = Object.keys(goodsObj).map((key) => ({
+    ...goodsObj[key],
+    key,
+  }));
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -94,7 +103,7 @@ export default function AddUserModal({
               required
             >
               <option value="">请选择商品</option>
-              {config.goods.map((good) => (
+              {goods.map((good) => (
                 <option key={good.key} value={good.key}>
                   {good.name} - ￥{good.price}
                 </option>

@@ -1,9 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { landingpageConfig } from '@/store/landingpage';
+import { useTranslations, useMessages } from 'next-intl';
 const { footer: footerConfig } = landingpageConfig;
 
 export default function FooterComponent() {
+  const t = useTranslations('Footer');
+  const messages = useMessages();
+  const footerConfig = messages.Footer as any;
   return (
     <footer className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -17,10 +21,10 @@ export default function FooterComponent() {
                 src="/logo.png"
                 alt=""
               />
-              <span className="font-bold">{footerConfig.title}</span>
+              <span className="font-bold">{t('title')}</span>
             </Link>
             <p className="mt-3 mb-3 text-sm text-base-content/80 leading-relaxed">
-              {footerConfig.subtitle}
+              {t('subtitle')}
             </p>
 
             <Link
@@ -46,13 +50,13 @@ export default function FooterComponent() {
               </span>
             </Link>
           </div>
-          {footerConfig.items.map((section) => (
+          {footerConfig.items.map((section, index) => (
             <div key={section.title}>
               <h3 className="text-sm font-semibold text-gray-900">
-                {section.title}
+                {t(`items.${index}.title`)}
               </h3>
               <ul role="list" className="mt-6 space-y-4">
-                {section.links.map((link) => (
+                {section.links.map((link, i) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
@@ -68,7 +72,7 @@ export default function FooterComponent() {
                           className="w-6 h-6"
                         />
                       )}
-                      {link.name}
+                      {t(`items.${index}.links.${i}.name`)}
                     </a>
                   </li>
                 ))}

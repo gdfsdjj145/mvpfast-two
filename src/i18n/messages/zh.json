@@ -1,0 +1,352 @@
+{
+  "Header": {
+    "logo": {
+      "url": "/title-logo.png",
+      "alt": "MvpFast"
+    },
+    "nav": {
+      "items": [
+        { "name": "价格", "href": "/#price" },
+        { "name": "文档", "href": "/docs/introduction", "target": "_blank" },
+        { "name": "博客", "href": "/blog" },
+        {
+          "name": "关于我们",
+          "href": "https://www.islandspage.com/EM-T",
+          "target": "_blank",
+          "rel": "external"
+        }
+      ]
+    },
+    "login": {
+      "label": "登录"
+    },
+    "theme": {
+      "label": "主题色"
+    }
+  },
+  "Hero": {
+    "title": "在一天之内构建",
+    "subtitle": "你的网站应用",
+    "description": "NextJs的开发模板，包含登录、支付、文章、博客和微信开发等模块功能，附带学习课程，让你学会快速打造网站应用，赚取第一桶金。",
+    "cta": {
+      "start": {
+        "label": "开始使用",
+        "href": "/dashboard/home"
+      },
+      "docs": {
+        "label": "文档",
+        "href": "/docs/introduction",
+        "target": "_blank"
+      }
+    },
+    "discount": {
+      "price": "",
+      "description": "这是模板demo，使用模板将为你节省大量时间"
+    },
+    "case": {
+      "num": "999",
+      "description": "程序员开始构建自己的产品",
+      "items": [
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        },
+        {
+          "user": "/a1.jpg"
+        }
+      ]
+    },
+    "banner": {
+      "url": "/banner.png",
+      "alt": "MvpFast Preview"
+    }
+  },
+  "Brand": {
+    "items": [
+      {
+        "name": "NextJs",
+        "logo": "/nextjs-logo.png",
+        "stars": "126K⭐",
+        "href": "https://nextjs.org/"
+      },
+      {
+        "name": "TailWindCss",
+        "logo": "/tailwindcss.png",
+        "stars": "82K⭐",
+        "href": "https://tailwindcss.com/"
+      },
+      {
+        "name": "Mongodb",
+        "logo": "/mongodb.png",
+        "stars": "26K⭐",
+        "href": "https://www.mongodb.com/zh-cn/cloud/atlas/register"
+      },
+      {
+        "name": "WeChat",
+        "logo": "/wx.png",
+        "stars": "",
+        "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
+      }
+    ]
+  },
+  "Admin": {
+    "banner": {
+      "url": "/banner-1.png",
+      "alt": "后台预览"
+    }
+  },
+  "Feature": {
+    "title": "展示你网站的功能",
+    "subtitle": "这一部分用于展示你的网站功能",
+    "description": "这一部分展示客户喜欢的功能，对客户有用的功能信息（下面是编的示例）",
+    "items": [
+      {
+        "name": "功能1",
+        "icon": "CircleUser",
+        "description": "展示出你产品的特色能力",
+        "list": ["有无敌的功能", "一键配置", "太牛了"]
+      },
+      {
+        "name": "功能2",
+        "icon": "BadgeJapaneseYen",
+        "description": "别人没有的你也有",
+        "list": ["独步武林", "独孤九剑", "吸星大法"]
+      },
+      {
+        "name": "功能3",
+        "icon": "Shield",
+        "description": "前面两个不够，还有第三个",
+        "list": ["激光炮", "ak47"]
+      }
+    ]
+  },
+  "FeatureGrid": {
+    "title": "MvpFast的主要特点",
+    "items": [
+      {
+        "icon": "CircleUser",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "Package",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "Moon",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "MessageCircleMore",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "File",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      }
+    ]
+  },
+  "FeatureCard": {
+    "items": [
+      {
+        "title": "后台管理1",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      },
+      {
+        "title": "后台管理2",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      },
+      {
+        "title": "后台管理3",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "banner-1.png",
+          "alt": ""
+        }
+      }
+    ]
+  },
+  "Case": {
+    "title": "用MvpFast搭建的网站",
+    "subtitle": "已经使用MvpFast搭建多个网站产品，以下产品均已上线",
+    "description": "",
+    "items": [
+      {
+        "id": 1,
+        "title": "LogoCook-Logo厨师",
+        "href": "https://www.logocook.shop",
+        "imageUrl": "/f1.png",
+        "des": "LogoCook是一款快速免费的logo生成器,通过在线编辑就可以快速的创建自己想要的logo,包括logo免费下载,可爱的logo属性设计,上传自定义的svg文件,满足个人和企业快速创建logo的需求",
+        "gradient": "from-pink-500 to-rose-500",
+        "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600"
+      },
+      {
+        "id": 2,
+        "title": "WeFight-一起奋斗吧！",
+        "href": "https://www.wefight.cn",
+        "imageUrl": "/f2.png",
+        "des": "WeFight是一个通过互相打卡竞技排名的方式来完成目标的网站,通过创建目标任务群组,邀请好友进入群组,完成每天打卡任务,通过每天打卡的方式来培养好习惯和完成目标,适合健身、学习、读书、工作各种社交场景",
+        "gradient": "from-cyan-500 to-blue-500",
+        "hoverGradient": "group-hover:from-cyan-600 group-hover:to-blue-600"
+      },
+      {
+        "id": 3,
+        "title": "IMessageU-Idea Message User",
+        "href": "https://www.imessageu.shop",
+        "imageUrl": "/f3.png",
+        "des": "一款快速打通用户反馈通道的产品，创建你的面板来接受用户的心声和建议，帮助开发者助力打造更好的产品，帮助开发者减少伪需求的开发，帮助开发者避免无用功",
+        "gradient": "from-purple-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-purple-600 group-hover:to-indigo-600"
+      }
+    ]
+  },
+  "Price": {
+    "title": "展示你的套餐",
+    "subtitle": "提供套餐的详细信息，让用户放心购买",
+    "description": "这是demo展示，如果想要购买，请到官网购买，目前还在100元优惠阶段",
+    "buy": "立即购买",
+    "more": "最多人购买",
+    "tips": "如有退款问题，可联系客服",
+    "goods": {
+      "normal": {
+        "key": "normal",
+        "name": "开发模板代码",
+        "description": "包含了基础的网站开发功能，例如用户登录，数据库，博客，文章，支付等能力的集成方案。购买后，你可以永久的使用MvpFast的模板，并且享受该模板后续版本的更新功能，在网站上线过程中如遇到问题，可以享受作者的技术支持服务，帮你解决一切的技术问题。",
+        "includedFeatures": [
+          "登录 + 数据库 + 支付功能等封装能力",
+          "前端代码（NextJs + Tailwindcss）",
+          "微信公众号服务代码"
+        ],
+        "price": 299,
+        "original": 399,
+        "mostPopular": false,
+        "href": "/pay?key=normal"
+      },
+      "most": {
+        "key": "most",
+        "name": "开发模板代码 + 从0到1Nextjs全栈开发课程",
+        "description": "包含开发模板代码所有内容、从0到1的Nextjs全栈开发课程所有内容",
+        "includedFeatures": [
+          "登录 + 数据库 + 支付功能等封装能力",
+          "前端代码（NextJs + Tailwindcss）",
+          "微信公众号服务代码",
+          "从0到1的Nextjs全栈开发课程"
+        ],
+        "price": 399,
+        "original": 449,
+        "mostPopular": true,
+        "href": "/pay?key=most"
+      }
+    }
+  },
+  "Faq": {
+    "title": "关于MvpFast常见问题",
+    "subtitle": "如果你的问题这里答案，可以用一下方式联系我们",
+    "call": {
+      "email": "freecloud@emong.com.cn",
+      "wechat": "jiajiandu"
+    },
+    "items": [
+      {
+        "question": "MvpFast的支付问题",
+        "answer": "MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。"
+      },
+      {
+        "question": "购买后得到什么",
+        "answer": "购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。"
+      },
+      {
+        "question": "购买MvpFast之后，我可以做什么",
+        "answer": "你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。"
+      },
+      {
+        "question": "如何部署MvpFast",
+        "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
+      }
+    ]
+  },
+  "FaqList": [
+    {
+      "title": "MvpFast的支付问题",
+      "answer": "MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。"
+    },
+    {
+      "title": "购买后得到什么",
+      "answer": "购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。"
+    },
+    {
+      "title": "购买MvpFast之后，我可以做什么",
+      "answer": "你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。"
+    },
+    {
+      "title": "如何部署MvpFast",
+      "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
+    }
+  ],
+  "Footer": {
+    "title": "MvpFast",
+    "subtitle": "用最短的时间快速创建你个人应用的开发模板",
+    "items": [
+      {
+        "title": "友情链接",
+        "links": [
+          {
+            "name": "ez背单词",
+            "href": "https://ezbdc.dashu.ai",
+            "title": "一款极简的英文单词学习应用，可以非常方便高效的学习英文，具有有挑战的单词背诵模式，无需注册，下载即用。",
+            "logo": "ezbbc-logo.png"
+          },
+          {
+            "name": "LogoCook",
+            "href": "https://www.logocook.shop/",
+            "title": "LogoCook是一款快速免费的logo生成器,通过在线编辑就可以快速的创建自己想要的logo,包括logo免费下载,可爱的logo属性设计,上传自定义的svg文件,满足个人和企业快速创建logo的需求",
+            "logo": "cook-logo.png"
+          },
+          {
+            "name": "IMessageU",
+            "href": "https://www.imessageu.shop/",
+            "title": "一款快速打通用户反馈通道的产品，创建你的面板来接受用户的心声和建议，帮助开发者助力打造更好的产品，帮助开发者减少伪需求的开发，帮助开发者避免无用功",
+            "logo": "want-logo.png"
+          },
+          {
+            "name": "WeFight",
+            "href": "https://www.wefight.cn/",
+            "title": "一款快速打通用户反馈通道的产品，创建你的面板来接受用户的心声和建议，帮助开发者助力打造更好的产品，帮助开发者减少伪需求的开发，帮助开发者避免无用功",
+            "logo": "fight-logo.png"
+          }
+        ]
+      },
+      {
+        "title": "技术文档",
+        "links": [
+          { "name": "TailwindCSS", "href": "https://tailwindcss.com/" },
+          { "name": "Next", "href": "https://nextjs.org/" },
+          { "name": "Prisma", "href": "https://www.prisma.io/" },
+          { "name": "DaisyUI", "href": "https://daisyui.com/" },
+          { "name": "NextAuth.js", "href": "https://next-auth.js.org/" }
+        ]
+      },
+      {
+        "title": "更多",
+        "links": [{ "name": "商用协议", "href": "/blog/commercial" }]
+      }
+    ]
+  }
+}

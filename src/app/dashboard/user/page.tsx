@@ -2,13 +2,25 @@
 import React, { useState } from 'react';
 import { config } from '@/config';
 import AddUserModal from './modal/AddUserModal';
+import { useMessages } from 'next-intl';
 
 export default function page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [user, setUser] = useState([]);
+
+  // 使用 next-intl 获取商品信息，与 PriceComponent 保持一致
+  const messages = useMessages();
+  const priceConfig = messages.Price as any;
+  const goodsObj = priceConfig.goods;
+  const goods = Object.keys(goodsObj).map((key) => ({
+    ...goodsObj[key],
+    key,
+  }));
+
+  // 创建商品哈希表以便快速查找
   const goodsHash = {};
-  config.goods.forEach((good) => {
+  goods.forEach((good) => {
     goodsHash[good.key] = good;
   });
 

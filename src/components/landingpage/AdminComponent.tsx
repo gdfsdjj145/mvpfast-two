@@ -2,9 +2,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function AdminComponent({ admin }: { admin: any }) {
-  const adminConfig = admin;
+  const t = useTranslations('Admin');
+  const messages = useMessages();
+  const adminConfig = messages.Admin as any;
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.div

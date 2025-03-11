@@ -2,31 +2,38 @@ import React from 'react';
 import { config } from '@/config';
 import { ImCheckmark2 } from 'react-icons/im';
 import { IoGiftOutline } from 'react-icons/io5';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function PriceComponent({ items }: { items: any }) {
-  const priceConfig = items;
-  const { goods } = config;
+  const t = useTranslations('Price');
+  const messages = useMessages();
+  const priceConfig = messages.Price as any;
+  const goodsObj = priceConfig.goods;
+  const goods = Object.keys(goodsObj).map((key) => ({
+    ...goodsObj[key],
+    key,
+  }));
   return (
     <section id="price" className="bg-white ">
       <div className="overflow-hidden ">
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <p className="text-base/7 font-semibold text-secondary mb-2">
-              {priceConfig.title}
+              {t('title')}
             </p>
             <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
-              {priceConfig.subtitle}
+              {t('subtitle')}
             </h2>
           </div>
           <div className="relative mt-6">
             <p className="text-sm md:text-base flex justify-center items-center gap-2 ">
               <span className="text-gray-500">
-                {priceConfig.description}
+                {t('description')}
                 <a
                   href="https://www.mvpfast.top/#price"
                   className="btn btn-secondary btn-outline btn-sm ml-3"
                 >
-                  立即购买
+                  {t('buy')}
                   <IoGiftOutline className="ml-2" />
                 </a>
               </span>
@@ -47,7 +54,7 @@ export default function PriceComponent({ items }: { items: any }) {
                     {good.mostPopular && (
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                         <span className="badge  badge-secondary text-xs badge-lg ">
-                          最多人购买
+                          {t('more')}
                           <span className="animate-bounce">🔥</span>
                         </span>
                       </div>
@@ -95,10 +102,10 @@ export default function PriceComponent({ items }: { items: any }) {
                       aria-describedby={good.key}
                       className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
                     >
-                      立刻购买 🚀
+                      {t('buy')} 🚀
                     </button>
                     <p className="text-center mt-4 text-gray-400">
-                      如有退款问题，可联系客服
+                      {t('tips')}
                     </p>
                   </div>
                 ))}

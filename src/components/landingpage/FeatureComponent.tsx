@@ -4,9 +4,12 @@ import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { CheckCircle, icons } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function FeatureComponent({ feature }: { feature: any }) {
-  const featureConfig = feature;
+  const t = useTranslations('Feature');
+  const messages = useMessages();
+  const featureConfig = messages.Feature as any;
   const [ref, isIntersecting] = useIntersectionObserver({
     threshold: 0.1,
     triggerOnce: true,
@@ -23,13 +26,13 @@ export default function FeatureComponent({ feature }: { feature: any }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
-            {featureConfig.title}
+            {t('title')}
           </h2>
           <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            {featureConfig.subtitle}
+            {t('subtitle')}
           </p>
           <p className="mt-10 text-lg leading-8 mb-12 text-gray-600">
-            {featureConfig.description}
+            {t('description')}
           </p>
         </div>
 
@@ -56,7 +59,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
                     {renderIcon(item.icon)}
                   </div>
                   <span className="font-medium text-sm md:text-base text-center">
-                    {item.name}
+                    {t(`items.${index}.name`)}
                   </span>
                 </button>
               ))}
@@ -75,7 +78,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
               >
                 <div className="max-w-3xl mx-auto">
                   <p className="font-bold text-gray-900 text-lg md:text-xl mb-8">
-                    {featureConfig.items[selectedFeature].description}
+                    {t(`items.${selectedFeature}.description`)}
                   </p>
                   <ul className="space-y-4">
                     {featureConfig.items[selectedFeature].list.map(
@@ -88,7 +91,9 @@ export default function FeatureComponent({ feature }: { feature: any }) {
                           className="flex items-start gap-4"
                         >
                           <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
-                          <span className="text-gray-600">{item}</span>
+                          <span className="text-gray-600">
+                            {t(`items.${selectedFeature}.list.${index}`)}
+                          </span>
                         </motion.li>
                       )
                     )}
