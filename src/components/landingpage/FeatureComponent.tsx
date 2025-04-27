@@ -90,7 +90,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
                           transition={{ duration: 0.3, delay: index * 0.1 }}
                           className="flex items-start gap-4"
                         >
-                          <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0 mt-1" />
+                          <CheckCircle className="w-5 h-5 text-secondary shrink-0 mt-1" />
                           <span className="text-gray-600">
                             {t(`items.${selectedFeature}.list.${index}`)}
                           </span>

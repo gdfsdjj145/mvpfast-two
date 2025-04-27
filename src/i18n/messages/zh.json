@@ -1,4 +1,9 @@
 {
+  "Metadata": {
+    "title": "MvpFast-快速构建网站应用",
+    "description": "这是一款能帮助你快速构建个人网站的应用，使用最新的前端技术栈，集成登录、鉴权、手机、邮箱、数据库、博客、文章、支付等等网站所需要的功能，你只需要花几个小时开发你的核心功能就可以上线，一次购买，永久拥有",
+    "keywords": "开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录"
+  },
   "Header": {
     "logo": {
       "url": "/title-logo.png",
@@ -8,7 +13,6 @@
       "items": [
         { "name": "价格", "href": "/#price" },
         { "name": "文档", "href": "/docs/introduction", "target": "_blank" },
-        { "name": "博客", "href": "/blog" },
         {
           "name": "关于我们",
           "href": "https://www.islandspage.com/EM-T",
@@ -234,7 +238,7 @@
           "前端代码（NextJs + Tailwindcss）",
           "微信公众号服务代码"
         ],
-        "price": 299,
+        "price": 0.1,
         "original": 399,
         "mostPopular": false,
         "href": "/pay?key=normal"
@@ -249,7 +253,7 @@
           "微信公众号服务代码",
           "从0到1的Nextjs全栈开发课程"
         ],
-        "price": 399,
+        "price": 0.1,
         "original": 449,
         "mostPopular": true,
         "href": "/pay?key=most"

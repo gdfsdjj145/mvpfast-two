@@ -2,7 +2,7 @@ import React, { useEffect, useState, Suspense, useRef } from 'react';
 import { get } from '@/app/services/index';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { createQrCode, checkQrCode } from '@/app/auth/signin/actions';
+import { createQrCode, checkQrCode } from '@/app/[local]/auth/signin/actions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 

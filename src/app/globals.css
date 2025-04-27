@@ -1,60 +1,77 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+  .font-xft {
+    font-family: var(--font-xft), sans-serif;
   }
 }
 
-:root {
-  --p: #9462ff;
-}
 
-[data-theme='dark'] {
-  --p: #9462ff;
-}
-
-html {
-  scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */
-  scrollbar-width: thin; /* 滚动条宽度 */
-}
- 
-/* 修改特定容器的滚动条样式 */
-.scrollbar-style {
-  scrollbar-color: #e8e8e8;
-  scrollbar-width: thin;
-  scroll-behavior: smooth; /* 平滑滚动 */
-}
-
-.scrollbar-style::-webkit-scrollbar {
-  width: 12px; /* 对于Google Chrome、Safari和新版的Firefox */
-}
- 
-.scrollbar-style::-webkit-scrollbar-track {
-  background: #2e2e2e; /* 对于Google Chrome、Safari和新版的Firefox */
-}
- 
-.scrollbar-style::-webkit-scrollbar-thumb {
-  background: #ff6347; /* 对于Google Chrome、Safari和新版的Firefox */
-}
- 
-.scrollbar-style {
-  scroll-behavior: smooth; /* 平滑滚动 */
-}
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+    }
+  }
+
+  :root {
+    --p: #9462ff;
+  }
+
+  [data-theme='dark'] {
+    --p: #9462ff;
+  }
+
+  html {
+    scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */
+    scrollbar-width: thin; /* 滚动条宽度 */
+  }
+
+  /* 修改特定容器的滚动条样式 */
+  .scrollbar-style {
+    scrollbar-color: #e8e8e8;
+    scrollbar-width: thin;
+    scroll-behavior: smooth; /* 平滑滚动 */
+  }
+
+  .scrollbar-style::-webkit-scrollbar {
+    width: 12px; /* 对于Google Chrome、Safari和新版的Firefox */
+  }
+
+  .scrollbar-style::-webkit-scrollbar-track {
+    background: #2e2e2e; /* 对于Google Chrome、Safari和新版的Firefox */
+  }
+
+  .scrollbar-style::-webkit-scrollbar-thumb {
+    background: #ff6347; /* 对于Google Chrome、Safari和新版的Firefox */
+  }
+
+  .scrollbar-style {
+    scroll-behavior: smooth; /* 平滑滚动 */
   }
 }
 

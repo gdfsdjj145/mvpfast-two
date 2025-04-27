@@ -1,18 +1,28 @@
-import { getRequestConfig } from 'next-intl/server';
-import { cookies } from 'next/headers';
+import {getRequestConfig} from 'next-intl/server';
+import {routing} from './routing';
+ 
+export default getRequestConfig(async ({requestLocale}) => {
+  // Typically corresponds to the `[locale]` segment
+  const requested = await requestLocale;
+  const locale = routing.locales.some(loc => loc === requested)
+    ? requested
+    : routing.defaultLocale;
+ 
+  // 加载所有消息文件
+  const [baseMessages, dashboardMessages] = await Promise.all([
+    import(`./messages/${locale}.json`),
+    import(`./messages/dashboard/${locale}.json`)
+  ]);
 
-export default getRequestConfig(async () => {
-  let locale = 'zh';
+  // 合并消息
+  const messages = {
+    ...baseMessages.default,
+    ...dashboardMessages.default
+  };
 
-  // 从 cookie 中读取语言设置
-  const cookieStore = cookies();
-  const savedLocale = cookieStore.get('locale');
-  if (savedLocale) {
-    locale = savedLocale.value;
-  }
-
+  console.log('locale', locale);
   return {
     locale,
-    messages: (await import(`./messages/${locale}.json`)).default,
+    messages
   };
 });

@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { verifyCode } from './app/auth/signin/actions';
+import { verifyCode } from './app/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
 
 import prisma from './lib/prisma';
@@ -39,52 +39,49 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         console.log('credentials', credentials);
 
-        const verifyState = await verifyCode(type as string, {
-          identifier,
-          code,
-        });
-
-        if (verifyState || type === 'wx') {
-          let res = null;
-          const params = {
-            email: null,
-            wechatOpenId: null,
-            phone: null,
-            nickName: '',
-            createdDate: new Date(),
-          };
-          if (type === 'email') {
-            res = await prisma.user.findFirst({
-              where: {
-                email: identifier as string,
-              },
-            });
-            params.email = identifier as string;
-          }
-          if (type === 'phone') {
-            res = await prisma.user.findFirst({
-              where: {
-                phone: identifier as string,
-              },
-            });
-            params.phone = identifier as string;
-          }
-          if (type === 'wx') {
-            res = await prisma.user.findFirst({
-              where: {
-                wechatOpenId: identifier as string,
-              },
-            });
-            params.wechatOpenId = identifier as string;
-          }
+        if (type === 'wx') {
+          const res = await prisma.user.findFirst({
+            where: {
+              wechatOpenId: identifier as string,
+            },
+          });
           if (res) {
             return res;
-          } else {
-            params.nickName = getGeneratorName();
-            const newUser = await prisma.user.create({
-              data: params,
-            });
-            return newUser;
+          }
+        } else {
+          if (verifyState) {
+            let res = null;
+            const params = {
+              email: null,
+              wechatOpenId: null,
+              phone: null,
+              nickName: ''
+            };
+            if (type === 'email') {
+              res = await prisma.user.findFirst({
+                where: {
+                  email: identifier as string,
+                },
+              });
+              params.email = identifier as string;
+            }
+            if (type === 'phone') {
+              res = await prisma.user.findFirst({
+                where: {
+                  phone: identifier as string,
+                },
+              });
+              params.phone = identifier as string;
+            }
+            if (res) {
+              return res;
+            } else {
+              params.nickName = getGeneratorName();
+              const newUser = await prisma.user.create({
+                data: params,
+              });
+              return newUser;
+            }
           }
         }
       },
@@ -96,9 +93,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
     maxAge: 2 * 60 * 60, // 2小时
     updateAge: 60 * 60,
-  },
-  pages: {
-    signIn: '/auth/signin',
   },
   cookies: {
     sessionToken: {

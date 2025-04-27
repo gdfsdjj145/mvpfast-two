@@ -1,0 +1,110 @@
+---
+title: API参考文档
+description: 详细的API接口说明与示例
+---
+
+# API参考文档
+
+本文档提供了所有可用API端点的详细说明与示例代码。
+
+## 认证
+
+所有API请求需要通过Bearer令牌进行认证。您可以在开发者控制台生成API密钥。
+
+```javascript
+// 请求示例
+fetch('https://api.example.com/v1/users', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  }
+})
+```
+
+## 用户接口
+
+### 获取用户列表
+
+```http
+GET /api/v1/users
+```
+
+查询参数:
+
+| 参数 | 类型 | 描述 |
+| ---- | ---- | ---- |
+| page | 整数 | 页码，默认为1 |
+| limit | 整数 | 每页记录数，默认为10 |
+| sort | 字符串 | 排序字段，例如`name:asc` |
+
+响应示例:
+
+```json
+{
+  "data": [
+    {
+      "id": "user_123",
+      "name": "张三",
+      "email": "zhangsan@example.com",
+      "createdAt": "2023-05-15T08:30:00Z"
+    },
+    // ...更多用户
+  ],
+  "pagination": {
+    "total": 42,
+    "page": 1,
+    "limit": 10,
+    "pages": 5
+  }
+}
+```
+
+### 创建用户
+
+```http
+POST /api/v1/users
+```
+
+请求体:
+
+```json
+{
+  "name": "李四",
+  "email": "lisi@example.com",
+  "password": "secure_password"
+}
+```
+
+## 错误处理
+
+所有API错误响应遵循以下格式:
+
+```json
+{
+  "error": {
+    "code": "invalid_request",
+    "message": "请求参数无效",
+    "details": [
+      {"field": "email", "message": "邮箱格式不正确"}
+    ]
+  }
+}
+```
+
+## 速率限制
+
+API请求受到速率限制保护，默认限制为每分钟60次请求。您可以在响应头中查看剩余配额:
+
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 58
+X-RateLimit-Reset: 1620000000
+```
+
+## 其他资源
+
+<Cards>
+  <Card title="认证指南" href="/docs/api-authentication" />
+  <Card title="Webhook集成" href="/docs/webhooks" />
+  <Card title="SDK文档" href="/docs/sdk-reference" />
+</Cards> 

@@ -56,7 +56,7 @@ export default function CaseComponent({ items }: { items: any }) {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl bg-clip-text text-transparent bg-linear-to-r from-purple-600 to-pink-600">
             {t('title')}
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
@@ -83,7 +83,7 @@ export default function CaseComponent({ items }: { items: any }) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div
-                className={`absolute inset-0 -z-10 bg-gradient-to-t ${item.gradient} opacity-70 transition-colors duration-300`}
+                className={`absolute inset-0 -z-10 bg-linear-to-t ${item.gradient} opacity-70 transition-colors duration-300`}
               />
               <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
 
@@ -92,7 +92,7 @@ export default function CaseComponent({ items }: { items: any }) {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded"
+                  className="group outline-hidden focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 rounded-sm"
                 >
                   <span className="absolute inset-0" />
                   {t(`items.${index}.title`)}

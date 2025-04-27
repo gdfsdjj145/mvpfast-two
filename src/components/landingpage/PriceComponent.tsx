@@ -97,13 +97,13 @@ export default function PriceComponent({ items }: { items: any }) {
                         ))}
                       </ul>
                     </div>
-                    <button
-                      disabled
+                    <a
                       aria-describedby={good.key}
-                      className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+                      className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-xs  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
+                      href={`/pay?key=${good.key}`}
                     >
                       {t('buy')} 🚀
-                    </button>
+                    </a>
                     <p className="text-center mt-4 text-gray-400">
                       {t('tips')}
                     </p>

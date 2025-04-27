@@ -4,10 +4,10 @@ export const config = {
   db: true,
   // 登录集成功能
   // 首次以微信登录为主
-  loginType: 'email',
+  loginType: 'wx',
   // 登录方式 最少一个
   // wx 微信登录  phone 手机登录 email 邮箱登录
-  loginTypes: ['email'],
+  loginTypes: ['wx'],
   // 支付方式
   payConfig: [
     {

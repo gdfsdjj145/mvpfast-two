@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
 import { paySign } from '@/lib/pay/sign';
-import { checkYungouOrderStatus } from '@/app/pay/actions';
+import { checkYungouOrderStatus } from '@/app/[local]/pay/actions';
 
 interface WeChatPayQRCodeProps {
   orderId: string;
@@ -63,7 +63,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
           data: {
             qrCodeUrl: data.data,
             outTradeNo: outTradeNo,
-            createdAt: new Date().toLocaleString(),
+            created_time: new Date().toLocaleString(),
           },
         };
       } else {
@@ -76,7 +76,7 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
       }
       onCreateOrder({
         orderId: resData.data.outTradeNo,
-        createdAt: resData.data.createdAt,
+        created_time: resData.data.created_time,
         sign: sign,
       });
       setQrCodeUrl(resData.data.qrCodeUrl);

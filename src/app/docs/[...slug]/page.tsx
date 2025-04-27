@@ -1,39 +1,46 @@
-import { allDocPages } from 'contentlayer/generated';
-import DocPageClient from './DocPageClient';
+import { source } from '../../../../source';
+import {
+  DocsBody,
+  DocsDescription,
+  DocsPage,
+  DocsTitle,
+} from 'fumadocs-ui/page';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
-
-// 缓存文档查找函数
-const getDoc = (slug: string) => {
-  return allDocPages.find((doc) => doc.url === `/docs/${slug}`);
-};
-
-export const generateStaticParams = async () => {
-  return allDocPages.map((doc) => ({
-    slug: doc.url.replace('/docs/', '').split('/'),
-  }));
-};
-
-// 只保留有效的静态生成配置
-export const dynamic = 'force-static';
-export const revalidate = false;
-export const fetchCache = 'force-cache';
-export const runtime = 'nodejs';
-export const preferredRegion = 'auto';
-
-const DocPage = ({ params }: { params: { slug: string[] } }) => {
-  const slug = params.slug.join('/');
-  const doc = getDoc(slug);
-
-  if (!doc) {
-    notFound();
-  }
-
+import { getMDXComponents } from '../../../components/mdx-components';
+ 
+export default async function Page(props: {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+  if (!page) notFound();
+ 
+  const MDX = page.data.body;
+ 
   return (
-    <Suspense fallback={null}>
-      <DocPageClient doc={doc} />
-    </Suspense>
+    <DocsPage toc={page.data.toc} full={page.data.full}>
+      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsBody>
+        <MDX components={getMDXComponents()} />
+      </DocsBody>
+    </DocsPage>
   );
-};
-
-export default DocPage;
+}
+ 
+export async function generateStaticParams() {
+  return source.generateParams();
+}
+ 
+export async function generateMetadata(props: {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+  if (!page) notFound();
+ 
+  return {
+    title: page.data.title,
+    description: page.data.description,
+  };
+}

@@ -1,4 +1,9 @@
 {
+  "Metadata": {
+    "title": "MvpFast-Build your web application in a day",
+    "description": "This is a template demo, using the template will save you a lot of time",
+    "keywords": "MvpFast template, NextJs, React, TailwindCss, Mongdb, Atlas, Wechat, WeChat public account, NextAuth, website development, Saas template, WeChat login"
+  },
   "Header": {
     "logo": {
       "url": "/title-logo.png",
@@ -8,7 +13,6 @@
       "items": [
         { "name": "Pricing", "href": "/#price" },
         { "name": "Docs", "href": "/docs/introduction", "target": "_blank" },
-        { "name": "Blog", "href": "/blog" },
         {
           "name": "About Us",
           "href": "https://www.islandspage.com/EM-T",

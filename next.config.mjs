@@ -1,5 +1,9 @@
-import { withContentlayer } from 'next-contentlayer'
+import { createMDX } from 'fumadocs-mdx/next';
 import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin();
+
+const withMDX = createMDX({});
 
 /** @type {import('next').NextConfig} */
 
@@ -24,7 +28,7 @@ const nextConfig = {
       },
     ],
   },
-  async headers () {
+  async headers() {
     return [
       {
         source: '/:path*',
@@ -52,7 +56,5 @@ const nextConfig = {
   },
 };
 
-const withNextIntl = createNextIntlPlugin();
-
-export default withContentlayer(withNextIntl(nextConfig));
+export default withMDX(withNextIntl(nextConfig));
 

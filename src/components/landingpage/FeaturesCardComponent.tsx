@@ -34,12 +34,12 @@ export default function FeaturesSection({ features = [] }: FeaturesSection) {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`grid gap-8 lg:gap-12 items-center ${
                 index % 2 === 0
-                  ? 'lg:grid-cols-[1fr,1.2fr]'
-                  : 'lg:grid-cols-[1.2fr,1fr]'
+                  ? 'lg:grid-cols-[1fr_1.2fr]'
+                  : 'lg:grid-cols-[1.2fr_1fr]'
               }`}
             >
               <div className={index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+                <div className="relative aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
                   <Image
                     src={feature.image.src}
                     alt={feature.image.alt || ''}
