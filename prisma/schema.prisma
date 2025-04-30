@@ -38,12 +38,12 @@ model Promotion {
 model User {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   /// Could not determine type: the field only had null or empty values in the sample set.
-  avatar       Json?
+  avatar       String?
   created_time DateTime @db.Date @default(now())
   email        String?
   nickName     String
   /// Could not determine type: the field only had null or empty values in the sample set.
-  phone        Json?
+  phone        String?
   wechatOpenId String?
 
   @@unique([wechatOpenId, phone, email])
