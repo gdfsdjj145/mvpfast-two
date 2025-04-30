@@ -20,34 +20,39 @@ const intlMiddleware = createMiddleware({
 });
 
 export async function middleware(request: NextRequest) {
-  // 获取URL来确定是否处理国际化
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
   
-  // 跳过对API路由和Next.js静态文件的国际化处理
-  const shouldHandleLocale = !pathname.startsWith('/api/') && 
-                              !pathname.startsWith('/_next/') && 
-                              !pathname.startsWith('/docs') &&
-                              !pathname.startsWith('/blog') &&
-                              !pathname.includes('.');
+  // 设置进度条头
+  const response = NextResponse.next();
+  response.headers.set('X-Progress-Start', 'true');
   
-  // 处理国际化路由
-  if (shouldHandleLocale) {
-    const response = intlMiddleware(request);
-
-    // 如果intlMiddleware有返回，表示它处理了请求(如重定向)，直接返回结果
-    if (response) {
-      // 设置一个自定义头部来触发客户端的进度条
-      response.headers.set('X-Progress-Start', 'true');
-      return response;
+  // 提取可能存在的语言前缀之后的实际路径
+  let pathnameWithoutLocale = pathname;
+  let currentLocale = '';
+  
+  for (const locale of routing.locales) {
+    if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
+      pathnameWithoutLocale = pathname.replace(new RegExp(`^/${locale}`), '');
+      currentLocale = locale;
+      break;
     }
   }
-
-  // 对于不需要处理国际化的路由，使用原来的中间件逻辑
-  const response = NextResponse.next();
-
-  // 设置一个自定义头部来触发客户端的进度条
-  response.headers.set('X-Progress-Start', 'true');
-
+  
+  // 跳过对API路由和Next.js静态文件的特殊处理
+  if (
+    pathname.startsWith('/api/') || 
+    pathname.startsWith('/_next/') || 
+    pathname.startsWith('/docs') ||
+    pathname.includes('.')
+  ) {
+    return response;
+  }
+  
+  // 调试日志
+  console.log('当前路径:', pathname);
+  console.log('去除语言前缀后的路径:', pathnameWithoutLocale);
+  
+  // 验证用户认证状态
   const secret = process.env.NEXTAUTH_SECRET;
   if (!secret) {
     throw new Error('NEXTAUTH_SECRET is not set');
@@ -63,23 +68,40 @@ export async function middleware(request: NextRequest) {
   if (!token) {
     const sessionToken = request.cookies.get('next-auth.session-token');
     if (sessionToken) {
-      // 这里只是简单地将cookie值赋给token
-      // 实际使用时可能需要进行更复杂的解析和验证
       token = { sessionToken: sessionToken.value } as JWT;
     }
   }
 
-  const { search } = request.nextUrl;
-  const fullPath = `${pathname}${search}`;
-
-  // 调试日志
-  console.log('当前路径:', pathname);
   console.log('token状态:', !!token);
-
+  
+  // 检查当前路径是否在公开路由列表中
+  if (publicRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+    // 公开路由直接通过国际化中间件处理
+    return intlMiddleware(request);
+  }
+  
+  // 检查当前路径是否在需要保护的路由列表中
+  if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+    if (!token) {
+      console.log('未登录访问受保护路由，重定向到登录页');
+      
+      // 构造登录URL时保留语言前缀
+      let loginPath = '/auth/signin';
+      if (currentLocale) {
+        loginPath = `/${currentLocale}/auth/signin`;
+      }
+      
+      const loginUrl = new URL(loginPath, request.url);
+      loginUrl.searchParams.set('redirect', `${pathname}${search}`);
+      console.log('重定向到:', loginUrl.toString());
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+  
   // 处理登录成功后的重定向
   if (
-    pathname === '/api/auth/signin/credentials' ||
-    pathname === '/api/auth/session'
+    pathnameWithoutLocale === '/api/auth/signin/credentials' ||
+    pathnameWithoutLocale === '/api/auth/session'
   ) {
     const callbackUrl = request.nextUrl.searchParams.get('redirect');
     if (callbackUrl) {
@@ -93,30 +115,21 @@ export async function middleware(request: NextRequest) {
   if (
     token &&
     redirectParam &&
-    protectedRoutes.some((route) => redirectParam.startsWith(route))
+    protectedRoutes.some((route) => {
+      // 检查重定向参数是否包含受保护路由，考虑可能的语言前缀
+      for (const locale of routing.locales) {
+        if (redirectParam.startsWith(`/${locale}${route}`)) {
+          return true;
+        }
+      }
+      return redirectParam.startsWith(route);
+    })
   ) {
     return NextResponse.redirect(new URL(redirectParam, request.url));
   }
 
-  // 检查当前路径是否在公开路由列表中
-  if (publicRoutes.some((route) => pathname.startsWith(route))) {
-    return response;
-  }
-
-
-  // 检查当前路径是否在需要保护的路由列表中
-  if (protectedRoutes.some((route) => pathname.startsWith(route))) {
-    if (!token) {
-      console.log('未登录访问受保护路由，重定向到登录页');
-      const loginUrl = new URL('/auth/signin', request.url);
-      // 修复重定向URL格式，移除多余的/
-      loginUrl.searchParams.set('redirect', `${pathname}${search}`);
-      return NextResponse.redirect(loginUrl);
-    }
-  }
-
-  // 对于所有其他路由，允许访问
-  return response;
+  // 通过国际化中间件处理其他所有路由
+  return intlMiddleware(request);
 }
 
 export const config = {
