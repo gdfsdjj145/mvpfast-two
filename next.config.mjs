@@ -40,20 +40,7 @@ const nextConfig = {
         ],
       },
     ]
-  },
-  webpack: (config, { isServer }) => {
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader',
-    });
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        'supports-color': false,
-      };
-    }
-    return config;
-  },
+  }
 };
 
 export default withMDX(withNextIntl(nextConfig));
