@@ -67,7 +67,9 @@ export default function CaseComponent({ items }: { items: any }) {
           {caseConfig.items.map((item, index) => (
             <article
               key={item.id}
-              ref={(el) => (postRefs.current[index] = el)}
+              ref={el => {
+                (postRefs.current[index] = el);
+              }}
               className={`relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80 opacity-0 translate-y-10 transition-all duration-700 ease-out shadow-lg hover:shadow-2xl`}
               style={{
                 transitionDelay: `${index * 100}ms`,

@@ -10,14 +10,6 @@ const withMDX = createMDX({});
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['framer-motion'],
-  swcMinify: true,
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-    esmExternals: 'loose'
-  },
-  serverOptions: {
-    maxHeaderSize: 32768,
-  },
   images: {
     unoptimized: true,
     domains: ['localhost'],

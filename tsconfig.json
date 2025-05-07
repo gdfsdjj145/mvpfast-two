@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "strict": false,
     "skipLibCheck": true,
     "noEmitOnError": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "strictFunctionTypes": false,
+    "strictFunctionTypes": true,
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
@@ -26,11 +30,25 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@prisma/client": ["./prisma/client"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@prisma/client": [
+        "./prisma/client"
+      ]
+    },
+    "target": "ES2017",
+    "types": [
+      "framer-motion"
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".contentlayer/generated"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

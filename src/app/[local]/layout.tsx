@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
-import dynamic from 'next/dynamic';
 import '../globals.css';
 import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
@@ -13,10 +12,6 @@ import { ThemeProviders } from '@/components/theme/ThemeProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
-
-const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
-  ssr: false,
-});
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,7 +24,13 @@ const fonts = localFont({
   variable: '--font-xft',
 });
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: string }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const t = await getTranslations('Metadata');
   return {
     title: t('title'),
@@ -65,7 +66,6 @@ export default async function RootLayout({
   return (
     <html lang="zh">
       <body className={cn(fonts.variable, inter.className)}>
-        <PageProgressBar />
         <NextIntlClientProvider locale={locale} messages={messages}>
             <ThemeProviders attribute="data-theme" defaultTheme="light">
               <SessionProvider>
@@ -88,7 +88,6 @@ export default async function RootLayout({
             gtag('config', 'G-B315FBSZWP');
           `}
         </Script>
-        {/* <WeSdk></WeSdk> */}
       </body>
     </html>
   );
