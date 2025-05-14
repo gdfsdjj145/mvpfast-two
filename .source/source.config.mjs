@@ -9,6 +9,16 @@ var docs = defineDocs({
     // options for `meta` collection
   }
 });
+var blogs = defineDocs({
+  dir: "content/blog",
+  docs: {
+    // options for `blog` collection
+  },
+  meta: {
+    // options for `meta` collection
+  }
+});
 export {
+  blogs,
   docs
 };

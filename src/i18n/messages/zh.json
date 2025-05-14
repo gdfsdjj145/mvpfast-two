@@ -13,6 +13,7 @@
       "items": [
         { "name": "价格", "href": "/#price" },
         { "name": "文档", "href": "/docs/introduction", "target": "_blank" },
+        { "name": "博客", "href": "/blog", "target": "_blank" },
         {
           "name": "关于我们",
           "href": "https://www.islandspage.com/EM-T",

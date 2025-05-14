@@ -43,6 +43,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/api/') || 
     pathname.startsWith('/_next/') || 
     pathname.startsWith('/docs') ||
+    pathname.startsWith('/blog') ||
     pathname.includes('.')
   ) {
     return response;

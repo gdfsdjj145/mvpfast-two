@@ -9,3 +9,13 @@ export const docs = defineDocs({
     // options for `meta` collection
   },
 });
+
+export const blogs = defineDocs({
+  dir: 'content/blog',
+  docs: {
+    // options for `blog` collection
+  },
+  meta: {
+    // options for `meta` collection
+  },
+});
