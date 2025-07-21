@@ -28,11 +28,24 @@ model Order {
 }
 
 model PayOrder {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time  DateTime @db.Date
+  identifier String
+  orderType  String
+  price      Float
+  sign       String?
+  status     String
 }
 
+
 model Promotion {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  checkout       Boolean  @default(false)
+  created_time   DateTime @db.Date @default(now())
+  identifier     String
+  orderType      String
+  promotionPrice Float
+  purchaser      String
 }
 
 model User {
@@ -65,8 +78,3 @@ model VerificationWxQrCode {
   openId       String?
 }
 
-model mvpfast_demo {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  @@map("mvpfast-demo")
-}

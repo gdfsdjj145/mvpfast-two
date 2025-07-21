@@ -1,21 +1,21 @@
 // source.config.ts
-import { defineDocs } from "fumadocs-mdx/config";
+import { frontmatterSchema, metaSchema, defineDocs } from "fumadocs-mdx/config";
+import { z } from "zod";
 var docs = defineDocs({
-  dir: "content/docs",
-  docs: {
-    // options for `doc` collection
-  },
-  meta: {
-    // options for `meta` collection
-  }
+  dir: "content/docs"
 });
 var blogs = defineDocs({
   dir: "content/blog",
   docs: {
-    // options for `blog` collection
+    schema: frontmatterSchema.extend({
+      index: z.boolean().default(false),
+      date: z.date()
+    })
   },
   meta: {
-    // options for `meta` collection
+    schema: metaSchema.extend({
+      // other props
+    })
   }
 });
 export {

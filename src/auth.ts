@@ -39,6 +39,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         console.log('credentials', credentials);
 
+        const verifyState = await verifyCode(type as string, {
+          identifier,
+          code,
+        });
+
         if (type === 'wx') {
           const res = await prisma.user.findFirst({
             where: {

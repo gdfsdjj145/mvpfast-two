@@ -67,6 +67,7 @@
     "shiki": "^1.23.1",
     "supports-color": "^8.1.1",
     "wechatpay-node-v3": "^2.2.1",
+    "zod": "^3.25.76",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

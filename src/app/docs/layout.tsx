@@ -5,8 +5,12 @@ import { baseOptions } from '../layout.config';
  
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <DocsLayout tree={source.pageTree} {...baseOptions}>
-      {children}
-    </DocsLayout>
+       // @ts-ignore
+       <DocsLayout
+       tree={source.pageTree}
+       {...baseOptions}
+       >
+         {children}
+       </DocsLayout>
   );
 }
