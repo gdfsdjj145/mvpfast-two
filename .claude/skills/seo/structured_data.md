@@ -1,7 +1,7 @@
 ---
 name: structured_data
 description: JSON-LD 结构化数据配置指南
-author: Claude Code
+author: MvpFast
 ---
 
 # JSON-LD 结构化数据指南

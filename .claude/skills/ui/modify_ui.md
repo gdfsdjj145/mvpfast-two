@@ -1,7 +1,7 @@
 ---
 name: modify_ui
 description: 根据用户 UI 描述，使用 DaisyUI 5 和 Tailwind CSS 4 给出优化建议和代码
-author: Claude Code
+author: MvpFast
 ---
 
 # UI 修改与优化指南

@@ -1,7 +1,7 @@
 ---
 name: design_data_model
 description: 根据自然语言业务描述，反推数据模型并生成 Prisma Schema
-author: Claude Code
+author: MvpFast
 ---
 
 # 数据模型设计技能

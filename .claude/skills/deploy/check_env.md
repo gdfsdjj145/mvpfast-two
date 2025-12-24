@@ -1,7 +1,7 @@
 ---
 name: check_env
 description: 检查项目启动和部署所需的环境变量配置
-author: Claude Code
+author: MvpFast
 ---
 
 # 环境变量检查指南
