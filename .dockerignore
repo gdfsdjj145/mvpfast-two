@@ -1,0 +1,86 @@
+# ===========================================
+# MVP Fast Web - Docker Ignore
+# ===========================================
+
+# 依赖目录
+node_modules
+.pnpm-store
+
+# 构建输出
+.next
+out
+dist
+build
+
+# 测试相关
+coverage
+.vitest
+__tests__
+
+# 开发工具
+.git
+.gitignore
+.github
+.vscode
+.idea
+*.swp
+*.swo
+
+# 环境配置 (敏感信息)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Docker 相关 (避免递归)
+Dockerfile*
+docker-compose*
+.docker
+
+# 文档和配置
+README.md
+CLAUDE.md
+TODO.md
+CHANGELOG.md
+LICENSE
+*.log
+
+# TypeScript 构建信息
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# OS 生成的文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 调试日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 编辑器备份
+*~
+*.bak
+*.backup
+
+# MCP 服务器 (可选排除)
+# mcp/
+
+# 测试配置
+vitest.config.ts
+vitest.setup.ts
+
+# ESLint 和 Prettier
+.eslintrc*
+.prettierrc*
+eslint.config.mjs
+
+# Husky (Git Hooks)
+.husky/

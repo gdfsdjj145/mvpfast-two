@@ -7,7 +7,14 @@ import { toast } from 'react-hot-toast';
 
 export default function OrderPage() {
   const { data: session, status } = useSession();
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<{
+    id: string;
+    name: string;
+    price: number;
+    orderId: string;
+    transactionId: string;
+    created_time: Date;
+  }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -75,7 +82,7 @@ export default function OrderPage() {
       if (result.success) {
         toast.success('删除成功');
         // 刷新订单列表
-        const ordersResult = await getOrdersByUserId(session?.user?.id);
+        const ordersResult = await getOrdersByUserId(session?.user?.id ?? '');
         setOrders(ordersResult.data || []);
       } else {
         toast.error('删除失败');

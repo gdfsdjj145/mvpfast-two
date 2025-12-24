@@ -14,9 +14,9 @@ export default function PriceComponent({ items }: { items: any }) {
     key,
   }));
   return (
-    <section id="price" className="bg-white ">
-      <div className="overflow-hidden ">
-        <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
+    <section id="price" className="bg-white">
+      <div className="overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-96 pt-16 sm:pt-24 lg:pt-32 text-center">
           <div className="mx-auto max-w-4xl">
             <p className="text-base/7 font-semibold text-secondary mb-2">
               {t('title')}
@@ -40,10 +40,10 @@ export default function PriceComponent({ items }: { items: any }) {
             </p>
           </div>
         </div>
-        <div className="flow-root bg-white pb-24 sm:pb-32">
+        <div className="flow-root bg-white pb-16 sm:pb-24 lg:pb-32">
           <div className="-mt-80">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto grid max-w-md grid-cols-1 gap-6 sm:gap-8 md:max-w-3xl md:grid-cols-2 lg:max-w-5xl xl:max-w-6xl xl:grid-cols-2">
                 {goods.map((good) => (
                   <div
                     key={good.key}
@@ -86,7 +86,7 @@ export default function PriceComponent({ items }: { items: any }) {
                         role="list"
                         className="mt-10 space-y-4 text-sm/6 text-gray-600"
                       >
-                        {good.includedFeatures.map((feature) => (
+                        {good.includedFeatures.map((feature: string) => (
                           <li key={feature} className="flex gap-x-3">
                             <ImCheckmark2
                               aria-hidden="true"

@@ -5,16 +5,16 @@
       "dom.iterable",
       "esnext"
     ],
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
     "noEmitOnError": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "strictBindCallApply": false,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-    "alwaysStrict": false,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
     "allowJs": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -49,6 +49,7 @@
     ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "vitest.config.ts"
   ]
 }

@@ -16,7 +16,8 @@ const Table = ({
     totalPages: number;
   } | null;
 }) => {
-  const handlePageChange = (type) => {
+  const handlePageChange = (type: 'prev' | 'next') => {
+    if (!pagination) return;
     let page = pagination.page;
     if (type === 'prev') {
       page--;

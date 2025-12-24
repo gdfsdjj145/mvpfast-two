@@ -2,7 +2,50 @@
   "Metadata": {
     "title": "MvpFast-Build your web application in a day",
     "description": "This is a template demo, using the template will save you a lot of time",
-    "keywords": "MvpFast template, NextJs, React, TailwindCss, Mongdb, Atlas, Wechat, WeChat public account, NextAuth, website development, Saas template, WeChat login"
+    "keywords": "MvpFast template, NextJs, React, TailwindCss, Mongdb, Atlas, Wechat, WeChat public account, NextAuth, website development, Saas template, WeChat login",
+    "og": {
+      "siteName": "MvpFast",
+      "type": "website"
+    },
+    "twitter": {
+      "card": "summary_large_image"
+    }
+  },
+  "Pages": {
+    "pricing": {
+      "title": "Pricing",
+      "description": "Choose the MvpFast plan that suits you, one-time purchase for lifetime use",
+      "keywords": "pricing, plans, purchase, MvpFast"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Technical articles, product updates and development tutorials",
+      "keywords": "blog, articles, tutorials, NextJs"
+    },
+    "docs": {
+      "title": "Documentation",
+      "description": "MvpFast user guide and API documentation",
+      "keywords": "docs, guide, API, tutorials"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Manage your account and orders",
+      "noIndex": true
+    },
+    "auth": {
+      "title": "Sign In",
+      "description": "Sign in to your MvpFast account",
+      "noIndex": true
+    },
+    "pay": {
+      "title": "Payment",
+      "description": "Complete your MvpFast purchase",
+      "noIndex": true
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "Sorry, the page you are looking for does not exist"
+    }
   },
   "Header": {
     "logo": {

@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import NextAuth, { type DefaultSession } from 'next-auth';
+import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode } from './app/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
@@ -16,30 +16,46 @@ declare module 'next-auth' {
       wechatOpenId?: string | null;
       nickName?: string | null;
       avatar?: string | null;
-      // 其他需要的属性
     };
   }
 
   interface User {
-    phone?: string;
-    wechatOpenId?: string;
+    phone?: string | null;
+    wechatOpenId?: string | null;
     role?: string;
-    nickName?: string;
-    avatar?: string;
-    // 其他需要的属性
+    nickName?: string | null;
+    avatar?: string | null;
   }
+}
+
+interface UserParams {
+  email: string | null;
+  wechatOpenId: string | null;
+  phone: string | null;
+  nickName: string;
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
       id: 'credentials',
-      async authorize(credentials) {
-        const { identifier, code, type } = credentials;
+      async authorize(credentials): Promise<{
+        id: string;
+        email: string | null;
+        phone: string | null;
+        wechatOpenId: string | null;
+        nickName: string | null;
+        avatar: string | null;
+      } | null> {
+        const { identifier, code, type } = credentials as {
+          identifier: string;
+          code: string;
+          type: string;
+        };
 
         console.log('credentials', credentials);
 
-        const verifyState = await verifyCode(type as string, {
+        const verifyState = await verifyCode(type, {
           identifier,
           code,
         });
@@ -47,7 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (type === 'wx') {
           const res = await prisma.user.findFirst({
             where: {
-              wechatOpenId: identifier as string,
+              wechatOpenId: identifier,
             },
           });
           if (res) {
@@ -56,7 +72,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } else {
           if (verifyState) {
             let res = null;
-            const params = {
+            const params: UserParams = {
               email: null,
               wechatOpenId: null,
               phone: null,
@@ -65,18 +81,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (type === 'email') {
               res = await prisma.user.findFirst({
                 where: {
-                  email: identifier as string,
+                  email: identifier,
                 },
               });
-              params.email = identifier as string;
+              params.email = identifier;
             }
             if (type === 'phone') {
               res = await prisma.user.findFirst({
                 where: {
-                  phone: identifier as string,
+                  phone: identifier,
                 },
               });
-              params.phone = identifier as string;
+              params.phone = identifier;
             }
             if (res) {
               return res;
@@ -89,6 +105,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
           }
         }
+        return null;
       },
     }),
   ],
@@ -118,12 +135,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (user) {
-          session.user.id = user.id;
-          session.user.email = user.email;
-          session.user.phone = user.phone;
-          session.user.wechatOpenId = user.wechatOpenId;
-          session.user.avatar = user.avatar;
-          session.user.nickName = user.nickName;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (session.user as any).id = user.id;
+          (session.user as any).email = user.email;
+          (session.user as any).phone = user.phone;
+          (session.user as any).wechatOpenId = user.wechatOpenId;
+          (session.user as any).avatar = user.avatar;
+          (session.user as any).nickName = user.nickName;
         }
       }
       return session;

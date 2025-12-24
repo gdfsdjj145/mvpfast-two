@@ -8,7 +8,11 @@ import toast from 'react-hot-toast';
 
 export default function page() {
   const { data: session, status } = useSession();
-  const [promotions, setPromotions] = useState([]);
+  const [promotions, setPromotions] = useState<{
+    promotionPrice: number;
+    checkout: boolean;
+    created_time: Date;
+  }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

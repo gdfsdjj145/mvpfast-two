@@ -22,7 +22,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
   };
 
   return (
-    <section id="feat" className="bg-white py-24 sm:py-32" ref={ref as any}>
+    <section id="feat" className="bg-white py-16 sm:py-24 lg:py-32" ref={ref as any}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
@@ -39,7 +39,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
         <div className="mt-16">
           <div className="mx-auto max-w-3xl">
             <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8 mb-12 justify-center">
-              {featureConfig.items.map((item, index) => (
+              {featureConfig.items.map((item: { name: string; icon: string; description: string; list: string[] }, index: number) => (
                 <button
                   key={item.name}
                   onClick={() => setSelectedFeature(index)}
@@ -82,7 +82,7 @@ export default function FeatureComponent({ feature }: { feature: any }) {
                   </p>
                   <ul className="space-y-4">
                     {featureConfig.items[selectedFeature].list.map(
-                      (item, index) => (
+                      (item: string, index: number) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}

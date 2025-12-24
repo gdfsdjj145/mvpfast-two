@@ -29,6 +29,9 @@ function generateSignature(
   const message = `${method}\n${url}\n${timestamp}\n${nonce}\n${body}\n`;
 
   const privateKey = process.env.WECHAT_PRIVATE_KEY;
+  if (!privateKey) {
+    throw new Error('WECHAT_PRIVATE_KEY environment variable is not set');
+  }
 
   const signature = crypto
     .createSign('RSA-SHA256')
@@ -39,6 +42,9 @@ function generateSignature(
 
 export function generateJsapiSignature(prepayId: string, timestamp: string, nonce: string) {
   const privateKey = process.env.WECHAT_PRIVATE_KEY;
+  if (!privateKey) {
+    throw new Error('WECHAT_PRIVATE_KEY environment variable is not set');
+  }
   const message = `${process.env.NEXT_PUBLIC_WECHAT_APPID}\n${timestamp}\n${nonce}\n${prepayId}\n`;
   const signature = crypto
     .createSign('RSA-SHA256')

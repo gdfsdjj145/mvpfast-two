@@ -158,7 +158,7 @@ export const checkQrCode = async (
   // 已创建用户
 
   return {
-    openId: user.wechatOpenId,
+    openId: user.wechatOpenId ?? '',
     isScan: true,
   };
 };

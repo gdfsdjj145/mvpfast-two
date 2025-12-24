@@ -11,12 +11,12 @@ export default function BrandComponent({ brand }: { brand: any }) {
   return (
     <section className="bg-gray-50/50 border-y border-gray-100">
       <motion.div
-        className="max-w-7xl mx-auto px-4 py-8 flex flex-wrap items-center justify-center gap-8 md:gap-16"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 flex flex-wrap items-center justify-center gap-8 md:gap-16"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        {brandConfig.items.map((tech) => (
+        {brandConfig.items.map((tech: { name: string; href: string; logo: string; stars?: string }) => (
           <a
             key={tech.name}
             href={tech.href}
@@ -29,6 +29,8 @@ export default function BrandComponent({ brand }: { brand: any }) {
               alt={tech.name}
               width={32}
               height={32}
+              quality={80}
+              loading="lazy"
               className="w-8 h-8 object-contain"
             />
             <span className="font-medium">{tech.name}</span>

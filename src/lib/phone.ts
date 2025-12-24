@@ -2,8 +2,8 @@ import Core from '@alicloud/pop-core';
 
 // 创建阿里云客户端实例
 const client = new Core({
-  accessKeyId: process.env.ALIYUN_ACCESS_KEY_ID,
-  accessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET,
+  accessKeyId: process.env.ALIYUN_ACCESS_KEY_ID || '',
+  accessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET || '',
   endpoint: 'https://dysmsapi.aliyuncs.com',
   apiVersion: '2017-05-25',
 });

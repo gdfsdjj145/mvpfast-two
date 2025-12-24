@@ -33,10 +33,7 @@ export default function HeroComponent({ hero }: { hero: any }) {
 
   return (
     <section className="overflow-hidden bg-white">
-      {/* 背景装饰 */}
-      <div className="" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-32 lg:pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
         <motion.div
           className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20"
           variants={containerVariants}
@@ -46,11 +43,11 @@ export default function HeroComponent({ hero }: { hero: any }) {
           {/* 左侧内容区 */}
           <div className="flex flex-col gap-8 lg:gap-12 items-center lg:items-start text-center lg:text-left lg:w-1/2">
             <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight">
-                <span className="block text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-pink-600 mb-3">
+              <h1 className="font-extrabold text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-3">
                   {t('title')}
                 </span>
-                <span className="block text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-green-600">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
                   {t('subtitle')}
                 </span>
               </h1>
@@ -60,10 +57,10 @@ export default function HeroComponent({ hero }: { hero: any }) {
             </motion.div>
 
             {/* CTA 区域 */}
-            <motion.div variants={itemVariants} className="space-y-6">
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4">
               <Link
                 href={heroConfig.cta.start.href}
-                className="inline-flex items-center px-8 py-4 text-lg font-semibold text-white bg-linear-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group mr-4"
+                className="inline-flex items-center justify-center px-8 py-4 text-base sm:text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl group"
               >
                 <FaPlay className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
                 {t('cta.start.label')}
@@ -72,7 +69,7 @@ export default function HeroComponent({ hero }: { hero: any }) {
               <Link
                 href={heroConfig.cta.docs.href}
                 target="_blank"
-                className="inline-flex items-center px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-full transition-all duration-300 hover:bg-gray-200 hover:scale-105 group"
+                className="inline-flex items-center justify-center px-8 py-4 text-base sm:text-lg font-semibold text-gray-700 bg-gray-100 rounded-full transition-all duration-300 hover:bg-gray-200 hover:scale-105 group"
               >
                 <FaBook className="mr-2 group-hover:translate-x-1 transition-transform duration-300" />
                 {t('cta.docs.label')}
@@ -93,7 +90,7 @@ export default function HeroComponent({ hero }: { hero: any }) {
                 className="flex items-center gap-4 bg-gray-50 rounded-2xl p-4"
               >
                 <div className="flex -space-x-4">
-                  {heroConfig.case.items.map((item, i) => (
+                  {heroConfig.case.items.map((item: { user: string }, i: number) => (
                     <div
                       key={i}
                       className="w-12 h-12 rounded-full border-2 border-white overflow-hidden hover:scale-110 transition-transform duration-300"
@@ -103,6 +100,8 @@ export default function HeroComponent({ hero }: { hero: any }) {
                         alt={`User ${i + 1}`}
                         width={48}
                         height={48}
+                        quality={80}
+                        loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -124,15 +123,17 @@ export default function HeroComponent({ hero }: { hero: any }) {
           </div>
 
           {/* 右侧图片 */}
-          <motion.div variants={itemVariants} className="lg:w-1/2">
-            <div className="">
-              <div className="-inset-4 bg-linear-to-r rounded-xl blur-2xl opacity-30 group-hover:opacity-40 transition duration-500" />
+          <motion.div variants={itemVariants} className="lg:w-1/2 w-full">
+            <div className="relative">
               <Image
                 src={heroConfig.banner.url}
                 alt={heroConfig.banner.alt}
                 width={800}
                 height={600}
-                className="rounded-xl  hover:scale-[1.02] transition-transform duration-500"
+                priority
+                quality={90}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="rounded-xl shadow-2xl hover:scale-[1.02] transition-transform duration-500 w-full h-auto"
               />
             </div>
           </motion.div>

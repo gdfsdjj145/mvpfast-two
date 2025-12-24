@@ -83,7 +83,7 @@ export default function PaymentPage() {
   useEffect(() => {
     const getShare = async () => {
       if (status === 'authenticated' && session) {
-        const { data } = await checkUserById(shareCode);
+        const { data } = await checkUserById(shareCode ?? '');
         if (data) {
           setShareOption({
             code: data.id,
@@ -106,10 +106,10 @@ export default function PaymentPage() {
         try {
           const result = await checkUserPayment(session.user.id);
           console.log(result.data);
-          if (result.data.hasPaid) {
+          if (result.data && result.data.hasPaid) {
             setPaymentStatus('success');
             setPaymentResult({
-              transactionId: result.data.transactionId,
+              transactionId: result.data.transactionId ?? '',
               paidAt: new Date(result.data.created_time).toLocaleString(),
             });
 
@@ -125,18 +125,18 @@ export default function PaymentPage() {
 
             setOrderInfo((prevState) => ({
               ...prevState,
-              orderId: result.data.orderId,
+              orderId: result.data.orderId ?? '',
               created_time: new Date(result.data.created_time).toLocaleString(),
               amount: result.data.price * 100,
-              name: result.data.name,
-              orderType: result.data.orderType,
+              name: result.data.name ?? '',
+              orderType: result.data.orderType ?? '',
               description: order.description,
-              shareId: result.data.promoter,
+              shareId: result.data.promoter ?? '',
             }));
           } else {
             setPaymentStatus('pending');
           }
-          if (shareCode && !result.data.hasPaid) {
+          if (shareCode && result.data && !result.data.hasPaid) {
             getShare();
           }
 

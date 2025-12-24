@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake;
+  themes: light --default;
 }
 
 @import 'fumadocs-ui/css/neutral.css';
@@ -30,20 +30,41 @@
     --background-end-rgb: 255, 255, 255;
   }
 
-  @media (prefers-color-scheme: dark) {
+  /* 已禁用系统深色模式跟随 */
+  /* @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 255, 255, 255;
       --background-start-rgb: 0, 0, 0;
       --background-end-rgb: 0, 0, 0;
     }
-  }
+  } */
 
   :root {
     --p: #9462ff;
   }
 
-  [data-theme='dark'] {
-    --p: #9462ff;
+  /* 强制保持亮色主题，禁用深色模式 */
+  html, html[data-theme='light'], html[data-theme='dark'] {
+    color-scheme: light !important;
+  }
+
+  /* 确保所有元素都使用亮色主题 */
+  *, *::before, *::after {
+    color-scheme: light !important;
+  }
+
+  /* 强制 body 使用亮色背景 */
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* 覆盖任何可能的深色模式样式 */
+  @media (prefers-color-scheme: dark) {
+    :root, html, body {
+      background-color: white !important;
+      color: black !important;
+    }
   }
 
   html {

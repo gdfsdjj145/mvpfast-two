@@ -52,7 +52,7 @@ const WeChatLogin = () => {
   );
 };
 
-const VerificationButton = (props) => {
+const VerificationButton = (props: { type: string; form: { identifier: string; code: string } }) => {
   const { type, form } = props;
   const [counter, setCounter] = useState(0);
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -98,7 +98,7 @@ export default function SignInPage() {
   });
   const searchParams = useSearchParams();
 
-  const handleFormChnage = (key, value) => {
+  const handleFormChnage = (key: string, value: string) => {
     setForm({
       ...form,
       [key]: value,
@@ -219,7 +219,7 @@ export default function SignInPage() {
                         className="btn flex-1"
                         onClick={() => setType(item)}
                       >
-                        {LOGIN_HASH[item]}
+                        {LOGIN_HASH[item as keyof typeof LOGIN_HASH]}
                       </button>
                     )}
                   </React.Fragment>

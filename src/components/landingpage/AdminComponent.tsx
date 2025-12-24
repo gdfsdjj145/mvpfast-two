@@ -9,7 +9,7 @@ export default function AdminComponent({ admin }: { admin: any }) {
   const messages = useMessages();
   const adminConfig = messages.Admin as any;
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -21,6 +21,8 @@ export default function AdminComponent({ admin }: { admin: any }) {
           alt={adminConfig.banner.alt}
           width={1920}
           height={1080}
+          quality={90}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
           className="w-full h-auto object-cover"
         />
       </motion.div>

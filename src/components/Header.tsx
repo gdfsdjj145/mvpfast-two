@@ -3,6 +3,7 @@ import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations, useMessages } from 'next-intl';
 import I18n from './I18n';
 import ThemeComponent from './theme/ThemeChoose';
@@ -24,16 +25,19 @@ const UserMenu = () => {
   const renderName = () => {
     if (session?.user?.avatar) {
       return (
-        <img
+        <Image
           src={session.user.avatar}
           alt="头像"
+          width={40}
+          height={40}
+          quality={80}
           className="w-full h-full object-cover"
         />
       );
     }
     if (session?.user?.email) return session.user.email[0];
     if (session?.user?.phone) return session.user.phone[0];
-    if (session?.user?.wechatOpenId) return session.user.nickName[0];
+    if (session?.user?.wechatOpenId) return session.user.nickName?.[0] ?? '?';
     return '?';
   };
 
@@ -109,16 +113,20 @@ export default function Header() {
       <div className="navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="navbar-start">
           <a href="/" className="normal-case text-xl p-0">
-            <img
+            <Image
               alt={headerConfig.logo.alt}
               src={headerConfig.logo.url}
+              width={40}
+              height={40}
+              quality={90}
+              priority
               className="h-10 w-auto"
             />
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 gap-1">
-            {headerConfig.nav.items.map((item, index) => (
+            {headerConfig.nav.items.map((item: { name: string; href: string; target?: string; rel?: string }, index: number) => (
               <li key={item.name}>
                 <a
                   href={item.href}
