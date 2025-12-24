@@ -1,7 +1,7 @@
 ---
 name: add-route
 description: 指导 AI 如何在 mvpfast-web 项目中生成 API 路由、数据库模型和 Model 层
-author: Claude Code
+author: MvpFast
 ---
 
 # API 路由生成指南

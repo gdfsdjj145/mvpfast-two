@@ -1,7 +1,7 @@
 ---
 name: add-page
 description: 指导 AI 如何在 mvpfast-web 项目中生成页面（表单页、列表页、详情页等）
-author: Claude Code
+author: MvpFast
 ---
 
 # 页面生成指南

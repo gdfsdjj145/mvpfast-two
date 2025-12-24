@@ -1,7 +1,7 @@
 ---
 name: seo_config
 description: 通过 next-intl message 配置国际化 SEO
-author: Claude Code
+author: MvpFast
 ---
 
 # SEO 配置指南

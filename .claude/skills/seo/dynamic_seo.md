@@ -1,7 +1,7 @@
 ---
 name: dynamic_seo
 description: 动态页面的 SEO 配置指南（博客、产品详情等）
-author: Claude Code
+author: MvpFast
 ---
 
 # 动态页面 SEO 指南
