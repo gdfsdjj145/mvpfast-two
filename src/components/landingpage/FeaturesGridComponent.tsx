@@ -24,9 +24,8 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
   };
 
   return (
-    <section className="py-20 sm:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+    <section className="py-16 sm:py-24 lg:py-32 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -37,7 +36,7 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
           </motion.h2>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuresConfig.items.map((feature, index) => (
+            {featuresConfig.items.map((feature: { icon: string; title: string; description: string }, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -56,7 +55,6 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
               </motion.div>
             ))}
           </div>
-        </div>
       </div>
     </section>
   );

@@ -7,19 +7,26 @@ import { useMessages } from 'next-intl';
 export default function page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [user, setUser] = useState([]);
+  interface UserItem {
+    name: string;
+    createAt: string;
+    payAt: string;
+    goodKey: string;
+  }
+
+  const [user, setUser] = useState<UserItem[]>([]);
 
   // 使用 next-intl 获取商品信息，与 PriceComponent 保持一致
   const messages = useMessages();
-  const priceConfig = messages.Price as any;
-  const goodsObj = priceConfig.goods;
+  const priceConfig = messages.Price as Record<string, unknown>;
+  const goodsObj = (priceConfig as { goods: Record<string, { name: string; price: number }> }).goods;
   const goods = Object.keys(goodsObj).map((key) => ({
     ...goodsObj[key],
     key,
   }));
 
   // 创建商品哈希表以便快速查找
-  const goodsHash = {};
+  const goodsHash: Record<string, { name: string; price: number; key: string }> = {};
   goods.forEach((good) => {
     goodsHash[good.key] = good;
   });
@@ -35,7 +42,7 @@ export default function page() {
   };
 
   // 处理提交
-  const handleSubmit = (userData: any) => {
+  const handleSubmit = (userData: UserItem) => {
     console.log('提交的用户数据:', userData);
     setUser([...user, userData]);
     setIsModalOpen(false);

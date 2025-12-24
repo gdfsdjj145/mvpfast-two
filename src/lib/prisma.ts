@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { config } from '../config'; //
+import { config } from '../config';
 
 let prisma: PrismaClient | null = null;
 
@@ -8,12 +8,12 @@ if (config.db) {
   prisma = new PrismaClient();
 }
 
-const prismaProxy = new Proxy(prisma, {
-  get(target, prop) {
+const prismaProxy = new Proxy({} as PrismaClient, {
+  get(_target, prop: string | symbol) {
     if (!prisma) {
       return () => Promise.resolve(null);
     }
-    return prisma[prop];
+    return (prisma as unknown as Record<string | symbol, unknown>)[prop];
   },
 });
 

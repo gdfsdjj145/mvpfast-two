@@ -32,7 +32,7 @@ export default function WeChatH5Pay({
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const createOrderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const useWeChatPay = (data) => {
+  const useWeChatPay = (data: { data: { timestamp: string; nonce: string; package: string; signature: string } }) => {
     (window as any).WeixinJSBridge.invoke(
       'getBrandWCPayRequest',
       {
@@ -43,7 +43,7 @@ export default function WeChatH5Pay({
         signType: 'RSA',
         paySign: data.data.signature,
       },
-      function (res) {
+      function (res: { err_msg: string }) {
         console.log(res, '-----');
         if (res.err_msg == 'get_brand_wcpay_request:ok') {
           console.log('支付成功');

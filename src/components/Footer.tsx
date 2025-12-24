@@ -15,11 +15,13 @@ export default function FooterComponent() {
           <div className="flex  flex-col mr-4 justify-start">
             <Link href="/" className="flex gap-3">
               <Image
-                width={0}
-                height={0}
+                width={24}
+                height={24}
+                quality={80}
+                loading="lazy"
                 className="w-6 h-6"
                 src="/logo.png"
-                alt=""
+                alt="MvpFast Logo"
               />
               <span className="font-bold">{t('title')}</span>
             </Link>
@@ -35,11 +37,13 @@ export default function FooterComponent() {
                 <span className="hidden md:block">使用</span>
                 <span className="font-bold flex gap-0.5 items-center tracking-tight">
                   <Image
-                    width={0}
-                    height={0}
+                    width={24}
+                    height={24}
+                    quality={80}
+                    loading="lazy"
                     className="w-6 h-6 group-hover:scale-110 group-hover:rotate-45 transition-all mr-1"
                     src="/logo.png"
-                    alt=""
+                    alt="MvpFast Logo"
                   />
                   MvpFast
                 </span>
@@ -50,13 +54,13 @@ export default function FooterComponent() {
               </span>
             </Link>
           </div>
-          {footerConfig.items.map((section, index) => (
+          {footerConfig.items.map((section: { title: string; links: { name: string; href: string; logo?: string }[] }, index: number) => (
             <div key={section.title}>
               <h3 className="text-sm font-semibold text-gray-900">
                 {t(`items.${index}.title`)}
               </h3>
               <ul role="list" className="mt-6 space-y-4">
-                {section.links.map((link, i) => (
+                {section.links.map((link: { name: string; href: string; logo?: string }, i: number) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
@@ -65,10 +69,12 @@ export default function FooterComponent() {
                     >
                       {link.logo && (
                         <Image
-                          width={0}
-                          height={0}
+                          width={24}
+                          height={24}
+                          quality={80}
+                          loading="lazy"
                           src={`/${link.logo}`}
-                          alt=""
+                          alt={link.name}
                           className="w-6 h-6"
                         />
                       )}

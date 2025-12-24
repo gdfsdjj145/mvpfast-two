@@ -42,13 +42,14 @@ function processBlogData(blogPages: Array<Page<PageData>>): BlogPost[] {
     const data = page.data as BlogPageData;
     const rawDate = data.date ? new Date(data.date) : new Date();
 
-    const hash = {
+    const hash: Record<string, string> = {
       '商用协议': '1.png',
       '支付和备案问题': '2.png',
     }
-    
+
     // 获取图片路径，如果标题不在hash中则使用默认图片
-    const getImagePath = (title: string) => {
+    const getImagePath = (title: string | undefined) => {
+      if (!title) return '/blog/assets/1.png';
       const imageName = hash[title];
       if (!imageName) {
         return '/blog/assets/1.png'; // 添加前导斜杠表示从根目录开始

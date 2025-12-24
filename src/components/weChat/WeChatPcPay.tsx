@@ -43,10 +43,10 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
         const params = {
           out_trade_no: outTradeNo,
           total_fee: `0.01`, // 修改成为 amount 0.01为测试
-          mch_id: process.env.NEXT_PUBLIC_YUNGOUOS_MCH_ID,
+          mch_id: process.env.NEXT_PUBLIC_YUNGOUOS_MCH_ID || '',
           body: description,
         };
-        sign = paySign(params, process.env.NEXT_PUBLIC_YUNGOUOS_API_KEY);
+        sign = paySign(params, process.env.NEXT_PUBLIC_YUNGOUOS_API_KEY || '');
         const { data } = await axios({
           url: 'https://api.pay.yungouos.com/api/pay/wxpay/nativePay',
           method: 'post',
@@ -138,11 +138,11 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
     // 检测yungou订单状态
     const checkYungouOrderStatusFn = async () => {
       const payOrder = await checkYungouOrderStatus(outTradeNo);
-      if (payOrder.status === 'success') {
+      if (payOrder && payOrder.status === 'success') {
         setPaymentStatus('success');
         setIsPaymentSuccessful(true);
         onPaymentSuccess({
-          transactionId: payOrder.sign,
+          transactionId: payOrder.sign ?? '',
           paidAt: new Date().toLocaleString(),
         });
         if (intervalIdRef.current) {

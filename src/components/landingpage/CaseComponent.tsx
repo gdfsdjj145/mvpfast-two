@@ -52,19 +52,19 @@ export default function CaseComponent({ items }: { items: any }) {
     <section
       id="case"
       ref={sectionRef}
-      className="bg-white from-gray-50 to-white py-24 sm:py-32 opacity-0 translate-y-10 transition-all duration-1000 ease-out"
+      className="bg-white py-16 sm:py-24 lg:py-32 opacity-0 translate-y-10 transition-all duration-1000 ease-out"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl bg-clip-text text-transparent bg-linear-to-r from-purple-600 to-pink-600">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
             {t('title')}
           </h2>
-          <p className="mt-2 text-lg leading-8 text-gray-600">
+          <p className="mt-4 text-lg leading-8 text-gray-600">
             {t('description')}
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-          {caseConfig.items.map((item, index) => (
+          {caseConfig.items.map((item: { id: string; title: string; imageUrl: string; gradient: string; href: string; des: string }, index: number) => (
             <article
               key={item.id}
               ref={el => {
@@ -80,12 +80,13 @@ export default function CaseComponent({ items }: { items: any }) {
                 height={300}
                 alt={item.title}
                 src={item.imageUrl}
-                className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                quality={85}
                 loading="lazy"
+                className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div
-                className={`absolute inset-0 -z-10 bg-linear-to-t ${item.gradient} opacity-70 transition-colors duration-300`}
+                className={`absolute inset-0 -z-10 bg-gradient-to-t ${item.gradient} opacity-70 transition-colors duration-300`}
               />
               <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
 

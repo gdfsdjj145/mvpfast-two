@@ -2,7 +2,50 @@
   "Metadata": {
     "title": "MvpFast-快速构建网站应用",
     "description": "这是一款能帮助你快速构建个人网站的应用，使用最新的前端技术栈，集成登录、鉴权、手机、邮箱、数据库、博客、文章、支付等等网站所需要的功能，你只需要花几个小时开发你的核心功能就可以上线，一次购买，永久拥有",
-    "keywords": "开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录"
+    "keywords": "开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录",
+    "og": {
+      "siteName": "MvpFast",
+      "type": "website"
+    },
+    "twitter": {
+      "card": "summary_large_image"
+    }
+  },
+  "Pages": {
+    "pricing": {
+      "title": "定价方案",
+      "description": "选择适合你的 MvpFast 套餐，一次购买永久使用",
+      "keywords": "定价, 套餐, 购买, MvpFast"
+    },
+    "blog": {
+      "title": "博客",
+      "description": "技术文章、产品更新和开发教程",
+      "keywords": "博客, 技术文章, 教程, NextJs"
+    },
+    "docs": {
+      "title": "文档中心",
+      "description": "MvpFast 使用指南和 API 文档",
+      "keywords": "文档, 指南, API, 教程"
+    },
+    "dashboard": {
+      "title": "控制台",
+      "description": "管理你的账户和订单",
+      "noIndex": true
+    },
+    "auth": {
+      "title": "登录",
+      "description": "登录你的 MvpFast 账户",
+      "noIndex": true
+    },
+    "pay": {
+      "title": "支付",
+      "description": "完成支付购买 MvpFast",
+      "noIndex": true
+    },
+    "notFound": {
+      "title": "页面未找到",
+      "description": "抱歉，您访问的页面不存在"
+    }
   },
   "Header": {
     "logo": {

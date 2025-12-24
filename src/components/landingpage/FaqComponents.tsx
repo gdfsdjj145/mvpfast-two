@@ -6,8 +6,8 @@ export default function FaqComponents({ items }: { items: any }) {
   const messages = useMessages();
   const faqConfig = messages.Faq as any;
   return (
-    <section className="bg-white" id="faq">
-      <div className="mx-auto max-w-7xl px-6 py-24 sm:pt-32 lg:px-8 lg:py-40">
+    <section className="bg-white py-16 sm:py-24 lg:py-32" id="faq">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
             <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
@@ -26,7 +26,7 @@ export default function FaqComponents({ items }: { items: any }) {
           </div>
           <div className="mt-10 lg:col-span-7 lg:mt-0">
             <dl className="space-y-10">
-              {faqConfig.items.map((faq, index) => (
+              {faqConfig.items.map((faq: { question: string; answer: string }, index: number) => (
                 <div key={faq.question}>
                   <dt className="text-base font-semibold leading-7 text-gray-900">
                     {t(`items.${index}.question`)}

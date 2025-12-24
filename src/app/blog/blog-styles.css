@@ -231,8 +231,8 @@
   font-weight: 500;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
+/* 已禁用深色模式支持，保持亮色主题 */
+/* @media (prefers-color-scheme: dark) {
   .blog-card {
     background-color: var(--color-background-dark, #1a1a1a);
   }
@@ -252,20 +252,20 @@
   .blog-card-stats {
     color: var(--color-text-muted-dark, #aaa);
   }
-  
+
   .blog-pagination-button {
     border-color: var(--color-border-dark, rgba(255, 255, 255, 0.1));
     color: var(--color-text-dark, #e0e0e0);
   }
-  
+
   .blog-pagination-ellipsis {
     color: var(--color-text-muted-dark, #aaa);
   }
-  
+
   .blog-header p {
     color: var(--color-text-muted-dark, #aaa);
   }
-}
+} */
 
 /* Featured post styles */
 .blog-card.featured {

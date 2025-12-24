@@ -59,11 +59,15 @@ export async function middleware(request: NextRequest) {
     throw new Error('NEXTAUTH_SECRET is not set');
   }
 
-  let token: JWT | null = await getToken({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tokenParams: any = {
     req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-    salt: process.env.NEXTAUTH_SALT,
-  });
+    secret: secret,
+  };
+  if (process.env.NEXTAUTH_SALT) {
+    tokenParams.salt = process.env.NEXTAUTH_SALT;
+  }
+  let token: JWT | null = await getToken(tokenParams);
 
   // 如果没有通过getToken获取到token，尝试从cookie中获取
   if (!token) {
@@ -83,19 +87,26 @@ export async function middleware(request: NextRequest) {
   
   // 检查当前路径是否在需要保护的路由列表中
   if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-    if (!token) {
+    // 开发环境下跳过认证检查
+    const isDev = process.env.NODE_ENV === 'development';
+
+    if (!token && !isDev) {
       console.log('未登录访问受保护路由，重定向到登录页');
-      
+
       // 构造登录URL时保留语言前缀
       let loginPath = '/auth/signin';
       if (currentLocale) {
         loginPath = `/${currentLocale}/auth/signin`;
       }
-      
+
       const loginUrl = new URL(loginPath, request.url);
       loginUrl.searchParams.set('redirect', `${pathname}${search}`);
       console.log('重定向到:', loginUrl.toString());
       return NextResponse.redirect(loginUrl);
+    }
+
+    if (isDev && !token) {
+      console.log('[DEV] 开发环境免登录访问:', pathnameWithoutLocale);
     }
   }
   

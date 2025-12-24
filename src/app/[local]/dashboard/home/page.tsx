@@ -32,7 +32,7 @@ ChartJS.register(
 );
 
 // 统计卡片组件
-const StatCard = ({ title, value, icon, color, isLoading }) => {
+const StatCard = ({ title, value, icon, color, isLoading }: { title: string; value: string; icon: React.ReactNode; color: string; isLoading: boolean }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -62,7 +62,8 @@ const StatCard = ({ title, value, icon, color, isLoading }) => {
 };
 
 // 图表卡片组件
-const ChartCard = ({ title, ChartComponent, chartData, chartOptions, isLoading }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ChartCard = ({ title, ChartComponent, chartData, chartOptions, isLoading }: { title: string; ChartComponent: any; chartData: unknown; chartOptions: unknown; isLoading: boolean }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -85,7 +86,7 @@ const ChartCard = ({ title, ChartComponent, chartData, chartOptions, isLoading }
 };
 
 // 创建蓝色渐变效果
-const createBlueGradient = (ctx, chartArea) => {
+const createBlueGradient = (ctx: CanvasRenderingContext2D | null, chartArea: { top: number; bottom: number } | undefined) => {
   if (!ctx || !chartArea) {
     return 'rgba(0,0,0,0.1)';
   }

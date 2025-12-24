@@ -22,10 +22,10 @@ export default function FeaturesSection({ features = [] }: FeaturesSection) {
   const messages = useMessages();
   const featuresConfig = messages.FeatureCard as any;
   return (
-    <section className="py-12 sm:py-16 lg:py-24 overflow-hidden bg-base-100">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 sm:py-24 lg:py-32 overflow-hidden bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-16">
-          {featuresConfig.items.map((feature, index) => (
+          {featuresConfig.items.map((feature: { title: string; description: string; image: { src: string; alt: string } }, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -44,8 +44,10 @@ export default function FeaturesSection({ features = [] }: FeaturesSection) {
                     src={feature.image.src}
                     alt={feature.image.alt || ''}
                     fill
+                    quality={85}
+                    loading="lazy"
                     className="object-cover transform hover:scale-105 transition-transform duration-500"
-                    sizes="(min-width: 1280px) 50vw, (min-width: 768px) 70vw, 100vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 50vw"
                   />
                 </div>
               </div>
