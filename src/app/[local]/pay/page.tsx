@@ -319,7 +319,7 @@ export default function PaymentPage() {
             <span className="text-emerald-600">
               <img
                 className="w-28 md:w-36"
-                src="/wechat.jpg"
+                src="/payment/wechat.jpg"
                 alt=""
                 srcSet=""
               />
@@ -418,7 +418,7 @@ export default function PaymentPage() {
           </div>
           
           <div className="flex items-center mb-6">
-            <img src="/logo.png" alt="Logo" className="w-10 h-10 mr-3" />
+            <img src="/brand/logo.png" alt="Logo" className="w-10 h-10 mr-3" />
             <h1 className="text-2xl md:text-3xl font-bold">订单</h1>
           </div>
           

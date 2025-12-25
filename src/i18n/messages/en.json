@@ -49,7 +49,7 @@
   },
   "Header": {
     "logo": {
-      "url": "/title-logo.png",
+      "url": "/brand/title-logo.png",
       "alt": "MvpFast"
     },
     "nav": {
@@ -72,44 +72,27 @@
     }
   },
   "Hero": {
-    "title": "Build in a day",
-    "subtitle": "your web application",
-    "description": "NextJs development template with login, payment, articles, blog and WeChat development modules, along with learning courses to help you quickly build web applications and earn your first bucket of gold.",
+    "title": "AI + Template",
+    "subtitle": "Build Your Web App",
+    "description": "AI-powered Next.js development template, the perfect combination for Vibe Coding. Includes payment, authentication, articles, blog and more. Combined with videos and courses to help you launch your website and earn your first income quickly",
     "cta": {
       "start": {
-        "label": "Get Started",
+        "label": "Start Building",
         "href": "/dashboard/home"
       },
       "docs": {
-        "label": "Documentation",
+        "label": "Docs",
         "href": "/docs/introduction",
         "target": "_blank"
       }
     },
-    "discount": {
-      "price": "",
-      "description": "This is a template demo, using the template will save you a lot of time"
-    },
-    "case": {
-      "num": "999",
-      "description": "developers started building their own products",
-      "items": [
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        }
-      ]
+    "testimonial": {
+      "avatar": "/avatars/a1.jpg",
+      "name": "Developer",
+      "quote": "A minimalist template system that boosts development efficiency by 300%"
     },
     "banner": {
-      "url": "/banner.png",
+      "url": "/banners/banner.png",
       "alt": "MvpFast Preview"
     }
   },
@@ -117,25 +100,25 @@
     "items": [
       {
         "name": "NextJs",
-        "logo": "/nextjs-logo.png",
+        "logo": "/tech/nextjs-logo.png",
         "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
         "name": "TailWindCss",
-        "logo": "/tailwindcss.png",
+        "logo": "/tech/tailwindcss.png",
         "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
         "name": "Mongodb",
-        "logo": "/mongodb.png",
+        "logo": "/tech/mongodb.png",
         "stars": "26K⭐",
         "href": "https://www.mongodb.com/cloud/atlas/register"
       },
       {
         "name": "WeChat",
-        "logo": "/wx.png",
+        "logo": "/social/wx.png",
         "stars": "",
         "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
       }
@@ -143,7 +126,7 @@
   },
   "Admin": {
     "banner": {
-      "url": "/banner-1.png",
+      "url": "/banners/banner-1.png",
       "alt": "Admin Preview"
     }
   },
@@ -247,7 +230,7 @@
         "id": 1,
         "title": "LogoCook-Logo Chef",
         "href": "https://www.logocook.shop",
-        "imageUrl": "/f1.png",
+        "imageUrl": "/cases/f1.png",
         "des": "LogoCook is a fast and free logo generator that allows you to quickly create the logo you want through online editing, including free logo downloads, cute logo property designs, uploading custom svg files, meeting the needs of individuals and businesses to quickly create logos",
         "gradient": "from-pink-500 to-rose-500",
         "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600"
@@ -256,7 +239,7 @@
         "id": 2,
         "title": "WeFight-Let's fight together!",
         "href": "https://www.wefight.cn",
-        "imageUrl": "/f2.png",
+        "imageUrl": "/cases/f2.png",
         "des": "WeFight is a website that helps you achieve goals through mutual check-ins and competitive rankings. By creating goal task groups, inviting friends to join, completing daily check-in tasks, and using daily check-ins to cultivate good habits and achieve goals, it's suitable for fitness, learning, reading, work, and various social scenarios",
         "gradient": "from-cyan-500 to-blue-500",
         "hoverGradient": "group-hover:from-cyan-600 group-hover:to-blue-600"
@@ -265,7 +248,7 @@
         "id": 3,
         "title": "IMessageU-Idea Message User",
         "href": "https://www.imessageu.shop",
-        "imageUrl": "/f3.png",
+        "imageUrl": "/cases/f3.png",
         "des": "A product that quickly opens user feedback channels, creating your panel to receive user voices and suggestions, helping developers build better products, helping developers reduce the development of false requirements, and helping developers avoid useless work",
         "gradient": "from-purple-500 to-indigo-500",
         "hoverGradient": "group-hover:from-purple-600 group-hover:to-indigo-600"

@@ -1,81 +1,75 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { landingpageConfig } from '@/store/landingpage';
 import { useTranslations, useMessages } from 'next-intl';
-const { footer: footerConfig } = landingpageConfig;
 
 export default function FooterComponent() {
   const t = useTranslations('Footer');
   const messages = useMessages();
   const footerConfig = messages.Footer as any;
+
   return (
-    <footer className="bg-gray-100">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
-          <div className="flex  flex-col mr-4 justify-start">
-            <Link href="/" className="flex gap-3">
+    <footer className="bg-gray-900">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:gap-12">
+          {/* Brand Column */}
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
               <Image
-                width={24}
-                height={24}
+                width={28}
+                height={28}
                 quality={80}
                 loading="lazy"
-                className="w-6 h-6"
-                src="/logo.png"
+                className="w-7 h-7"
+                src="/brand/logo.png"
                 alt="MvpFast Logo"
               />
-              <span className="font-bold">{t('title')}</span>
+              <span className="font-bold text-white text-lg">{t('title')}</span>
             </Link>
-            <p className="mt-3 mb-3 text-sm text-base-content/80 leading-relaxed">
+            <p className="text-sm text-gray-400 leading-relaxed mb-6">
               {t('subtitle')}
             </p>
 
             <Link
               href="https://www.mvpfast.top"
-              className="border-2 border-base-content/20 rounded-md p-2 group hover:bg-base-content/20 text-sm flex flex-col items-center"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all"
             >
-              <div className="flex gap-2 items-center group justify-center">
-                <span className="hidden md:block">使用</span>
-                <span className="font-bold flex gap-0.5 items-center tracking-tight">
-                  <Image
-                    width={24}
-                    height={24}
-                    quality={80}
-                    loading="lazy"
-                    className="w-6 h-6 group-hover:scale-110 group-hover:rotate-45 transition-all mr-1"
-                    src="/logo.png"
-                    alt="MvpFast Logo"
-                  />
-                  MvpFast
-                </span>
-                <span>开发</span>
-              </div>
-              <span className="text-xs text-gray-500 mt-1 block md:hidden">
-                点击这里了解更多
-              </span>
+              <Image
+                width={20}
+                height={20}
+                quality={80}
+                loading="lazy"
+                className="w-5 h-5"
+                src="/brand/logo.png"
+                alt="MvpFast Logo"
+              />
+              <span>使用 MvpFast 开发</span>
             </Link>
           </div>
+
+          {/* Link Columns */}
           {footerConfig.items.map((section: { title: string; links: { name: string; href: string; logo?: string }[] }, index: number) => (
             <div key={section.title}>
-              <h3 className="text-sm font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-white mb-4">
                 {t(`items.${index}.title`)}
               </h3>
-              <ul role="list" className="mt-6 space-y-4">
+              <ul role="list" className="space-y-3">
                 {section.links.map((link: { name: string; href: string; logo?: string }, i: number) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
                       target="_blank"
-                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-4"
+                      rel="noopener noreferrer"
+                      className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2"
                     >
                       {link.logo && (
                         <Image
-                          width={24}
-                          height={24}
+                          width={16}
+                          height={16}
                           quality={80}
                           loading="lazy"
                           src={`/${link.logo}`}
                           alt={link.name}
-                          className="w-6 h-6"
+                          className="w-4 h-4 opacity-60"
                         />
                       )}
                       {t(`items.${index}.links.${i}.name`)}
@@ -86,13 +80,20 @@ export default function FooterComponent() {
             </div>
           ))}
         </div>
-        <div className="mt-10 border-t border-gray-900/10 pt-8 flex justify-center items-center">
-          <p className="text-xs leading-5 text-gray-500">
-            &copy; 2024 MvpFast,{' '}
-            <a href="https://beian.miit.gov.cn" target="_blank">
-              粤ICP备2024286477号-2
-            </a>
+
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-gray-500">
+            &copy; {new Date().getFullYear()} MvpFast. All rights reserved.
           </p>
+          <a
+            href="https://beian.miit.gov.cn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-gray-500 hover:text-gray-400 transition-colors"
+          >
+            粤ICP备2024286477号-2
+          </a>
         </div>
       </div>
     </footer>

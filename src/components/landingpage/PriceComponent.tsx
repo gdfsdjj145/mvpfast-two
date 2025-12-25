@@ -1,10 +1,12 @@
-import React from 'react';
-import { config } from '@/config';
-import { ImCheckmark2 } from 'react-icons/im';
-import { IoGiftOutline } from 'react-icons/io5';
-import { useTranslations, useMessages } from 'next-intl';
+'use client';
 
-export default function PriceComponent({ items }: { items: any }) {
+import React from 'react';
+import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useTranslations, useMessages } from 'next-intl';
+import { cn } from '@/lib/utils';
+
+export default function PriceComponent() {
   const t = useTranslations('Price');
   const messages = useMessages();
   const priceConfig = messages.Price as any;
@@ -13,105 +15,106 @@ export default function PriceComponent({ items }: { items: any }) {
     ...goodsObj[key],
     key,
   }));
+
   return (
-    <section id="price" className="bg-white">
-      <div className="overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-96 pt-16 sm:pt-24 lg:pt-32 text-center">
-          <div className="mx-auto max-w-4xl">
-            <p className="text-base/7 font-semibold text-secondary mb-2">
-              {t('title')}
-            </p>
-            <h2 className="font-bold text-3xl lg:text-5xl tracking-tight mb-8 max-w-2xl mx-auto">
-              {t('subtitle')}
-            </h2>
-          </div>
-          <div className="relative mt-6">
-            <p className="text-sm md:text-base flex justify-center items-center gap-2 ">
-              <span className="text-gray-500">
-                {t('description')}
-                <a
-                  href="https://www.mvpfast.top/#price"
-                  className="btn btn-secondary btn-outline btn-sm ml-3"
-                >
-                  {t('buy')}
-                  <IoGiftOutline className="ml-2" />
-                </a>
-              </span>
-            </p>
-          </div>
-        </div>
-        <div className="flow-root bg-white pb-16 sm:pb-24 lg:pb-32">
-          <div className="-mt-80">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="mx-auto grid max-w-md grid-cols-1 gap-6 sm:gap-8 md:max-w-3xl md:grid-cols-2 lg:max-w-5xl xl:max-w-6xl xl:grid-cols-2">
-                {goods.map((good) => (
-                  <div
-                    key={good.key}
-                    className={`relative ${
-                      good.mostPopular ? 'border-2 border-secondary' : ''
-                    } flex flex-col justify-between rounded-3xl bg-white p-8  ring-1 ring-gray-900/10 sm:p-10`}
-                  >
-                    {good.mostPopular && (
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                        <span className="badge  badge-secondary text-xs badge-lg ">
-                          {t('more')}
-                          <span className="animate-bounce">🔥</span>
-                        </span>
-                      </div>
-                    )}
-                    <div>
-                      <h3
-                        id={good.key}
-                        className="text-base/7 font-semibold text-secondary"
-                      >
-                        {good.name}
-                      </h3>
-                      <div className="mt-4 flex items-baseline gap-x-2">
-                        <div className="flex gap-4 justify-between items-end text-5xl font-semibold tracking-tight text-gray-900">
-                          <div>￥{good.price}</div>
-                          <div className="relative text-lg opacity-80">
-                            <span className="absolute bg-base-content h-[1.5px] inset-x-0 top-[48%]"></span>
-                            {good.original && (
-                              <span className="text-gray-400">
-                                ￥{good.original}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <p className="mt-6 text-base/7 text-gray-600">
-                        {good.description}
-                      </p>
-                      <ul
-                        role="list"
-                        className="mt-10 space-y-4 text-sm/6 text-gray-600"
-                      >
-                        {good.includedFeatures.map((feature: string) => (
-                          <li key={feature} className="flex gap-x-3">
-                            <ImCheckmark2
-                              aria-hidden="true"
-                              className="h-6 w-5 flex-none text-secondary"
-                            />
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <a
-                      aria-describedby={good.key}
-                      className="btn btn-secondary mt-8 block rounded-md  px-3.5 py-2 text-center text-sm/6 font-semibold text-white shadow-xs  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 "
-                      href={`/pay?key=${good.key}`}
-                    >
-                      {t('buy')} 🚀
-                    </a>
-                    <p className="text-center mt-4 text-gray-400">
-                      {t('tips')}
-                    </p>
-                  </div>
-                ))}
+    <section id="price" className="bg-gray-50 py-20 sm:py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <span className="inline-block text-sm font-semibold text-purple-600 tracking-wide uppercase mb-3">
+            {t('title')}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+            {t('subtitle')}
+          </h2>
+          <p className="mt-4 text-gray-600">
+            {t('description')}
+          </p>
+        </motion.div>
+
+        {/* Pricing Cards */}
+        <div className="grid gap-8 lg:grid-cols-2 max-w-5xl mx-auto">
+          {goods.map((good, index) => (
+            <motion.div
+              key={good.key}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className={cn(
+                'relative bg-white rounded-2xl p-8 sm:p-10',
+                good.mostPopular
+                  ? 'ring-2 ring-purple-600 shadow-xl shadow-purple-500/10'
+                  : 'border border-gray-200'
+              )}
+            >
+              {/* Popular Badge */}
+              {good.mostPopular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="inline-flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-500 text-white text-xs font-semibold px-4 py-1.5 rounded-full">
+                    {t('more')}
+                  </span>
+                </div>
+              )}
+
+              {/* Plan Name */}
+              <h3 className="text-lg font-semibold text-purple-600 mb-4">
+                {good.name}
+              </h3>
+
+              {/* Price */}
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="text-4xl sm:text-5xl font-bold text-gray-900">
+                  ¥{good.price}
+                </span>
+                {good.original && (
+                  <span className="text-lg text-gray-400 line-through">
+                    ¥{good.original}
+                  </span>
+                )}
               </div>
-            </div>
-          </div>
+
+              {/* Description */}
+              <p className="text-gray-600 text-sm leading-relaxed mb-8">
+                {good.description}
+              </p>
+
+              {/* Features */}
+              <ul className="space-y-3 mb-8">
+                {good.includedFeatures.map((feature: string, i: number) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5">
+                      <Check className="w-3 h-3 text-purple-600" />
+                    </span>
+                    <span className="text-sm text-gray-600">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA Button */}
+              <a
+                href={`/pay?key=${good.key}`}
+                className={cn(
+                  'block w-full py-3 px-6 text-center text-sm font-semibold rounded-full transition-all duration-300',
+                  good.mostPopular
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:shadow-lg hover:shadow-purple-500/25 hover:scale-[1.02]'
+                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                )}
+              >
+                {t('buy')}
+              </a>
+
+              {/* Tips */}
+              <p className="text-center mt-4 text-xs text-gray-400">
+                {t('tips')}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

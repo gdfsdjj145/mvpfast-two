@@ -4,67 +4,52 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useTranslations, useMessages } from 'next-intl';
 
-interface Feature {
-  title: string;
-  description: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-}
-
-interface FeaturesSection {
-  features: Feature[];
-}
-
-export default function FeaturesSection({ features = [] }: FeaturesSection) {
+export default function FeaturesSection() {
   const t = useTranslations('FeatureCard');
   const messages = useMessages();
   const featuresConfig = messages.FeatureCard as any;
+
   return (
-    <section className="py-16 sm:py-24 lg:py-32 overflow-hidden bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16">
+    <section className="py-20 sm:py-24 lg:py-32 bg-white">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="space-y-20 lg:space-y-32">
           {featuresConfig.items.map((feature: { title: string; description: string; image: { src: string; alt: string } }, index: number) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`grid gap-8 lg:gap-12 items-center ${
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className={`grid gap-10 lg:gap-16 items-center ${
                 index % 2 === 0
-                  ? 'lg:grid-cols-[1fr_1.2fr]'
-                  : 'lg:grid-cols-[1.2fr_1fr]'
+                  ? 'lg:grid-cols-[1fr_1.1fr]'
+                  : 'lg:grid-cols-[1.1fr_1fr]'
               }`}
             >
+              {/* Image */}
               <div className={index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
-                <div className="relative aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 shadow-lg shadow-gray-200/50">
                   <Image
                     src={feature.image.src}
                     alt={feature.image.alt || ''}
                     fill
                     quality={85}
                     loading="lazy"
-                    className="object-cover transform hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 50vw"
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
               </div>
 
-              <div
-                className={`space-y-6 ${
-                  index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'
-                }`}
-              >
-                <div className="space-y-4">
-                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                    {t(`items.${index}.title`)}
-                  </h3>
-                  <p className="text-lg text-base-content/70 leading-relaxed">
-                    {t(`items.${index}.description`)}
-                  </p>
-                </div>
+              {/* Content */}
+              <div className={`${index % 2 === 0 ? 'lg:order-2 lg:pl-4' : 'lg:order-1 lg:pr-4'}`}>
+                <span className="inline-block w-12 h-1 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full mb-6" />
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight mb-4">
+                  {t(`items.${index}.title`)}
+                </h3>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  {t(`items.${index}.description`)}
+                </p>
               </div>
             </motion.div>
           ))}
