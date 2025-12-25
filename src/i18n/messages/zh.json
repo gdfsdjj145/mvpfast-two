@@ -49,7 +49,7 @@
   },
   "Header": {
     "logo": {
-      "url": "/title-logo.png",
+      "url": "/brand/title-logo.png",
       "alt": "MvpFast"
     },
     "nav": {
@@ -73,12 +73,12 @@
     }
   },
   "Hero": {
-    "title": "在一天之内构建",
-    "subtitle": "你的网站应用",
-    "description": "NextJs的开发模板，包含登录、支付、文章、博客和微信开发等模块功能，附带学习课程，让你学会快速打造网站应用，赚取第一桶金。",
+    "title": "AI + Template",
+    "subtitle": "构建你的网站应用",
+    "description": "AI驱动的NextJs开发模板，Vibe Coding的最佳组合，包含支付、登录、文章、博客等一系列功能，结合视频和课程，快速上线网站赚取第一桶金",
     "cta": {
       "start": {
-        "label": "开始使用",
+        "label": "立即开始构建",
         "href": "/dashboard/home"
       },
       "docs": {
@@ -87,30 +87,13 @@
         "target": "_blank"
       }
     },
-    "discount": {
-      "price": "",
-      "description": "这是模板demo，使用模板将为你节省大量时间"
-    },
-    "case": {
-      "num": "999",
-      "description": "程序员开始构建自己的产品",
-      "items": [
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        },
-        {
-          "user": "/a1.jpg"
-        }
-      ]
+    "testimonial": {
+      "avatar": "/avatars/a1.jpg",
+      "name": "开发者",
+      "quote": "极简的模板系统，让开发效率提升300%"
     },
     "banner": {
-      "url": "/banner.png",
+      "url": "/banners/banner.png",
       "alt": "MvpFast Preview"
     }
   },
@@ -118,25 +101,25 @@
     "items": [
       {
         "name": "NextJs",
-        "logo": "/nextjs-logo.png",
+        "logo": "/tech/nextjs-logo.png",
         "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
         "name": "TailWindCss",
-        "logo": "/tailwindcss.png",
+        "logo": "/tech/tailwindcss.png",
         "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
         "name": "Mongodb",
-        "logo": "/mongodb.png",
+        "logo": "/tech/mongodb.png",
         "stars": "26K⭐",
         "href": "https://www.mongodb.com/zh-cn/cloud/atlas/register"
       },
       {
         "name": "WeChat",
-        "logo": "/wx.png",
+        "logo": "/social/wx.png",
         "stars": "",
         "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
       }
@@ -144,7 +127,7 @@
   },
   "Admin": {
     "banner": {
-      "url": "/banner-1.png",
+      "url": "/banners/banner-1.png",
       "alt": "后台预览"
     }
   },
@@ -240,7 +223,7 @@
         "id": 1,
         "title": "LogoCook-Logo厨师",
         "href": "https://www.logocook.shop",
-        "imageUrl": "/f1.png",
+        "imageUrl": "/cases/f1.png",
         "des": "LogoCook是一款快速免费的logo生成器,通过在线编辑就可以快速的创建自己想要的logo,包括logo免费下载,可爱的logo属性设计,上传自定义的svg文件,满足个人和企业快速创建logo的需求",
         "gradient": "from-pink-500 to-rose-500",
         "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600"
@@ -249,7 +232,7 @@
         "id": 2,
         "title": "WeFight-一起奋斗吧！",
         "href": "https://www.wefight.cn",
-        "imageUrl": "/f2.png",
+        "imageUrl": "/cases/f2.png",
         "des": "WeFight是一个通过互相打卡竞技排名的方式来完成目标的网站,通过创建目标任务群组,邀请好友进入群组,完成每天打卡任务,通过每天打卡的方式来培养好习惯和完成目标,适合健身、学习、读书、工作各种社交场景",
         "gradient": "from-cyan-500 to-blue-500",
         "hoverGradient": "group-hover:from-cyan-600 group-hover:to-blue-600"
@@ -258,7 +241,7 @@
         "id": 3,
         "title": "IMessageU-Idea Message User",
         "href": "https://www.imessageu.shop",
-        "imageUrl": "/f3.png",
+        "imageUrl": "/cases/f3.png",
         "des": "一款快速打通用户反馈通道的产品，创建你的面板来接受用户的心声和建议，帮助开发者助力打造更好的产品，帮助开发者减少伪需求的开发，帮助开发者避免无用功",
         "gradient": "from-purple-500 to-indigo-500",
         "hoverGradient": "group-hover:from-purple-600 group-hover:to-indigo-600"

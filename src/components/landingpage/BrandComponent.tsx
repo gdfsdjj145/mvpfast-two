@@ -2,44 +2,47 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useTranslations, useMessages } from 'next-intl';
+import { useMessages } from 'next-intl';
 
-export default function BrandComponent({ brand }: { brand: any }) {
-  const t = useTranslations('Brand');
+export default function BrandComponent() {
   const messages = useMessages();
   const brandConfig = messages.Brand as any;
+
   return (
-    <section className="bg-gray-50/50 border-y border-gray-100">
-      <motion.div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 flex flex-wrap items-center justify-center gap-8 md:gap-16"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        {brandConfig.items.map((tech: { name: string; href: string; logo: string; stars?: string }) => (
-          <a
-            key={tech.name}
-            href={tech.href}
-            className="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-white hover:shadow-md transition-all duration-300"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src={tech.logo}
-              alt={tech.name}
-              width={32}
-              height={32}
-              quality={80}
-              loading="lazy"
-              className="w-8 h-8 object-contain"
-            />
-            <span className="font-medium">{tech.name}</span>
-            {tech.stars && (
-              <span className="text-sm text-gray-500">{tech.stars}</span>
-            )}
-          </a>
-        ))}
-      </motion.div>
+    <section className="border-y border-gray-100 bg-white">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 md:gap-x-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {brandConfig.items.map((tech: { name: string; href: string; logo: string }, index: number) => (
+            <motion.a
+              key={tech.name}
+              href={tech.href}
+              className="flex items-center gap-2.5 opacity-60 hover:opacity-100 transition-opacity duration-300"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 0.6, y: 0 }}
+              whileHover={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              <Image
+                src={tech.logo}
+                alt={tech.name}
+                width={28}
+                height={28}
+                quality={80}
+                loading="lazy"
+                className="w-7 h-7 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+              <span className="font-medium text-gray-700 text-sm">{tech.name}</span>
+            </motion.a>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }

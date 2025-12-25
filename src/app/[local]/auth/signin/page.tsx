@@ -129,7 +129,7 @@ export default function SignInPage() {
         <a href="/" className="mx-auto">
           <img
             alt="Your Company"
-            src="/logo.png"
+            src="/brand/logo.png"
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

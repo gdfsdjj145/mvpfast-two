@@ -1,108 +1,107 @@
 'use client';
 import React, { useState } from 'react';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import { CheckCircle, icons } from 'lucide-react';
+import { Check, icons } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useMessages } from 'next-intl';
 
-export default function FeatureComponent({ feature }: { feature: any }) {
+export default function FeatureComponent() {
   const t = useTranslations('Feature');
   const messages = useMessages();
   const featureConfig = messages.Feature as any;
-  const [ref, isIntersecting] = useIntersectionObserver({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
   const [selectedFeature, setSelectedFeature] = useState(0);
 
   const renderIcon = (icon: string) => {
     const LucideIcon = icons[icon as keyof typeof icons];
-    return <LucideIcon className="w-6 h-6" />;
+    return LucideIcon ? <LucideIcon className="w-5 h-5" /> : null;
   };
 
   return (
-    <section id="feat" className="bg-white py-16 sm:py-24 lg:py-32" ref={ref as any}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base text-secondary font-semibold leading-7 mb-4">
+    <section id="feat" className="bg-gray-50 py-20 sm:py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <span className="inline-block text-sm font-semibold text-purple-600 tracking-wide uppercase mb-3">
             {t('title')}
-          </h2>
-          <p className="mt-6 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
             {t('subtitle')}
-          </p>
-          <p className="mt-10 text-lg leading-8 mb-12 text-gray-600">
+          </h2>
+          <p className="mt-4 text-lg text-gray-600 leading-relaxed">
             {t('description')}
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-16">
-          <div className="mx-auto max-w-3xl">
-            <div className="grid grid-cols-3 md:grid-cols-3 gap-4 md:gap-8 mb-12 justify-center">
-              {featureConfig.items.map((item: { name: string; icon: string; description: string; list: string[] }, index: number) => (
-                <button
-                  key={item.name}
-                  onClick={() => setSelectedFeature(index)}
-                  className={cn(
-                    'group flex flex-col items-center justify-center gap-3 p-4 rounded-lg transition-all duration-300 hover:bg-gray-100',
-                    index === selectedFeature
-                      ? 'bg-secondary/10 text-secondary'
-                      : 'text-gray-600 hover:text-secondary'
-                  )}
-                >
-                  <div
-                    className={cn(
-                      'transition-transform duration-300 group-hover:scale-110',
-                      index === selectedFeature ? 'scale-110' : ''
-                    )}
-                  >
-                    {renderIcon(item.icon)}
-                  </div>
-                  <span className="font-medium text-sm md:text-base text-center">
-                    {t(`items.${index}.name`)}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative bg-[#f2f2f2] rounded-2xl overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedFeature}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="p-8 md:p-12"
+        {/* Tab Buttons */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-gray-100">
+            {featureConfig.items.map((item: { name: string; icon: string }, index: number) => (
+              <button
+                key={item.name}
+                onClick={() => setSelectedFeature(index)}
+                className={cn(
+                  'flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300',
+                  index === selectedFeature
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-md'
+                    : 'text-gray-600 hover:text-gray-900'
+                )}
               >
-                <div className="max-w-3xl mx-auto">
-                  <p className="font-bold text-gray-900 text-lg md:text-xl mb-8">
-                    {t(`items.${selectedFeature}.description`)}
-                  </p>
-                  <ul className="space-y-4">
-                    {featureConfig.items[selectedFeature].list.map(
-                      (item: string, index: number) => (
-                        <motion.li
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.1 }}
-                          className="flex items-start gap-4"
-                        >
-                          <CheckCircle className="w-5 h-5 text-secondary shrink-0 mt-1" />
-                          <span className="text-gray-600">
-                            {t(`items.${selectedFeature}.list.${index}`)}
-                          </span>
-                        </motion.li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                {renderIcon(item.icon)}
+                <span className="hidden sm:inline">{t(`items.${index}.name`)}</span>
+              </button>
+            ))}
           </div>
         </div>
+
+        {/* Content Panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedFeature}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="p-8 sm:p-10 lg:p-12"
+            >
+              <div className="max-w-3xl mx-auto">
+                <h3 className="text-xl font-semibold text-gray-900 mb-6">
+                  {t(`items.${selectedFeature}.description`)}
+                </h3>
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {featureConfig.items[selectedFeature].list.map(
+                    (_item: string, index: number) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.05 }}
+                        className="flex items-start gap-3"
+                      >
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5">
+                          <Check className="w-3 h-3 text-purple-600" />
+                        </span>
+                        <span className="text-gray-600">
+                          {t(`items.${selectedFeature}.list.${index}`)}
+                        </span>
+                      </motion.li>
+                    )
+                  )}
+                </ul>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

@@ -114,7 +114,7 @@ export default function OrderPage() {
                 <div className="p-6">
                   <div className="flex flex-col md:flex-row">
                     <img
-                      src="/banner.png"
+                      src="/banners/banner.png"
                       alt="mvpfast"
                       className="w-full md:w-1/3 rounded-lg md:mr-6 mb-4 md:mb-0"
                     />
