@@ -12,7 +12,9 @@
       "Bash(pnpm test:coverage:*)",
       "Bash(pnpm remove:*)",
       "Bash(ls:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(pnpm prisma generate:*)",
+      "Bash(npx prisma db push:*)"
     ],
     "deny": [],
     "ask": []

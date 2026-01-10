@@ -14,6 +14,7 @@ declare module 'next-auth' {
       phone?: string | null;
       role?: string;
       wechatOpenId?: string | null;
+      wechatUnionId?: string | null;
       nickName?: string | null;
       avatar?: string | null;
     };
@@ -22,6 +23,7 @@ declare module 'next-auth' {
   interface User {
     phone?: string | null;
     wechatOpenId?: string | null;
+    wechatUnionId?: string | null;
     role?: string;
     nickName?: string | null;
     avatar?: string | null;
@@ -140,6 +142,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           (session.user as any).email = user.email;
           (session.user as any).phone = user.phone;
           (session.user as any).wechatOpenId = user.wechatOpenId;
+          (session.user as any).wechatUnionId = user.wechatUnionId;
           (session.user as any).avatar = user.avatar;
           (session.user as any).nickName = user.nickName;
         }
@@ -152,6 +155,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email;
         token.phone = user.phone;
         token.wechatOpenId = user.wechatOpenId;
+        token.wechatUnionId = user.wechatUnionId;
         token.nickName = user.nickName;
         token.avatar = user.avatar;
       } else {
@@ -162,6 +166,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.email = dbUser.email;
           token.phone = dbUser.phone;
           token.wechatOpenId = dbUser.wechatOpenId;
+          token.wechatUnionId = dbUser.wechatUnionId;
           token.nickName = dbUser.nickName;
           token.avatar = dbUser.avatar;
         }
