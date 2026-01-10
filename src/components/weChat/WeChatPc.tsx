@@ -1,86 +1,135 @@
-import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { get } from '@/app/services/index';
-import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
-import { createQrCode, checkQrCode } from '@/app/[local]/auth/signin/actions';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+'use client';
+import React, { useEffect, useState, useRef } from 'react';
 
-const WxCode = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  let timer: any = null;
-  const [codeState, setCodeState] = useState({
-    ticket: '',
-    qrcode: '',
-  });
+declare global {
+  interface Window {
+    WxLogin: new (config: {
+      self_redirect?: boolean;
+      id: string;
+      appid: string;
+      scope: string;
+      redirect_uri: string;
+      state?: string;
+      style?: 'black' | 'white';
+      href?: string;
+      fast_login?: boolean | number
+      onReady?: (isReady: boolean) => void;
+    }) => void;
+  }
+}
+
+const WeChatPc = () => {
   const [loading, setLoading] = useState(true);
-  const hasRunEffect = useRef(false);
-
-  const getWxQrCode = async () => {
-    if (hasRunEffect.current) return; // 如果已经执行过，直接返回
-    hasRunEffect.current = true; // 标记为已执行
-
-    setLoading(true);
-    const data = await get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/getWxQrCode?key=1000`
-    );
-    createQrCode(data.ticket);
-    pollQrCode(data.ticket);
-    setCodeState(data);
-    setLoading(false);
-  };
-
-  const pollQrCode = async (ticket: string) => {
-    timer = setInterval(async () => {
-      const data: any = await checkQrCode(ticket);
-      if (data.isScan) {
-        clearInterval(timer);
-        timer = null;
-        const res = await signIn('credentials', {
-          type: 'wx',
-          identifier: data.openId,
-          redirect: false,
-        });
-        console.log(res);
-        if (res?.error) {
-          toast.error(res?.error);
-        } else {
-          const callbackUrl = searchParams.get('redirect') || '/';
-          window.location.href = callbackUrl;
-        }
-      }
-    }, 2000);
-  };
+  const [error, setError] = useState<string | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scriptLoadedRef = useRef(false);
 
   useEffect(() => {
-    getWxQrCode();
-    return () => {
-      if (timer) {
-        clearInterval(timer);
+    // 生成随机 state 用于防 CSRF 攻击
+    const generateState = () => {
+      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    };
+
+    const initWxLogin = () => {
+      if (!window.WxLogin) {
+        setError('微信登录SDK加载失败');
+        setLoading(false);
+        return;
+      }
+
+      const appid = process.env.NEXT_PUBLIC_WECHAT_OPEN_APPID;
+      const domain = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+      const redirectUri = encodeURIComponent(`${domain}/api/wx/callback`);
+      const state = `open_${generateState()}`;
+
+      try {
+        new window.WxLogin({
+          self_redirect: false,
+          id: 'wx_login_container',
+          appid: appid || '',
+          scope: 'snsapi_login',
+          redirect_uri: redirectUri,
+          state: state,
+          style: 'black',
+          href: '/css/wxlogin.css',
+          onReady: function (isReady: boolean) {
+            if (isReady) {
+              setLoading(false);
+            } else {
+              setError('二维码加载失败，请刷新重试');
+              setLoading(false);
+            }
+          },
+        });
+      } catch (err) {
+        console.error('WxLogin init error:', err);
+        setError('微信登录初始化失败');
+        setLoading(false);
       }
     };
+
+    // 加载微信登录 JS SDK
+    const loadWxLoginScript = () => {
+      if (scriptLoadedRef.current) {
+        initWxLogin();
+        return;
+      }
+
+      // 检查是否已经存在 script
+      const existingScript = document.querySelector('script[src*="wxLogin.js"]');
+      if (existingScript) {
+        scriptLoadedRef.current = true;
+        initWxLogin();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js';
+      script.async = true;
+      script.onload = () => {
+        scriptLoadedRef.current = true;
+        initWxLogin();
+      };
+      script.onerror = () => {
+        setError('微信登录SDK加载失败');
+        setLoading(false);
+      };
+      document.body.appendChild(script);
+    };
+
+    loadWxLoginScript();
   }, []);
 
   return (
-    <Suspense>
-      <figure className="relative">
-        {loading && (
-          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-10">
-            <div className="text-white text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white mr-2"></div>
-              <span>加载中...</span>
-            </div>
+    <div className="relative h-[180px]">
+      {loading && (
+        <div className="absolute inset-0 bg-base-100 flex justify-center items-center z-10">
+          <div className="text-center">
+            <span className="loading loading-spinner loading-lg"></span>
+            <p className="mt-2 text-sm text-gray-500">加载中...</p>
           </div>
-        )}
-        {codeState.ticket ? (
-          <img src={codeState.qrcode} alt="wx-code" className="w-full h-auto" />
-        ) : (
-          <div className="p-10 text-center">获取微信登录二维码中...</div>
-        )}
-      </figure>
-    </Suspense>
+        </div>
+      )}
+      {error && (
+        <div className="absolute inset-0 bg-base-100 flex justify-center items-center z-10">
+          <div className="text-center text-error">
+            <p>{error}</p>
+            <button
+              className="btn btn-sm btn-primary mt-2"
+              onClick={() => window.location.reload()}
+            >
+              刷新重试
+            </button>
+          </div>
+        </div>
+      )}
+      <div
+        id="wx_login_container"
+        ref={containerRef}
+        className="flex justify-center"
+      />
+    </div>
   );
 };
 
-export default WxCode;
+export default WeChatPc;

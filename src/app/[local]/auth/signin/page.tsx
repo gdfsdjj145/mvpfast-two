@@ -1,9 +1,8 @@
 'use client';
-import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { get } from '@/app/services/index';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { sendCode, createQrCode, checkQrCode } from './actions';
+import { sendCode } from './actions';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -20,36 +19,24 @@ const WeChatLogin = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // 检查初始窗口大小
     const checkDevice = () => {
-      setIsMobile(window.innerWidth < 768); // 768px 作为断点
+      setIsMobile(window.innerWidth < 768);
     };
-
-    // 首次执行
     checkDevice();
-
-    // 添加窗口大小变化监听
     window.addEventListener('resize', checkDevice);
-
-    // 清理监听器
-    return () => {
-      window.removeEventListener('resize', checkDevice);
-    };
+    return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  return (
-    <div className="card bg-base-100 w-80 shadow-xl mx-auto">
-      {isMobile ? <WeChatMobile /> : <WxChatPc />}
-      <div className="card-body gap-3">
-        <h2 className="card-title justify-center">
-          {isMobile ? '请使用微信登录' : '请使用微信扫码登录'}
-        </h2>
-        <p className="mt-6 text-center text-xs leading-5 text-gray-600">
-          {isMobile ? '点击按钮后跳转微信' : '扫码后等待几秒'}
-        </p>
+  if (isMobile) {
+    return (
+      <div className="text-center py-4">
+        <WeChatMobile />
+        <p className="mt-4 text-sm text-gray-500">点击按钮后跳转微信</p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <WxChatPc />;
 };
 
 const VerificationButton = (props: { type: string; form: { identifier: string; code: string } }) => {
@@ -197,9 +184,7 @@ export default function SignInPage() {
             )}
 
             {type === 'wx' && (
-              <div className="card bg-base-100 w-80 shadow-xl mx-auto">
-                <WeChatLogin />
-              </div>
+              <WeChatLogin />
             )}
 
             <div>
