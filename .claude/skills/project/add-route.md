@@ -30,7 +30,7 @@ author: MvpFast
 3. Model 层 (src/models/[feature].ts)
        ↓
 4. API 路由 (src/app/api/[feature]/route.ts)
-   或 Server Actions (src/app/[local]/[feature]/actions.ts)
+   或 Server Actions (src/app/(main)/[local]/[feature]/actions.ts)
 ```
 
 ---
@@ -474,7 +474,7 @@ export async function DELETE(
 ## 或者使用 Server Actions
 
 ### 位置
-`src/app/[local]/[feature]/actions.ts`
+`src/app/(main)/[local]/[feature]/actions.ts`
 
 ### 模板
 
@@ -659,7 +659,7 @@ import { apiLogger } from '@/lib/api-logger';
 - [ ] **创建 `src/models/[feature].ts`** Model 层
 - [ ] **创建 API 路由或 Server Actions**
   - API 路由: `src/app/api/[feature]/route.ts`
-  - Server Actions: `src/app/[local]/[feature]/actions.ts`
+  - Server Actions: `src/app/(main)/[local]/[feature]/actions.ts`
 - [ ] **测试接口**
 
 ### 文件结构示例（反馈功能）

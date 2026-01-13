@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { verifyCode } from './app/[local]/auth/signin/actions';
+import { verifyCode } from './app/(main)/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
 
 import prisma from './lib/prisma';

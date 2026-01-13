@@ -1,20 +1,46 @@
 ---
 name: seo_config
-description: 通过 next-intl message 配置国际化 SEO
+description: 通过 next-intl message 配置国际化 SEO（路由组架构）
 author: MvpFast
 ---
 
 # SEO 配置指南
 
-本项目使用 **next-intl message 系统** 作为 SEO 配置的单一数据源。所有 SEO 相关的文本内容（标题、描述、关键词等）都通过 `src/i18n/messages/*.json` 文件配置。
+本项目使用 **Route Groups（路由组）** 分离布局系统，SEO 配置分布在两个路由组中：
+
+- `(main)` 路由组：主应用 SEO（使用 next-intl message 系统）
+- `(fumadocs)` 路由组：文档/博客 SEO（独立配置）
+
+---
+
+## 项目 SEO 架构
+
+```
+src/app/
+├── (fumadocs)/               # Fumadocs 路由组
+│   └── layout.tsx            # 文档/博客 SEO（静态 metadata）
+│
+├── (main)/                   # 主应用路由组
+│   ├── layout.tsx            # 主应用全局 SEO（从 i18n 读取）
+│   └── [local]/
+│       └── layout.tsx        # 语言相关 metadata（locale, alternates）
+│
+├── sitemap.ts                # 全站 sitemap
+└── robots.ts                 # robots.txt
+
+src/i18n/messages/
+├── zh.json                   # 中文 SEO 配置
+└── en.json                   # 英文 SEO 配置
+```
 
 ---
 
 ## 核心原则
 
-1. **单一数据源**: SEO 配置全部在 message JSON 文件中
+1. **单一数据源**: 主应用 SEO 配置在 message JSON 文件中
 2. **天然 i18n**: 每种语言的 SEO 在对应语言文件中维护
 3. **AI 友好**: 修改 JSON 比修改 TypeScript 代码更简单可靠
+4. **路由组隔离**: 文档/博客与主应用 SEO 完全独立
 
 ---
 
@@ -78,16 +104,13 @@ author: MvpFast
 
 ## Layout 中读取 SEO 配置
 
-### 根布局 (src/app/[local]/layout.tsx)
+### 主应用根布局 (src/app/(main)/layout.tsx)
 
 ```typescript
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 
-export async function generateMetadata(
-  props: { params: Promise<{ locale: string }> }
-): Promise<Metadata> {
-  const { locale } = await props.params;
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata');
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
 
@@ -101,7 +124,7 @@ export async function generateMetadata(
 
     openGraph: {
       type: 'website',
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+      locale: 'zh_CN',
       url: siteUrl,
       siteName: t('title'),
       title: t('title'),
@@ -132,16 +155,69 @@ export async function generateMetadata(
 }
 ```
 
+### 语言子布局 (src/app/(main)/[local]/layout.tsx)
+
+```typescript
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(
+  props: { params: Promise<{ local: string }> }
+): Promise<Metadata> {
+  const { local: locale } = await props.params;
+  const t = await getTranslations('Metadata');
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
+
+  return {
+    // Open Graph - 根据语言设置 locale
+    openGraph: {
+      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+    },
+
+    // 语言替代版本
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        'zh-CN': `${siteUrl}/zh`,
+        'en-US': `${siteUrl}/en`,
+      },
+    },
+  };
+}
+```
+
+### Fumadocs 布局 (src/app/(fumadocs)/layout.tsx)
+
+```typescript
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'MvpFast 文档',
+    template: '%s | MvpFast',
+  },
+  description: 'MvpFast 使用指南、API 文档和技术博客',
+  keywords: '文档, 指南, API, 博客, MvpFast',
+  openGraph: {
+    type: 'website',
+    siteName: 'MvpFast Docs',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+```
+
 ### 页面级 Metadata
 
 ```typescript
-// src/app/[local]/pricing/page.tsx
+// src/app/(main)/[local]/pricing/page.tsx
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Pages.pricing');
-  const globalT = await getTranslations('Metadata');
 
   return {
     title: t('title'),  // 会自动应用 template: "%s | MvpFast"
@@ -300,7 +376,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // 在页面中使用
-// src/app/[local]/contact/page.tsx
+// src/app/(main)/[local]/contact/page.tsx
 export async function generateMetadata() {
   const t = await getTranslations('Pages.contact');
   return {
@@ -353,7 +429,9 @@ twitter: {
 |------|------|
 | `src/i18n/messages/zh.json` | 中文 SEO 配置 |
 | `src/i18n/messages/en.json` | 英文 SEO 配置 |
-| `src/app/[local]/layout.tsx` | 读取全局 SEO 配置 |
+| `src/app/(main)/layout.tsx` | 主应用全局 SEO 配置 |
+| `src/app/(main)/[local]/layout.tsx` | 语言相关 metadata |
+| `src/app/(fumadocs)/layout.tsx` | 文档/博客 SEO 配置 |
 | `src/app/sitemap.ts` | sitemap.xml 生成 |
 | `src/app/robots.ts` | robots.txt 配置 |
 | `src/components/seo/JsonLd.tsx` | 结构化数据组件 |

@@ -19,27 +19,57 @@ This file provides guidance to Claude Code when working with this codebase.
 
 ## Project Structure
 
+项目使用 **Route Groups（路由组）** 分离两套独立的布局系统：
+
 ```
 src/
-├── app/            # Next.js App Router pages
-│   ├── [local]/    # Localized routes
-│   ├── api/        # API endpoints
-│   ├── blog/       # Blog pages (MDX)
-│   └── docs/       # Documentation pages
-├── components/     # React components
-├── hooks/          # Custom React hooks
-├── i18n/           # Internationalization config
-├── lib/            # Utilities (prisma, payment, etc.)
-├── models/         # Database API functions
-├── stores/         # Global state management
-├── styles/         # Global styles
-├── auth.ts         # NextAuth configuration
-└── middleware.ts   # Next.js middleware
+├── app/
+│   ├── (fumadocs)/           # Fumadocs 路由组（文档和博客）
+│   │   ├── layout.tsx        # Fumadocs 根布局（含 html/body）
+│   │   ├── layout.config.ts  # Fumadocs 配置
+│   │   ├── docs/             # 文档页面 (/docs/*)
+│   │   └── blog/             # 博客页面 (/blog/*)
+│   │
+│   ├── (main)/               # 主应用路由组
+│   │   ├── layout.tsx        # 主应用根布局（含 html/body + SEO metadata）
+│   │   ├── globals.css       # 全局样式
+│   │   ├── [local]/          # 本地化路由 (/zh/*, /en/*)
+│   │   │   ├── layout.tsx    # 语言子布局（仅 metadata）
+│   │   │   ├── page.tsx      # 首页
+│   │   │   ├── auth/         # 认证页面
+│   │   │   ├── dashboard/    # 仪表板（受保护）
+│   │   │   └── pay/          # 支付页面
+│   │   └── api/              # API 路由
+│   │
+│   ├── error.tsx             # 全局错误边界
+│   ├── global-error.tsx      # 全局错误处理
+│   ├── not-found.tsx         # 404 页面
+│   ├── robots.ts             # robots.txt 生成
+│   └── sitemap.ts            # sitemap.xml 生成
+│
+├── components/               # React 组件
+├── hooks/                    # 自定义 React hooks
+├── i18n/                     # 国际化配置
+├── lib/                      # 工具库（prisma, payment 等）
+├── models/                   # 数据库操作函数
+├── stores/                   # 全局状态管理
+├── styles/                   # 全局样式
+├── auth.ts                   # NextAuth 配置
+└── middleware.ts             # Next.js 中间件
 
-prisma/schema.prisma  # MongoDB schema
-content/              # MDX content for docs & blog
-mcp/                  # Model Context Protocol server
+prisma/schema.prisma          # MongoDB schema
+content/                      # MDX 内容（docs & blog）
+mcp/                          # Model Context Protocol server
 ```
+
+### 路由组说明
+
+| 路由组 | URL 路径 | 布局系统 | SEO |
+|--------|----------|----------|-----|
+| `(fumadocs)` | `/docs/*`, `/blog/*` | Fumadocs UI | 独立 metadata |
+| `(main)` | `/zh/*`, `/en/*`, `/api/*` | 自定义布局 | 完整 SEO 配置 |
+
+**注意**: 路由组名称不会出现在 URL 中。
 
 ## Common Commands
 
@@ -74,7 +104,7 @@ pnpm dev:all      # Run dev server + MCP in parallel
 ### Styling
 - Use Tailwind CSS utility classes
 - Use DaisyUI components where applicable
-- Global styles in `src/styles/`
+- Global styles in `src/app/(main)/globals.css`
 
 ## Database Models
 
@@ -94,7 +124,41 @@ Key models in `prisma/schema.prisma`:
 
 ## Development Notes
 
-- API routes are in `src/app/api/`
-- Protected routes use NextAuth session checks
-- i18n messages are in `src/i18n/messages/`
-- Content for docs/blog is in `content/` directory
+### 添加新页面
+
+**主应用页面（需要国际化）**:
+```bash
+# 位置: src/app/(main)/[local]/your-page/page.tsx
+mkdir -p src/app/\(main\)/\[local\]/your-page
+```
+
+**后台管理页面（受保护）**:
+```bash
+# 位置: src/app/(main)/[local]/dashboard/your-feature/page.tsx
+mkdir -p src/app/\(main\)/\[local\]/dashboard/your-feature
+```
+
+**API 路由**:
+```bash
+# 位置: src/app/(main)/api/your-endpoint/route.ts
+mkdir -p src/app/\(main\)/api/your-endpoint
+```
+
+### SEO 配置
+
+- 主应用 SEO: `src/app/(main)/layout.tsx` + `src/i18n/messages/*.json`
+- 文档/博客 SEO: `src/app/(fumadocs)/layout.tsx`
+- sitemap: `src/app/sitemap.ts`
+- robots: `src/app/robots.ts`
+
+### 关键文件位置
+
+| 需求 | 文件位置 |
+|------|----------|
+| 修改主应用布局 | `src/app/(main)/layout.tsx` |
+| 修改文档布局 | `src/app/(fumadocs)/layout.tsx` |
+| 添加 API | `src/app/(main)/api/[name]/route.ts` |
+| 添加页面 | `src/app/(main)/[local]/[name]/page.tsx` |
+| 添加组件 | `src/components/[category]/[Name].tsx` |
+| 修改国际化 | `src/i18n/messages/[locale].json` |
+| 修改全局样式 | `src/app/(main)/globals.css` |

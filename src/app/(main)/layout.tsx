@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 import { cn } from '@/lib/utils';
-import '../globals.css';
+import './globals.css';
 import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
 import Script from 'next/script';
@@ -13,6 +13,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { GlobalJsonLd } from '@/components/seo';
+
+/**
+ * Main 路由组的根布局
+ * 用于主应用（[local]/* 路由）
+ */
 
 /**
  * 获取网站基础 URL
@@ -32,9 +37,7 @@ const fonts = localFont({
   variable: '--font-xft',
 });
 
-export async function generateMetadata(props: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const params = await props.params;
-  const { locale } = params;
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata');
   const siteUrl = getSiteUrl();
 
@@ -62,7 +65,7 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     // Open Graph
     openGraph: {
       type: 'website',
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+      locale: 'zh_CN',
       url: siteUrl,
       siteName: title,
       title,
@@ -128,13 +131,11 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
     // 验证
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION,
-      // yandex: 'yandex-verification-id',
-      // bing: 'bing-verification-id',
     },
   };
 }
 
-export default async function RootLayout({
+export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -150,15 +151,15 @@ export default async function RootLayout({
       </head>
       <body className={cn(fonts.variable, inter.className)}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-            <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
-              <SessionProvider>
-                <ReduxProvider>{children}</ReduxProvider>
+          <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
+            <SessionProvider>
+              <ReduxProvider>{children}</ReduxProvider>
             </SessionProvider>
-            </ThemeProviders>
+          </ThemeProviders>
         </NextIntlClientProvider>
-        <Toaster></Toaster>
-        <Analytics></Analytics>
-        <SpeedInsights></SpeedInsights>
+        <Toaster />
+        <Analytics />
+        <SpeedInsights />
         <Script
           strategy="lazyOnload"
           src={`https://www.googletagmanager.com/gtag/js?id=G-B315FBSZWP`}

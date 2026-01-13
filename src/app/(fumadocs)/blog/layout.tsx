@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import './blog-styles.css';
-import { blogSource } from '../../../source';
+import { blogSource } from '../../../../source';
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { baseOptions } from '../layout.config';
 

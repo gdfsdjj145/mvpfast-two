@@ -20,17 +20,42 @@ author: MvpFast
 
 ---
 
+## 项目路由组结构
+
+项目使用 **Route Groups（路由组）** 分离两套布局系统：
+
+```
+src/app/
+├── (fumadocs)/           # Fumadocs 路由组（文档和博客）
+│   ├── docs/             # /docs/* 路由
+│   └── blog/             # /blog/* 路由
+│
+└── (main)/               # 主应用路由组
+    ├── layout.tsx        # 根布局（含 html/body + SEO）
+    ├── globals.css       # 全局样式
+    ├── [local]/          # 本地化路由 (/zh/*, /en/*)
+    │   ├── page.tsx      # 首页
+    │   ├── auth/         # 认证页面
+    │   ├── dashboard/    # 仪表板（受保护）
+    │   └── pay/          # 支付页面
+    └── api/              # API 路由
+```
+
+**重要**: 所有主应用页面都在 `src/app/(main)/` 下创建。
+
+---
+
 ## 页面类型和生成策略
 
 ### 1. 前台普通页面（公开访问）
 
 **场景**: 首页、关于页、联系页等不需要登录的页面
 
-**生成位置**: `src/app/[local]/[page-name]/page.tsx`
+**生成位置**: `src/app/(main)/[local]/[page-name]/page.tsx`
 
 **模板**:
 ```tsx
-// src/app/[local]/about/page.tsx
+// src/app/(main)/[local]/about/page.tsx
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -54,11 +79,11 @@ export default function AboutPage() {
 
 **场景**: 用户管理、订单管理、数据列表等后台页面
 
-**生成位置**: `src/app/[local]/dashboard/[feature]/`
+**生成位置**: `src/app/(main)/[local]/dashboard/[feature]/`
 
 **需要创建的文件**:
 ```
-src/app/[local]/dashboard/[feature]/
+src/app/(main)/[local]/dashboard/[feature]/
 ├── page.tsx          # 主页面（列表展示）
 ├── actions.ts        # Server Actions（数据操作）
 └── modal/
@@ -564,7 +589,7 @@ export default function AddModal({
 
 **场景**: 反馈表单、联系表单、申请表单等
 
-**生成位置**: `src/app/[local]/[feature]/page.tsx`
+**生成位置**: `src/app/(main)/[local]/[feature]/page.tsx`
 
 **模板**:
 ```tsx
@@ -796,8 +821,8 @@ export default function FeedbackPage() {
 
 1. **数据库模型** (`prisma/schema.prisma` 添加)
 2. **Model 层** (`src/models/feedback.ts`)
-3. **前台表单** (`src/app/[local]/feedback/page.tsx`, `actions.ts`)
-4. **后台管理** (`src/app/[local]/dashboard/feedback/page.tsx`, `actions.ts`, `modal/AddModal.tsx`)
+3. **前台表单** (`src/app/(main)/[local]/feedback/page.tsx`, `actions.ts`)
+4. **后台管理** (`src/app/(main)/[local]/dashboard/feedback/page.tsx`, `actions.ts`, `modal/AddModal.tsx`)
 5. **API 路由**（可选，如需外部调用）
 
 详细代码见各模板。

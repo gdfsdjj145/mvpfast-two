@@ -45,10 +45,16 @@ const CHANGE_FREQUENCIES = {
 } as const;
 
 /**
- * 静态页面列表
+ * 需要语言前缀的页面（main 路由组）
  */
-const STATIC_PAGES = [
+const LOCALIZED_PAGES = [
   { path: '', priority: PAGE_PRIORITIES.home, changeFrequency: CHANGE_FREQUENCIES.home },
+] as const;
+
+/**
+ * 不需要语言前缀的页面（fumadocs 路由组）
+ */
+const NON_LOCALIZED_PAGES = [
   { path: '/blog', priority: PAGE_PRIORITIES.blog, changeFrequency: CHANGE_FREQUENCIES.blog },
   { path: '/docs', priority: PAGE_PRIORITIES.docs, changeFrequency: CHANGE_FREQUENCIES.docs },
 ] as const;
@@ -57,7 +63,8 @@ const STATIC_PAGES = [
  * 生成 sitemap.xml
  *
  * 包含:
- * - 静态页面 (首页、博客、文档等)
+ * - 本地化页面 (需要语言前缀，如首页)
+ * - 非本地化页面 (不需要语言前缀，如博客、文档)
  * - 多语言版本 (zh, en)
  * - 动态内容 (可扩展博客文章、文档页面等)
  */
@@ -68,8 +75,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = [];
 
-  // 添加静态页面
-  for (const page of STATIC_PAGES) {
+  // 添加需要语言前缀的页面（main 路由组）
+  for (const page of LOCALIZED_PAGES) {
     // 为每个语言版本生成 URL
     for (const locale of locales) {
       const url = page.path
@@ -92,6 +99,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
       });
     }
+  }
+
+  // 添加不需要语言前缀的页面（fumadocs 路由组）
+  for (const page of NON_LOCALIZED_PAGES) {
+    entries.push({
+      url: `${baseUrl}${page.path}`,
+      lastModified: now,
+      changeFrequency: page.changeFrequency as 'daily' | 'weekly' | 'monthly' | 'yearly',
+      priority: page.priority,
+    });
   }
 
   // TODO: 添加动态博客文章
