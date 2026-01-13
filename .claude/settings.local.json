@@ -14,7 +14,9 @@
       "Bash(ls:*)",
       "Bash(pnpm build:*)",
       "Bash(pnpm prisma generate:*)",
-      "Bash(npx prisma db push:*)"
+      "Bash(npx prisma db push:*)",
+      "WebSearch",
+      "WebFetch(domain:medium.com)"
     ],
     "deny": [],
     "ask": []
