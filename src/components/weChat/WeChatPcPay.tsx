@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
 import { paySign } from '@/lib/pay/sign';
-import { checkYungouOrderStatus } from '@/app/[local]/pay/actions';
+import { checkYungouOrderStatus } from '@/app/(main)/[local]/pay/actions';
 
 interface WeChatPayQRCodeProps {
   orderId: string;

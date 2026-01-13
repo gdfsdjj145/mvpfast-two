@@ -26,6 +26,8 @@ author: MvpFast
 
 ## 项目目录结构详解
 
+项目使用 **Route Groups（路由组）** 分离两套独立的布局系统：
+
 ```
 mvpfast-web/
 ├── .claude/                    # Claude Code 配置
@@ -44,6 +46,14 @@ mvpfast-web/
 │
 ├── src/
 │   ├── app/                    # Next.js App Router
+│   │   ├── (fumadocs)/         # Fumadocs 路由组（文档和博客）
+│   │   ├── (main)/             # 主应用路由组
+│   │   ├── error.tsx           # 全局错误边界
+│   │   ├── global-error.tsx    # 全局错误处理
+│   │   ├── not-found.tsx       # 404 页面
+│   │   ├── robots.ts           # robots.txt 生成
+│   │   └── sitemap.ts          # sitemap.xml 生成
+│   │
 │   ├── auth.ts                 # NextAuth 配置
 │   ├── components/             # React 组件
 │   ├── config.ts               # 应用配置
@@ -70,75 +80,85 @@ mvpfast-web/
 
 ---
 
-## 路由系统（App Router）
+## 路由组系统（Route Groups）
 
-### 路由结构 `src/app/`
+### 为什么使用路由组？
+
+项目使用两套完全不同的布局系统：
+- **Fumadocs**: 用于文档和博客，有自己的 UI 组件库
+- **主应用**: 自定义布局，包含完整的 SEO、认证、国际化等
+
+路由组让这两套系统完全独立，各自有自己的根布局（包含 `<html>` 和 `<body>` 标签）。
+
+### 路由组结构
 
 ```
 src/app/
-├── [local]/                    # 动态语言路由段 (en, zh)
-│   ├── layout.tsx              # 本地化根布局
-│   ├── page.tsx                # 首页 (Landing Page)
-│   │
-│   ├── auth/                   # 认证相关
-│   │   └── signin/
-│   │       ├── page.tsx        # 登录页面
-│   │       └── actions.ts      # Server Actions
-│   │
-│   ├── dashboard/              # 用户仪表板（受保护）
-│   │   ├── layout.tsx          # Dashboard 布局（侧边栏等）
-│   │   ├── home/page.tsx       # /dashboard/home
-│   │   ├── order/page.tsx      # /dashboard/order
-│   │   ├── share/page.tsx      # /dashboard/share
-│   │   ├── user/page.tsx       # /dashboard/user
-│   │   ├── person/page.tsx     # /dashboard/person
-│   │   └── dbdemo/page.tsx     # /dashboard/dbdemo
-│   │
-│   └── pay/                    # 支付页面（受保护）
-│       ├── page.tsx            # 支付页面
-│       └── actions.tsx         # 支付 Server Actions
+├── (fumadocs)/                 # Fumadocs 路由组
+│   ├── layout.tsx              # 根布局（含 html/body + fumadocs metadata）
+│   ├── layout.config.ts        # Fumadocs 配置
+│   ├── docs/                   # /docs/* 路由
+│   │   ├── layout.tsx          # Docs 子布局
+│   │   └── [...slug]/page.tsx  # 文档页面
+│   └── blog/                   # /blog/* 路由
+│       ├── layout.tsx          # Blog 子布局
+│       ├── page.tsx            # 博客列表
+│       └── [...slug]/page.tsx  # 博客文章
 │
-├── api/                        # API 路由
-│   ├── auth/[...nextauth]/     # NextAuth API
-│   ├── health/                 # 健康检查
-│   ├── orders/                 # 订单 API
-│   ├── wx/                     # 微信相关 API
-│   └── yungou/                 # 云购相关
-│
-├── blog/                       # 博客（非本地化）
-├── docs/                       # 文档（非本地化）
-│
-├── layout.tsx                  # 根布局
-├── globals.css                 # 全局样式
-├── error.tsx                   # 错误边界
-├── global-error.tsx            # 全局错误处理
-├── not-found.tsx               # 404 页面
-├── robots.ts                   # robots.txt 生成
-└── sitemap.ts                  # sitemap.xml 生成
+└── (main)/                     # 主应用路由组
+    ├── layout.tsx              # 根布局（含 html/body + 完整 SEO metadata）
+    ├── globals.css             # 全局样式
+    ├── [local]/                # 本地化路由 (/zh/*, /en/*)
+    │   ├── layout.tsx          # 语言子布局（仅 metadata，无 html/body）
+    │   ├── page.tsx            # 首页
+    │   ├── auth/signin/        # 登录页面
+    │   ├── dashboard/          # 仪表板（受保护）
+    │   │   ├── layout.tsx      # Dashboard 布局
+    │   │   ├── home/           # /dashboard/home
+    │   │   ├── order/          # /dashboard/order
+    │   │   └── ...
+    │   └── pay/                # 支付页面
+    └── api/                    # API 路由
+        ├── auth/[...nextauth]/ # NextAuth API
+        ├── health/             # 健康检查
+        ├── orders/             # 订单 API
+        └── wx/                 # 微信相关 API
 ```
 
-### 添加新页面的方法
+### 路由组对照表
 
-#### 1. 添加普通页面（需要国际化）
+| 路由组 | URL 路径 | 布局系统 | SEO | 说明 |
+|--------|----------|----------|-----|------|
+| `(fumadocs)` | `/docs/*`, `/blog/*` | Fumadocs UI | 独立配置 | 文档和博客 |
+| `(main)` | `/zh/*`, `/en/*` | 自定义布局 | 完整 SEO | 主应用页面 |
+| `(main)` | `/api/*` | 无布局 | 无 | API 端点 |
 
-在 `src/app/[local]/` 下创建文件夹和 `page.tsx`：
+**重要**: 路由组名称（括号内的部分）不会出现在 URL 中。
+
+---
+
+## 添加新页面的方法
+
+### 1. 添加主应用页面（需要国际化）
+
+在 `src/app/(main)/[local]/` 下创建：
 
 ```bash
 # 例如添加 /about 页面
-mkdir -p src/app/[local]/about
-touch src/app/[local]/about/page.tsx
+mkdir -p src/app/\(main\)/\[local\]/about
+touch src/app/\(main\)/\[local\]/about/page.tsx
 ```
 
 ```tsx
-// src/app/[local]/about/page.tsx
+// src/app/(main)/[local]/about/page.tsx
 export default function AboutPage() {
   return <div>关于我们</div>;
 }
 ```
 
-#### 2. 添加受保护页面（需要登录）
+### 2. 添加受保护页面（需要登录）
 
-1. 在 `src/app/[local]/dashboard/` 下创建
+1. 在 `src/app/(main)/[local]/dashboard/` 下创建
 2. 会自动继承 dashboard 的布局和认证保护
 3. 或在 `middleware.ts` 的 `protectedRoutes` 数组中添加路径
 
@@ -147,17 +167,17 @@ export default function AboutPage() {
 const protectedRoutes = ['/pay', '/dashboard', '/new-protected-route'];
 ```
 
-#### 3. 添加 API 端点
+### 3. 添加 API 端点
 
-在 `src/app/api/` 下创建 `route.ts`：
+在 `src/app/(main)/api/` 下创建 `route.ts`：
 
 ```bash
-mkdir -p src/app/api/my-endpoint
-touch src/app/api/my-endpoint/route.ts
+mkdir -p src/app/\(main\)/api/my-endpoint
+touch src/app/\(main\)/api/my-endpoint/route.ts
 ```
 
 ```ts
-// src/app/api/my-endpoint/route.ts
+// src/app/(main)/api/my-endpoint/route.ts
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -172,11 +192,38 @@ export async function POST(request: Request) {
 
 ---
 
+## SEO 配置说明
+
+### 布局层级与 Metadata
+
+```
+(main)/layout.tsx          → 主应用全局 SEO（从 i18n messages 读取）
+  └── [local]/layout.tsx   → 语言相关 metadata（locale, alternates）
+        └── page.tsx       → 页面级 metadata（可选）
+
+(fumadocs)/layout.tsx      → 文档/博客全局 SEO
+  └── docs/layout.tsx      → 文档 metadata
+  └── blog/layout.tsx      → 博客 metadata
+```
+
+### SEO 配置位置
+
+| 配置 | 位置 |
+|------|------|
+| 主应用全局 SEO | `src/app/(main)/layout.tsx` |
+| 语言相关 SEO | `src/app/(main)/[local]/layout.tsx` |
+| SEO 文本内容 | `src/i18n/messages/*.json` |
+| 文档/博客 SEO | `src/app/(fumadocs)/layout.tsx` |
+| sitemap | `src/app/sitemap.ts` |
+| robots | `src/app/robots.ts` |
+
+---
+
 ## API 结构详解
 
 ### API 位置
 
-所有 API 端点位于 `src/app/api/`
+所有 API 端点位于 `src/app/(main)/api/`
 
 ### 现有 API 端点
 
@@ -371,8 +418,8 @@ npx prisma studio     # 打开 Prisma Studio
 1. **数据模型**: 更新 `prisma/schema.prisma`
 2. **生成客户端**: `npx prisma generate`
 3. **数据库函数**: 在 `src/models/` 添加操作函数
-4. **API 端点**: 在 `src/app/api/` 创建 route.ts
-5. **页面**: 在 `src/app/[local]/` 创建页面
+4. **API 端点**: 在 `src/app/(main)/api/` 创建 route.ts
+5. **页面**: 在 `src/app/(main)/[local]/` 创建页面
 6. **组件**: 在 `src/components/` 添加可复用组件
 7. **国际化**: 在 `src/i18n/messages/` 添加文本
 
@@ -404,10 +451,12 @@ ALIYUN_ACCESS_KEY_SECRET="..."
 | 修改认证逻辑 | `src/auth.ts` |
 | 添加路由保护 | `src/middleware.ts` |
 | 修改数据库模型 | `prisma/schema.prisma` |
-| 添加 API | `src/app/api/[name]/route.ts` |
-| 添加页面 | `src/app/[local]/[name]/page.tsx` |
+| 添加 API | `src/app/(main)/api/[name]/route.ts` |
+| 添加页面 | `src/app/(main)/[local]/[name]/page.tsx` |
 | 添加组件 | `src/components/[category]/[Name].tsx` |
 | 修改国际化 | `src/i18n/messages/[locale].json` |
-| 添加全局样式 | `src/app/globals.css` |
-| 修改 SEO | `src/lib/seo.ts`, `src/app/robots.ts`, `src/app/sitemap.ts` |
-| 修改安全配置 | `next.config.mjs`, `src/lib/security.ts` |
+| 添加全局样式 | `src/app/(main)/globals.css` |
+| 修改主应用 SEO | `src/app/(main)/layout.tsx` |
+| 修改文档 SEO | `src/app/(fumadocs)/layout.tsx` |
+| 修改 sitemap | `src/app/sitemap.ts` |
+| 修改 robots | `src/app/robots.ts` |
