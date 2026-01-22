@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { sendCode } from './actions';
-import { config } from '@/config';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import WxChatPc from '@/components/weChat/WeChatPc';
 import WeChatMobile from '@/components/weChat/WeChatMobile';
+import { Loader2 } from 'lucide-react';
 
 const LOGIN_HASH = {
   wx: '💬 微信登录',
@@ -78,12 +78,43 @@ const VerificationButton = (props: { type: string; form: { identifier: string; c
 
 export default function SignInPage() {
   const router = useRouter();
-  const [type, setType] = useState(config.loginType);
+  const [loading, setLoading] = useState(true);
+  const [loginConfig, setLoginConfig] = useState({ loginType: 'phone', loginTypes: ['phone'] });
+  const [type, setType] = useState('phone');
   const [form, setForm] = useState({
     identifier: '',
     code: '',
   });
   const searchParams = useSearchParams();
+
+  // 从数据库加载登录配置
+  useEffect(() => {
+    const fetchLoginConfig = async () => {
+      try {
+        const response = await fetch('/api/admin/configs');
+        if (response.ok) {
+          const data = await response.json();
+          const loginTypeItem = data.items?.find((item: any) => item.key === 'auth.loginType');
+          const loginTypesItem = data.items?.find((item: any) => item.key === 'auth.loginTypes');
+
+          const fetchedLoginType = loginTypeItem?.value || 'phone';
+          const fetchedLoginTypes = loginTypesItem?.value || ['phone'];
+
+          setLoginConfig({
+            loginType: fetchedLoginType,
+            loginTypes: fetchedLoginTypes,
+          });
+          setType(fetchedLoginType);
+        }
+      } catch (error) {
+        console.error('Failed to fetch login config:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLoginConfig();
+  }, []);
 
   const handleFormChnage = (key: string, value: string) => {
     setForm({
@@ -109,6 +140,14 @@ export default function SignInPage() {
       router.push(callbackUrl);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center bg-slate-100">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen w-full flex justify-center items-center bg-slate-100">
@@ -189,7 +228,7 @@ export default function SignInPage() {
 
             <div>
               {
-                config.loginTypes.length > 1 && (
+                loginConfig.loginTypes.length > 1 && (
                   <div className="relative mt-10">
                     <div className="divider">或者</div>
                   </div>
@@ -197,7 +236,7 @@ export default function SignInPage() {
               }
 
               <div className="mt-6 flex justify-between gap-4">
-                {config.loginTypes.map((item) => (
+                {loginConfig.loginTypes.map((item) => (
                   <React.Fragment key={item}>
                     {type !== item && (
                       <button

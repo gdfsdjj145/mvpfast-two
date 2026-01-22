@@ -11,6 +11,9 @@ const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
 // 需要验证的路由列表 - 确保包含所有需要保护的路径
 const protectedRoutes = ['/pay', '/dashboard'];
 
+// 需要管理员权限的路由
+const adminRoutes = ['/dashboard/settings/system'];
+
 // 创建next-intl中间件
 const intlMiddleware = createMiddleware({
   // 使用i18n/routing中定义的配置
@@ -107,6 +110,39 @@ export async function middleware(request: NextRequest) {
 
     if (isDev && !token) {
       console.log('[DEV] 开发环境免登录访问:', pathnameWithoutLocale);
+    }
+
+    // 检查是否为管理员专属路由
+    if (adminRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+      // 开发环境跳过管理员检查
+      if (!isDev && token) {
+        // 获取用户信息检查角色
+        const userId = token.sub as string;
+        if (userId) {
+          try {
+            // 动态导入 prisma 避免在边缘环境中出错
+            const { default: prisma } = await import('./lib/prisma');
+            const user = await prisma.user.findUnique({
+              where: { id: userId },
+              select: { role: true },
+            });
+
+            const userRole = user?.role || 'user';
+            if (userRole !== 'admin' && userRole !== 'superadmin') {
+              console.log('非管理员访问管理员路由，重定向到 403');
+              let forbiddenPath = '/403';
+              if (currentLocale) {
+                forbiddenPath = `/${currentLocale}/403`;
+              }
+              return NextResponse.redirect(new URL(forbiddenPath, request.url));
+            }
+          } catch (error) {
+            console.error('检查用户角色失败:', error);
+          }
+        }
+      } else if (isDev) {
+        console.log('[DEV] 开发环境跳过管理员权限检查');
+      }
     }
   }
   

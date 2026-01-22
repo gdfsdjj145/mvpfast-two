@@ -266,6 +266,7 @@
           "微信公众号服务代码"
         ],
         "price": 0.1,
+        "creditPrice": 10,
         "original": 399,
         "mostPopular": false,
         "href": "/pay?key=normal"
@@ -281,6 +282,7 @@
           "从0到1的Nextjs全栈开发课程"
         ],
         "price": 0.1,
+        "creditPrice": 10,
         "original": 449,
         "mostPopular": true,
         "href": "/pay?key=most"

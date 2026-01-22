@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import {
   Chart as ChartJS,
@@ -12,11 +12,26 @@ import {
   Tooltip,
   Legend,
   Filler,
+  ArcElement,
 } from 'chart.js';
-import { Line, Bar } from 'react-chartjs-2';
-import { getDashboardStats } from './actions';
-import { FiUsers, FiShoppingCart } from 'react-icons/fi';
+import { Line, Doughnut } from 'react-chartjs-2';
+import { getUserDashboardData } from './actions';
 import { motion } from 'framer-motion';
+import {
+  Coins,
+  TrendingUp,
+  TrendingDown,
+  ArrowRightLeft,
+  History,
+  Ticket,
+  Gift,
+  Wallet,
+  X,
+  CheckCircle,
+  Loader2,
+} from 'lucide-react';
+import { config } from '@/config';
+import toast, { Toaster } from 'react-hot-toast';
 
 // 注册 ChartJS 组件
 ChartJS.register(
@@ -28,270 +43,604 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  ArcElement
 );
 
-// 统计卡片组件
-const StatCard = ({ title, value, icon, color, isLoading }: { title: string; value: string; icon: React.ReactNode; color: string; isLoading: boolean }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-base-100 rounded-xl shadow-md p-5 transition-all hover:shadow-lg border border-base-300/50"
-    >
-      {isLoading ? (
-        <div className="animate-pulse space-y-3">
-          <div className="h-4 bg-base-300 rounded w-3/4"></div>
-          <div className="h-8 bg-base-300 rounded w-1/2"></div>
-          <div className="absolute top-5 right-5 h-10 w-10 bg-base-300 rounded-lg"></div>
-        </div>
-      ) : (
-        <div className="flex items-center justify-between relative">
-          <div>
-            <p className="text-base-content/70 text-sm font-medium uppercase tracking-wider">{title}</p>
-            <p className="text-3xl font-bold mt-2 text-base-content">{value}</p>
-          </div>
-          <div className={`absolute top-0 right-0 ${color} p-3 rounded-lg text-white shadow-md`}>
-            {icon}
-          </div>
-        </div>
-      )}
-    </motion.div>
-  );
-};
+interface CreditTransaction {
+  id: string;
+  type: string;
+  amount: number;
+  balance: number;
+  description: string;
+  created_time: string;
+}
 
-// 图表卡片组件
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ChartCard = ({ title, ChartComponent, chartData, chartOptions, isLoading }: { title: string; ChartComponent: any; chartData: unknown; chartOptions: unknown; isLoading: boolean }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="bg-base-100 rounded-xl shadow-md p-5 transition-all hover:shadow-lg border border-base-300/50"
-    >
-      <h3 className="text-lg font-semibold mb-4 text-base-content">{title}</h3>
-      <div className="h-64 md:h-80">
-        {isLoading ? (
-          <div className="animate-pulse h-full flex items-center justify-center">
-            <div className="w-full h-full bg-base-300 rounded"></div>
-          </div>
-        ) : (
-          <ChartComponent data={chartData} options={chartOptions} />
-        )}
-      </div>
-    </motion.div>
-  );
-};
-
-// 创建蓝色渐变效果
-const createBlueGradient = (ctx: CanvasRenderingContext2D | null, chartArea: { top: number; bottom: number } | undefined) => {
-  if (!ctx || !chartArea) {
-    return 'rgba(0,0,0,0.1)';
-  }
-  const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-  gradient.addColorStop(0, 'rgba(65, 105, 225, 0.5)');  // 皇家蓝，半透明
-  gradient.addColorStop(1, 'rgba(65, 105, 225, 0.05)'); // 皇家蓝，几乎透明
-  return gradient;
-};
+interface DashboardData {
+  credits: number;
+  totalSpent: number;
+  totalRecharge: number;
+  totalConsume: number;
+  recentTransactions: CreditTransaction[];
+  dailyData: { labels: string[]; recharge: number[]; consume: number[] };
+}
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState<any>({
-    totalUsers: 0,
-    totalOrders: 0,
-    userGrowthData: { labels: [], datasets: [] },
-    orderTrendData: { labels: [], datasets: [] },
-  });
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [dateRange, setDateRange] = useState<7 | 30>(7);
 
-  const createGradientCallback = useCallback(createBlueGradient, []);
+  // 兑换码弹窗状态
+  const [redeemCode, setRedeemCode] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  const [redeemResult, setRedeemResult] = useState<{
+    success: boolean;
+    creditAmount?: number;
+    newBalance?: number;
+    message?: string;
+  } | null>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
-  useEffect(() => {
-    const fetchStats = async () => {
+  // 是否为积分模式
+  const isCreditsMode = config.purchaseMode === 'credits';
+
+  // 打开兑换弹窗
+  const openRedeemModal = () => {
+    setRedeemCode('');
+    setRedeemResult(null);
+    modalRef.current?.showModal();
+  };
+
+  // 关闭兑换弹窗
+  const closeRedeemModal = async () => {
+    const wasSuccess = redeemResult?.success;
+    modalRef.current?.close();
+    setRedeemCode('');
+    setRedeemResult(null);
+
+    // 如果兑换成功，关闭弹窗后再次刷新数据确保显示最新
+    if (wasSuccess) {
       setIsLoading(true);
       try {
-        // 获取真实数据
-        const dashboardStats = await getDashboardStats();
-        
-        // 定义多彩的颜色值
-        const vibrantColors = {
-          blue: '#4169E1',       // 皇家蓝
-          indigo: '#6610f2',     // 靛青色
-          purple: '#6f42c1',     // 紫色
-          pink: '#e83e8c',       // 粉色
-          red: '#dc3545',        // 红色
-          orange: '#fd7e14',     // 橙色
-          yellow: '#ffc107',     // 黄色
-          green: '#28a745',      // 绿色
-          teal: '#20c997',       // 蓝绿色
-          cyan: '#17a2b8',       // 青色
-        };
+        const newData = await getUserDashboardData(dateRange);
+        setData(newData);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
-        // 多彩图表背景色（带透明度）
-        const vibrantBgColors = [
-          'rgba(65, 105, 225, 0.7)',  // 蓝色
-          'rgba(102, 16, 242, 0.7)',  // 靛青色
-          'rgba(111, 66, 193, 0.7)',  // 紫色
-          'rgba(232, 62, 140, 0.7)',  // 粉色
-          'rgba(220, 53, 69, 0.7)',   // 红色
-          'rgba(253, 126, 20, 0.7)',  // 橙色
-          'rgba(255, 193, 7, 0.7)',   // 黄色
-        ];
+  // 兑换积分
+  const handleRedeem = async () => {
+    if (!redeemCode.trim()) {
+      toast.error('请输入兑换码');
+      return;
+    }
 
-        // 边框颜色（不透明）
-        const vibrantBorderColors = [
-          'rgb(65, 105, 225)',   // 蓝色
-          'rgb(102, 16, 242)',   // 靛青色
-          'rgb(111, 66, 193)',   // 紫色
-          'rgb(232, 62, 140)',   // 粉色
-          'rgb(220, 53, 69)',    // 红色
-          'rgb(253, 126, 20)',   // 橙色
-          'rgb(255, 193, 7)',    // 黄色
-        ];
+    setIsRedeeming(true);
+    setRedeemResult(null);
 
-        // 获取用户增长数据并应用样式
-        const userGrowthData = {
-          ...dashboardStats.userGrowthData,
-          datasets: dashboardStats.userGrowthData.datasets.map(dataset => ({
-            ...dataset,
-            fill: true,
-            borderColor: vibrantColors.blue,
-            backgroundColor: (context: any) => {
-              const chart = context.chart;
-              const { ctx, chartArea } = chart;
-              return createGradientCallback(ctx, chartArea);
-            },
-            tension: 0.3,
-            pointBackgroundColor: vibrantColors.blue,
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: vibrantColors.blue,
-          }))
-        };
+    try {
+      const res = await fetch('/api/user/redeem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: redeemCode.trim() }),
+      });
+      const result = await res.json();
 
-        // 获取订单趋势数据并应用样式
-        const orderTrendData = {
-          ...dashboardStats.orderTrendData,
-          datasets: dashboardStats.orderTrendData.datasets.map(dataset => ({
-            ...dataset,
-            backgroundColor: vibrantBgColors,
-            borderColor: vibrantBorderColors,
-            borderWidth: 1,
-            borderRadius: 4,
-          }))
-        };
-
-        // 合并真实数据和图表模拟数据
-        setStats({
-          totalUsers: dashboardStats.totalUsers,
-          totalOrders: dashboardStats.totalOrders,
-          userGrowthData: userGrowthData,
-          orderTrendData: orderTrendData,
+      if (result.success) {
+        setRedeemResult({
+          success: true,
+          creditAmount: result.data.creditAmount,
+          newBalance: result.data.newBalance,
+          message: result.message,
         });
+        // 刷新仪表盘数据
+        const newData = await getUserDashboardData(dateRange);
+        setData(newData);
+      } else {
+        setRedeemResult({
+          success: false,
+          message: result.error || '兑换失败',
+        });
+      }
+    } catch (error) {
+      setRedeemResult({
+        success: false,
+        message: '网络错误，请稍后重试',
+      });
+    } finally {
+      setIsRedeeming(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getUserDashboardData(dateRange);
+        setData(result);
       } catch (error) {
-        console.error("获取仪表盘数据失败:", error);
+        console.error('获取仪表盘数据失败:', error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchStats();
-  }, [createGradientCallback]);
+    fetchData();
+  }, [dateRange]);
 
-  const statCards = [
-    {
-      title: '总用户数',
-      value: isLoading ? '...' : stats.totalUsers.toLocaleString(),
-      icon: <FiUsers className="w-6 h-6" />,
-      color: 'bg-primary',
-    },
-    {
-      title: '总订单数',
-      value: isLoading ? '...' : stats.totalOrders.toLocaleString(),
-      icon: <FiShoppingCart className="w-6 h-6" />,
-      color: 'bg-secondary',
-    },
-  ];
+  // 格式化日期
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleString('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
-  const commonChartOptions = {
+  // 渲染类型图标
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case 'recharge':
+        return <TrendingUp size={16} className="text-success" />;
+      case 'consume':
+        return <TrendingDown size={16} className="text-error" />;
+      case 'refund':
+        return <ArrowRightLeft size={16} className="text-warning" />;
+      default:
+        return <Coins size={16} />;
+    }
+  };
+
+  // 渲染类型文字
+  const getTypeText = (type: string) => {
+    switch (type) {
+      case 'recharge':
+        return '充值';
+      case 'consume':
+        return '消费';
+      case 'refund':
+        return '退款';
+      default:
+        return type;
+    }
+  };
+
+  // 趋势图配置
+  const trendChartData = {
+    labels: data?.dailyData?.labels || [],
+    datasets: [
+      {
+        label: '充值',
+        data: data?.dailyData?.recharge || [],
+        borderColor: 'rgb(34, 197, 94)',
+        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+        fill: true,
+        tension: 0.4,
+      },
+      {
+        label: '消费',
+        data: data?.dailyData?.consume || [],
+        borderColor: 'rgb(239, 68, 68)',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const trendChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        position: 'top' as const,
       },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        titleColor: '#333',
-        bodyColor: '#666',
-        padding: 10,
-        cornerRadius: 4,
-        boxPadding: 5,
-        titleFont: {
-          size: 14,
-          weight: 'bold',
-        },
-        bodyFont: {
-          size: 13,
-        },
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        borderWidth: 1,
-      }
     },
     scales: {
-      x: {
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
-        },
-        ticks: {
-          color: 'rgba(0, 0, 0, 0.7)',
-          font: {
-            size: 12,
-          },
-        },
-      },
       y: {
         beginAtZero: true,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
-        },
-        ticks: {
-          color: 'rgba(0, 0, 0, 0.7)',
-          font: {
-            size: 12,
-          },
-          padding: 8,
-        },
       },
     },
   };
 
+  // 分布图数据
+  const distributionData = {
+    labels: ['充值', '消费'],
+    datasets: [
+      {
+        data: [data?.totalRecharge || 0, Math.abs(data?.totalConsume || 0)],
+        backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)'],
+        borderColor: ['rgb(34, 197, 94)', 'rgb(239, 68, 68)'],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  if (!isCreditsMode) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center text-base-content/60">
+          <Wallet size={48} className="mx-auto mb-4 opacity-50" />
+          <p>当前系统未启用积分模式</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {statCards.map((card, index) => (
-          <StatCard key={index} {...card} isLoading={isLoading} />
-        ))}
+      <Toaster position="top-right" />
+      {/* 时间范围选择 */}
+      <div className="flex justify-end">
+        <div className="join">
+          <button
+            className={`join-item btn btn-sm ${dateRange === 7 ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={() => setDateRange(7)}
+          >
+            近7天
+          </button>
+          <button
+            className={`join-item btn btn-sm ${dateRange === 30 ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={() => setDateRange(30)}
+          >
+            近30天
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard
-          title="用户增长趋势"
-          ChartComponent={Line} 
-          chartData={stats.userGrowthData}
-          chartOptions={commonChartOptions}
-          isLoading={isLoading}
-        />
+      {/* 主要统计卡片 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* 当前积分 - 大卡片 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="md:col-span-2 lg:col-span-1 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white shadow-lg"
+        >
+          {isLoading ? (
+            <div className="animate-pulse space-y-3">
+              <div className="h-4 bg-white/30 rounded w-1/2"></div>
+              <div className="h-10 bg-white/30 rounded w-3/4"></div>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 mb-2">
+                <Coins size={20} />
+                <span className="text-white/80 text-sm font-medium">当前积分</span>
+              </div>
+              <div className="text-4xl font-bold">
+                {(data?.credits || 0).toLocaleString()}
+              </div>
+              <div className="text-white/70 text-sm mt-2">
+                累计消费 ¥{(data?.totalSpent || 0).toFixed(2)}
+              </div>
+            </>
+          )}
+        </motion.div>
 
-        <ChartCard
-          title="每日订单趋势"
-          ChartComponent={Bar}
-          chartData={stats.orderTrendData}
-          chartOptions={commonChartOptions}
-          isLoading={isLoading}
-        />
+        {/* 总充值 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+        >
+          {isLoading ? (
+            <div className="animate-pulse space-y-3">
+              <div className="h-4 bg-base-300 rounded w-1/2"></div>
+              <div className="h-8 bg-base-300 rounded w-3/4"></div>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="p-2 bg-success/10 rounded-lg">
+                  <TrendingUp size={18} className="text-success" />
+                </div>
+                <span className="text-base-content/60 text-sm">总充值</span>
+              </div>
+              <div className="text-2xl font-bold text-success">
+                +{(data?.totalRecharge || 0).toLocaleString()}
+              </div>
+            </>
+          )}
+        </motion.div>
+
+        {/* 总消费 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+        >
+          {isLoading ? (
+            <div className="animate-pulse space-y-3">
+              <div className="h-4 bg-base-300 rounded w-1/2"></div>
+              <div className="h-8 bg-base-300 rounded w-3/4"></div>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="p-2 bg-error/10 rounded-lg">
+                  <TrendingDown size={18} className="text-error" />
+                </div>
+                <span className="text-base-content/60 text-sm">总消费</span>
+              </div>
+              <div className="text-2xl font-bold text-error">
+                {(data?.totalConsume || 0).toLocaleString()}
+              </div>
+            </>
+          )}
+        </motion.div>
+
+        {/* 快捷操作 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="p-2 bg-primary/10 rounded-lg">
+              <Gift size={18} className="text-primary" />
+            </div>
+            <span className="text-base-content/60 text-sm">快捷操作</span>
+          </div>
+          <button
+            onClick={openRedeemModal}
+            className="btn btn-primary btn-sm w-full gap-2"
+          >
+            <Ticket size={16} />
+            兑换积分
+          </button>
+        </motion.div>
       </div>
+
+      {/* 图表和交易记录 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* 趋势图 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="lg:col-span-2 bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+        >
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <History size={20} className="text-primary" />
+            近{dateRange}天积分变动
+          </h3>
+          <div className="h-64">
+            {isLoading ? (
+              <div className="animate-pulse h-full bg-base-300 rounded"></div>
+            ) : (
+              <Line data={trendChartData} options={trendChartOptions} />
+            )}
+          </div>
+        </motion.div>
+
+        {/* 分布图 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+        >
+          <h3 className="text-lg font-semibold mb-4">积分分布</h3>
+          <div className="h-64 flex items-center justify-center">
+            {isLoading ? (
+              <div className="animate-pulse w-40 h-40 bg-base-300 rounded-full"></div>
+            ) : (data?.totalRecharge || 0) + Math.abs(data?.totalConsume || 0) > 0 ? (
+              <Doughnut
+                data={distributionData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                  },
+                }}
+              />
+            ) : (
+              <div className="text-center text-base-content/50">
+                <Coins size={40} className="mx-auto mb-2 opacity-30" />
+                <p className="text-sm">暂无数据</p>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* 最近交易记录 */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="bg-base-100 rounded-2xl shadow-md border border-base-300/50"
+      >
+        <div className="p-5 border-b border-base-300">
+          <h3 className="text-lg font-semibold flex items-center gap-2">
+            <History size={20} className="text-primary" />
+            最近交易记录
+          </h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>类型</th>
+                <th>积分变动</th>
+                <th>余额</th>
+                <th>描述</th>
+                <th>时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-8">
+                    <span className="loading loading-spinner loading-md"></span>
+                  </td>
+                </tr>
+              ) : !data?.recentTransactions?.length ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-8 text-base-content/50">
+                    暂无交易记录
+                  </td>
+                </tr>
+              ) : (
+                data.recentTransactions.map((tx) => (
+                  <tr key={tx.id} className="hover">
+                    <td>
+                      <div className="flex items-center gap-2">
+                        {getTypeIcon(tx.type)}
+                        <span className="text-sm">{getTypeText(tx.type)}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <span
+                        className={`font-semibold ${
+                          tx.amount > 0 ? 'text-success' : 'text-error'
+                        }`}
+                      >
+                        {tx.amount > 0 ? '+' : ''}
+                        {tx.amount}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="flex items-center gap-1">
+                        <Coins size={14} className="text-warning" />
+                        {tx.balance}
+                      </div>
+                    </td>
+                    <td>
+                      <span className="text-sm text-base-content/70 max-w-[200px] truncate block">
+                        {tx.description}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="text-sm text-base-content/50">
+                        {formatDate(tx.created_time)}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        {data?.recentTransactions && data.recentTransactions.length > 0 && (
+          <div className="p-4 border-t border-base-300 text-center">
+            <a href="/dashboard/credits" className="link link-primary text-sm">
+              查看全部记录 →
+            </a>
+          </div>
+        )}
+      </motion.div>
+
+      {/* 兑换积分弹窗 */}
+      <dialog ref={modalRef} className="modal">
+        <div className="modal-box">
+          <button
+            onClick={closeRedeemModal}
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            <X size={18} />
+          </button>
+
+          <h3 className="font-bold text-lg flex items-center gap-2 mb-4">
+            <Ticket size={20} className="text-primary" />
+            兑换积分
+          </h3>
+
+          {redeemResult?.success ? (
+            // 兑换成功显示
+            <div className="text-center py-6">
+              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle size={32} className="text-success" />
+              </div>
+              <h4 className="text-xl font-bold text-success mb-2">兑换成功！</h4>
+              <p className="text-base-content/70 mb-4">
+                获得 <span className="font-bold text-warning">{redeemResult.creditAmount}</span> 积分
+              </p>
+              <div className="bg-base-200 rounded-xl p-4">
+                <div className="text-sm text-base-content/60">当前积分余额</div>
+                <div className="text-2xl font-bold flex items-center justify-center gap-2">
+                  <Coins size={20} className="text-warning" />
+                  {redeemResult.newBalance?.toLocaleString()}
+                </div>
+              </div>
+              <button
+                onClick={closeRedeemModal}
+                className="btn btn-primary mt-6"
+              >
+                完成
+              </button>
+            </div>
+          ) : (
+            // 输入兑换码
+            <div className="space-y-4">
+              <div>
+                <label className="label">
+                  <span className="label-text">请输入兑换码</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="例如：WELCOME100"
+                  className="input input-bordered w-full uppercase"
+                  value={redeemCode}
+                  onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !isRedeeming) {
+                      handleRedeem();
+                    }
+                  }}
+                  disabled={isRedeeming}
+                  autoFocus
+                />
+              </div>
+
+              {redeemResult && !redeemResult.success && (
+                <div className="alert alert-error">
+                  <span>{redeemResult.message}</span>
+                </div>
+              )}
+
+              <div className="modal-action">
+                <button
+                  onClick={closeRedeemModal}
+                  className="btn btn-ghost"
+                  disabled={isRedeeming}
+                >
+                  取消
+                </button>
+                <button
+                  onClick={handleRedeem}
+                  className="btn btn-primary gap-2"
+                  disabled={isRedeeming || !redeemCode.trim()}
+                >
+                  {isRedeeming ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      兑换中...
+                    </>
+                  ) : (
+                    <>
+                      <Ticket size={16} />
+                      确认兑换
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button onClick={closeRedeemModal}>close</button>
+        </form>
+      </dialog>
     </div>
   );
 }

@@ -1,177 +1,186 @@
 'use server';
 
-import { getOrders } from '@/models/order';
 import prisma from '@/lib/prisma';
+import { auth } from '@/auth';
+import { getUserCreditInfo, getCreditTransactions } from '@/models/credit';
+import { unstable_noStore as noStore } from 'next/cache';
 
-// 获取用户增长趋势数据（最近6个月）
-async function getUserGrowthData() {
-  // 获取当前日期
-  const now = new Date();
-  const months = [];
-  const userCounts = [];
-  
-  // 获取过去6个月的月份名称和用户数据
-  for (let i = 5; i >= 0; i--) {
-    const targetMonth = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const nextMonth = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 1);
-    
-    // 月份名称（中文）
-    const monthName = `${targetMonth.getMonth() + 1}月`;
-    months.push(monthName);
-    
-    // 查询该月创建的用户数量
-    const userCount = await prisma.user.count({
+// 获取用户仪表盘数据
+export const getUserDashboardData = async (days: number = 7) => {
+  noStore(); // 禁用缓存，确保每次获取最新数据
+
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        credits: 0,
+        totalSpent: 0,
+        totalRecharge: 0,
+        totalConsume: 0,
+        recentTransactions: [],
+        dailyData: { labels: [], recharge: [], consume: [] },
+      };
+    }
+
+    const userId = session.user.id;
+
+    // 获取用户积分信息
+    const creditInfo = await getUserCreditInfo(userId);
+
+    // 获取指定时间范围内的交易记录
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+    startDate.setHours(0, 0, 0, 0);
+
+    const rangeTransactions = await prisma.creditTransaction.findMany({
       where: {
-        created_time: {
-          gte: targetMonth,
-          lt: nextMonth
-        }
+        userId,
+        created_time: { gte: startDate },
+      },
+      orderBy: { created_time: 'desc' },
+    });
+
+    // 计算时间范围内的总充值和总消费
+    let totalRecharge = 0;
+    let totalConsume = 0;
+
+    rangeTransactions.forEach((tx) => {
+      if (tx.type === 'recharge' && tx.amount > 0) {
+        totalRecharge += tx.amount;
+      } else if (tx.type === 'consume' || tx.amount < 0) {
+        totalConsume += tx.amount; // 负数
       }
     });
-    
-    userCounts.push(userCount);
+
+    // 获取最近10条交易记录
+    const recentTransactions = rangeTransactions.slice(0, 10).map((tx) => ({
+      id: tx.id,
+      type: tx.type,
+      amount: tx.amount,
+      balance: tx.balance,
+      description: tx.description,
+      created_time: tx.created_time.toISOString(),
+    }));
+
+    // 获取指定天数的数据
+    const dailyData = await getDailyTransactionData(userId, days);
+
+    return {
+      credits: creditInfo?.credits ?? 0,
+      totalSpent: creditInfo?.totalSpent ?? 0,
+      totalRecharge,
+      totalConsume,
+      recentTransactions,
+      dailyData,
+    };
+  } catch (error) {
+    console.error('获取用户仪表盘数据失败:', error);
+    return {
+      credits: 0,
+      totalSpent: 0,
+      totalRecharge: 0,
+      totalConsume: 0,
+      recentTransactions: [],
+      dailyData: { labels: [], recharge: [], consume: [] },
+    };
   }
-  
-  return {
-    labels: months,
-    datasets: [
-      {
-        label: '用户增长',
-        data: userCounts,
+};
+
+// 获取指定天数的每日交易数据
+async function getDailyTransactionData(userId: string, days: number = 7) {
+  const labels: string[] = [];
+  const rechargeData: number[] = [];
+  const consumeData: number[] = [];
+
+  const now = new Date();
+
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(now.getDate() - i);
+    date.setHours(0, 0, 0, 0);
+
+    const nextDate = new Date(date);
+    nextDate.setDate(date.getDate() + 1);
+
+    // 日期标签
+    labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
+
+    // 查询当天的充值和消费
+    const dayTransactions = await prisma.creditTransaction.findMany({
+      where: {
+        userId,
+        created_time: {
+          gte: date,
+          lt: nextDate,
+        },
       },
-    ],
+    });
+
+    let dayRecharge = 0;
+    let dayConsume = 0;
+
+    dayTransactions.forEach((tx) => {
+      if (tx.type === 'recharge' && tx.amount > 0) {
+        dayRecharge += tx.amount;
+      } else if (tx.type === 'consume' || tx.amount < 0) {
+        dayConsume += Math.abs(tx.amount);
+      }
+    });
+
+    rechargeData.push(dayRecharge);
+    consumeData.push(dayConsume);
+  }
+
+  return {
+    labels,
+    recharge: rechargeData,
+    consume: consumeData,
   };
 }
 
-// 获取一周订单数据
-async function getWeeklyOrderData() {
-  // 获取当前日期
-  const now = new Date();
-  const dayNames = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-  const orderCounts = [];
-  
-  // 获取今天是星期几（0是周日，1是周一，...）
-  const todayDay = now.getDay();
-  
-  // 计算本周一的日期
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (todayDay === 0 ? 6 : todayDay - 1));
-  monday.setHours(0, 0, 0, 0);
-  
-  // 遍历本周的每一天
-  for (let i = 0; i < 7; i++) {
-    const currentDay = new Date(monday);
-    currentDay.setDate(monday.getDate() + i);
-    
-    const nextDay = new Date(currentDay);
-    nextDay.setDate(currentDay.getDate() + 1);
-    
-    // 查询当天的订单数量
-    const orderCount = await prisma.order.count({
-      where: {
-        created_time: {
-          gte: currentDay,
-          lt: nextDay
-        }
-      }
-    });
-    
-    orderCounts.push(orderCount);
-  }
-  
-  return {
-    labels: dayNames,
-    datasets: [
-      {
-        label: '每日订单',
-        data: orderCounts,
-      },
-    ],
-  };
-}
-
+// 保留旧的函数以兼容其他地方的调用
 export const getDashboardStats = async () => {
   try {
-    // 获取真实数据
-    const [ordersData, totalUsers, userGrowthData, weeklyOrderData] = await Promise.all([
-      getOrders({}),
-      prisma.user.count(), // 直接使用prisma计数而不是findUsers
-      getUserGrowthData(),
-      getWeeklyOrderData()
+    const [totalUsers, totalOrders] = await Promise.all([
+      prisma.user.count(),
+      prisma.order.count(),
     ]);
 
-    const totalOrders = ordersData.count;
-
-    // 其他保持Mock数据
-    const mockData = {
+    return {
       totalUsers,
       totalOrders,
-      totalRevenue: 99999,
-      totalViews: 56789,
-      recentOrders: [
-        {
-          id: '1',
-          orderId: 'ORD20240301001',
-          userName: '张三',
-          productName: '专业版',
-          amount: 299,
-          created_time: new Date('2024-03-01'),
-        },
-        {
-          id: '2',
-          orderId: 'ORD20240228001',
-          userName: '李四',
-          productName: '基础版',
-          amount: 99,
-          created_time: new Date('2024-02-28'),
-        },
-        {
-          id: '3',
-          orderId: 'ORD20240227001',
-          userName: '王五',
-          productName: '专业版',
-          amount: 299,
-          created_time: new Date('2024-02-27'),
-        },
-      ],
-      // 使用真实数据替换模拟数据
-      monthlyRevenue: [
-        { month: '1月', revenue: 12000 },
-        { month: '2月', revenue: 19000 },
-        { month: '3月', revenue: 15000 },
-        { month: '4月', revenue: 22000 },
-        { month: '5月', revenue: 18000 },
-        { month: '6月', revenue: 25000 },
-        { month: '7月', revenue: 28000 },
-        { month: '8月', revenue: 30000 },
-        { month: '9月', revenue: 35000 },
-        { month: '10月', revenue: 32000 },
-        { month: '11月', revenue: 38000 },
-        { month: '12月', revenue: 42000 },
-      ],
-      orderTypes: [
-        { name: '基础版', count: 150 },
-        { name: '专业版', count: 280 },
-        { name: '企业版', count: 70 },
-      ],
-      // 添加真实用户增长和订单趋势数据
-      userGrowthData,
-      orderTrendData: weeklyOrderData,
+      userGrowthData: { labels: [], datasets: [{ label: '用户增长', data: [] }] },
+      orderTrendData: { labels: [], datasets: [{ label: '每日订单', data: [] }] },
     };
-
-    return mockData;
   } catch (error) {
     console.error('获取仪表盘数据失败:', error);
     return {
       totalUsers: 0,
       totalOrders: 0,
-      totalRevenue: 0,
-      totalViews: 0,
-      recentOrders: [],
-      monthlyRevenue: [],
-      orderTypes: [],
       userGrowthData: { labels: [], datasets: [{ label: '用户增长', data: [] }] },
       orderTrendData: { labels: [], datasets: [{ label: '每日订单', data: [] }] },
     };
+  }
+};
+
+// 获取当前用户积分信息
+export const getCurrentUserCredits = async () => {
+  noStore(); // 禁用缓存
+
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return null;
+    }
+
+    const creditInfo = await getUserCreditInfo(session.user.id);
+
+    return {
+      credits: creditInfo?.credits ?? 0,
+      totalSpent: creditInfo?.totalSpent ?? 0,
+    };
+  } catch (error) {
+    console.error('获取用户积分信息失败:', error);
+    return null;
   }
 };

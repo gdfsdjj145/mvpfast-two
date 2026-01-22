@@ -5,22 +5,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { TbReportMoney } from 'react-icons/tb';
-import { IoGiftOutline, IoSearchOutline } from 'react-icons/io5';
+import { IoGiftOutline } from 'react-icons/io5';
 import {
-  Database,
-  BarChart2,
   User,
+  Users,
   LogOut,
   Home,
   FileText,
   ChevronUp,
   ChevronRight,
   ChevronLeft,
-  Bell,
   Menu,
   X,
   Settings,
-  Sparkles,
+  UserCog,
+  Ticket,
+  Coins,
+  LayoutDashboard,
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -30,7 +31,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const t = useTranslations('Dashboard');
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(Boolean);
-  const currentPath = pathSegments[pathSegments.length - 1] || 'home';
+
+  // 获取 dashboard 之后的路径作为当前路径
+  const dashboardIndex = pathSegments.indexOf('dashboard');
+  const currentPath = dashboardIndex >= 0
+    ? pathSegments.slice(dashboardIndex + 1).join('/') || 'users'
+    : 'users';
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -51,11 +57,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const menuRef = useRef<HTMLDivElement>(null);
-  const notificationsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (session?.user) {
@@ -69,9 +72,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
-      }
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
-        setNotificationsOpen(false);
       }
     };
 
@@ -121,99 +121,169 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return '未知用户';
   };
 
+  // 用户角色
+  const userRole = session?.user?.role || 'user';
+  const isAdmin = userRole === 'admin' || userRole === 'superadmin';
+
+  // 需要管理员权限的路径
+  const adminOnlyPaths = ['users', 'order', 'redemption', 'settings/system'];
+
+  // 检查当前路径是否需要管理员权限
+  useEffect(() => {
+    if (status === 'loading') return;
+
+    const needsAdmin = adminOnlyPaths.some((path) => currentPath === path || currentPath.startsWith(path + '/'));
+
+    if (needsAdmin && !isAdmin) {
+      // 非管理员访问管理页面，重定向到 403
+      router.replace('/403');
+    }
+  }, [currentPath, isAdmin, status, router]);
+
   // 项目主题色 #9462ff
-  const menuGroups = [
+  const allMenuGroups = [
     {
-      title: t('main'),
+      title: '概览',
       items: [
         {
-          label: t('tabs.home.title'),
+          label: '仪表盘',
           key: 'home',
-          description: t('tabs.home.description'),
-          icon: <BarChart2 size={20} />,
+          description: '查看个人积分和消费概览',
+          icon: <LayoutDashboard size={20} />,
+          adminOnly: false,
         },
         {
-          label: t('tabs.dbdemo.title'),
-          key: 'dbdemo',
-          description: t('tabs.dbdemo.description'),
-          icon: <Database size={20} />,
+          label: '积分记录',
+          key: 'credits',
+          description: '查看积分变动记录',
+          icon: <Coins size={20} />,
+          adminOnly: false,
         },
       ],
     },
     {
-      title: t('business'),
+      title: '管理功能',
+      adminOnly: true,
       items: [
         {
-          label: t('tabs.order.title'),
-          key: 'order',
-          description: t('tabs.order.description'),
-          icon: <TbReportMoney size={20} />,
+          label: '用户管理',
+          key: 'users',
+          description: '管理系统用户和积分',
+          icon: <Users size={20} />,
+          adminOnly: true,
         },
+        {
+          label: '订单管理',
+          key: 'order',
+          description: '查看和管理订单记录',
+          icon: <TbReportMoney size={20} />,
+          adminOnly: true,
+        },
+        {
+          label: '兑换码管理',
+          key: 'redemption',
+          description: '创建和管理积分兑换码',
+          icon: <Ticket size={20} />,
+          adminOnly: true,
+        },
+      ],
+    },
+    {
+      title: '系统功能',
+      adminOnly: true,
+      items: [
+        {
+          label: '系统配置',
+          key: 'settings/system',
+          description: '管理系统运行时配置',
+          icon: <Settings size={20} />,
+          adminOnly: true,
+        },
+      ],
+    },
+    {
+      title: '个人功能',
+      items: [
         {
           label: t('tabs.person.title'),
           key: 'person',
           description: t('tabs.person.description'),
           icon: <User size={20} />,
+          adminOnly: false,
         },
       ],
     },
   ];
 
+  // 根据角色过滤菜单
+  const menuGroups = allMenuGroups
+    .filter((group) => !group.adminOnly || isAdmin)
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => !item.adminOnly || isAdmin),
+    }))
+    .filter((group) => group.items.length > 0);
+
   const menuItems = [
     {
+      label: '个人设置',
+      icon: <UserCog size={16} />,
+      href: '/dashboard/person',
+    },
+    {
       label: t('menu.buy.label'),
-      icon: <IoGiftOutline size={18} />,
+      icon: <IoGiftOutline size={16} />,
       href: '/#price',
     },
     {
       label: t('menu.docs.label'),
-      icon: <FileText size={18} />,
+      icon: <FileText size={16} />,
       href: '/docs/introduction',
       target: '_blank',
     },
-    { label: t('menu.home.label'), icon: <Home size={18} />, href: '/' },
+    { label: t('menu.home.label'), icon: <Home size={16} />, href: '/' },
   ];
-
-  // 模拟通知数据
-  const notifications = [
-    { id: 1, title: '系统更新', content: '系统已更新至最新版本', time: '刚刚', read: false },
-    { id: 2, title: '新消息', content: '您有一条新的消息', time: '10分钟前', read: false },
-    { id: 3, title: '任务完成', content: '您的任务已完成', time: '1小时前', read: true },
-  ];
-
-  const unreadCount = notifications.filter((n) => !n.read).length;
 
   // 生成面包屑
   const renderBreadcrumbs = () => {
-    const segments = pathname
-      .split('/')
-      .filter(Boolean)
-      .filter((segment) => segment !== 'zh' && segment !== 'en' && segment !== 'dashboard');
-    return (
-      <nav className="flex items-center gap-2 text-sm">
-        <Link href="/" className="text-gray-500 hover:text-gray-700 transition-colors">
-          首页
-        </Link>
-        {segments.map((segment, index) => {
-          const path = `/${['dashboard', ...segments.slice(0, index + 1)].join('/')}`;
-          const isLast = index === segments.length - 1;
-          const label =
-            menuGroups.flatMap((group) => group.items).find((item) => item.key === segment)?.label || segment;
+    if (!currentPath) return null;
 
-          return (
-            <React.Fragment key={path}>
-              <ChevronRight size={14} className="text-gray-400" />
-              {isLast ? (
-                <span className="font-medium text-gray-900">{label}</span>
-              ) : (
-                <Link href={path} className="text-gray-500 hover:text-gray-700 transition-colors">
-                  {label}
-                </Link>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </nav>
+    // 查找当前页面对应的菜单项
+    const currentMenuItem = menuGroups
+      .flatMap((group) => group.items)
+      .find((item) => item.key === currentPath);
+
+    return (
+      <div className="breadcrumbs text-sm">
+        <ul>
+          {/* 控制台首页 */}
+          <li>
+            <Link
+              href="/dashboard/home"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-base-content/60 hover:text-base-content hover:bg-base-200 transition-colors"
+            >
+              <Home size={14} />
+              <span>控制台</span>
+            </Link>
+          </li>
+
+          {/* 当前页面 */}
+          {currentMenuItem ? (
+            <li>
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-primary/10 text-primary font-medium">
+                <span className="[&>svg]:w-3.5 [&>svg]:h-3.5">{currentMenuItem.icon}</span>
+                <span>{currentMenuItem.label}</span>
+              </span>
+            </li>
+          ) : (
+            <li>
+              <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-primary/10 text-primary font-medium">
+                {currentPath}
+              </span>
+            </li>
+          )}
+        </ul>
+      </div>
     );
   };
 
@@ -221,7 +291,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const currentPageInfo = menuGroups.flatMap((group) => group.items).find((item) => item.key === currentPath);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-base-100 flex">
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div
@@ -232,15 +302,15 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Sidebar */}
       <aside
-        className={`${collapsed ? 'w-20' : 'w-72'} bg-white h-screen flex flex-col transition-all duration-300 ease-in-out z-50 sticky top-0
-        ${mobileMenuOpen ? 'fixed left-0' : 'hidden lg:flex'} border-r border-gray-200`}
+        className={`${collapsed ? 'w-20' : 'w-72'} bg-base-100 h-screen flex flex-col transition-all duration-300 ease-in-out z-50 sticky top-0
+        ${mobileMenuOpen ? 'fixed left-0' : 'hidden lg:flex'} border-r border-base-300`}
       >
         {/* Logo */}
-        <div className="h-16 px-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="h-16 px-4 border-b border-base-300 flex items-center justify-between">
           {!collapsed ? (
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 group-hover:shadow-primary/50 transition-shadow">
-                <Sparkles size={20} className="text-white" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow">
+                <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />
               </div>
               <span className="text-xl font-bold text-primary">
                 MvpFast
@@ -248,16 +318,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             </Link>
           ) : (
             <Link href="/" className="w-full flex justify-center">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
-                <Sparkles size={20} className="text-white" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
+                <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />
               </div>
             </Link>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className={`w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors ${collapsed ? 'hidden' : ''}`}
+            className={`w-8 h-8 rounded-lg hover:bg-base-200 flex items-center justify-center transition-colors ${collapsed ? 'hidden' : ''}`}
           >
-            <ChevronLeft size={18} className="text-gray-500" />
+            <ChevronLeft size={18} className="text-base-content/60" />
           </button>
         </div>
 
@@ -266,7 +336,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {menuGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="mb-6">
               {!collapsed && (
-                <div className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <div className="px-3 mb-2 text-xs font-semibold text-base-content/40 uppercase tracking-wider">
                   {group.title}
                 </div>
               )}
@@ -279,20 +349,20 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                         href={`/dashboard/${item.key}`}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative
                           ${isActive
-                            ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                            : 'text-gray-600 hover:bg-gray-100'
+                            ? 'bg-primary text-primary-content shadow-lg shadow-primary/30'
+                            : 'text-base-content/70 hover:bg-base-200'
                           }
                           ${collapsed ? 'justify-center' : ''}
                         `}
                       >
-                        <span className={`flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'}`}>
+                        <span className={`flex-shrink-0 ${isActive ? 'text-primary-content' : 'text-base-content/60 group-hover:text-base-content'}`}>
                           {item.icon}
                         </span>
                         {!collapsed && (
                           <span className="font-medium">{item.label}</span>
                         )}
                         {collapsed && (
-                          <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg">
+                          <div className="absolute left-full ml-2 px-3 py-2 bg-base-content text-base-100 text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg">
                             {item.label}
                           </div>
                         )}
@@ -307,34 +377,34 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Collapse toggle for collapsed state */}
         {collapsed && (
-          <div className="px-3 py-2 border-t border-gray-100">
+          <div className="px-3 py-2 border-t border-base-300">
             <button
               onClick={() => setCollapsed(false)}
-              className="w-full h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors"
+              className="w-full h-10 rounded-xl hover:bg-base-200 flex items-center justify-center transition-colors"
             >
-              <ChevronRight size={18} className="text-gray-500" />
+              <ChevronRight size={18} className="text-base-content/60" />
             </button>
           </div>
         )}
 
         {/* User Profile */}
-        <div className="border-t border-gray-100 p-3" ref={menuRef}>
+        <div className="border-t border-base-300 p-3 relative" ref={menuRef}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`flex items-center gap-3 w-full p-2 rounded-xl hover:bg-gray-100 transition-colors ${collapsed ? 'justify-center' : ''}`}
+            className={`flex items-center gap-3 w-full p-2 rounded-xl hover:bg-base-200 transition-colors ${collapsed ? 'justify-center' : ''}`}
           >
-            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 flex-shrink-0">
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-base-300 flex-shrink-0">
               {renderAvatar()}
             </div>
             {!collapsed && (
               <>
                 <div className="flex-1 min-w-0 text-left">
-                  <div className="font-medium text-gray-900 truncate text-sm">{renderFullName()}</div>
-                  <div className="text-xs text-gray-500 truncate">{renderUserType()}</div>
+                  <div className="font-medium text-base-content truncate text-sm">{renderFullName()}</div>
+                  <div className="text-xs text-base-content/60 truncate">{renderUserType()}</div>
                 </div>
                 <ChevronUp
                   size={18}
-                  className={`text-gray-400 transition-transform duration-200 ${isMenuOpen ? '' : 'rotate-180'}`}
+                  className={`text-base-content/40 transition-transform duration-200 ${isMenuOpen ? '' : 'rotate-180'}`}
                 />
               </>
             )}
@@ -343,31 +413,69 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Dropdown Menu */}
           {isMenuOpen && (
             <div
-              className={`absolute ${collapsed ? 'left-20 bottom-4' : 'bottom-full left-3 right-3'} mb-2 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden`}
+              className={`absolute ${collapsed ? 'left-20 bottom-4 w-64' : 'bottom-full left-3 right-3'} mb-2 bg-base-100 rounded-xl shadow-2xl border border-base-300 z-50 overflow-hidden`}
             >
-              <div className="p-4 bg-primary/10 border-b border-gray-100">
-                <div className="font-semibold text-gray-900">{renderFullName()}</div>
-                <div className="text-sm text-gray-500">{renderUserType()}</div>
+              {/* User Info Header */}
+              <div className="p-3 bg-gradient-to-r from-primary/10 to-primary/5 border-b border-base-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary/30">
+                    {renderAvatar()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-base-content text-sm truncate">{renderFullName()}</div>
+                    <div className="text-xs text-base-content/60 truncate">{renderUserType()}</div>
+                  </div>
+                </div>
               </div>
-              <ul className="p-2">
-                {menuItems.map((item) => (
+
+              {/* Menu Items */}
+              <ul className="p-1.5">
+                {/* Settings Section */}
+                <li className="px-2 py-1 text-xs font-semibold text-base-content/40 uppercase tracking-wider">
+                  设置
+                </li>
+                {menuItems.slice(0, 1).map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="flex items-center gap-2.5 px-3 py-2 hover:bg-base-200 rounded-lg transition-colors text-base-content text-sm"
+                    >
+                      <span className="text-base-content/60">{item.icon}</span>
+                      <span className="font-medium">{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+
+                {/* Divider */}
+                <div className="divider my-1"></div>
+
+                {/* Quick Links Section */}
+                <li className="px-2 py-1 text-xs font-semibold text-base-content/40 uppercase tracking-wider">
+                  快捷链接
+                </li>
+                {menuItems.slice(1).map((item) => (
                   <li key={item.label}>
                     <a
                       href={item.href}
                       target={item.target}
-                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 rounded-xl transition-colors text-gray-700"
+                      className="flex items-center gap-2.5 px-3 py-2 hover:bg-base-200 rounded-lg transition-colors text-base-content text-sm"
                     >
-                      <span className="text-gray-400">{item.icon}</span>
+                      <span className="text-base-content/60">{item.icon}</span>
                       <span className="font-medium">{item.label}</span>
                     </a>
                   </li>
                 ))}
-                <li className="border-t border-gray-100 mt-2 pt-2">
+
+                {/* Divider */}
+                <div className="divider my-1"></div>
+
+                {/* Logout */}
+                <li>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-3 py-2.5 hover:bg-red-50 rounded-xl transition-colors text-red-600 w-full"
+                    className="flex items-center gap-2.5 px-3 py-2 hover:bg-error/10 rounded-lg transition-colors text-error w-full text-sm"
                   >
-                    <LogOut size={18} />
+                    <LogOut size={16} />
                     <span className="font-medium">退出登录</span>
                   </button>
                 </li>
@@ -380,124 +488,48 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Navigation Bar */}
-        <header className="h-16 bg-white border-b border-gray-200 sticky top-0 z-30">
+        <header className="h-16 bg-base-100 border-b border-base-300 sticky top-0 z-30">
           <div className="h-full px-4 lg:px-6 flex items-center justify-between gap-4">
             {/* Mobile menu toggle */}
             <button
-              className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center lg:hidden transition-colors"
+              className="w-10 h-10 rounded-xl hover:bg-base-200 flex items-center justify-center lg:hidden transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
 
-            {/* Search Bar - Desktop */}
-            <div className="hidden lg:flex flex-1 max-w-md">
-              <div className="relative w-full">
-                <IoSearchOutline size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="搜索..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-10 pr-4 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary transition-all text-sm"
-                />
-              </div>
+            {/* Breadcrumbs - Desktop */}
+            <div className="hidden lg:flex flex-1">
+              {renderBreadcrumbs()}
             </div>
 
-            {/* Right side actions */}
-            <div className="flex items-center gap-2">
-              {/* Notifications */}
-              <div className="relative" ref={notificationsRef}>
-                <button
-                  className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors relative"
-                  onClick={() => setNotificationsOpen(!notificationsOpen)}
-                >
-                  <Bell size={20} className="text-gray-600" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                      {unreadCount}
-                    </span>
-                  )}
-                </button>
-
-                {notificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                      <span className="font-semibold text-gray-900">通知</span>
-                      <button className="text-sm text-primary hover:text-primary/80 font-medium">
-                        全部已读
-                      </button>
-                    </div>
-                    <div className="max-h-80 overflow-y-auto">
-                      {notifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${
-                            notification.read ? '' : 'bg-primary/5'
-                          }`}
-                        >
-                          <div className="flex justify-between items-start mb-1">
-                            <span className="font-medium text-gray-900">{notification.title}</span>
-                            <span className="text-xs text-gray-400">{notification.time}</span>
-                          </div>
-                          <p className="text-sm text-gray-600">{notification.content}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="p-3 text-center border-t border-gray-100">
-                      <button className="text-sm text-primary hover:text-primary/80 font-medium">
-                        查看全部通知
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Settings */}
-              <button className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-colors">
-                <Settings size={20} className="text-gray-600" />
-              </button>
-
-              {/* User avatar - Mobile */}
-              <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 lg:hidden">
-                {renderAvatar()}
-              </div>
+            {/* User avatar - Mobile */}
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-base-300 lg:hidden">
+              {renderAvatar()}
             </div>
           </div>
         </header>
 
         {/* Content area */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="p-4 lg:p-8 max-w-7xl mx-auto">
-            {/* Breadcrumbs */}
-            <div className="mb-6">{renderBreadcrumbs()}</div>
-
+        <main className="flex-1 overflow-y-auto bg-base-100">
+          <div className="p-4 lg:p-6 max-w-[1400px] mx-auto">
             {/* Page header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-4 mb-2">
-                {currentPageInfo && (
-                  <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
-                    <span className="text-white">{currentPageInfo.icon}</span>
-                  </div>
-                )}
-                <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                    {currentPageInfo?.label || '控制台'}
-                  </h1>
-                  <p className="text-gray-500 mt-1">{currentPageInfo?.description || ''}</p>
-                </div>
-              </div>
+            <div className="mb-4">
+              <h1 className="text-xl font-semibold text-base-content">
+                {currentPageInfo?.label || '控制台'}
+              </h1>
+              {currentPageInfo?.description && (
+                <p className="text-base-content/60 text-sm mt-0.5">{currentPageInfo.description}</p>
+              )}
             </div>
 
             {/* Page content */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
-              {children}
-            </div>
+            {children}
           </div>
         </main>
 
         {/* Footer */}
-        <footer className="py-4 px-6 bg-white border-t border-gray-100 text-center text-sm text-gray-500">
+        <footer className="py-4 px-6 bg-base-100 border-t border-base-300 text-center text-sm text-base-content/60">
           © {new Date().getFullYear()} MvpFast. All rights reserved.
         </footer>
       </div>
