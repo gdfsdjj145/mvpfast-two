@@ -30,13 +30,6 @@ declare module 'next-auth' {
   }
 }
 
-interface UserParams {
-  email: string | null;
-  wechatOpenId: string | null;
-  phone: string | null;
-  nickName: string;
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
@@ -74,36 +67,63 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } else {
           if (verifyState) {
             let res = null;
-            const params: UserParams = {
-              email: null,
-              wechatOpenId: null,
-              phone: null,
-              nickName: ''
-            };
             if (type === 'email') {
               res = await prisma.user.findFirst({
                 where: {
                   email: identifier,
                 },
               });
-              params.email = identifier;
+              if (!res) {
+                // 使用 upsert 避免唯一约束冲突
+                res = await prisma.user.upsert({
+                  where: {
+                    wechatOpenId_phone_email: {
+                      wechatOpenId: null,
+                      phone: null,
+                      email: identifier,
+                    },
+                  },
+                  update: {},
+                  create: {
+                    email: identifier,
+                    wechatOpenId: null,
+                    phone: null,
+                    nickName: getGeneratorName(),
+                  },
+                });
+              }
             }
-            if (type === 'phone') {
+            // dev 模式和 phone 模式都使用手机号登录
+            if (type === 'phone' || type === 'dev') {
               res = await prisma.user.findFirst({
                 where: {
                   phone: identifier,
                 },
               });
-              params.phone = identifier;
+              console.log('[Auth] Phone login - findFirst result:', res ? `Found user ${res.id}` : 'User not found');
+              if (!res) {
+                console.log('[Auth] Creating new user for phone:', identifier);
+                // 使用 upsert 避免唯一约束冲突
+                res = await prisma.user.upsert({
+                  where: {
+                    wechatOpenId_phone_email: {
+                      wechatOpenId: null,
+                      phone: identifier,
+                      email: null,
+                    },
+                  },
+                  update: {},
+                  create: {
+                    phone: identifier,
+                    wechatOpenId: null,
+                    email: null,
+                    nickName: getGeneratorName(),
+                  },
+                });
+              }
             }
             if (res) {
               return res;
-            } else {
-              params.nickName = getGeneratorName();
-              const newUser = await prisma.user.create({
-                data: params,
-              });
-              return newUser;
             }
           }
         }
@@ -145,6 +165,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           (session.user as any).wechatUnionId = user.wechatUnionId;
           (session.user as any).avatar = user.avatar;
           (session.user as any).nickName = user.nickName;
+          (session.user as any).role = user.role;
         }
       }
       return session;
@@ -158,6 +179,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.wechatUnionId = user.wechatUnionId;
         token.nickName = user.nickName;
         token.avatar = user.avatar;
+        token.role = user.role;
       } else {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub as string },
@@ -169,6 +191,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.wechatUnionId = dbUser.wechatUnionId;
           token.nickName = dbUser.nickName;
           token.avatar = dbUser.avatar;
+          token.role = dbUser.role;
         }
       }
       return token;

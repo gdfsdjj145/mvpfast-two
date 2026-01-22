@@ -10,6 +10,8 @@ import {
   checkUserPayment,
   checkUserById,
   createPayOrder,
+  getUserCreditsInfo,
+  purchaseWithCredits,
 } from './actions';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -31,12 +33,23 @@ const WeChatMobilePay = dynamic(
   }
 );
 
+// 支付方式类型
+interface PaymentMethod {
+  key: string;
+  name: string;
+  icon: string;
+  use: boolean;
+}
+
 export default function PaymentPage() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const goodKey = searchParams.get('key');
   const shareCode = searchParams.get('sharecode');
   const initialized = useRef(false);
+
+  // 获取购买模式配置
+  const purchaseMode = config.purchaseMode;
 
   // 使用 next-intl 获取商品信息，与 PriceComponent 保持一致
   const messages = useMessages();
@@ -51,6 +64,7 @@ export default function PaymentPage() {
   const good = goods.find((item) => item.key === goodKey) || {
     key: '',
     price: 0,
+    creditPrice: 0,
     description: '',
     name: '',
   };
@@ -65,6 +79,7 @@ export default function PaymentPage() {
   const [shareOption, setShareOption] = useState({
     code: '',
     sharePrice: 0,
+    shareCredits: 0, // 积分模式的优惠积分
   });
   const [isLoading, setIsLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState(''); // 'pending', 'success', 'failed'
@@ -77,8 +92,48 @@ export default function PaymentPage() {
   const [isH5Browser, setIsH5Browser] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
 
-  // 获取可用的支付方式
-  const availablePayments = config.payConfig.filter((payment) => payment.use);
+  // 积分模式相关状态
+  const [userCredits, setUserCredits] = useState(0);
+  const [isPurchasing, setIsPurchasing] = useState(false);
+
+  // 支付方式（从数据库加载）
+  const [availablePayments, setAvailablePayments] = useState<PaymentMethod[]>([]);
+
+  // 从数据库加载支付方式配置
+  useEffect(() => {
+    const fetchPaymentConfig = async () => {
+      try {
+        const response = await fetch('/api/admin/configs');
+        if (response.ok) {
+          const data = await response.json();
+          const payConfigItem = data.items?.find((item: any) => item.key === 'payment.methods');
+          if (payConfigItem && Array.isArray(payConfigItem.value)) {
+            const enabledPayments = payConfigItem.value.filter((p: PaymentMethod) => p.use);
+            setAvailablePayments(enabledPayments);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch payment config:', error);
+      }
+    };
+    fetchPaymentConfig();
+  }, []);
+
+  // 计算积分模式下的实际消费积分（扣除优惠）
+  const requiredCredits = Math.max(0, (good.creditPrice || 0) - shareOption.shareCredits);
+
+  // 获取用户积分（积分模式下）
+  useEffect(() => {
+    const fetchUserCredits = async () => {
+      if (purchaseMode === 'credits' && status === 'authenticated' && session?.user?.id) {
+        const result = await getUserCreditsInfo(session.user.id);
+        if (result.code === 0) {
+          setUserCredits(result.data.credits);
+        }
+      }
+    };
+    fetchUserCredits();
+  }, [purchaseMode, status, session]);
 
   useEffect(() => {
     const getShare = async () => {
@@ -88,11 +143,13 @@ export default function PaymentPage() {
           setShareOption({
             code: data.id,
             sharePrice: 30,
+            shareCredits: 5, // 积分模式优惠
           });
         } else {
           setShareOption({
             code: '',
             sharePrice: 0,
+            shareCredits: 0,
           });
         }
       }
@@ -100,7 +157,7 @@ export default function PaymentPage() {
 
     // 添加一个标志防止重复请求
     let isMounted = true;
-    
+
     const checkPayment = async () => {
       if (status === 'authenticated' && session && isMounted) {
         try {
@@ -148,11 +205,11 @@ export default function PaymentPage() {
         }
       }
     };
-    
+
     if (status === 'authenticated' && session) {
       checkPayment();
     }
-    
+
     return () => {
       isMounted = false;
     };
@@ -186,6 +243,7 @@ export default function PaymentPage() {
     setIsH5Browser(isMobile);
   }, []);
 
+  // 单次购买模式：支付成功回调
   const handlePaymentSuccess = async (result: {
     transactionId: string;
     paidAt: string;
@@ -211,6 +269,53 @@ export default function PaymentPage() {
     };
 
     await createOrder(order);
+  };
+
+  // 积分购买模式：使用积分购买
+  const handleCreditsPurchase = async () => {
+    if (!session?.user?.id) {
+      toast.error('请先登录');
+      return;
+    }
+
+    if (userCredits < requiredCredits) {
+      toast.error(`积分不足，当前余额: ${userCredits}，需要: ${requiredCredits}`);
+      return;
+    }
+
+    setIsPurchasing(true);
+    try {
+      const result = await purchaseWithCredits({
+        userId: session.user.id,
+        productKey: good.key,
+        productName: good.name,
+        creditAmount: requiredCredits,
+        promoter: shareOption.code || undefined,
+        promotionCredits: shareOption.shareCredits,
+      });
+
+      if (result.code === 0) {
+        setPaymentStatus('success');
+        setPaymentResult({
+          transactionId: result.data?.orderId || '',
+          paidAt: new Date().toLocaleString(),
+        });
+        setUserCredits(result.data?.remainingCredits || 0);
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+        toast.success('购买成功！');
+      } else {
+        toast.error(result.message || '购买失败');
+      }
+    } catch (error: any) {
+      console.error('积分购买失败:', error);
+      toast.error(error.message || '购买失败，请稍后重试');
+    } finally {
+      setIsPurchasing(false);
+    }
   };
 
   const handleCreateOrder = async (order: any) => {
@@ -252,6 +357,7 @@ export default function PaymentPage() {
     </div>
   );
 
+  // 渲染支付方式选择（单次购买模式）
   const renderPaymentMethods = () => {
     if (availablePayments.length <= 0) {
       return <p className="text-red-500">暂无可用支付方式</p>;
@@ -275,17 +381,100 @@ export default function PaymentPage() {
                   <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-sky-500 rounded-full"></div>
                 )}
               </div>
-              <Image 
-                src={payment.icon} 
-                alt={payment.name} 
-                width={30} 
-                height={30} 
+              <Image
+                src={payment.icon}
+                alt={payment.name}
+                width={30}
+                height={30}
                 className="flex-shrink-0"
               />
               <span className="font-medium">{payment.name}</span>
             </div>
           ))}
         </div>
+      </div>
+    );
+  };
+
+  // 渲染积分支付界面（积分购买模式）
+  const renderCreditsPayment = () => {
+    const hasEnoughCredits = userCredits >= requiredCredits;
+
+    return (
+      <div className="bg-white p-6 rounded-lg shadow-md w-full">
+        <h3 className="text-xl font-bold mb-6 text-gray-800">积分支付</h3>
+
+        {/* 用户积分余额 */}
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600">当前积分余额</span>
+            <span className="text-2xl font-bold text-amber-600">{userCredits}</span>
+          </div>
+        </div>
+
+        {/* 消费详情 */}
+        <div className="space-y-3 mb-6">
+          <div className="flex justify-between items-center text-gray-600">
+            <span>商品积分价格</span>
+            <span className="font-medium">{good.creditPrice || 0} 积分</span>
+          </div>
+          {shareOption.shareCredits > 0 && (
+            <div className="flex justify-between items-center text-emerald-600">
+              <span>优惠减免</span>
+              <span className="font-medium">-{shareOption.shareCredits} 积分</span>
+            </div>
+          )}
+          <div className="border-t pt-3 flex justify-between items-center">
+            <span className="font-semibold text-gray-800">需支付</span>
+            <span className="text-xl font-bold text-blue-600">{requiredCredits} 积分</span>
+          </div>
+        </div>
+
+        {/* 积分不足提示 */}
+        {!hasEnoughCredits && (
+          <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-2 text-rose-600 mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">积分不足</span>
+            </div>
+            <p className="text-sm text-rose-500">
+              还需要 <span className="font-bold">{requiredCredits - userCredits}</span> 积分，请先充值
+            </p>
+            <Link
+              href="/pay?key=credits"
+              className="mt-3 inline-block text-sm text-rose-600 hover:text-rose-700 underline"
+            >
+              前往充值 →
+            </Link>
+          </div>
+        )}
+
+        {/* 支付按钮 */}
+        <button
+          onClick={handleCreditsPurchase}
+          disabled={!hasEnoughCredits || isPurchasing}
+          className={`w-full py-3 px-4 font-medium rounded-md transition-all shadow-md hover:shadow-lg ${
+            hasEnoughCredits && !isPurchasing
+              ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {isPurchasing ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              处理中...
+            </span>
+          ) : hasEnoughCredits ? (
+            `确认支付 ${requiredCredits} 积分`
+          ) : (
+            '积分不足'
+          )}
+        </button>
       </div>
     );
   };
@@ -306,7 +495,7 @@ export default function PaymentPage() {
             </div>
           </div>
           <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-emerald-800 text-center">
-            支付成功
+            {purchaseMode === 'credits' ? '购买成功' : '支付成功'}
           </h3>
           <div className="mb-2">
             <span className="font-semibold text-emerald-700">交易号：</span>
@@ -339,6 +528,12 @@ export default function PaymentPage() {
     }
 
     if (paymentStatus === 'pending') {
+      // 积分购买模式
+      if (purchaseMode === 'credits') {
+        return renderCreditsPayment();
+      }
+
+      // 单次购买模式
       if (orderCreated) {
         if (isH5Browser) {
           return (
@@ -403,11 +598,63 @@ export default function PaymentPage() {
     }
   };
 
+  // 根据购买模式渲染左侧价格信息
+  const renderPriceInfo = () => {
+    if (purchaseMode === 'credits') {
+      return (
+        <>
+          <div className="flex justify-between items-center">
+            <span className="text-blue-200">积分价格</span>
+            <span className="text-xl font-bold">{good.creditPrice || 0} 积分</span>
+          </div>
+
+          {shareOption.shareCredits > 0 && (
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-blue-200">优惠</span>
+              <span className="text-emerald-300">-{shareOption.shareCredits} 积分</span>
+            </div>
+          )}
+
+          <div className="mt-4 pt-4 border-t border-blue-500/30 flex justify-between items-center">
+            <span className="text-blue-100">应付总额</span>
+            <span className="text-2xl font-bold">{requiredCredits} 积分</span>
+          </div>
+        </>
+      );
+    }
+
+    // 单次购买模式
+    return (
+      <>
+        <div className="flex justify-between items-center">
+          <span className="text-blue-200">单价</span>
+          <span className="text-xl font-bold">¥{good.price.toFixed(2)}</span>
+        </div>
+
+        {shareOption.sharePrice > 0 && (
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-blue-200">优惠</span>
+            <span className="text-emerald-300">-¥{shareOption.sharePrice.toFixed(2)}</span>
+          </div>
+        )}
+
+        <div className="mt-4 pt-4 border-t border-blue-500/30 flex justify-between items-center">
+          <span className="text-blue-100">应付总额</span>
+          <span className="text-2xl font-bold">¥{(orderInfo.amount / 100).toFixed(2)}</span>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="flex justify-center items-center py-8 px-4 md:px-8 bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
       <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white rounded-xl shadow-lg overflow-hidden">
         {/* 左侧订单信息 */}
-        <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 to-sky-700 text-white p-8 md:p-12">
+        <div className={`w-full md:w-1/2 text-white p-8 md:p-12 ${
+          purchaseMode === 'credits'
+            ? 'bg-gradient-to-br from-amber-500 to-orange-600'
+            : 'bg-gradient-to-br from-blue-600 to-sky-700'
+        }`}>
           <div className="mb-8">
             <Link href="/" className="inline-flex items-center text-white/80 hover:text-white">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -416,50 +663,59 @@ export default function PaymentPage() {
               返回首页
             </Link>
           </div>
-          
+
           <div className="flex items-center mb-6">
             <img src="/brand/logo.png" alt="Logo" className="w-10 h-10 mr-3" />
             <h1 className="text-2xl md:text-3xl font-bold">订单</h1>
           </div>
-          
+
+          {/* 购买模式标识 */}
+          {purchaseMode === 'credits' && (
+            <div className="mb-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                积分购买模式
+              </span>
+            </div>
+          )}
+
           <div className="mb-8">
             <h2 className="text-xl font-medium mb-4">商品详情</h2>
-            <div className="bg-gradient-to-r from-blue-700/40 to-sky-700/40 backdrop-blur-sm rounded-lg p-4">
+            <div className={`backdrop-blur-sm rounded-lg p-4 ${
+              purchaseMode === 'credits'
+                ? 'bg-gradient-to-r from-amber-600/40 to-orange-600/40'
+                : 'bg-gradient-to-r from-blue-700/40 to-sky-700/40'
+            }`}>
               <div className="text-lg font-bold mb-2">{good.name}</div>
-              <div className="text-blue-100 mb-4">{good.description}</div>
-              <div className="flex justify-between items-center">
-                <span className="text-blue-200">单价</span>
-                <span className="text-xl font-bold">¥{good.price.toFixed(2)}</span>
+              <div className={`mb-4 ${purchaseMode === 'credits' ? 'text-amber-100' : 'text-blue-100'}`}>
+                {good.description}
               </div>
-              
-              {shareOption.sharePrice > 0 && (
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-blue-200">优惠</span>
-                  <span className="text-emerald-300">-¥{shareOption.sharePrice.toFixed(2)}</span>
-                </div>
-              )}
-              
-              <div className="mt-4 pt-4 border-t border-blue-500/30 flex justify-between items-center">
-                <span className="text-blue-100">应付总额</span>
-                <span className="text-2xl font-bold">¥{(orderInfo.amount / 100).toFixed(2)}</span>
-              </div>
+              {renderPriceInfo()}
             </div>
           </div>
-          
-          <div className="text-blue-200 text-sm">
+
+          <div className={`text-sm ${purchaseMode === 'credits' ? 'text-amber-200' : 'text-blue-200'}`}>
             {(orderCreated || paymentStatus === 'success') ? (
               <>
                 <div className="mb-2">订单号: {orderInfo.orderId}</div>
                 <div className="mb-4">创建时间: {orderInfo.created_time || new Date().toLocaleString()}</div>
               </>
             ) : (
-              <div className="mb-4 text-blue-100 italic">请选择支付方式并确认支付后生成订单信息</div>
+              <div className={`mb-4 italic ${purchaseMode === 'credits' ? 'text-amber-100' : 'text-blue-100'}`}>
+                {purchaseMode === 'credits'
+                  ? '确认积分支付后生成订单信息'
+                  : '请选择支付方式并确认支付后生成订单信息'}
+              </div>
             )}
-            <p>请在15分钟内完成支付，否则订单将自动取消。</p>
+            {purchaseMode === 'direct' && (
+              <p>请在15分钟内完成支付，否则订单将自动取消。</p>
+            )}
             <p>如遇到问题，请联系客服wx：13022051583</p>
           </div>
         </div>
-        
+
         {/* 右侧支付区域 */}
         <div className="w-full md:w-1/2 p-8 md:p-12 bg-gradient-to-br from-white to-slate-50 flex items-center justify-center">
           <div className="w-full max-w-md">

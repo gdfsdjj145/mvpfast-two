@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils';
 import './globals.css';
 import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';
-import Script from 'next/script';
 import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProviders } from '@/components/theme/ThemeProvider';
@@ -13,6 +12,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import { GlobalJsonLd } from '@/components/seo';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 
 /**
  * Main 路由组的根布局
@@ -160,18 +160,7 @@ export default async function MainLayout({
         <Toaster />
         <Analytics />
         <SpeedInsights />
-        <Script
-          strategy="lazyOnload"
-          src={`https://www.googletagmanager.com/gtag/js?id=G-B315FBSZWP`}
-        />
-        <Script id="ga-script" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-B315FBSZWP');
-          `}
-        </Script>
+        <GoogleAnalytics />
       </body>
     </html>
   );

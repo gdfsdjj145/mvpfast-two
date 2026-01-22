@@ -45,6 +45,17 @@ export const sendCode = async (type: string, params: any) => {
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expires_at = new Date(Date.now() + 2 * 60 * 1000);
 
+  // 开发环境：跳过实际发送，直接提示使用万能验证码
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[DEV MODE] 跳过实际发送验证码，请使用万能验证码: 000000');
+    console.log('[DEV MODE] 目标:', identifier);
+    return {
+      code: 0,
+      data: {},
+      message: '开发环境：请使用万能验证码 000000',
+    };
+  }
+
   const info: any = await handlerSendCode(type, params, code);
 
   if (info.success) {
@@ -68,6 +79,12 @@ export const sendCode = async (type: string, params: any) => {
 // 验证码校验
 export const verifyCode = async (type: string, params: any) => {
   const { identifier, code } = params;
+
+  // 开发环境：允许使用万能验证码 "000000"
+  if (process.env.NODE_ENV === 'development' && code === '000000') {
+    console.log('[DEV MODE] 使用万能验证码登录:', identifier);
+    return true;
+  }
 
   const res = await prisma.verificationCode.findFirst({
     where: {

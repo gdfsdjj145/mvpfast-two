@@ -122,6 +122,80 @@ Key models in `prisma/schema.prisma`:
 - **Aliyun SMS**: Phone verification
 - **WeChat OAuth**: QR code login flow
 
+## Claude Code Skills
+
+This project includes specialized skills for common development tasks. Skills are located in `.claude/skills/` and can be invoked using the Skill tool.
+
+### UI Modification
+- **`ui/modify_ui.md`**: Comprehensive guide for modifying UI components
+  - Component updates and styling changes
+  - DaisyUI integration guidelines
+  - Tailwind CSS best practices
+  - Responsive design patterns
+
+### SEO Configuration
+- **`seo/seo_config.md`**: Static SEO configuration for pages
+  - Page-level metadata setup
+  - Open Graph and Twitter Card configuration
+  - Canonical URLs and alternate languages
+
+- **`seo/dynamic_seo.md`**: Dynamic SEO for content pages
+  - Database-driven metadata
+  - Dynamic title and description generation
+  - Structured data integration
+
+- **`seo/structured_data.md`**: JSON-LD structured data implementation
+  - Organization schema
+  - Article and blog post schema
+  - Product and offer schema
+  - FAQ and breadcrumb schema
+
+### Authentication
+- **`auth/auth-flow.md`**: General authentication flow guide
+  - Phone/email verification flow
+  - Session management
+  - Protected route setup
+
+- **`auth/wechat-login.md`**: WeChat OAuth integration
+  - QR code login implementation
+  - WeChat API integration
+  - User binding workflow
+
+### Database
+- **`database/design_data_model.md`**: Prisma schema design guide
+  - MongoDB schema patterns
+  - Model relationships
+  - Index optimization
+  - Migration best practices
+
+### Project Management
+- **`project/explain_structure.md`**: Project structure explanation
+  - Route Groups architecture
+  - File organization patterns
+  - Naming conventions
+
+- **`project/add-page.md`**: Adding new pages guide
+  - Main app pages (i18n enabled)
+  - Dashboard pages (protected)
+  - Documentation pages (Fumadocs)
+
+- **`project/add-route.md`**: Adding API routes
+  - REST API patterns
+  - Request validation
+  - Error handling
+  - Authentication middleware
+
+### Deployment
+- **`deploy/check_env.md`**: Environment configuration check
+  - Required environment variables
+  - Service connectivity tests
+  - Database connection verification
+  - Third-party API validation
+
+### How to Use Skills
+
+Skills provide context-specific guidance to Claude Code. When working on related tasks, Claude will automatically reference the appropriate skill files to follow project conventions and best practices.
+
 ## Development Notes
 
 ### 添加新页面

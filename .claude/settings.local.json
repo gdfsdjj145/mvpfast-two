@@ -16,7 +16,19 @@
       "Bash(pnpm prisma generate:*)",
       "Bash(npx prisma db push:*)",
       "WebSearch",
-      "WebFetch(domain:medium.com)"
+      "WebFetch(domain:medium.com)",
+      "Bash(npx prisma db pull:*)",
+      "Bash(npx tsx:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(chmod:*)",
+      "Bash(claude mcp add:*)",
+      "mcp__daisyui__fetch_daisyui_documentation",
+      "mcp__daisyui__search_daisyui_documentation",
+      "Bash(wc:*)",
+      "Bash(pnpm exec tsc:*)",
+      "Bash(pnpm tsc:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:daisyui.com)"
     ],
     "deny": [],
     "ask": []
