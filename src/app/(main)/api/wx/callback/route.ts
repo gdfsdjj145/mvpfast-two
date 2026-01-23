@@ -4,6 +4,7 @@ import axios from 'axios';
 import { encode } from 'next-auth/jwt';
 import prisma from '@/lib/prisma';
 import { getGeneratorName } from '@/lib/generatorName';
+import { grantInitialCredits } from '@/models/credit';
 
 // 微信开放平台接口获取 access_token
 async function getWechatOpenAccessToken(code: string) {
@@ -96,6 +97,8 @@ export async function GET(request: NextRequest) {
             phone: null,
           },
         });
+        // 新用户注册，赠送初始积分
+        await grantInitialCredits(user.id);
       } else {
         // 更新用户信息（如果有新的 unionid 或头像昵称变更）
         const updateData: {

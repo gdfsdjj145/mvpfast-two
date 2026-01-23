@@ -70,15 +70,7 @@ export async function middleware(request: NextRequest) {
   if (process.env.NEXTAUTH_SALT) {
     tokenParams.salt = process.env.NEXTAUTH_SALT;
   }
-  let token: JWT | null = await getToken(tokenParams);
-
-  // 如果没有通过getToken获取到token，尝试从cookie中获取
-  if (!token) {
-    const sessionToken = request.cookies.get('next-auth.session-token');
-    if (sessionToken) {
-      token = { sessionToken: sessionToken.value } as JWT;
-    }
-  }
+  const token: JWT | null = await getToken(tokenParams);
 
   console.log('token状态:', !!token);
   

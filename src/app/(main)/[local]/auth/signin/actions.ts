@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { getGeneratorName } from '@/lib/generatorName';
 import sendEmail from '@/lib/email';
 import sendPhone from '@/lib/phone';
+import { grantInitialCredits } from '@/models/credit';
 
 const handlerSendCode = async (type: string, params: any, code: string) => {
   const { identifier } = params;
@@ -157,7 +158,7 @@ export const checkQrCode = async (
   if (!user) {
     // 没用用户 创建用户
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         wechatOpenId: qrcode.openId as string,
         nickName: getGeneratorName(),
@@ -165,6 +166,9 @@ export const checkQrCode = async (
         email: null,
       },
     });
+
+    // 新用户注册，赠送初始积分
+    await grantInitialCredits(newUser.id);
 
     return {
       openId: qrcode.openId as string,

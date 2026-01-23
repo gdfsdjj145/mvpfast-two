@@ -22,6 +22,7 @@ import {
   Ticket,
   Coins,
   LayoutDashboard,
+  MessageSquare,
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -67,6 +68,22 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       setUser(devUser);
     }
   }, [session, isDev]);
+
+  // Session 过期检测和重定向
+  useEffect(() => {
+    // 跳过开发环境
+    if (isDev) return;
+
+    // 等待 session 加载完成
+    if (status === 'loading') return;
+
+    // 如果 session 已过期（unauthenticated），重定向到登录页
+    if (status === 'unauthenticated') {
+      console.log('[Dashboard] Session expired, redirecting to login');
+      const currentPath = window.location.pathname + window.location.search;
+      router.replace(`/auth/signin?redirect=${encodeURIComponent(currentPath)}`);
+    }
+  }, [status, isDev, router]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -121,8 +138,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return '未知用户';
   };
 
-  // 用户角色
-  const userRole = session?.user?.role || 'user';
+  // 用户角色 - 在 session 加载中时，保持上一次的角色状态避免菜单闪烁
+  // 开发环境默认为 admin，生产环境在加载完成前保持 undefined
+  const [cachedRole, setCachedRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.role) {
+      setCachedRole(session.user.role);
+    }
+  }, [status, session?.user?.role]);
+
+  // 确定当前角色：优先使用 session 中的角色，其次使用缓存的角色，开发环境默认 admin
+  const userRole = session?.user?.role || cachedRole || (isDev ? 'admin' : 'user');
   const isAdmin = userRole === 'admin' || userRole === 'superadmin';
 
   // 需要管理员权限的路径
@@ -198,6 +225,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           description: '管理系统运行时配置',
           icon: <Settings size={20} />,
           adminOnly: true,
+        },
+      ],
+    },
+    {
+      title: 'AI 工具',
+      items: [
+        {
+          label: 'AI Chat',
+          key: 'ai-chat',
+          description: '与 AI 模型进行对话',
+          icon: <MessageSquare size={20} />,
+          adminOnly: false,
         },
       ],
     },
@@ -289,6 +328,30 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 获取当前页面的图标和渐变色
   const currentPageInfo = menuGroups.flatMap((group) => group.items).find((item) => item.key === currentPath);
+
+  // 非开发环境下，如果正在加载或未认证，显示加载状态
+  // 开发环境下，如果正在加载也显示加载状态（避免菜单闪烁）
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-base-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <p className="text-base-content/60">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isDev && status === 'unauthenticated') {
+    return (
+      <div className="min-h-screen bg-base-100 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <p className="text-base-content/60">正在跳转到登录页...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-100 flex">
