@@ -3,6 +3,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode } from './app/(main)/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
+import { grantInitialCredits } from '@/models/credit';
 
 import prisma from './lib/prisma';
 
@@ -91,6 +92,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     nickName: getGeneratorName(),
                   },
                 });
+                // 新用户注册，赠送初始积分
+                await grantInitialCredits(res.id);
               }
             }
             // dev 模式和 phone 模式都使用手机号登录
@@ -120,6 +123,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     nickName: getGeneratorName(),
                   },
                 });
+                // 新用户注册，赠送初始积分
+                await grantInitialCredits(res.id);
               }
             }
             if (res) {

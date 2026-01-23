@@ -426,6 +426,68 @@ export async function getAllCreditTransactions(params: {
 }
 
 /**
+ * 赠送新用户初始积分（注册时调用）
+ * @param userId - 用户ID
+ * @returns 是否成功赠送
+ */
+export async function grantInitialCredits(userId: string): Promise<boolean> {
+  try {
+    // 获取积分配置
+    const config = await prisma.systemConfig.findUnique({
+      where: { key: 'credits.initialCredits', isActive: true },
+    })
+
+    if (!config?.value) {
+      return false
+    }
+
+    const creditsConfig = config.value as {
+      initial_credits_enabled: boolean
+      initial_credits_amount: number
+      initial_credits_valid_days: number
+      initial_credits_description: string
+    }
+
+    // 检查是否开启初始积分赠送
+    if (!creditsConfig.initial_credits_enabled || creditsConfig.initial_credits_amount <= 0) {
+      return false
+    }
+
+    // 使用事务赠送积分
+    await prisma.$transaction(async (tx) => {
+      // 更新用户积分
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: {
+          credits: { increment: creditsConfig.initial_credits_amount },
+        },
+      })
+
+      // 记录积分交易
+      await tx.creditTransaction.create({
+        data: {
+          userId,
+          type: 'recharge',
+          amount: creditsConfig.initial_credits_amount,
+          balance: user.credits,
+          description: creditsConfig.initial_credits_description || '新用户注册赠送积分',
+          metadata: {
+            source: 'initial_credits',
+            validDays: creditsConfig.initial_credits_valid_days,
+          },
+        },
+      })
+    })
+
+    console.log(`[Credits] Granted ${creditsConfig.initial_credits_amount} initial credits to user ${userId}`)
+    return true
+  } catch (error) {
+    console.error('[Credits] Failed to grant initial credits:', error)
+    return false
+  }
+}
+
+/**
  * 获取积分系统总体统计（管理员用）
  * @returns 统计信息
  */

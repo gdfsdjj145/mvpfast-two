@@ -36,10 +36,6 @@ interface LocalAnalyticsConfig {
   googleAnalyticsId: string;
 }
 
-interface LocalAIConfig {
-  apiKey: string;
-}
-
 interface SystemConfig {
   id: string;
   key: string;
@@ -74,14 +70,12 @@ export default function SystemConfigPage() {
   const [generalConfig, setGeneralConfig] = useState<LocalGeneralConfig>({ siteName: DEFAULT_SITE_NAME });
   const [creditsConfig, setCreditsConfig] = useState<LocalCreditsConfig>(defaultCreditsConfig);
   const [analyticsConfig, setAnalyticsConfig] = useState<LocalAnalyticsConfig>({ googleAnalyticsId: '' });
-  const [aiConfig, setAIConfig] = useState<LocalAIConfig>({ apiKey: '' });
 
   // 本地编辑状态（用户编辑但未保存的）
   const [localAuthConfig, setLocalAuthConfig] = useState<LocalAuthConfig>({ loginType: 'phone', loginTypes: ['phone'] });
   const [localGeneralConfig, setLocalGeneralConfig] = useState<LocalGeneralConfig>({ siteName: DEFAULT_SITE_NAME });
   const [localCreditsConfig, setLocalCreditsConfig] = useState<LocalCreditsConfig>(defaultCreditsConfig);
   const [localAnalyticsConfig, setLocalAnalyticsConfig] = useState<LocalAnalyticsConfig>({ googleAnalyticsId: '' });
-  const [localAIConfig, setLocalAIConfig] = useState<LocalAIConfig>({ apiKey: '' });
 
   // 是否为积分购买模式
   const isCreditsMode = appConfig.purchaseMode === 'credits';
@@ -95,8 +89,7 @@ export default function SystemConfigPage() {
     localCreditsConfig.initial_credits_amount !== creditsConfig.initial_credits_amount ||
     localCreditsConfig.initial_credits_valid_days !== creditsConfig.initial_credits_valid_days ||
     localCreditsConfig.initial_credits_description !== creditsConfig.initial_credits_description ||
-    localAnalyticsConfig.googleAnalyticsId !== analyticsConfig.googleAnalyticsId ||
-    localAIConfig.apiKey !== aiConfig.apiKey;
+    localAnalyticsConfig.googleAnalyticsId !== analyticsConfig.googleAnalyticsId;
 
   // 加载配置列表
   const loadConfigs = async () => {
@@ -165,12 +158,6 @@ export default function SystemConfigPage() {
       const analyticsConfigValue = { googleAnalyticsId: analyticsConfigItem?.value || '' };
       setAnalyticsConfig(analyticsConfigValue);
       setLocalAnalyticsConfig(analyticsConfigValue);
-
-      // 加载 AI 配置
-      const aiConfigItem = data.items?.find((item: SystemConfig) => item.key === 'ai.apiKey');
-      const aiConfigValue = { apiKey: aiConfigItem?.value || '' };
-      setAIConfig(aiConfigValue);
-      setLocalAIConfig(aiConfigValue);
     } catch (error) {
       console.error('Load configs error:', error);
       toast.error('加载配置失败');
@@ -314,23 +301,6 @@ export default function SystemConfigPage() {
         );
       }
 
-      // 保存 AI 配置
-      if (localAIConfig.apiKey !== aiConfig.apiKey) {
-        savePromises.push(
-          fetch('/api/admin/configs', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              key: 'ai.apiKey',
-              value: localAIConfig.apiKey,
-              type: 'string',
-              category: 'system',
-              description: 'AI API Key',
-            }),
-          })
-        );
-      }
-
       // 执行所有保存
       const responses = await Promise.all(savePromises);
 
@@ -347,7 +317,6 @@ export default function SystemConfigPage() {
       setAuthConfig({ ...localAuthConfig });
       setCreditsConfig({ ...localCreditsConfig });
       setAnalyticsConfig({ ...localAnalyticsConfig });
-      setAIConfig({ ...localAIConfig });
 
       toast.success('配置保存成功');
     } catch (error: any) {
@@ -511,10 +480,7 @@ export default function SystemConfigPage() {
       )}
 
       {!loading && activeTab === 'ai' && (
-        <AIConfig
-          config={localAIConfig}
-          onChange={setLocalAIConfig}
-        />
+        <AIConfig />
       )}
     </div>
   );
