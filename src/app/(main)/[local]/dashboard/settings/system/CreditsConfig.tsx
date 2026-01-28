@@ -66,10 +66,10 @@ export default function CreditsConfig({ config, onChange }: CreditsConfigProps) 
                   min="1"
                   value={config.initial_credits_amount}
                   onChange={(e) => onChange({ ...config, initial_credits_amount: parseInt(e.target.value) || 0 })}
-                  className="input input-bordered w-full"
+                  className="input w-full"
                   placeholder="请输入赠送的积分数量"
                 />
-                <p className="label text-xs text-base-content/60 mt-1">
+                <p className="label text-base-content/60">
                   新用户注册后将自动获得此数量的积分
                 </p>
               </fieldset>
@@ -85,10 +85,10 @@ export default function CreditsConfig({ config, onChange }: CreditsConfigProps) 
                   min="0"
                   value={config.initial_credits_valid_days}
                   onChange={(e) => onChange({ ...config, initial_credits_valid_days: parseInt(e.target.value) || 0 })}
-                  className="input input-bordered w-full"
+                  className="input w-full"
                   placeholder="0 表示永久有效"
                 />
-                <p className="label text-xs text-base-content/60 mt-1">
+                <p className="label text-base-content/60">
                   设置为 0 表示积分永久有效，不会过期
                 </p>
               </fieldset>
@@ -102,11 +102,11 @@ export default function CreditsConfig({ config, onChange }: CreditsConfigProps) 
                 <textarea
                   value={config.initial_credits_description}
                   onChange={(e) => onChange({ ...config, initial_credits_description: e.target.value })}
-                  className="textarea textarea-bordered w-full"
+                  className="textarea w-full"
                   placeholder="例如：新用户注册赠送积分"
                   rows={2}
                 />
-                <p className="label text-xs text-base-content/60 mt-1">
+                <p className="label text-base-content/60">
                   此描述将显示在用户的积分交易记录中
                 </p>
               </fieldset>

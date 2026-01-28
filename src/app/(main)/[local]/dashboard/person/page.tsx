@@ -55,13 +55,6 @@ export default function PersonPage() {
     return '?';
   };
 
-  const renderUserType = () => {
-    if (user?.email) return '邮箱用户';
-    if (user?.phone) return '手机用户';
-    if (user?.wechatOpenId) return '微信用户';
-    return '未知';
-  };
-
   const handleSave = async () => {
     if (!session?.user?.id) return;
 
@@ -124,19 +117,6 @@ export default function PersonPage() {
             className="input input-bordered w-full max-w-xs"
             value={user?.nickName}
             onChange={(e) => setUser({ ...user, nickName: e.target.value })}
-          />
-        </fieldset>
-
-        {/* 账号类型 */}
-        <fieldset className="fieldset">
-          <legend className="fieldset-legend">账号类型</legend>
-          <p className="text-base-content/60 text-sm mb-3">你通过什么途径登录的账号</p>
-          <input
-            type="text"
-            disabled
-            placeholder=""
-            className="input input-bordered w-full max-w-xs"
-            value={renderUserType()}
           />
         </fieldset>
       </div>

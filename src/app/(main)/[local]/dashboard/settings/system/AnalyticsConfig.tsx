@@ -35,11 +35,11 @@ export default function AnalyticsConfig({ config, onChange }: AnalyticsConfigPro
               type="text"
               value={config.googleAnalyticsId}
               onChange={(e) => onChange({ googleAnalyticsId: e.target.value.toUpperCase() })}
-              className="input input-bordered w-full font-mono"
+              className="input w-full font-mono"
               placeholder="G-XXXXXXXXXX"
             />
             <div className="flex justify-between items-center mt-1">
-              <p className="label text-xs text-base-content/60">
+              <p className="label text-base-content/60">
                 输入您的 Google Analytics 4 测量 ID，留空则禁用统计
               </p>
               <a

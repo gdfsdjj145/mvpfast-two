@@ -3,11 +3,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import userReducer from './user';
+import publicConfigReducer from './publicConfig';
 import { ReactNode } from 'react';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    publicConfig: publicConfigReducer,
   },
 });
 

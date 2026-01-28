@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Shield, Mail, Phone, Chrome } from 'lucide-react';
+import { Shield, Mail, Phone, Chrome, KeyRound } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface AuthConfigProps {
@@ -12,12 +12,12 @@ interface AuthConfigProps {
 
 const AUTH_METHODS = [
   {
-    key: 'wx',
-    name: '微信登录',
-    description: '使用微信扫码或授权登录',
-    icon: Chrome,
-    color: 'text-success',
-    badgeColor: 'badge-success',
+    key: 'password',
+    name: '账号密码登录',
+    description: '使用邮箱/手机号和密码登录',
+    icon: KeyRound,
+    color: 'text-primary',
+    badgeColor: 'badge-primary',
   },
   {
     key: 'phone',
@@ -34,6 +34,14 @@ const AUTH_METHODS = [
     icon: Mail,
     color: 'text-secondary',
     badgeColor: 'badge-secondary',
+  },
+  {
+    key: 'wx',
+    name: '微信登录',
+    description: '使用微信扫码或授权登录',
+    icon: Chrome,
+    color: 'text-success',
+    badgeColor: 'badge-success',
   },
 ];
 
@@ -149,36 +157,6 @@ export default function AuthConfig({ loginType, loginTypes, onChange }: AuthConf
             </div>
           );
         })}
-      </div>
-
-      {/* Current Config Display */}
-      <div className="card bg-base-200 shadow-lg">
-        <div className="card-body p-4">
-          <h3 className="font-semibold mb-3">当前配置预览</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <div className="text-sm text-base-content/60 mb-1">默认登录方式</div>
-              <div className="flex items-center gap-2">
-                <div className={`badge ${AUTH_METHODS.find(m => m.key === loginType)?.badgeColor || 'badge-ghost'}`}>
-                  {AUTH_METHODS.find(m => m.key === loginType)?.name || loginType}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="text-sm text-base-content/60 mb-1">已启用的登录方式</div>
-              <div className="flex flex-wrap gap-2">
-                {loginTypes.map(type => {
-                  const method = AUTH_METHODS.find(m => m.key === type);
-                  return (
-                    <div key={type} className={`badge ${method?.badgeColor || 'badge-ghost'}`}>
-                      {method?.name || type}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

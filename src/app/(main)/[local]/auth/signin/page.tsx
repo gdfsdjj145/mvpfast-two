@@ -7,12 +7,24 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import WxChatPc from '@/components/weChat/WeChatPc';
 import WeChatMobile from '@/components/weChat/WeChatMobile';
-import { Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useSiteConfig } from '@/hooks/useSiteConfig';
+import { useAppDispatch, useAppSelector } from '@/store/hook';
+import { fetchPublicConfigs, selectLoginConfig, selectPublicConfigLoaded } from '@/store/publicConfig';
 
-const LOGIN_HASH = {
-  wx: '💬 微信登录',
-  phone: '📱 手机登录',
-  email: '📫 邮箱登录',
+const LOGIN_HASH: Record<string, string> = {
+  wx: '微信登录',
+  phone: '手机登录',
+  email: '邮箱登录',
+  password: '密码登录',
+};
+
+const LOGIN_ICON_SRC: Record<string, string> = {
+  wx: '/login/微信.svg',
+  phone: '/login/手机.svg',
+  email: '/login/邮箱.svg',
+  password: '/login/账号.svg',
 };
 
 const WeChatLogin = () => {
@@ -31,7 +43,7 @@ const WeChatLogin = () => {
     return (
       <div className="text-center py-4">
         <WeChatMobile />
-        <p className="mt-4 text-sm text-gray-500">点击按钮后跳转微信</p>
+        <p className="mt-4 text-sm text-base-content/50">点击按钮后跳转微信</p>
       </div>
     );
   }
@@ -54,10 +66,8 @@ const VerificationButton = (props: { type: string; form: { identifier: string; c
   }, [counter]);
 
   const handleClick = async () => {
-    // 开始倒计时
     setCounter(60);
     setButtonDisabled(true);
-    // 生成验证码或其他操作
     const data: any = await sendCode(type, {
       identifier: form.identifier,
     });
@@ -67,7 +77,7 @@ const VerificationButton = (props: { type: string; form: { identifier: string; c
 
   return (
     <button
-      className="btn btn-active btn-primary w-32"
+      className="btn btn-primary btn-soft rounded-xl w-28 shrink-0 text-xs"
       onClick={() => handleClick()}
       disabled={buttonDisabled}
     >
@@ -78,43 +88,27 @@ const VerificationButton = (props: { type: string; form: { identifier: string; c
 
 export default function SignInPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [loginConfig, setLoginConfig] = useState({ loginType: 'phone', loginTypes: ['phone'] });
-  const [type, setType] = useState('phone');
+  const { siteConfig } = useSiteConfig();
+  const dispatch = useAppDispatch();
+  const loginConfig = useAppSelector(selectLoginConfig);
+  const configLoaded = useAppSelector(selectPublicConfigLoaded);
+  const [type, setType] = useState('');
   const [form, setForm] = useState({
     identifier: '',
     code: '',
+    password: '',
   });
   const searchParams = useSearchParams();
 
-  // 从数据库加载登录配置
   useEffect(() => {
-    const fetchLoginConfig = async () => {
-      try {
-        const response = await fetch('/api/admin/configs');
-        if (response.ok) {
-          const data = await response.json();
-          const loginTypeItem = data.items?.find((item: any) => item.key === 'auth.loginType');
-          const loginTypesItem = data.items?.find((item: any) => item.key === 'auth.loginTypes');
+    dispatch(fetchPublicConfigs());
+  }, [dispatch]);
 
-          const fetchedLoginType = loginTypeItem?.value || 'phone';
-          const fetchedLoginTypes = loginTypesItem?.value || ['phone'];
-
-          setLoginConfig({
-            loginType: fetchedLoginType,
-            loginTypes: fetchedLoginTypes,
-          });
-          setType(fetchedLoginType);
-        }
-      } catch (error) {
-        console.error('Failed to fetch login config:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLoginConfig();
-  }, []);
+  useEffect(() => {
+    if (configLoaded && !type) {
+      setType(loginConfig.loginType);
+    }
+  }, [configLoaded, loginConfig.loginType, type]);
 
   const handleFormChnage = (key: string, value: string) => {
     setForm({
@@ -124,13 +118,39 @@ export default function SignInPage() {
   };
 
   const handleLogin = async () => {
-    if (!form.identifier || !form.code) {
-      toast.error('请输入正确验证码或邮箱!');
+    if (!form.identifier) {
+      toast.error('请输入账号!');
+      return;
+    }
+
+    if (type === 'password') {
+      if (!form.password) {
+        toast.error('请输入密码!');
+        return;
+      }
+      const res = await signIn('credentials', {
+        type: 'password',
+        identifier: form.identifier,
+        password: form.password,
+        redirect: false,
+      });
+      if (res?.error) {
+        toast.error('账号或密码错误');
+      } else {
+        const callbackUrl = searchParams.get('redirect') || '/';
+        router.push(callbackUrl);
+      }
+      return;
+    }
+
+    if (!form.code) {
+      toast.error('请输入验证码!');
       return;
     }
     const res = await signIn('credentials', {
       type,
-      ...form,
+      identifier: form.identifier,
+      code: form.code,
       redirect: false,
     });
     if (res?.error) {
@@ -141,84 +161,142 @@ export default function SignInPage() {
     }
   };
 
-  if (loading) {
+  if (!configLoaded) {
     return (
-      <div className="h-screen w-full flex justify-center items-center bg-slate-100">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
+  const isCodeLogin = type === 'phone' || type === 'email';
+  const isPasswordLogin = type === 'password';
+
   return (
-    <div className="h-screen w-full flex justify-center items-center bg-slate-100">
-      <div className="flex flex-col justify-center w-full max-w-[480px] px-4">
-        <a href="/" className="mx-auto">
-          <img
-            alt="Your Company"
-            src="/brand/logo.png"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Mvp Fast
+    <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 px-4 overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="relative flex flex-col justify-center w-full max-w-[420px]">
+        {/* Logo + 标题 */}
+        <a href="/" className="flex flex-col items-center mb-5 group">
+          <div className="w-12 h-12 rounded-2xl bg-base-100 shadow-lg flex items-center justify-center transition-transform group-hover:scale-105">
+            <img
+              alt={siteConfig.siteName}
+              src="/favicon.ico"
+              className="h-8 w-8"
+            />
+          </div>
+          <h2 className="mt-2.5 text-xl font-bold tracking-tight text-base-content">
+            {siteConfig.siteName}
           </h2>
+          <p className="mt-0.5 text-sm text-base-content/50">
+            {isPasswordLogin ? '使用账号密码登录' : '欢迎回来'}
+          </p>
         </a>
 
-        <div className="mt-10">
-          <div className="bg-white px-6 py-8 shadow-sm sm:rounded-lg sm:px-12">
-            {type !== 'wx' && (
-              <div className="space-y-6">
+        {/* 主卡片 */}
+        <div className="card bg-base-100 shadow-xl rounded-3xl overflow-hidden">
+          <div className="card-body p-6 sm:p-8">
+            {/* 密码登录表单 */}
+            {isPasswordLogin && (
+              <div className="space-y-4">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    {type === 'email' ? '邮箱' : '手机号'}
-                  </label>
-                  <div className="mt-2 flex gap-4">
+                  <label className="text-sm font-medium text-base-content/70 mb-1 block">账号</label>
+                  <label className="input rounded-xl w-full focus-within:outline-primary/30">
+                    <Image src="/login/账号.svg" alt="账号" width={16} height={16} className="opacity-40" />
                     <input
                       value={form.identifier}
                       type="text"
-                      placeholder={
-                        type === 'email' ? '请输入邮箱' : '请输入手机号'
-                      }
-                      className="input input-bordered w-full"
+                      placeholder="请输入邮箱或手机号"
                       onChange={(e) =>
                         handleFormChnage('identifier', e.target.value)
                       }
                     />
-                    <VerificationButton
-                      form={form}
-                      type={type}
-                    ></VerificationButton>
-                  </div>
+                  </label>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    验证码
-                  </label>
-                  <div className="mt-2">
+                  <label className="text-sm font-medium text-base-content/70 mb-1 block">密码</label>
+                  <label className="input rounded-xl w-full focus-within:outline-primary/30">
+                    <Image src="/login/账号.svg" alt="密码" width={16} height={16} className="opacity-40" />
                     <input
-                      value={form.code}
-                      type="text"
-                      placeholder="请填写验证码"
-                      className="input input-bordered w-full"
-                      onChange={(e) => handleFormChnage('code', e.target.value)}
+                      value={form.password}
+                      type="password"
+                      placeholder="请输入密码"
+                      onChange={(e) => handleFormChnage('password', e.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <button
+                  className="btn btn-primary w-full rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
+                  onClick={() => handleLogin()}
+                >
+                  登录
+                </button>
+
+                <div className="text-center">
+                  <Link
+                    href="/zh/auth/signup"
+                    className="text-sm text-primary/80 hover:text-primary transition-colors"
+                  >
+                    没有账号？立即注册
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* 验证码登录表单 */}
+            {isCodeLogin && (
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-base-content/70 mb-1 block">
+                    {type === 'email' ? '邮箱' : '手机号'}
+                  </label>
+                  <div className="flex gap-3">
+                    <label className="input rounded-xl w-full focus-within:outline-primary/30">
+                      <Image src={type === 'email' ? '/login/邮箱.svg' : '/login/手机.svg'} alt={type === 'email' ? '邮箱' : '手机'} width={16} height={16} className="opacity-40" />
+                      <input
+                        value={form.identifier}
+                        type="text"
+                        placeholder={
+                          type === 'email' ? '请输入邮箱' : '请输入手机号'
+                        }
+                        onChange={(e) =>
+                          handleFormChnage('identifier', e.target.value)
+                        }
+                      />
+                    </label>
+                    <VerificationButton
+                      form={form}
+                      type={type}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <button
-                    className="btn btn-primary w-full"
-                    onClick={() => handleLogin()}
-                  >
-                    登录
-                  </button>
+                  <label className="text-sm font-medium text-base-content/70 mb-1 block">验证码</label>
+                  <label className="input rounded-xl w-full focus-within:outline-primary/30">
+                    <Image src="/login/邮箱.svg" alt="验证码" width={16} height={16} className="opacity-40" />
+                    <input
+                      value={form.code}
+                      type="text"
+                      placeholder="请填写验证码"
+                      onChange={(e) => handleFormChnage('code', e.target.value)}
+                    />
+                  </label>
                 </div>
+
+                <button
+                  className="btn btn-primary w-full rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
+                  onClick={() => handleLogin()}
+                >
+                  登录
+                </button>
               </div>
             )}
 
@@ -226,37 +304,37 @@ export default function SignInPage() {
               <WeChatLogin />
             )}
 
-            <div>
-              {
-                loginConfig.loginTypes.length > 1 && (
-                  <div className="relative mt-10">
-                    <div className="divider">或者</div>
-                  </div>
-                )
-              }
-
-              <div className="mt-6 flex justify-between gap-4">
-                {loginConfig.loginTypes.map((item) => (
-                  <React.Fragment key={item}>
-                    {type !== item && (
-                      <button
-                        className="btn flex-1"
-                        onClick={() => setType(item)}
-                      >
-                        {LOGIN_HASH[item as keyof typeof LOGIN_HASH]}
-                      </button>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
+            {/* 其他登录方式 */}
+            {loginConfig.loginTypes.length > 1 && (
+              <>
+                <div className="divider text-base-content/30 text-xs my-4">其他登录方式</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {loginConfig.loginTypes.map((item) => (
+                    <React.Fragment key={item}>
+                      {type !== item && (
+                        <button
+                          className="btn btn-ghost btn-sm rounded-xl flex-1 min-w-[110px] border border-base-300 hover:border-primary/30 hover:bg-primary/5 transition-all"
+                          onClick={() => setType(item)}
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <Image src={LOGIN_ICON_SRC[item]} alt={LOGIN_HASH[item]} width={18} height={18} />
+                            <span className="text-xs">{LOGIN_HASH[item]}</span>
+                          </span>
+                        </button>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
+        </div>
 
-          <div className="mt-6 text-center flex gap-4 justify-center">
-            <span className="text-sm text-secondary">
-              第一次登录时会创建帐号，并且会生成有趣的昵称💡
-            </span>
-          </div>
+        {/* 底部提示 */}
+        <div className="mt-4 text-center">
+          <span className="text-xs text-base-content/40">
+            {isPasswordLogin ? '使用邮箱或手机号登录' : '第一次登录时会创建帐号，并且会生成有趣的昵称'}
+          </span>
         </div>
       </div>
     </div>

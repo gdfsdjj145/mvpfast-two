@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 import { User, Prisma } from '@prisma/client';
 
 // 用户角色类型
-export type UserRole = 'user' | 'admin' | 'superadmin';
+export type UserRole = 'user' | 'admin';
 
 // 创建用户
 export async function createUser(data: {
@@ -111,7 +111,7 @@ export async function getUserList(params: {
 export async function getUserStats() {
   const [total, admins, activeUsers, totalCredits] = await Promise.all([
     prisma.user.count(),
-    prisma.user.count({ where: { role: { in: ['admin', 'superadmin'] } } }),
+    prisma.user.count({ where: { role: 'admin' } }),
     prisma.user.count({
       where: {
         created_time: {
@@ -164,14 +164,5 @@ export async function isAdmin(userId: string): Promise<boolean> {
     where: { id: userId },
     select: { role: true },
   });
-  return user?.role === 'admin' || user?.role === 'superadmin';
-}
-
-// 检查用户是否为超级管理员
-export async function isSuperAdmin(userId: string): Promise<boolean> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { role: true },
-  });
-  return user?.role === 'superadmin';
+  return user?.role === 'admin';
 }

@@ -10,7 +10,7 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const t = useTranslations('FaqList');
   const messages = useMessages();
-  const faqListConfig = messages.FaqList as unknown as any[];
+  const faqListConfig = (messages.FaqList as any).items as any[];
 
   const toggleItem = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -26,7 +26,7 @@ export default function FaqSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-            常见问题
+            {t('title')}
           </h2>
         </motion.div>
 
@@ -46,7 +46,7 @@ export default function FaqSection() {
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
               >
                 <span className="font-medium text-gray-900 pr-4">
-                  {t(`${index}.title`)}
+                  {t(`items.${index}.title`)}
                 </span>
                 <ChevronDown
                   className={cn(
@@ -63,7 +63,7 @@ export default function FaqSection() {
               >
                 <div className="overflow-hidden">
                   <p className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
-                    {t(`${index}.answer`)}
+                    {t(`items.${index}.answer`)}
                   </p>
                 </div>
               </div>

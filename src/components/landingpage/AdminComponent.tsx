@@ -2,11 +2,12 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useMessages } from 'next-intl';
+import { useMessages, useTranslations } from 'next-intl';
 
 export default function AdminComponent() {
   const messages = useMessages();
   const adminConfig = messages.Admin as any;
+  const t = useTranslations('Admin');
 
   return (
     <section className="bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 lg:py-20">
@@ -27,7 +28,7 @@ export default function AdminComponent() {
             </div>
             <div className="flex-1 mx-4">
               <div className="bg-gray-700 rounded-md px-3 py-1 text-xs text-gray-400 max-w-md mx-auto text-center">
-                mvpfast.top
+                {t('domain')}
               </div>
             </div>
           </div>

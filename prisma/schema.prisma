@@ -60,6 +60,7 @@ model User {
   nickName      String
   /// Could not determine type: the field only had null or empty values in the sample set.
   phone         String?
+  password      String?  // 加密后的密码（bcrypt）
   wechatOpenId  String?
   wechatUnionId String?
 
@@ -68,7 +69,7 @@ model User {
   totalSpent    Float    @default(0)  // 累计消费金额
 
   // 权限系统字段
-  role          String   @default("user")  // "user" | "admin" | "superadmin"
+  role          String   @default("user")  // "user" | "admin"
 
   @@unique([wechatOpenId, phone, email])
 }

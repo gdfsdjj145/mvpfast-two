@@ -153,14 +153,16 @@ export default async function MainLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
             <SessionProvider>
-              <ReduxProvider>{children}</ReduxProvider>
+              <ReduxProvider>
+                {children}
+                <GoogleAnalytics />
+              </ReduxProvider>
             </SessionProvider>
           </ThemeProviders>
         </NextIntlClientProvider>
         <Toaster />
         <Analytics />
         <SpeedInsights />
-        <GoogleAnalytics />
       </body>
     </html>
   );

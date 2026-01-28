@@ -27,15 +27,8 @@ function createOpenRouterClient() {
   const apiKey = getOpenRouterApiKey();
   if (!apiKey) return null;
 
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'MvpFast';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mvpfast.top';
-
   return new OpenRouter({
     apiKey,
-    defaultHeaders: {
-      'HTTP-Referer': siteUrl,
-      'X-Title': siteName,
-    },
   });
 }
 
@@ -93,10 +86,10 @@ export async function POST(request: NextRequest) {
 
     // Add optional parameters
     if (body.temperature !== undefined) options.temperature = body.temperature;
-    if (body.max_tokens !== undefined) options.max_tokens = body.max_tokens;
-    if (body.top_p !== undefined) options.top_p = body.top_p;
-    if (body.frequency_penalty !== undefined) options.frequency_penalty = body.frequency_penalty;
-    if (body.presence_penalty !== undefined) options.presence_penalty = body.presence_penalty;
+    if (body.max_tokens !== undefined) (options as any).maxTokens = body.max_tokens;
+    if (body.top_p !== undefined) (options as any).topP = body.top_p;
+    if (body.frequency_penalty !== undefined) (options as any).frequencyPenalty = body.frequency_penalty;
+    if (body.presence_penalty !== undefined) (options as any).presencePenalty = body.presence_penalty;
 
     // Handle streaming response
     if (body.stream) {

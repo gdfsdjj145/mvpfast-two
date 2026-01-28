@@ -4,6 +4,7 @@ import { getGeneratorName } from '@/lib/generatorName';
 import sendEmail from '@/lib/email';
 import sendPhone from '@/lib/phone';
 import { grantInitialCredits } from '@/models/credit';
+import bcrypt from 'bcryptjs';
 
 const handlerSendCode = async (type: string, params: any, code: string) => {
   const { identifier } = params;
@@ -182,4 +183,95 @@ export const checkQrCode = async (
     openId: user.wechatOpenId ?? '',
     isScan: true,
   };
+};
+
+// 密码加密
+export const hashPassword = async (password: string): Promise<string> => {
+  return bcrypt.hash(password, 10);
+};
+
+// 密码验证
+export const verifyPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+  return bcrypt.compare(password, hashedPassword);
+};
+
+// 账号密码登录验证
+export const verifyPasswordLogin = async (params: {
+  identifier: string;
+  password: string;
+  identifierType: 'email' | 'phone';
+}) => {
+  const { identifier, password, identifierType } = params;
+
+  // 查找用户
+  const user = await prisma.user.findFirst({
+    where: identifierType === 'email' ? { email: identifier } : { phone: identifier },
+  });
+
+  if (!user) {
+    return { success: false, error: '用户不存在' };
+  }
+
+  if (!user.password) {
+    return { success: false, error: '该账号未设置密码，请使用验证码登录' };
+  }
+
+  const isValid = await verifyPassword(password, user.password);
+  if (!isValid) {
+    return { success: false, error: '密码错误' };
+  }
+
+  return { success: true, user };
+};
+
+// 用户注册
+export const registerUser = async (params: {
+  identifier: string;
+  password: string;
+  identifierType: 'email' | 'phone';
+  code: string;
+}) => {
+  const { identifier, password, identifierType, code } = params;
+
+  // 验证验证码
+  const isCodeValid = await verifyCode(identifierType, { identifier, code });
+  if (!isCodeValid) {
+    return { success: false, error: '验证码错误或已过期' };
+  }
+
+  // 检查用户是否已存在
+  const existingUser = await prisma.user.findFirst({
+    where: identifierType === 'email' ? { email: identifier } : { phone: identifier },
+  });
+
+  if (existingUser) {
+    // 如果用户已存在但没有密码，则更新密码
+    if (!existingUser.password) {
+      const hashedPassword = await hashPassword(password);
+      await prisma.user.update({
+        where: { id: existingUser.id },
+        data: { password: hashedPassword },
+      });
+      return { success: true, message: '密码设置成功' };
+    }
+    return { success: false, error: '该账号已注册' };
+  }
+
+  // 创建新用户
+  const hashedPassword = await hashPassword(password);
+  const newUser = await prisma.user.create({
+    data: {
+      [identifierType]: identifier,
+      password: hashedPassword,
+      nickName: getGeneratorName(),
+      wechatOpenId: null,
+      phone: identifierType === 'phone' ? identifier : null,
+      email: identifierType === 'email' ? identifier : null,
+    },
+  });
+
+  // 新用户注册，赠送初始积分
+  await grantInitialCredits(newUser.id);
+
+  return { success: true, message: '注册成功' };
 };

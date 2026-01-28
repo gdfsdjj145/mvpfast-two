@@ -38,7 +38,7 @@ export default function FaqComponents() {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-0.5">邮箱</p>
+                  <p className="text-xs text-gray-500 mb-0.5">{t('call.emailLabel')}</p>
                   <p className="text-sm font-medium text-gray-900">{t('call.email')}</p>
                 </div>
               </a>
@@ -47,7 +47,7 @@ export default function FaqComponents() {
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-0.5">微信</p>
+                  <p className="text-xs text-gray-500 mb-0.5">{t('call.wechatLabel')}</p>
                   <p className="text-sm font-medium text-gray-900">{t('call.wechat')}</p>
                 </div>
               </div>

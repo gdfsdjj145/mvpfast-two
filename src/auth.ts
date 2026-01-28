@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { verifyCode } from './app/(main)/[local]/auth/signin/actions';
+import { verifyCode, verifyPasswordLogin } from './app/(main)/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
 import { grantInitialCredits } from '@/models/credit';
 
@@ -43,13 +43,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         nickName: string | null;
         avatar: string | null;
       } | null> {
-        const { identifier, code, type } = credentials as {
+        const { identifier, code, type, password } = credentials as {
           identifier: string;
           code: string;
           type: string;
+          password?: string;
         };
 
         console.log('credentials', credentials);
+
+        // 账号密码登录
+        if (type === 'password') {
+          // 判断是邮箱还是手机号
+          const identifierType = identifier.includes('@') ? 'email' : 'phone';
+          const result = await verifyPasswordLogin({
+            identifier,
+            password: password || '',
+            identifierType,
+          });
+
+          if (result.success && result.user) {
+            return result.user;
+          }
+          return null;
+        }
 
         const verifyState = await verifyCode(type, {
           identifier,
@@ -79,8 +96,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 res = await prisma.user.upsert({
                   where: {
                     wechatOpenId_phone_email: {
-                      wechatOpenId: null,
-                      phone: null,
+                      wechatOpenId: '',
+                      phone: '',
                       email: identifier,
                     },
                   },
@@ -110,9 +127,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 res = await prisma.user.upsert({
                   where: {
                     wechatOpenId_phone_email: {
-                      wechatOpenId: null,
+                      wechatOpenId: '',
                       phone: identifier,
-                      email: null,
+                      email: '',
                     },
                   },
                   update: {},

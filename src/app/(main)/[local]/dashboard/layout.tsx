@@ -27,9 +27,11 @@ import {
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useSiteConfig } from '@/hooks/useSiteConfig';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const t = useTranslations('Dashboard');
+  const { siteConfig } = useSiteConfig();
   const pathname = usePathname();
   const pathSegments = pathname.split('/').filter(Boolean);
 
@@ -124,17 +126,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  const renderUserType = () => {
-    if (user?.email) return '邮箱用户';
-    if (user?.phone) return '手机用户';
-    if (user?.wechatOpenId) return '微信用户';
-    return '游客';
-  };
-
   const renderFullName = () => {
     if (user?.nickName) return user.nickName;
-    if (user?.email) return user.email;
-    if (user?.phone) return user.phone;
     return '未知用户';
   };
 
@@ -150,7 +143,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 确定当前角色：优先使用 session 中的角色，其次使用缓存的角色，开发环境默认 admin
   const userRole = session?.user?.role || cachedRole || (isDev ? 'admin' : 'user');
-  const isAdmin = userRole === 'admin' || userRole === 'superadmin';
+  const isAdmin = userRole === 'admin';
 
   // 需要管理员权限的路径
   const adminOnlyPaths = ['users', 'order', 'redemption', 'settings/system'];
@@ -373,16 +366,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {!collapsed ? (
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow">
-                <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />
+                <img src="/favicon.ico" alt={siteConfig.siteName} className="w-full h-full object-contain" />
               </div>
               <span className="text-xl font-bold text-primary">
-                MvpFast
+                {siteConfig.siteName}
               </span>
             </Link>
           ) : (
             <Link href="/" className="w-full flex justify-center">
               <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
-                <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />
+                <img src="/favicon.ico" alt={siteConfig.siteName} className="w-full h-full object-contain" />
               </div>
             </Link>
           )}
@@ -463,7 +456,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <>
                 <div className="flex-1 min-w-0 text-left">
                   <div className="font-medium text-base-content truncate text-sm">{renderFullName()}</div>
-                  <div className="text-xs text-base-content/60 truncate">{renderUserType()}</div>
                 </div>
                 <ChevronUp
                   size={18}
@@ -486,7 +478,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-base-content text-sm truncate">{renderFullName()}</div>
-                    <div className="text-xs text-base-content/60 truncate">{renderUserType()}</div>
                   </div>
                 </div>
               </div>
@@ -593,7 +584,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Footer */}
         <footer className="py-4 px-6 bg-base-100 border-t border-base-300 text-center text-sm text-base-content/60">
-          © {new Date().getFullYear()} MvpFast. All rights reserved.
+          © {new Date().getFullYear()} {siteConfig.siteName}. All rights reserved.
         </footer>
       </div>
     </div>

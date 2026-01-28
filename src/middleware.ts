@@ -120,7 +120,7 @@ export async function middleware(request: NextRequest) {
             });
 
             const userRole = user?.role || 'user';
-            if (userRole !== 'admin' && userRole !== 'superadmin') {
+            if (userRole !== 'admin') {
               console.log('非管理员访问管理员路由，重定向到 403');
               let forbiddenPath = '/403';
               if (currentLocale) {

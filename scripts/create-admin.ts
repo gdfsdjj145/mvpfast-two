@@ -37,7 +37,7 @@ async function main() {
 
   if (user) {
     // 用户已存在，更新角色
-    if (user.role === 'admin' || user.role === 'superadmin') {
+    if (user.role === 'admin') {
       console.log(`✅ 用户已经是管理员（角色: ${user.role}）`);
       console.log(`   ID: ${user.id}`);
       console.log(`   昵称: ${user.nickName}`);

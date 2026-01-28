@@ -8,7 +8,12 @@ import prisma from '@/lib/prisma'
 
 export async function GET() {
   try {
-    const results = {
+    const results: {
+      timestamp: string;
+      status: string;
+      checks: any;
+      summary?: string;
+    } = {
       timestamp: new Date().toISOString(),
       status: 'success',
       checks: {} as any

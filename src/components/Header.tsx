@@ -7,10 +7,12 @@ import Image from 'next/image';
 import { useTranslations, useMessages } from 'next-intl';
 import I18n from './I18n';
 import ThemeComponent from './theme/ThemeChoose';
+import { useSiteConfig } from '@/hooks/useSiteConfig';
 
 const UserMenu = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const t = useTranslations('Header');
 
   const handleLogout = async () => {
     const result = await signOut({ redirect: false, callbackUrl: '/' });
@@ -26,7 +28,7 @@ const UserMenu = () => {
       return (
         <Image
           src={session.user.avatar}
-          alt="头像"
+          alt={t('userMenu.avatarAlt')}
           width={32}
           height={32}
           quality={80}
@@ -41,10 +43,8 @@ const UserMenu = () => {
   };
 
   const renderFullName = () => {
-    if (session?.user?.email) return session.user.email;
-    if (session?.user?.phone) return session.user.phone;
-    if (session?.user?.wechatOpenId) return session.user.nickName;
-    return '未知用户';
+    if (session?.user?.nickName) return session.user.nickName;
+    return t('userMenu.unknownUser');
   };
 
   return (
@@ -68,7 +68,7 @@ const UserMenu = () => {
               href="/dashboard/home"
               className="text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
             >
-              我的账户
+              {t('userMenu.account')}
             </Link>
           </li>
           <li>
@@ -76,7 +76,7 @@ const UserMenu = () => {
               onClick={handleLogout}
               className="text-sm text-red-500 hover:bg-red-50 rounded-lg"
             >
-              退出登录
+              {t('userMenu.logout')}
             </button>
           </li>
         </ul>
@@ -85,10 +85,10 @@ const UserMenu = () => {
       {/* 移动端显示 */}
       <div className="sm:hidden flex items-center gap-2">
         <Link href="/dashboard/home" className="text-sm text-gray-600">
-          我的
+          {t('userMenu.accountMobile')}
         </Link>
         <button onClick={handleLogout} className="text-sm text-red-500">
-          退出
+          {t('userMenu.logoutMobile')}
         </button>
       </div>
     </>
@@ -100,6 +100,7 @@ export default function Header() {
   const messages = useMessages();
   const headerConfig = messages.Header as any;
   const { status } = useSession();
+  const { siteConfig } = useSiteConfig();
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
@@ -107,15 +108,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              alt={headerConfig.logo.alt}
-              src={headerConfig.logo.url}
-              width={32}
-              height={32}
-              quality={90}
-              priority
+            <img
+              alt={siteConfig.siteName}
+              src="/favicon.ico"
               className="h-8 w-auto"
             />
+            <span className="text-lg font-bold text-gray-900">{siteConfig.siteName}</span>
           </Link>
 
           {/* Navigation */}

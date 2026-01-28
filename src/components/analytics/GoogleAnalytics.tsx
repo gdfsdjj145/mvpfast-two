@@ -1,34 +1,20 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/store/hook';
+import { fetchPublicConfigs, selectGoogleAnalyticsId, selectPublicConfigLoaded } from '@/store/publicConfig';
 
 export default function GoogleAnalytics() {
-  const [gaId, setGaId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const gaId = useAppSelector(selectGoogleAnalyticsId);
+  const loaded = useAppSelector(selectPublicConfigLoaded);
 
   useEffect(() => {
-    const fetchGaId = async () => {
-      try {
-        const response = await fetch('/api/admin/configs/public?key=analytics.googleAnalyticsId');
-        if (response.ok) {
-          const data = await response.json();
-          if (data.value) {
-            setGaId(data.value);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch Google Analytics ID:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    dispatch(fetchPublicConfigs());
+  }, [dispatch]);
 
-    fetchGaId();
-  }, []);
-
-  // 不渲染任何内容直到加载完成，且只有配置了 ID 才渲染脚本
-  if (isLoading || !gaId) {
+  if (!loaded || !gaId) {
     return null;
   }
 
