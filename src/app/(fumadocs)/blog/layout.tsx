@@ -1,7 +1,5 @@
 import { ReactNode } from 'react';
-import './blog-styles.css';
-import { blogSource } from '../../../../source';
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { baseOptions } from '../layout.config';
 
 export async function generateMetadata() {
@@ -17,16 +15,8 @@ export async function generateMetadata() {
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    // @ts-ignore
-    <DocsLayout 
-      tree={blogSource.pageTree} 
-      sidebar={{
-        enabled: false
-      }}
-    >
-      <div className="blog-layout">
-        {children}
-      </div>
-    </DocsLayout>
+    <HomeLayout {...baseOptions}>
+      {children}
+    </HomeLayout>
   );
 }

@@ -23,7 +23,7 @@ export async function requireAdmin(): Promise<AdminUser> {
     const userRole = session.user.role || 'user';
 
     // 检查权限（开发和生产都检查）
-    if (userRole !== 'admin' && userRole !== 'superadmin') {
+    if (userRole !== 'admin') {
       throw new Error('Forbidden: Admin access required');
     }
 
@@ -54,7 +54,7 @@ export async function isAdmin(): Promise<boolean> {
   // 如果有 session，检查真实角色
   if (session?.user) {
     const userRole = session.user.role || 'user';
-    return userRole === 'admin' || userRole === 'superadmin';
+    return userRole === 'admin';
   }
 
   // 开发环境下没有 session 时，返回 true 以便调试

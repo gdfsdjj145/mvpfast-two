@@ -69,6 +69,14 @@
     },
     "theme": {
       "label": "Theme"
+    },
+    "userMenu": {
+      "avatarAlt": "Avatar",
+      "unknownUser": "Unknown User",
+      "account": "My Account",
+      "logout": "Sign Out",
+      "accountMobile": "Account",
+      "logoutMobile": "Sign Out"
     }
   },
   "Hero": {
@@ -125,6 +133,7 @@
     ]
   },
   "Admin": {
+    "domain": "mvpfast.top",
     "banner": {
       "url": "/banners/banner-1.png",
       "alt": "Admin Preview"
@@ -300,6 +309,8 @@
     "title": "Common questions about MvpFast",
     "subtitle": "If your question has an answer here, you can contact us in the following ways",
     "call": {
+      "emailLabel": "Email",
+      "wechatLabel": "WeChat",
       "email": "freecloud@emong.com.cn",
       "wechat": "jiajiandu"
     },
@@ -322,27 +333,82 @@
       }
     ]
   },
-  "FaqList": [
-    {
-      "title": "MvpFast payment issues",
-      "answer": "MvpFast template's payment function is completely in accordance with relevant national regulations, currently using WeChat's payment method. To connect to the payment module, developers need to verify as a WeChat merchant and bind payment keys to use the payment function."
-    },
-    {
-      "title": "What do I get after purchase",
-      "answer": "After purchase, you will get all the code of the template: including login module, payment module, UI module, frontend code, WeChat public account code, etc. Afterwards, you can use the template to quickly implement your ideas, and when you encounter any problems with MvpFast code, processes, or related issues, you can add WeChat jiajiandu to ask questions, and I will reply within 24 hours."
-    },
-    {
-      "title": "What can I do after purchasing MvpFast",
-      "answer": "You can use this template to build any type and number of websites and quickly commercialize them, or simply learn from the code template. However, you are not allowed to privately resell the MvpFast template code, nor are you allowed to share it on related code platforms. If discovered, legal responsibility will be pursued."
-    },
-    {
-      "title": "How to deploy MvpFast",
-      "answer": "Deploying MvpFast is very simple, just submit the code to your personal git repository, then deploy with one click through Vercel, the entire process takes only 1 minute."
-    }
-  ],
+  "FaqList": {
+    "title": "FAQ",
+    "items": [
+      {
+        "title": "MvpFast payment issues",
+        "answer": "MvpFast template's payment function is completely in accordance with relevant national regulations, currently using WeChat's payment method. To connect to the payment module, developers need to verify as a WeChat merchant and bind payment keys to use the payment function."
+      },
+      {
+        "title": "What do I get after purchase",
+        "answer": "After purchase, you will get all the code of the template: including login module, payment module, UI module, frontend code, WeChat public account code, etc. Afterwards, you can use the template to quickly implement your ideas, and when you encounter any problems with MvpFast code, processes, or related issues, you can add WeChat jiajiandu to ask questions, and I will reply within 24 hours."
+      },
+      {
+        "title": "What can I do after purchasing MvpFast",
+        "answer": "You can use this template to build any type and number of websites and quickly commercialize them, or simply learn from the code template. However, you are not allowed to privately resell the MvpFast template code, nor are you allowed to share it on related code platforms. If discovered, legal responsibility will be pursued."
+      },
+      {
+        "title": "How to deploy MvpFast",
+        "answer": "Deploying MvpFast is very simple, just submit the code to your personal git repository, then deploy with one click through Vercel, the entire process takes only 1 minute."
+      }
+    ]
+  },
+  "Pay": {
+    "loading": "Loading...",
+    "loadingQRCode": "Loading payment QR code...",
+    "noPaymentMethods": "No payment methods available",
+    "selectPaymentMethod": "Select Payment Method",
+    "confirmPayment": "Confirm Payment ¥{amount}",
+    "backToHome": "Back to Home",
+    "order": "Order",
+    "productDetails": "Product Details",
+    "unitPrice": "Unit Price",
+    "creditsPrice": "Credits Price",
+    "discount": "Discount",
+    "totalAmount": "Total Amount",
+    "credits": "credits",
+    "creditsMode": "Credits Purchase Mode",
+    "creditsPayment": "Credits Payment",
+    "currentBalance": "Current Credits Balance",
+    "productCreditsPrice": "Product Credits Price",
+    "discountReduction": "Discount Reduction",
+    "amountToPay": "Amount to Pay",
+    "insufficientCredits": "Insufficient Credits",
+    "needMore": "Need {amount} more credits, please recharge first",
+    "goRecharge": "Go to Recharge →",
+    "confirmCreditsPayment": "Confirm Payment {amount} credits",
+    "processing": "Processing...",
+    "purchaseSuccess": "Purchase Successful",
+    "paymentSuccess": "Payment Successful",
+    "transactionId": "Transaction ID: ",
+    "serviceWechat": "Service WeChat: ",
+    "addWechatForTemplate": "Add service WeChat to get the template",
+    "goToProfile": "Go to Profile",
+    "orderId": "Order ID: {id}",
+    "createTime": "Created at: {time}",
+    "pendingCreditsOrder": "Order info will be generated after confirming credits payment",
+    "pendingDirectOrder": "Please select a payment method and confirm to generate order info",
+    "paymentTimeout": "Please complete payment within 15 minutes, otherwise the order will be automatically cancelled.",
+    "contactService": "If you encounter any issues, please contact service WeChat: 13022051583",
+    "loadFailed": "Loading Failed",
+    "refreshRetry": "Please refresh the page and try again",
+    "refreshPage": "Refresh Page",
+    "loginFirst": "Please login first",
+    "insufficientBalance": "Insufficient credits, current balance: {current}, required: {required}",
+    "validDiscount": "Valid discount link detected, discount applied",
+    "selectPaymentFirst": "Please select a payment method",
+    "purchaseFailed": "Purchase failed",
+    "purchaseFailedRetry": "Purchase failed, please try again later"
+  },
   "Footer": {
     "title": "MvpFast",
     "subtitle": "Development template to quickly create your personal application in the shortest time",
+    "poweredBy": "Built with {name}",
+    "beian": {
+      "text": "粤ICP备2024286477号-2",
+      "url": "https://beian.miit.gov.cn"
+    },
     "items": [
       {
         "title": "Friendly Links",

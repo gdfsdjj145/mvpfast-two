@@ -33,12 +33,12 @@ export default function GeneralConfig({ siteName = '', onChange }: GeneralConfig
               <legend className="fieldset-legend">网站名称 *</legend>
               <input
                 type="text"
-                className="input input-bordered w-full"
+                className="input w-full"
                 placeholder="例如: MVPFast"
                 value={siteName}
                 onChange={(e) => onChange({ siteName: e.target.value })}
               />
-              <p className="label text-xs text-base-content/60 mt-1">
+              <p className="label text-base-content/60">
                 将显示在浏览器标签页和页面标题
               </p>
             </fieldset>

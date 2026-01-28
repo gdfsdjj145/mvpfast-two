@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import confetti from 'canvas-confetti';
 import { useSession } from 'next-auth/react';
@@ -17,18 +17,20 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import { useMessages } from 'next-intl';
+import { useMessages, useTranslations } from 'next-intl';
+import { useAppDispatch, useAppSelector } from '@/store/hook';
+import { fetchPublicConfigs, selectPaymentMethods, selectPublicConfigLoaded } from '@/store/publicConfig';
 
 // 动态导入 WeChatPayQRCode 组件
 const WeChatPcPay = dynamic(() => import('@/components/weChat/WeChatPcPay'), {
-  loading: () => <p>加载支付二维码...</p>,
+  loading: () => <p>...</p>,
   ssr: false,
 });
 
 const WeChatMobilePay = dynamic(
   () => import('@/components/weChat/WeChatMobilePay'),
   {
-    loading: () => <p>加载支付二维码...</p>,
+    loading: () => <p>...</p>,
     ssr: false,
   }
 );
@@ -47,6 +49,21 @@ export default function PaymentPage() {
   const goodKey = searchParams.get('key');
   const shareCode = searchParams.get('sharecode');
   const initialized = useRef(false);
+  const t = useTranslations('Pay');
+
+  // Redux: 获取支付方式配置
+  const dispatch = useAppDispatch();
+  const paymentMethods = useAppSelector(selectPaymentMethods);
+  const configLoaded = useAppSelector(selectPublicConfigLoaded);
+
+  useEffect(() => {
+    dispatch(fetchPublicConfigs());
+  }, [dispatch]);
+
+  const availablePayments = useMemo(
+    () => (paymentMethods as PaymentMethod[]).filter((p) => p.use),
+    [paymentMethods]
+  );
 
   // 获取购买模式配置
   const purchaseMode = config.purchaseMode;
@@ -95,29 +112,6 @@ export default function PaymentPage() {
   // 积分模式相关状态
   const [userCredits, setUserCredits] = useState(0);
   const [isPurchasing, setIsPurchasing] = useState(false);
-
-  // 支付方式（从数据库加载）
-  const [availablePayments, setAvailablePayments] = useState<PaymentMethod[]>([]);
-
-  // 从数据库加载支付方式配置
-  useEffect(() => {
-    const fetchPaymentConfig = async () => {
-      try {
-        const response = await fetch('/api/admin/configs');
-        if (response.ok) {
-          const data = await response.json();
-          const payConfigItem = data.items?.find((item: any) => item.key === 'payment.methods');
-          if (payConfigItem && Array.isArray(payConfigItem.value)) {
-            const enabledPayments = payConfigItem.value.filter((p: PaymentMethod) => p.use);
-            setAvailablePayments(enabledPayments);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to fetch payment config:', error);
-      }
-    };
-    fetchPaymentConfig();
-  }, []);
 
   // 计算积分模式下的实际消费积分（扣除优惠）
   const requiredCredits = Math.max(0, (good.creditPrice || 0) - shareOption.shareCredits);
@@ -218,7 +212,7 @@ export default function PaymentPage() {
   useEffect(() => {
     if (shareOption && shareOption.code && !initialized.current) {
       initialized.current = true;
-      toast.success('检测为合格优惠链接，获得优惠');
+      toast.success(t('validDiscount'));
       setOrderInfo((prevState) => ({
         ...prevState,
         amount: orderInfo.amount - shareOption.sharePrice * 100,
@@ -274,12 +268,12 @@ export default function PaymentPage() {
   // 积分购买模式：使用积分购买
   const handleCreditsPurchase = async () => {
     if (!session?.user?.id) {
-      toast.error('请先登录');
+      toast.error(t('loginFirst'));
       return;
     }
 
     if (userCredits < requiredCredits) {
-      toast.error(`积分不足，当前余额: ${userCredits}，需要: ${requiredCredits}`);
+      toast.error(t('insufficientBalance', { current: userCredits, required: requiredCredits }));
       return;
     }
 
@@ -306,13 +300,13 @@ export default function PaymentPage() {
           spread: 70,
           origin: { y: 0.6 },
         });
-        toast.success('购买成功！');
+        toast.success(t('purchaseSuccess') + '!');
       } else {
-        toast.error(result.message || '购买失败');
+        toast.error(result.message || t('purchaseFailed'));
       }
     } catch (error: any) {
       console.error('积分购买失败:', error);
-      toast.error(error.message || '购买失败，请稍后重试');
+      toast.error(error.message || t('purchaseFailedRetry'));
     } finally {
       setIsPurchasing(false);
     }
@@ -336,7 +330,7 @@ export default function PaymentPage() {
 
   const initiatePayment = () => {
     if (!payType) {
-      toast.error('请选择支付方式');
+      toast.error(t('selectPaymentFirst'));
       return;
     }
     setOrderCreated(true);
@@ -351,7 +345,7 @@ export default function PaymentPage() {
           </div>
         </div>
         <div className="text-center mt-4 text-blue-500 font-bold">
-          加载中...
+          {t('loading')}
         </div>
       </div>
     </div>
@@ -360,7 +354,7 @@ export default function PaymentPage() {
   // 渲染支付方式选择（单次购买模式）
   const renderPaymentMethods = () => {
     if (availablePayments.length <= 0) {
-      return <p className="text-red-500">暂无可用支付方式</p>;
+      return <p className="text-red-500">{t('noPaymentMethods')}</p>;
     }
 
     return (
@@ -402,12 +396,12 @@ export default function PaymentPage() {
 
     return (
       <div className="bg-white p-6 rounded-lg shadow-md w-full">
-        <h3 className="text-xl font-bold mb-6 text-gray-800">积分支付</h3>
+        <h3 className="text-xl font-bold mb-6 text-gray-800">{t('creditsPayment')}</h3>
 
         {/* 用户积分余额 */}
         <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">当前积分余额</span>
+            <span className="text-gray-600">{t('currentBalance')}</span>
             <span className="text-2xl font-bold text-amber-600">{userCredits}</span>
           </div>
         </div>
@@ -415,18 +409,18 @@ export default function PaymentPage() {
         {/* 消费详情 */}
         <div className="space-y-3 mb-6">
           <div className="flex justify-between items-center text-gray-600">
-            <span>商品积分价格</span>
-            <span className="font-medium">{good.creditPrice || 0} 积分</span>
+            <span>{t('productCreditsPrice')}</span>
+            <span className="font-medium">{good.creditPrice || 0} {t('credits')}</span>
           </div>
           {shareOption.shareCredits > 0 && (
             <div className="flex justify-between items-center text-emerald-600">
-              <span>优惠减免</span>
-              <span className="font-medium">-{shareOption.shareCredits} 积分</span>
+              <span>{t('discountReduction')}</span>
+              <span className="font-medium">-{shareOption.shareCredits} {t('credits')}</span>
             </div>
           )}
           <div className="border-t pt-3 flex justify-between items-center">
-            <span className="font-semibold text-gray-800">需支付</span>
-            <span className="text-xl font-bold text-blue-600">{requiredCredits} 积分</span>
+            <span className="font-semibold text-gray-800">{t('amountToPay')}</span>
+            <span className="text-xl font-bold text-blue-600">{requiredCredits} {t('credits')}</span>
           </div>
         </div>
 
@@ -437,16 +431,16 @@ export default function PaymentPage() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <span className="font-medium">积分不足</span>
+              <span className="font-medium">{t('insufficientCredits')}</span>
             </div>
             <p className="text-sm text-rose-500">
-              还需要 <span className="font-bold">{requiredCredits - userCredits}</span> 积分，请先充值
+              {t('needMore', { amount: requiredCredits - userCredits })}
             </p>
             <Link
               href="/pay?key=credits"
               className="mt-3 inline-block text-sm text-rose-600 hover:text-rose-700 underline"
             >
-              前往充值 →
+              {t('goRecharge')}
             </Link>
           </div>
         )}
@@ -467,12 +461,12 @@ export default function PaymentPage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              处理中...
+              {t('processing')}
             </span>
           ) : hasEnoughCredits ? (
-            `确认支付 ${requiredCredits} 积分`
+            t('confirmCreditsPayment', { amount: requiredCredits })
           ) : (
-            '积分不足'
+            t('insufficientCredits')
           )}
         </button>
       </div>
@@ -495,16 +489,16 @@ export default function PaymentPage() {
             </div>
           </div>
           <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-emerald-800 text-center">
-            {purchaseMode === 'credits' ? '购买成功' : '支付成功'}
+            {purchaseMode === 'credits' ? t('purchaseSuccess') : t('paymentSuccess')}
           </h3>
           <div className="mb-2">
-            <span className="font-semibold text-emerald-700">交易号：</span>
+            <span className="font-semibold text-emerald-700">{t('transactionId')}</span>
             <span className="text-emerald-600">
               {paymentResult.transactionId}
             </span>
           </div>
           <div className="mb-2">
-            <div className="font-semibold text-emerald-700 mb-2">客服微信：</div>
+            <div className="font-semibold text-emerald-700 mb-2">{t('serviceWechat')}</div>
             <span className="text-emerald-600">
               <img
                 className="w-28 md:w-36"
@@ -515,12 +509,12 @@ export default function PaymentPage() {
             </span>
           </div>
           <div className="text-gray-500 text-sm md:text-base">
-            添加客服微信获取模板
+            {t('addWechatForTemplate')}
           </div>
 
           <div className="mt-8">
             <Link href="/dashboard/order" className="inline-flex items-center justify-center w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-medium rounded-md transition-all">
-              前往个人页面
+              {t('goToProfile')}
             </Link>
           </div>
         </div>
@@ -560,13 +554,13 @@ export default function PaymentPage() {
       } else {
         return (
           <div className="bg-white p-6 rounded-lg shadow-md w-full">
-            <h3 className="text-xl font-bold mb-6 text-gray-800">选择支付方式</h3>
+            <h3 className="text-xl font-bold mb-6 text-gray-800">{t('selectPaymentMethod')}</h3>
             {renderPaymentMethods()}
             <button
               onClick={initiatePayment}
               className="mt-8 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white font-medium rounded-md transition-all shadow-md hover:shadow-lg"
             >
-              确认支付 ¥{(orderInfo.amount / 100).toFixed(2)}
+              {t('confirmPayment', { amount: (orderInfo.amount / 100).toFixed(2) })}
             </button>
           </div>
         );
@@ -584,14 +578,14 @@ export default function PaymentPage() {
             </div>
           </div>
           <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 text-rose-800 text-center">
-            加载失败
+            {t('loadFailed')}
           </h3>
-          <p className="text-rose-600 text-center mb-6">请刷新页面重试</p>
+          <p className="text-rose-600 text-center mb-6">{t('refreshRetry')}</p>
           <button
             onClick={() => window.location.reload()}
             className="w-full py-3 px-4 bg-gradient-to-r from-rose-500 to-red-500 hover:from-rose-600 hover:to-red-600 text-white font-medium rounded-md transition-all"
           >
-            刷新页面
+            {t('refreshPage')}
           </button>
         </div>
       );
@@ -604,20 +598,20 @@ export default function PaymentPage() {
       return (
         <>
           <div className="flex justify-between items-center">
-            <span className="text-blue-200">积分价格</span>
-            <span className="text-xl font-bold">{good.creditPrice || 0} 积分</span>
+            <span className="text-blue-200">{t('creditsPrice')}</span>
+            <span className="text-xl font-bold">{good.creditPrice || 0} {t('credits')}</span>
           </div>
 
           {shareOption.shareCredits > 0 && (
             <div className="flex justify-between items-center mt-2">
-              <span className="text-blue-200">优惠</span>
-              <span className="text-emerald-300">-{shareOption.shareCredits} 积分</span>
+              <span className="text-blue-200">{t('discount')}</span>
+              <span className="text-emerald-300">-{shareOption.shareCredits} {t('credits')}</span>
             </div>
           )}
 
           <div className="mt-4 pt-4 border-t border-blue-500/30 flex justify-between items-center">
-            <span className="text-blue-100">应付总额</span>
-            <span className="text-2xl font-bold">{requiredCredits} 积分</span>
+            <span className="text-blue-100">{t('totalAmount')}</span>
+            <span className="text-2xl font-bold">{requiredCredits} {t('credits')}</span>
           </div>
         </>
       );
@@ -627,19 +621,19 @@ export default function PaymentPage() {
     return (
       <>
         <div className="flex justify-between items-center">
-          <span className="text-blue-200">单价</span>
+          <span className="text-blue-200">{t('unitPrice')}</span>
           <span className="text-xl font-bold">¥{good.price.toFixed(2)}</span>
         </div>
 
         {shareOption.sharePrice > 0 && (
           <div className="flex justify-between items-center mt-2">
-            <span className="text-blue-200">优惠</span>
+            <span className="text-blue-200">{t('discount')}</span>
             <span className="text-emerald-300">-¥{shareOption.sharePrice.toFixed(2)}</span>
           </div>
         )}
 
         <div className="mt-4 pt-4 border-t border-blue-500/30 flex justify-between items-center">
-          <span className="text-blue-100">应付总额</span>
+          <span className="text-blue-100">{t('totalAmount')}</span>
           <span className="text-2xl font-bold">¥{(orderInfo.amount / 100).toFixed(2)}</span>
         </div>
       </>
@@ -660,13 +654,13 @@ export default function PaymentPage() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              返回首页
+              {t('backToHome')}
             </Link>
           </div>
 
           <div className="flex items-center mb-6">
             <img src="/brand/logo.png" alt="Logo" className="w-10 h-10 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">订单</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">{t('order')}</h1>
           </div>
 
           {/* 购买模式标识 */}
@@ -676,13 +670,13 @@ export default function PaymentPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                积分购买模式
+                {t('creditsMode')}
               </span>
             </div>
           )}
 
           <div className="mb-8">
-            <h2 className="text-xl font-medium mb-4">商品详情</h2>
+            <h2 className="text-xl font-medium mb-4">{t('productDetails')}</h2>
             <div className={`backdrop-blur-sm rounded-lg p-4 ${
               purchaseMode === 'credits'
                 ? 'bg-gradient-to-r from-amber-600/40 to-orange-600/40'
@@ -699,20 +693,20 @@ export default function PaymentPage() {
           <div className={`text-sm ${purchaseMode === 'credits' ? 'text-amber-200' : 'text-blue-200'}`}>
             {(orderCreated || paymentStatus === 'success') ? (
               <>
-                <div className="mb-2">订单号: {orderInfo.orderId}</div>
-                <div className="mb-4">创建时间: {orderInfo.created_time || new Date().toLocaleString()}</div>
+                <div className="mb-2">{t('orderId', { id: orderInfo.orderId })}</div>
+                <div className="mb-4">{t('createTime', { time: orderInfo.created_time || new Date().toLocaleString() })}</div>
               </>
             ) : (
               <div className={`mb-4 italic ${purchaseMode === 'credits' ? 'text-amber-100' : 'text-blue-100'}`}>
                 {purchaseMode === 'credits'
-                  ? '确认积分支付后生成订单信息'
-                  : '请选择支付方式并确认支付后生成订单信息'}
+                  ? t('pendingCreditsOrder')
+                  : t('pendingDirectOrder')}
               </div>
             )}
             {purchaseMode === 'direct' && (
-              <p>请在15分钟内完成支付，否则订单将自动取消。</p>
+              <p>{t('paymentTimeout')}</p>
             )}
-            <p>如遇到问题，请联系客服wx：13022051583</p>
+            <p>{t('contactService')}</p>
           </div>
         </div>
 

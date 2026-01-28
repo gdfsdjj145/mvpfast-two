@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { getUserById, updateUser, updateUserRole, deleteUser, isAdmin, isSuperAdmin } from '@/models/user';
+import { getUserById, updateUser, updateUserRole, deleteUser, isAdmin } from '@/models/user';
 import { getCreditTransactions, getUserCreditInfo } from '@/models/credit';
 
 // GET: 获取单个用户详情
@@ -71,15 +71,6 @@ export async function PUT(
 
     // 如果要更新角色
     if (role) {
-      // 只有超级管理员可以修改角色
-      const superAdminCheck = await isSuperAdmin(session.user.id);
-      if (!superAdminCheck) {
-        return NextResponse.json(
-          { error: '只有超级管理员可以修改用户角色' },
-          { status: 403 }
-        );
-      }
-
       // 不能修改自己的角色
       if (id === session.user.id) {
         return NextResponse.json(
@@ -122,13 +113,9 @@ export async function DELETE(
       return NextResponse.json({ error: '未登录' }, { status: 401 });
     }
 
-    // 只有超级管理员可以删除用户
-    const superAdminCheck = await isSuperAdmin(session.user.id);
-    if (!superAdminCheck) {
-      return NextResponse.json(
-        { error: '只有超级管理员可以删除用户' },
-        { status: 403 }
-      );
+    const adminCheck = await isAdmin(session.user.id);
+    if (!adminCheck) {
+      return NextResponse.json({ error: '无权限访问' }, { status: 403 });
     }
 
     const { id } = await params;

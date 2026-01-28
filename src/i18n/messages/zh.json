@@ -59,7 +59,7 @@
         { "name": "博客", "href": "/blog", "target": "_blank" },
         {
           "name": "关于我们",
-          "href": "https://www.islandspage.com/EM-T",
+          "href": "https://www.kajian.shop/",
           "target": "_blank",
           "rel": "external"
         }
@@ -70,6 +70,14 @@
     },
     "theme": {
       "label": "主题色"
+    },
+    "userMenu": {
+      "avatarAlt": "头像",
+      "unknownUser": "未知用户",
+      "account": "我的账户",
+      "logout": "退出登录",
+      "accountMobile": "我的",
+      "logoutMobile": "退出"
     }
   },
   "Hero": {
@@ -126,6 +134,7 @@
     ]
   },
   "Admin": {
+    "domain": "mvpfast.top",
     "banner": {
       "url": "/banners/banner-1.png",
       "alt": "后台预览"
@@ -293,6 +302,8 @@
     "title": "关于MvpFast常见问题",
     "subtitle": "如果你的问题这里答案，可以用一下方式联系我们",
     "call": {
+      "emailLabel": "邮箱",
+      "wechatLabel": "微信",
       "email": "freecloud@emong.com.cn",
       "wechat": "jiajiandu"
     },
@@ -315,27 +326,82 @@
       }
     ]
   },
-  "FaqList": [
-    {
-      "title": "MvpFast的支付问题",
-      "answer": "MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。"
-    },
-    {
-      "title": "购买后得到什么",
-      "answer": "购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。"
-    },
-    {
-      "title": "购买MvpFast之后，我可以做什么",
-      "answer": "你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。"
-    },
-    {
-      "title": "如何部署MvpFast",
-      "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
-    }
-  ],
+  "FaqList": {
+    "title": "常见问题",
+    "items": [
+      {
+        "title": "MvpFast的支付问题",
+        "answer": "MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。"
+      },
+      {
+        "title": "购买后得到什么",
+        "answer": "购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。"
+      },
+      {
+        "title": "购买MvpFast之后，我可以做什么",
+        "answer": "你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。"
+      },
+      {
+        "title": "如何部署MvpFast",
+        "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
+      }
+    ]
+  },
+  "Pay": {
+    "loading": "加载中...",
+    "loadingQRCode": "加载支付二维码...",
+    "noPaymentMethods": "暂无可用支付方式",
+    "selectPaymentMethod": "选择支付方式",
+    "confirmPayment": "确认支付 ¥{amount}",
+    "backToHome": "返回首页",
+    "order": "订单",
+    "productDetails": "商品详情",
+    "unitPrice": "单价",
+    "creditsPrice": "积分价格",
+    "discount": "优惠",
+    "totalAmount": "应付总额",
+    "credits": "积分",
+    "creditsMode": "积分购买模式",
+    "creditsPayment": "积分支付",
+    "currentBalance": "当前积分余额",
+    "productCreditsPrice": "商品积分价格",
+    "discountReduction": "优惠减免",
+    "amountToPay": "需支付",
+    "insufficientCredits": "积分不足",
+    "needMore": "还需要 {amount} 积分，请先充值",
+    "goRecharge": "前往充值 →",
+    "confirmCreditsPayment": "确认支付 {amount} 积分",
+    "processing": "处理中...",
+    "purchaseSuccess": "购买成功",
+    "paymentSuccess": "支付成功",
+    "transactionId": "交易号：",
+    "serviceWechat": "客服微信：",
+    "addWechatForTemplate": "添加客服微信获取模板",
+    "goToProfile": "前往个人页面",
+    "orderId": "订单号: {id}",
+    "createTime": "创建时间: {time}",
+    "pendingCreditsOrder": "确认积分支付后生成订单信息",
+    "pendingDirectOrder": "请选择支付方式并确认支付后生成订单信息",
+    "paymentTimeout": "请在15分钟内完成支付，否则订单将自动取消。",
+    "contactService": "如遇到问题，请联系客服wx：13022051583",
+    "loadFailed": "加载失败",
+    "refreshRetry": "请刷新页面重试",
+    "refreshPage": "刷新页面",
+    "loginFirst": "请先登录",
+    "insufficientBalance": "积分不足，当前余额: {current}，需要: {required}",
+    "validDiscount": "检测为合格优惠链接，获得优惠",
+    "selectPaymentFirst": "请选择支付方式",
+    "purchaseFailed": "购买失败",
+    "purchaseFailedRetry": "购买失败，请稍后重试"
+  },
   "Footer": {
     "title": "MvpFast",
     "subtitle": "用最短的时间快速创建你个人应用的开发模板",
+    "poweredBy": "使用 {name} 开发",
+    "beian": {
+      "text": "粤ICP备2024286477号-2",
+      "url": "https://beian.miit.gov.cn"
+    },
     "items": [
       {
         "title": "友情链接",

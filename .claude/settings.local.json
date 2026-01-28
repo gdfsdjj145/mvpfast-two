@@ -28,7 +28,17 @@
       "Bash(pnpm exec tsc:*)",
       "Bash(pnpm tsc:*)",
       "Bash(curl:*)",
-      "WebFetch(domain:daisyui.com)"
+      "WebFetch(domain:daisyui.com)",
+      "Bash(pnpm update:*)",
+      "Bash(pnpm list:*)",
+      "Bash(grep:*)",
+      "Bash(xargs ls:*)",
+      "Bash(node -e:*)",
+      "Bash(xargs cat:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npm view:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []

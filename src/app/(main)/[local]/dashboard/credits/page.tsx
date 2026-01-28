@@ -62,7 +62,7 @@ export default function CreditsPage() {
 
   // 判断是否为管理员
   const userRole = session?.user?.role || 'user';
-  const isAdmin = userRole === 'admin' || userRole === 'superadmin';
+  const isAdmin = userRole === 'admin';
 
   // 获取交易记录
   const fetchTransactions = async () => {

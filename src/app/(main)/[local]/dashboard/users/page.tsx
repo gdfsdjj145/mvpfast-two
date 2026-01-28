@@ -9,7 +9,6 @@ import {
   ChevronRight,
   Coins,
   Shield,
-  ShieldCheck,
   User,
   Mail,
   Phone,
@@ -22,6 +21,7 @@ import {
   TrendingUp,
   TrendingDown,
   History,
+  UserPlus,
 } from 'lucide-react';
 import Image from 'next/image';
 import toast, { Toaster } from 'react-hot-toast';
@@ -77,6 +77,16 @@ export default function UsersPage() {
   const [userTransactions, setUserTransactions] = useState<CreditTransaction[]>([]);
   const [loadingTransactions, setLoadingTransactions] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+
+  // 新增用户弹窗
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    identifier: '',
+    password: '',
+    initialCredits: 0,
+  });
+  const [creating, setCreating] = useState(false);
+  const createModalRef = useRef<HTMLDialogElement>(null);
 
   // 获取用户列表
   const fetchUsers = async () => {
@@ -214,16 +224,57 @@ export default function UsersPage() {
     }
   };
 
+  // 打开新增用户弹窗
+  const openCreateModal = () => {
+    setCreateForm({ identifier: '', password: '', initialCredits: 0 });
+    createModalRef.current?.showModal();
+  };
+
+  // 创建用户
+  const handleCreateUser = async () => {
+    if (!createForm.identifier.trim()) {
+      toast.error('请输入账号（邮箱或手机号）');
+      return;
+    }
+    if (!createForm.password.trim()) {
+      toast.error('请输入密码');
+      return;
+    }
+    if (createForm.password.length < 6) {
+      toast.error('密码长度至少6位');
+      return;
+    }
+
+    setCreating(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          identifier: createForm.identifier.trim(),
+          password: createForm.password,
+          initialCredits: createForm.initialCredits,
+        }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success(data.message || '用户创建成功');
+        createModalRef.current?.close();
+        fetchUsers(); // 刷新列表
+      } else {
+        toast.error(data.error || '创建用户失败');
+      }
+    } catch (error) {
+      toast.error('创建用户失败');
+    } finally {
+      setCreating(false);
+    }
+  };
+
   // 渲染角色徽章
   const renderRoleBadge = (role: string) => {
     switch (role) {
-      case 'superadmin':
-        return (
-          <div className="badge badge-error badge-sm gap-1">
-            <ShieldCheck size={12} />
-            超级管理员
-          </div>
-        );
       case 'admin':
         return (
           <div className="badge badge-warning badge-sm gap-1">
@@ -342,7 +393,6 @@ export default function UsersPage() {
               <option value="">全部角色</option>
               <option value="user">普通用户</option>
               <option value="admin">管理员</option>
-              <option value="superadmin">超级管理员</option>
             </select>
             <button
               onClick={() => fetchUsers()}
@@ -350,6 +400,13 @@ export default function UsersPage() {
               title="刷新"
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+            </button>
+            <button
+              onClick={openCreateModal}
+              className="btn btn-primary btn-sm gap-1"
+            >
+              <UserPlus size={16} />
+              新增用户
             </button>
           </div>
         </div>
@@ -464,14 +521,6 @@ export default function UsersPage() {
                                   管理员
                                 </button>
                               </li>
-                              <li>
-                                <button
-                                  onClick={() => handleUpdateRole(user.id, 'superadmin')}
-                                  className={user.role === 'superadmin' ? 'active' : ''}
-                                >
-                                  超级管理员
-                                </button>
-                              </li>
                             </ul>
                           </div>
                         </div>
@@ -538,32 +587,32 @@ export default function UsersPage() {
                 <div className="card-body p-4">
                   <h4 className="font-semibold text-sm mb-3">调整积分</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label className="label py-1">
-                        <span className="label-text text-sm">调整数量</span>
-                      </label>
+                    <fieldset className="fieldset">
+                      <legend className="fieldset-legend">调整数量</legend>
                       <div className="join w-full">
                         <button
-                          className="join-item btn btn-sm"
+                          type="button"
+                          className="join-item btn"
                           onClick={() => setCreditAmount(a => a - 100)}
                         >
                           <Minus size={14} />
                         </button>
                         <input
                           type="number"
-                          className="join-item input input-bordered input-sm w-full text-center"
+                          className="join-item input w-full text-center"
                           value={creditAmount}
                           onChange={(e) => setCreditAmount(parseInt(e.target.value) || 0)}
                           placeholder="正数增加，负数扣除"
                         />
                         <button
-                          className="join-item btn btn-sm"
+                          type="button"
+                          className="join-item btn"
                           onClick={() => setCreditAmount(a => a + 100)}
                         >
                           <Plus size={14} />
                         </button>
                       </div>
-                      <div className="text-xs text-base-content/60 mt-1">
+                      <p className="label text-base-content/60">
                         {creditAmount > 0 ? (
                           <span className="text-success">增加 {creditAmount} 积分</span>
                         ) : creditAmount < 0 ? (
@@ -571,20 +620,18 @@ export default function UsersPage() {
                         ) : (
                           '输入正数增加，负数扣除'
                         )}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="label py-1">
-                        <span className="label-text text-sm">调整原因 *</span>
-                      </label>
+                      </p>
+                    </fieldset>
+                    <fieldset className="fieldset">
+                      <legend className="fieldset-legend">调整原因 *</legend>
                       <input
                         type="text"
-                        className="input input-bordered input-sm w-full"
+                        className="input w-full"
                         value={creditReason}
                         onChange={(e) => setCreditReason(e.target.value)}
                         placeholder="请填写调整原因"
                       />
-                    </div>
+                    </fieldset>
                   </div>
                   <div className="mt-3">
                     <button
@@ -679,6 +726,99 @@ export default function UsersPage() {
         </form>
       </dialog>
       )}
+
+      {/* 新增用户弹窗 */}
+      <dialog ref={createModalRef} className="modal">
+        <div className="modal-box max-w-md">
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <UserPlus size={20} className="text-primary" />
+            新增用户
+          </h3>
+
+          <div className="space-y-4">
+            {/* 账号输入 */}
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">账号 <span className="text-error">*</span></legend>
+              <input
+                type="text"
+                className="input w-full"
+                value={createForm.identifier}
+                onChange={(e) => setCreateForm({ ...createForm, identifier: e.target.value })}
+                placeholder="请输入邮箱或手机号"
+              />
+              <p className="label text-base-content/60">支持邮箱或手机号作为登录账号</p>
+            </fieldset>
+
+            {/* 密码输入 */}
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">密码 <span className="text-error">*</span></legend>
+              <input
+                type="password"
+                className="input w-full"
+                value={createForm.password}
+                onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                placeholder="请输入密码（至少6位）"
+              />
+            </fieldset>
+
+            {/* 初始积分（仅积分模式显示） */}
+            {isCreditsMode && (
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">初始积分</legend>
+                <div className="join w-full">
+                  <button
+                    type="button"
+                    className="join-item btn"
+                    onClick={() => setCreateForm({ ...createForm, initialCredits: Math.max(0, createForm.initialCredits - 100) })}
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <input
+                    type="number"
+                    className="join-item input w-full text-center"
+                    value={createForm.initialCredits}
+                    onChange={(e) => setCreateForm({ ...createForm, initialCredits: Math.max(0, parseInt(e.target.value) || 0) })}
+                    placeholder="0"
+                    min="0"
+                  />
+                  <button
+                    type="button"
+                    className="join-item btn"
+                    onClick={() => setCreateForm({ ...createForm, initialCredits: createForm.initialCredits + 100 })}
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
+                <p className="label text-base-content/60">可选，创建用户时赠送的初始积分</p>
+              </fieldset>
+            )}
+          </div>
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-ghost gap-2">
+                <X size={18} />
+                取消
+              </button>
+            </form>
+            <button
+              onClick={handleCreateUser}
+              className="btn btn-primary gap-2"
+              disabled={creating}
+            >
+              {creating ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <Save size={18} />
+              )}
+              创建用户
+            </button>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
 }

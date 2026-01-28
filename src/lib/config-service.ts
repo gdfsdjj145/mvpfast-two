@@ -1,6 +1,14 @@
 import { getAllConfigsAsObject, getConfigByKey } from '@/models/systemConfig';
 import { config as defaultConfig } from '@/config';
 
+// 数据库配置的硬编码默认值（不依赖 config.ts）
+const DB_CONFIG_DEFAULTS: Record<string, any> = {
+  'system.siteName': 'MvpFast',
+  'auth.loginType': 'password',
+  'auth.loginTypes': ['password'],
+  'payment.methods': ['wechat'],
+};
+
 // 缓存相关
 type ConfigCache = {
   data: Record<string, any>;
@@ -90,14 +98,20 @@ export async function getConfigObject() {
 
     return {
       db: allConfigs['system.db'] ?? defaultConfig.db,
-      loginType: allConfigs['auth.loginType'] ?? defaultConfig.loginType,
-      loginTypes: allConfigs['auth.loginTypes'] ?? defaultConfig.loginTypes,
-      payConfig: allConfigs['payment.methods'] ?? defaultConfig.payConfig,
+      loginType: allConfigs['auth.loginType'] ?? DB_CONFIG_DEFAULTS['auth.loginType'],
+      loginTypes: allConfigs['auth.loginTypes'] ?? DB_CONFIG_DEFAULTS['auth.loginTypes'],
+      payConfig: allConfigs['payment.methods'] ?? DB_CONFIG_DEFAULTS['payment.methods'],
       goods: allConfigs['product.goods'] ?? defaultConfig.goods,
     };
   } catch (error) {
     console.error('[ConfigService] Failed to get config object:', error);
-    return defaultConfig;
+    return {
+      db: defaultConfig.db,
+      loginType: DB_CONFIG_DEFAULTS['auth.loginType'],
+      loginTypes: DB_CONFIG_DEFAULTS['auth.loginTypes'],
+      payConfig: DB_CONFIG_DEFAULTS['payment.methods'],
+      goods: defaultConfig.goods,
+    };
   }
 }
 
@@ -107,9 +121,7 @@ export async function getConfigObject() {
 function flattenDefaultConfig(): Record<string, any> {
   return {
     'system.db': defaultConfig.db,
-    'auth.loginType': defaultConfig.loginType,
-    'auth.loginTypes': defaultConfig.loginTypes,
-    'payment.methods': defaultConfig.payConfig,
     'product.goods': defaultConfig.goods,
+    ...DB_CONFIG_DEFAULTS,
   };
 }

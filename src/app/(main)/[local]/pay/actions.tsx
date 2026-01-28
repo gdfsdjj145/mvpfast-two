@@ -188,7 +188,6 @@ export const purchaseWithCredits = async (params: {
     // 4. 创建订单记录
     const order = await modelCreateOrder({
       identifier: userId,
-      created_time: new Date(),
       transactionId: `CREDITS_${orderId}`, // 积分支付的交易ID
       orderId,
       orderType: productKey,
@@ -196,7 +195,6 @@ export const purchaseWithCredits = async (params: {
       name: productName,
       promoter: promoter || null,
       promotionPrice: promotionCredits,
-      paymentMethod: 'credits', // 标记为积分支付
       creditAmount: creditAmount, // 记录消费的积分数
     });
 

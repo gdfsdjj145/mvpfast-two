@@ -4,16 +4,21 @@ import { getConfigByKey, deleteConfig } from '@/models/systemConfig';
 import { getAuditLogsByKey, createAuditLog } from '@/models/configAuditLog';
 import { clearConfigCache } from '@/lib/config-service';
 
+type RouteParams = {
+  params: Promise<{ key: string }>;
+};
+
 // GET /api/admin/configs/[key] - 获取单个配置详情（包含审计日志）
 export async function GET(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: RouteParams
 ) {
   try {
     // 验证管理员权限
     await requireAdmin();
 
-    const key = decodeURIComponent(params.key);
+    const { key: rawKey } = await params;
+    const key = decodeURIComponent(rawKey);
 
     // 获取配置
     const config = await getConfigByKey(key);
@@ -63,13 +68,14 @@ export async function GET(
 // DELETE /api/admin/configs/[key] - 删除配置（软删除）
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { key: string } }
+  { params }: RouteParams
 ) {
   try {
     // 验证管理员权限
     const admin = await requireAdmin();
 
-    const key = decodeURIComponent(params.key);
+    const { key: rawKey } = await params;
+    const key = decodeURIComponent(rawKey);
 
     // 获取旧值（用于审计）
     const oldConfig = await getConfigByKey(key);
