@@ -161,70 +161,79 @@ export default function OrderManagementPage() {
       credit: { label: '积分充值', color: 'badge-secondary' },
     };
     const config = types[type] || { label: type, color: 'badge-ghost' };
-    return <span className={`badge ${config.color} badge-sm`}>{config.label}</span>;
+    return <span className={`badge ${config.color} badge-sm whitespace-nowrap`}>{config.label}</span>;
   };
 
   return (
     <div className="space-y-6">
       {/* 统计卡片 */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="stat bg-base-100 rounded-xl shadow">
-            <div className="stat-figure text-primary">
-              <ShoppingCart size={24} />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="card bg-base-100 border border-base-200">
+            <div className="card-body p-4 flex-row items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                <ShoppingCart size={20} className="text-primary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-base-content/50">总订单</p>
+                <p className="text-xl font-bold truncate">{stats.totalOrders}</p>
+              </div>
             </div>
-            <div className="stat-title">总订单数</div>
-            <div className="stat-value text-primary">{stats.totalOrders}</div>
           </div>
-
-          <div className="stat bg-base-100 rounded-xl shadow">
-            <div className="stat-figure text-secondary">
-              <Calendar size={24} />
+          <div className="card bg-base-100 border border-base-200">
+            <div className="card-body p-4 flex-row items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
+                <Calendar size={20} className="text-secondary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-base-content/50">今日订单</p>
+                <p className="text-xl font-bold truncate">{stats.todayOrders}</p>
+              </div>
             </div>
-            <div className="stat-title">今日订单</div>
-            <div className="stat-value text-secondary">{stats.todayOrders}</div>
           </div>
-
-          <div className="stat bg-base-100 rounded-xl shadow">
-            <div className="stat-figure text-success">
-              <DollarSign size={24} />
+          <div className="card bg-base-100 border border-base-200">
+            <div className="card-body p-4 flex-row items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center shrink-0">
+                <DollarSign size={20} className="text-success" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-base-content/50">总收入</p>
+                <p className="text-xl font-bold truncate">{formatPrice(stats.totalRevenue)}</p>
+              </div>
             </div>
-            <div className="stat-title">总收入</div>
-            <div className="stat-value text-success text-2xl">{formatPrice(stats.totalRevenue)}</div>
           </div>
-
-          <div className="stat bg-base-100 rounded-xl shadow">
-            <div className="stat-figure text-info">
-              <TrendingUp size={24} />
+          <div className="card bg-base-100 border border-base-200">
+            <div className="card-body p-4 flex-row items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center shrink-0">
+                <TrendingUp size={20} className="text-info" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs text-base-content/50">本月收入</p>
+                <p className="text-xl font-bold truncate">{formatPrice(stats.monthRevenue)}</p>
+              </div>
             </div>
-            <div className="stat-title">本月收入</div>
-            <div className="stat-value text-info text-2xl">{formatPrice(stats.monthRevenue)}</div>
           </div>
         </div>
       )}
 
       {/* 筛选区域 */}
-      <div className="card bg-base-100 shadow">
-        <div className="card-body">
-          <form onSubmit={handleSearch} className="flex flex-wrap gap-4">
-            {/* 搜索框 */}
-            <div className="form-control flex-1 min-w-[200px]">
-              <div className="input-group">
-                <input
-                  type="text"
-                  placeholder="搜索订单号、交易号、用户..."
-                  className="input input-bordered w-full"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
+      <div className="card bg-base-100 border border-base-200">
+        <div className="card-body p-4">
+          <form onSubmit={handleSearch} className="flex flex-wrap gap-3">
+            <div className="form-control flex-1 min-w-[180px]">
+              <input
+                type="text"
+                placeholder="搜索订单号、交易号、用户..."
+                className="input input-bordered input-sm w-full"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
 
-            {/* 订单类型 - 仅积分模式显示 */}
             {isCreditsMode && (
-              <div className="form-control w-40">
+              <div className="form-control">
                 <select
-                  className="select select-bordered"
+                  className="select select-bordered select-sm"
                   value={orderType}
                   onChange={(e) => setOrderType(e.target.value)}
                 >
@@ -235,34 +244,30 @@ export default function OrderManagementPage() {
               </div>
             )}
 
-            {/* 开始日期 */}
             <div className="form-control">
               <input
                 type="date"
-                className="input input-bordered"
+                className="input input-bordered input-sm"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-
-            {/* 结束日期 */}
             <div className="form-control">
               <input
                 type="date"
-                className="input input-bordered"
+                className="input input-bordered input-sm"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
 
-            {/* 按钮组 */}
             <div className="flex gap-2">
-              <button type="submit" className="btn btn-primary gap-2">
-                <Search size={16} />
+              <button type="submit" className="btn btn-primary btn-sm gap-1">
+                <Search size={14} />
                 搜索
               </button>
-              <button type="button" onClick={handleReset} className="btn btn-ghost gap-2">
-                <Filter size={16} />
+              <button type="button" onClick={handleReset} className="btn btn-ghost btn-sm gap-1">
+                <Filter size={14} />
                 重置
               </button>
             </div>
@@ -271,11 +276,11 @@ export default function OrderManagementPage() {
       </div>
 
       {/* 订单列表 */}
-      <div className="card bg-base-100 shadow">
-        <div className="card-body">
+      <div className="card bg-base-100 border border-base-200 overflow-hidden">
+        <div className="card-body p-4 min-w-0">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="card-title">订单列表</h2>
-            <div className="text-sm text-base-content/60">共 {total} 条记录</div>
+            <h2 className="font-semibold text-lg">订单列表</h2>
+            <div className="text-sm text-base-content/50">共 {total} 条</div>
           </div>
 
           {loading ? (
@@ -284,83 +289,84 @@ export default function OrderManagementPage() {
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12">
-              <Package size={48} className="mx-auto text-base-content/30 mb-4" />
-              <p className="text-base-content/60">暂无订单记录</p>
+              <Package size={48} className="mx-auto text-base-content/20 mb-4" />
+              <p className="text-base-content/50">暂无订单记录</p>
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-                <table className="table table-zebra">
+              {/* daisyUI table: pin-rows 固定表头, pin-cols 固定首尾th列 */}
+              <div className="overflow-x-auto max-w-full">
+                <table className="table table-sm table-pin-rows table-pin-cols table-zebra">
                   <thead>
                     <tr>
-                      <th>订单号</th>
-                      <th>商品名称</th>
-                      {isCreditsMode && <th>类型</th>}
-                      <th>用户</th>
-                      <th>金额</th>
-                      <th>交易号</th>
-                      <th>创建时间</th>
+                      <th>序号</th>
+                      <td>订单号</td>
+                      <td>商品</td>
+                      {isCreditsMode && <td>类型</td>}
+                      <td>用户</td>
+                      <td>金额</td>
+                      <td>交易号</td>
+                      <td>时间</td>
                       <th>操作</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.map((order) => (
+                    {orders.map((order, index) => (
                       <tr key={order.id}>
+                        <th>{(page - 1) * pageSize + index + 1}</th>
                         <td>
-                          <code className="text-xs bg-base-200 px-2 py-1 rounded">
-                            {order.orderId}
-                          </code>
+                          <span className="font-mono text-xs">{order.orderId}</span>
                         </td>
                         <td>
                           <div className="flex items-center gap-2">
                             {isCreditsMode && order.orderType === 'credit' ? (
-                              <CreditCard size={16} className="text-secondary" />
+                              <CreditCard size={14} className="text-secondary shrink-0" />
                             ) : (
-                              <Package size={16} className="text-primary" />
+                              <Package size={14} className="text-primary shrink-0" />
                             )}
                             <span>{order.name}</span>
                             {isCreditsMode && order.creditAmount && (
-                              <span className="badge badge-sm badge-secondary">
-                                +{order.creditAmount} 积分
+                              <span className="badge badge-sm badge-secondary shrink-0">
+                                +{order.creditAmount}
                               </span>
                             )}
                           </div>
                         </td>
                         {isCreditsMode && <td>{renderOrderType(order.orderType)}</td>}
                         <td>
-                          <span className="text-sm">{order.identifier}</span>
+                          <span className="text-xs">{order.identifier}</span>
                         </td>
                         <td>
-                          <span className="font-medium text-success">
+                          <span className="font-semibold text-success">
                             {formatPrice(order.price)}
                           </span>
                           {order.promotionPrice > 0 && (
                             <div className="text-xs text-warning">
-                              推广返利: {formatPrice(order.promotionPrice)}
+                              返利 {formatPrice(order.promotionPrice)}
                             </div>
                           )}
                         </td>
                         <td>
-                          <code className="text-xs bg-base-200 px-2 py-1 rounded">
-                            {order.transactionId}
-                          </code>
+                          <span className="font-mono text-xs text-base-content/60">{order.transactionId}</span>
                         </td>
                         <td>
-                          <span className="text-sm">{formatDate(order.created_time)}</span>
+                          <span className="text-xs text-base-content/60">
+                            {formatDate(order.created_time)}
+                          </span>
                         </td>
-                        <td>
+                        <th>
                           <button
                             onClick={() => handleDelete(order.id)}
                             disabled={deleting === order.id}
-                            className="btn btn-ghost btn-sm text-error"
+                            className="btn btn-ghost btn-xs text-error"
                           >
                             {deleting === order.id ? (
-                              <Loader2 size={16} className="animate-spin" />
+                              <Loader2 size={14} className="animate-spin" />
                             ) : (
-                              <Trash2 size={16} />
+                              <Trash2 size={14} />
                             )}
                           </button>
-                        </td>
+                        </th>
                       </tr>
                     ))}
                   </tbody>
@@ -372,7 +378,7 @@ export default function OrderManagementPage() {
                 <div className="flex justify-center mt-6">
                   <div className="join">
                     <button
-                      className="join-item btn"
+                      className="join-item btn btn-sm"
                       disabled={page <= 1}
                       onClick={() => setPage(page - 1)}
                     >
@@ -392,7 +398,7 @@ export default function OrderManagementPage() {
                       return (
                         <button
                           key={pageNum}
-                          className={`join-item btn ${page === pageNum ? 'btn-active' : ''}`}
+                          className={`join-item btn btn-sm ${page === pageNum ? 'btn-primary' : ''}`}
                           onClick={() => setPage(pageNum)}
                         >
                           {pageNum}
@@ -400,7 +406,7 @@ export default function OrderManagementPage() {
                       );
                     })}
                     <button
-                      className="join-item btn"
+                      className="join-item btn btn-sm"
                       disabled={page >= totalPages}
                       onClick={() => setPage(page + 1)}
                     >

@@ -8,6 +8,31 @@ const DEFAULTS = {
   loginTypes: ['password'] as string[],
 };
 
+// 默认支付方式配置
+const DEFAULT_PAYMENT_METHODS = [
+  { key: 'wechat', name: '微信支付', icon: '/payment/wechat-pay.png', use: true, isDefault: true },
+];
+
+// 规范化支付方式数据：兼容字符串数组和对象数组，修正中文图标路径
+function normalizePaymentMethods(raw: any[]): any[] {
+  if (!Array.isArray(raw) || raw.length === 0) return DEFAULT_PAYMENT_METHODS;
+
+  return raw.map((item) => {
+    // 如果是字符串（如 'wechat'），转换为对象
+    if (typeof item === 'string') {
+      const def = DEFAULT_PAYMENT_METHODS.find((d) => d.key === item);
+      return def || { key: item, name: item, icon: '', use: true };
+    }
+    // 修正含中文的图标路径
+    if (item.icon && /[\u4e00-\u9fa5]/.test(item.icon)) {
+      if (item.key === 'wechat') {
+        return { ...item, icon: '/payment/wechat-pay.png' };
+      }
+    }
+    return item;
+  });
+}
+
 export interface PublicConfigState {
   siteName: string;
   loginType: string;
@@ -67,7 +92,7 @@ export const publicConfigSlice = createSlice({
         state.loginType = configs['auth.loginType'] || DEFAULTS.loginType;
         state.loginTypes = configs['auth.loginTypes'] || DEFAULTS.loginTypes;
         state.googleAnalyticsId = configs['analytics.googleAnalyticsId'] || '';
-        state.paymentMethods = configs['payment.methods'] || [];
+        state.paymentMethods = normalizePaymentMethods(configs['payment.methods']);
         state.loaded = true;
         state.loading = false;
       })
