@@ -2,9 +2,8 @@
 
 import { useLocale } from 'next-intl';
 import React, { useState } from 'react';
-import { Globe } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from '@/i18n/navigation';
 
 const languageList = [
   {
@@ -48,11 +47,7 @@ export default function I18NComponent() {
 
   const switchLanguage = (value: string) => {
     if (value !== locale) {
-      let newPathName = pathname.replace(`/${locale}`, `/${value}`);
-      if (!newPathName.startsWith(`/${value}`)) {
-        newPathName = `/${value}${newPathName}`;
-      }
-      router.push(newPathName);
+      router.replace(pathname, { locale: value as 'en' | 'zh' });
     }
     setIsOpen(false);
   };
