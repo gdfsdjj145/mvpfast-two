@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 /**
  * [local] 子布局
@@ -48,10 +49,19 @@ export async function generateMetadata(props: { params: Promise<{ local: string 
   };
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ local: string }>;
 }>) {
-  return <>{children}</>;
+  const { local: locale } = await params;
+  const messages = await getMessages();
+
+  return (
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      {children}
+    </NextIntlClientProvider>
+  );
 }

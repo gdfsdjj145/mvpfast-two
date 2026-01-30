@@ -54,8 +54,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         // 账号密码登录
         if (type === 'password') {
-          // 判断是邮箱还是手机号
-          const identifierType = identifier.includes('@') ? 'email' : 'phone';
+          // 判断是邮箱还是手机号：含@为邮箱，纯数字为手机号，其他视为用户名（按email查）
+          const isPhone = /^\d+$/.test(identifier);
+          const identifierType = isPhone ? 'phone' : 'email';
           const result = await verifyPasswordLogin({
             identifier,
             password: password || '',

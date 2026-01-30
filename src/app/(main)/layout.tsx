@@ -9,8 +9,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProviders } from '@/components/theme/ThemeProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { GlobalJsonLd } from '@/components/seo';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 
@@ -141,25 +140,22 @@ export default async function MainLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
-  const messages = await getMessages();
 
   return (
-    <html lang="zh" data-theme="light" style={{ colorScheme: 'light' }}>
+    <html lang={locale} data-theme="light" style={{ colorScheme: 'light' }}>
       <head>
         <GlobalJsonLd />
         <meta name="color-scheme" content="light only" />
       </head>
       <body className={cn(fonts.variable, inter.className)}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
-            <SessionProvider>
-              <ReduxProvider>
-                {children}
-                <GoogleAnalytics />
-              </ReduxProvider>
-            </SessionProvider>
-          </ThemeProviders>
-        </NextIntlClientProvider>
+        <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
+          <SessionProvider>
+            <ReduxProvider>
+              {children}
+              <GoogleAnalytics />
+            </ReduxProvider>
+          </SessionProvider>
+        </ThemeProviders>
         <Toaster />
         <Analytics />
         <SpeedInsights />
