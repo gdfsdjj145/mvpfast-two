@@ -173,6 +173,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           adminOnly: false,
         },
         {
+          label: '我的订单',
+          key: 'my-orders',
+          description: '查看我的购买订单记录',
+          icon: <TbReportMoney size={20} />,
+          adminOnly: false,
+        },
+        {
           label: '积分记录',
           key: 'credits',
           description: '查看积分变动记录',

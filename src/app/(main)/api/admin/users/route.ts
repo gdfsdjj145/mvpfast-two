@@ -75,13 +75,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 判断账号类型（邮箱或手机号）
-    const isEmail = identifier.includes('@');
-    const identifierType = isEmail ? 'email' : 'phone';
+    // 判断账号类型：纯数字为手机号，其他一律视为邮箱
+    const isPhone = /^\d+$/.test(identifier);
+    const identifierType = isPhone ? 'phone' : 'email';
 
     // 检查用户是否已存在
     const existingUser = await prisma.user.findFirst({
-      where: isEmail ? { email: identifier } : { phone: identifier },
+      where: isPhone ? { phone: identifier } : { email: identifier },
     });
 
     if (existingUser) {
