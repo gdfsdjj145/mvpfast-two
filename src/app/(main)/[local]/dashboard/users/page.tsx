@@ -24,7 +24,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 import Image from 'next/image';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { config } from '@/config';
 
 interface UserData {
@@ -326,8 +326,6 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" />
-
       {/* 统计卡片 */}
       {stats && (
         <div className={`grid gap-3 ${isCreditsMode ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3'}`}>

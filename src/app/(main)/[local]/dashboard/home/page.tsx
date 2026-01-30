@@ -31,7 +31,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { config } from '@/config';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 // 注册 ChartJS 组件
 ChartJS.register(
@@ -271,7 +271,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <Toaster position="top-right" />
       {/* 时间范围选择 */}
       <div className="flex justify-end">
         <div className="join">

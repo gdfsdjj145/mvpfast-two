@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Settings, Shield, CreditCard, Gift, BarChart3, Bot, Loader2, Save } from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import AuthConfig from './AuthConfig';
 import PaymentConfig from './PaymentConfig';
 import GeneralConfig from './GeneralConfig';
@@ -356,8 +356,6 @@ export default function SystemConfigPage() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" />
-
       {/* Header with Save Button */}
       <div className="flex justify-between items-center">
         <div role="tablist" className="tabs tabs-boxed bg-base-200 p-1">

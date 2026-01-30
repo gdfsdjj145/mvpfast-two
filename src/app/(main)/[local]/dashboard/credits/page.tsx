@@ -14,7 +14,7 @@ import {
   User,
   Ticket,
 } from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 
 interface CreditTransaction {
@@ -169,8 +169,6 @@ export default function CreditsPage() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" />
-
       {/* 管理员统计卡片 */}
       {isAdmin && adminStats && (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">

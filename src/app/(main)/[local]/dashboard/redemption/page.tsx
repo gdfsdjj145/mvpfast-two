@@ -20,7 +20,7 @@ import {
   Hash,
   Clock,
 } from 'lucide-react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 interface RedemptionCode {
   id: string;
@@ -326,8 +326,6 @@ export default function RedemptionPage() {
 
   return (
     <div className="space-y-4">
-      <Toaster position="top-right" />
-
       {/* 统计卡片 */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

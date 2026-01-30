@@ -1,7 +1,7 @@
 import { RootProvider } from 'fumadocs-ui/provider';
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import 'fumadocs-ui/style.css';
+import './globals.css';
 
 /**
  * Fumadocs 路由组的根布局
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     default: 'MvpFast 文档',
     template: '%s | MvpFast',
   },
-  description: 'MvpFast 使用指南、API 文档和技术博客',
-  keywords: '文档, 指南, API, 博客, MvpFast',
+  description: 'MvpFast 使用指南、API 文档和技术文章',
+  keywords: '文档, 指南, API, 文章, MvpFast',
   metadataBase: new URL(getSiteUrl()),
   openGraph: {
     type: 'website',

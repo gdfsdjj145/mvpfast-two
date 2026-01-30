@@ -4,9 +4,9 @@ import { baseOptions } from '../layout.config';
 
 export async function generateMetadata() {
   return {
-    title: 'MvpFast 知识博客',
+    title: 'MvpFast 文章',
     description: '一些分享内容',
-    keywords: '知识博客, 分享内容',
+    keywords: '文章, 分享内容',
     icons: {
       icon: '/favicons/icon_16x16.png',
     },
