@@ -3,57 +3,19 @@ import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { updateUserInfo } from './actions';
 import toast from 'react-hot-toast';
+import ImageUpload from '@/components/common/ImageUpload';
 
 export default function PersonPage() {
   const { data: session, status, update: updateSession } = useSession();
   const [user, setUser] = React.useState<any>(null);
   const [avatar, setAvatar] = React.useState<string | null>(null);
 
-  const handleAvatarClick = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const base64 = e.target?.result as string;
-          setAvatar(base64);
-          // 这里可以添加上传到服务器的逻辑
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-    input.click();
-  };
-
   useEffect(() => {
     if (session?.user) {
-      console.log(session.user);
       setUser(session.user);
+      setAvatar(session.user.avatar || null);
     }
   }, [session]);
-
-  // 渲染头像
-  const renderName = () => {
-    if (avatar) {
-      return (
-        <img src={avatar} alt="头像" className="w-full h-full object-cover" />
-      );
-    }
-    if (user?.avatar) {
-      return (
-        <img
-          src={user.avatar}
-          alt="头像"
-          className="w-full h-full object-cover"
-        />
-      );
-    }
-    if (user?.nickName) return user.nickName[0];
-    return '?';
-  };
 
   const handleSave = async () => {
     if (!session?.user?.id) return;
@@ -64,7 +26,6 @@ export default function PersonPage() {
     });
 
     if (res.code === 0) {
-      // 更新 session
       await updateSession({
         ...session,
         user: {
@@ -90,10 +51,15 @@ export default function PersonPage() {
         {/* 头像设置 */}
         <fieldset className="fieldset">
           <legend className="fieldset-legend">您的头像</legend>
-          <p className="text-base-content/60 text-sm mb-3">当前无法修改头像</p>
-          <div className="w-24 h-24 rounded-full bg-neutral flex items-center justify-center text-white text-3xl cursor-pointer overflow-hidden">
-            {renderName()}
-          </div>
+          <p className="text-base-content/60 text-sm mb-3">
+            点击上传新头像，支持 JPG/PNG/GIF/WebP 格式
+          </p>
+          <ImageUpload
+            value={avatar || ''}
+            onChange={(url) => setAvatar(url || null)}
+            type="avatar"
+            variant="avatar"
+          />
         </fieldset>
 
         {/* 语言设置 */}

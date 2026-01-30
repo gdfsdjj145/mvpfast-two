@@ -35,6 +35,13 @@ const serverEnvSchema = z.object({
   MAIL_USER: z.string().optional(),
   MAIL_PASS: z.string().optional(),
 
+  // Cloudflare R2 存储
+  R2_ENDPOINT: z.string().optional(),
+  R2_ACCESS_KEY_ID: z.string().optional(),
+  R2_SECRET_ACCESS_KEY: z.string().optional(),
+  R2_BUCKET_NAME: z.string().optional(),
+  R2_PUBLIC_DOMAIN: z.string().optional(),
+
   // Node 环境
   NODE_ENV: z
     .enum(['development', 'production', 'test'])
@@ -181,6 +188,19 @@ export function isSmsConfigured(): boolean {
     serverEnv.ALIYUN_ACCESS_KEY_SECRET &&
     serverEnv.ALIYUN_SMS_SIGN_NAME &&
     serverEnv.ALIYUN_SMS_TEMPLATE_CODE
+  );
+}
+
+/**
+ * 检查 Cloudflare R2 存储是否已配置
+ */
+export function isR2Configured(): boolean {
+  return !!(
+    serverEnv.R2_ENDPOINT &&
+    serverEnv.R2_ACCESS_KEY_ID &&
+    serverEnv.R2_SECRET_ACCESS_KEY &&
+    serverEnv.R2_BUCKET_NAME &&
+    serverEnv.R2_PUBLIC_DOMAIN
   );
 }
 

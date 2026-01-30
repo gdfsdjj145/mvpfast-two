@@ -146,7 +146,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const isAdmin = userRole === 'admin';
 
   // 需要管理员权限的路径
-  const adminOnlyPaths = ['users', 'order', 'redemption', 'settings/system'];
+  const adminOnlyPaths = ['users', 'order', 'redemption', 'settings/system', 'posts'];
 
   // 检查当前路径是否需要管理员权限
   useEffect(() => {
@@ -204,6 +204,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           key: 'redemption',
           description: '创建和管理积分兑换码',
           icon: <Ticket size={20} />,
+          adminOnly: true,
+        },
+        {
+          label: '文章管理',
+          key: 'posts',
+          description: '创建和管理博客文章',
+          icon: <FileText size={20} />,
           adminOnly: true,
         },
       ],

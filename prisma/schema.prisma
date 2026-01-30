@@ -176,3 +176,26 @@ model RedemptionRecord {
   @@index([created_time])
   @@unique([codeId, userId])              // 同一用户同一兑换码只能使用一次
 }
+
+// 博客文章表
+model Post {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime  @db.Date @default(now())
+  updated_time DateTime  @db.Date @updatedAt
+  title        String
+  slug         String    @unique
+  description  String?
+  content      String
+  coverImage   String?
+  category     String?
+  tags         String[]
+  status       String    @default("draft") // "draft" | "published"
+  authorId     String    @db.ObjectId
+  authorName   String
+  publishedAt  DateTime? @db.Date
+  views        Int       @default(0)
+
+  @@index([status])
+  @@index([category])
+  @@index([created_time])
+}
