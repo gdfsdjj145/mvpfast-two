@@ -94,6 +94,7 @@ export default function SignInPage() {
   const loginConfig = useAppSelector(selectLoginConfig);
   const configLoaded = useAppSelector(selectPublicConfigLoaded);
   const [type, setType] = useState('');
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     identifier: '',
     code: '',
@@ -129,6 +130,7 @@ export default function SignInPage() {
         toast.error('请输入密码!');
         return;
       }
+      setLoading(true);
       const res = await signIn('credentials', {
         type: 'password',
         identifier: form.identifier,
@@ -137,6 +139,7 @@ export default function SignInPage() {
       });
       if (res?.error) {
         toast.error('账号或密码错误');
+        setLoading(false);
       } else {
         await update();
         const callbackUrl = searchParams.get('redirect') || '/';
@@ -150,6 +153,7 @@ export default function SignInPage() {
       toast.error('请输入验证码!');
       return;
     }
+    setLoading(true);
     const res = await signIn('credentials', {
       type,
       identifier: form.identifier,
@@ -158,6 +162,7 @@ export default function SignInPage() {
     });
     if (res?.error) {
       toast.error(res?.error);
+      setLoading(false);
     } else {
       await update();
       const callbackUrl = searchParams.get('redirect') || '/';
@@ -240,7 +245,9 @@ export default function SignInPage() {
                 <button
                   className="btn btn-primary w-full rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
                   onClick={() => handleLogin()}
+                  disabled={loading}
                 >
+                  {loading && <span className="loading loading-spinner loading-sm"></span>}
                   登录
                 </button>
 
@@ -299,7 +306,9 @@ export default function SignInPage() {
                 <button
                   className="btn btn-primary w-full rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all"
                   onClick={() => handleLogin()}
+                  disabled={loading}
                 >
+                  {loading && <span className="loading loading-spinner loading-sm"></span>}
                   登录
                 </button>
               </div>
