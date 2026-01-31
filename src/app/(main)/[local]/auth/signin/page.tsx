@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { sendCode } from './actions';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
@@ -87,8 +87,9 @@ const VerificationButton = (props: { type: string; form: { identifier: string; c
 };
 
 export default function SignInPage() {
-  const router = useRouter();
   const { siteConfig } = useSiteConfig();
+  const { update } = useSession();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const loginConfig = useAppSelector(selectLoginConfig);
   const configLoaded = useAppSelector(selectPublicConfigLoaded);
@@ -137,6 +138,7 @@ export default function SignInPage() {
       if (res?.error) {
         toast.error('账号或密码错误');
       } else {
+        await update();
         const callbackUrl = searchParams.get('redirect') || '/';
         router.push(callbackUrl);
       }
@@ -156,6 +158,7 @@ export default function SignInPage() {
     if (res?.error) {
       toast.error(res?.error);
     } else {
+      await update();
       const callbackUrl = searchParams.get('redirect') || '/';
       router.push(callbackUrl);
     }
