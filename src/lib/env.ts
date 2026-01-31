@@ -14,8 +14,10 @@ const serverEnvSchema = z.object({
   DATABASE_URL: z.string().min(1, '数据库连接字符串不能为空'),
 
   // NextAuth
-  NEXTAUTH_SECRET: z.string().min(1, 'NextAuth 密钥不能为空'),
+  NEXTAUTH_SECRET: z.string().min(1, 'NextAuth 密钥不能为空').optional(),
+  AUTH_SECRET: z.string().min(1, 'Auth 密钥不能为空').optional(),
   NEXTAUTH_URL: z.string().url('NextAuth URL 必须是有效的 URL').optional(),
+  AUTH_URL: z.string().url('Auth URL 必须是有效的 URL').optional(),
   NEXTAUTH_SALT: z.string().optional(),
 
   // 微信支付
@@ -41,6 +43,10 @@ const serverEnvSchema = z.object({
   R2_SECRET_ACCESS_KEY: z.string().optional(),
   R2_BUCKET_NAME: z.string().optional(),
   R2_PUBLIC_DOMAIN: z.string().optional(),
+
+  // AI 服务
+  OPENROUTER_API_KEY: z.string().optional(),
+  SILICONFLOW_API_KEY: z.string().optional(),
 
   // Node 环境
   NODE_ENV: z
