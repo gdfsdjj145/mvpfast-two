@@ -66,6 +66,7 @@ const UserMenu = () => {
           <li>
             <Link
               href="/dashboard/home"
+              prefetch={false}
               className="text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
             >
               {t('userMenu.account')}
@@ -84,7 +85,7 @@ const UserMenu = () => {
 
       {/* 移动端显示 */}
       <div className="sm:hidden flex items-center gap-2">
-        <Link href="/dashboard/home" className="text-sm text-gray-600">
+        <Link href="/dashboard/home" prefetch={false} className="text-sm text-gray-600">
           {t('userMenu.accountMobile')}
         </Link>
         <button onClick={handleLogout} className="text-sm text-red-500">

@@ -141,6 +141,7 @@ export default function SignInPage() {
         await update();
         const callbackUrl = searchParams.get('redirect') || '/';
         router.push(callbackUrl);
+        router.refresh();
       }
       return;
     }
@@ -161,6 +162,7 @@ export default function SignInPage() {
       await update();
       const callbackUrl = searchParams.get('redirect') || '/';
       router.push(callbackUrl);
+      router.refresh();
     }
   };
 
