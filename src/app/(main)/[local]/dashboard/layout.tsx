@@ -23,11 +23,13 @@ import {
   Coins,
   LayoutDashboard,
   MessageSquare,
+  ShieldCheck,
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useSiteConfig } from '@/hooks/useSiteConfig';
+import { hasPermission, type Permission } from '@/lib/rbac';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const t = useTranslations('Dashboard');
@@ -148,25 +150,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   // 确定当前角色：优先使用 session 中的角色，其次使用缓存的角色，开发环境默认 admin
   const userRole = session?.user?.role || cachedRole || (isDev ? 'admin' : 'user');
-  const isAdmin = userRole === 'admin';
-
-  // 需要管理员权限的路径
-  const adminOnlyPaths = ['users', 'order', 'redemption', 'settings/system', 'posts'];
-
-  // 检查当前路径是否需要管理员权限
-  useEffect(() => {
-    if (status === 'loading') return;
-
-    const needsAdmin = adminOnlyPaths.some((path) => currentPath === path || currentPath.startsWith(path + '/'));
-
-    if (needsAdmin && !isAdmin) {
-      // 非管理员访问管理页面，重定向到 403
-      router.replace('/403');
-    }
-  }, [currentPath, isAdmin, status, router]);
 
   // 项目主题色 #9462ff
-  const allMenuGroups = [
+  const allMenuGroups: {
+    title: string;
+    permission?: Permission;
+    items: {
+      label: string;
+      key: string;
+      description: string;
+      icon: React.ReactNode;
+      permission?: Permission;
+    }[];
+  }[] = [
     {
       title: '概览',
       items: [
@@ -175,68 +171,72 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           key: 'home',
           description: '查看个人积分和消费概览',
           icon: <LayoutDashboard size={20} />,
-          adminOnly: false,
         },
         {
           label: '我的订单',
           key: 'my-orders',
           description: '查看我的购买订单记录',
           icon: <TbReportMoney size={20} />,
-          adminOnly: false,
         },
         {
           label: '积分记录',
           key: 'credits',
           description: '查看积分变动记录',
           icon: <Coins size={20} />,
-          adminOnly: false,
         },
       ],
     },
     {
       title: '管理功能',
-      adminOnly: true,
+      permission: 'user:list',
       items: [
         {
           label: '用户管理',
           key: 'users',
           description: '管理系统用户和积分',
           icon: <Users size={20} />,
-          adminOnly: true,
+          permission: 'user:list',
+        },
+        {
+          label: '角色管理',
+          key: 'roles',
+          description: '查看角色权限配置',
+          icon: <ShieldCheck size={20} />,
+          permission: 'user:edit',
         },
         {
           label: '订单管理',
           key: 'order',
           description: '查看和管理订单记录',
           icon: <TbReportMoney size={20} />,
-          adminOnly: true,
+          permission: 'order:list',
         },
         {
           label: '兑换码管理',
           key: 'redemption',
           description: '创建和管理积分兑换码',
           icon: <Ticket size={20} />,
-          adminOnly: true,
+          permission: 'redemption:manage',
         },
         {
           label: '文章管理',
           key: 'posts',
           description: '创建和管理博客文章',
           icon: <FileText size={20} />,
-          adminOnly: true,
+          permission: 'post:manage',
         },
       ],
     },
     {
       title: '系统功能',
-      adminOnly: true,
+      permission: 'system:manage',
       items: [
         {
           label: '系统配置',
           key: 'settings/system',
           description: '管理系统运行时配置',
           icon: <Settings size={20} />,
-          adminOnly: true,
+          permission: 'system:manage',
         },
       ],
     },
@@ -248,7 +248,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           key: 'ai-chat',
           description: '与 AI 模型进行对话',
           icon: <MessageSquare size={20} />,
-          adminOnly: false,
         },
       ],
     },
@@ -260,18 +259,17 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           key: 'person',
           description: t('tabs.person.description'),
           icon: <User size={20} />,
-          adminOnly: false,
         },
       ],
     },
   ];
 
-  // 根据角色过滤菜单
+  // 根据权限过滤菜单
   const menuGroups = allMenuGroups
-    .filter((group) => !group.adminOnly || isAdmin)
+    .filter((group) => !group.permission || hasPermission(userRole, group.permission))
     .map((group) => ({
       ...group,
-      items: group.items.filter((item) => !item.adminOnly || isAdmin),
+      items: group.items.filter((item) => !item.permission || hasPermission(userRole, item.permission)),
     }))
     .filter((group) => group.items.length > 0);
 

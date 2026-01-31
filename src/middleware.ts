@@ -4,15 +4,13 @@ import NextAuth from 'next-auth';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import authConfig from './auth.config';
+import { ROUTE_PERMISSIONS, hasPermission } from '@/lib/rbac';
 
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
 
 // 需要验证的路由列表
 const protectedRoutes = ['/pay', '/dashboard'];
-
-// 需要管理员权限的路由
-const adminRoutes = ['/dashboard/settings/system'];
 
 // 创建next-intl中间件
 const intlMiddleware = createMiddleware({
@@ -80,12 +78,16 @@ export default auth(async function middleware(request) {
       console.log('[DEV] 开发环境免登录访问:', pathnameWithoutLocale);
     }
 
-    // 管理员路由检查 - 从 JWT token 中读取 role，无需查数据库
-    if (adminRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
+    // 基于 RBAC 的路由权限检查
+    const requiredPermission = Object.entries(ROUTE_PERMISSIONS)
+      .find(([route]) => pathnameWithoutLocale.startsWith(route));
+
+    if (requiredPermission) {
       if (!isDev && isAuthenticated) {
         const userRole = (session as any)?.user?.role || 'user';
-        if (userRole !== 'admin') {
-          console.log('非管理员访问管理员路由，重定向到首页');
+        const [, permission] = requiredPermission;
+        if (!hasPermission(userRole, permission)) {
+          console.log('无权限访问路由，重定向到首页');
           let forbiddenPath = '/';
           if (currentLocale) {
             forbiddenPath = `/${currentLocale}/`;

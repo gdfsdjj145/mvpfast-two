@@ -22,10 +22,12 @@ import {
   TrendingDown,
   History,
   UserPlus,
+  Pencil,
 } from 'lucide-react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { config } from '@/config';
+import { ROLE_PERMISSIONS, type Role } from '@/lib/rbac';
 
 interface UserData {
   id: string;
@@ -87,6 +89,15 @@ export default function UsersPage() {
   });
   const [creating, setCreating] = useState(false);
   const createModalRef = useRef<HTMLDialogElement>(null);
+
+  // 编辑用户弹窗
+  const [editUser, setEditUser] = useState<UserData | null>(null);
+  const [editForm, setEditForm] = useState({ nickName: '', role: '' });
+  const [saving, setSaving] = useState(false);
+  const editModalRef = useRef<HTMLDialogElement>(null);
+
+  // 可用角色列表（从 RBAC 配置读取）
+  const availableRoles = Object.keys(ROLE_PERMISSIONS) as Role[];
 
   // 获取用户列表
   const fetchUsers = async () => {
@@ -201,26 +212,56 @@ export default function UsersPage() {
     }
   };
 
-  // 更新用户角色
-  const handleUpdateRole = async (userId: string, newRole: string) => {
+  // 打开编辑用户弹窗
+  const openEditModal = (user: UserData) => {
+    setEditUser(user);
+    setEditForm({ nickName: user.nickName, role: user.role });
+    editModalRef.current?.showModal();
+  };
+
+  // 保存编辑
+  const handleSaveEdit = async () => {
+    if (!editUser) return;
+
+    setSaving(true);
     try {
-      const res = await fetch(`/api/admin/users/${userId}`, {
+      const body: Record<string, string> = {};
+      if (editForm.nickName !== editUser.nickName) {
+        body.nickName = editForm.nickName;
+      }
+      if (editForm.role !== editUser.role) {
+        body.role = editForm.role;
+      }
+
+      if (Object.keys(body).length === 0) {
+        toast('没有修改内容');
+        editModalRef.current?.close();
+        setSaving(false);
+        return;
+      }
+
+      const res = await fetch(`/api/admin/users/${editUser.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: newRole }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
 
       if (data.success) {
-        toast.success('角色更新成功');
+        toast.success('用户信息已更新');
         setUsers(users.map(u =>
-          u.id === userId ? { ...u, role: newRole } : u
+          u.id === editUser.id
+            ? { ...u, ...body }
+            : u
         ));
+        editModalRef.current?.close();
       } else {
-        toast.error(data.error || '更新角色失败');
+        toast.error(data.error || '更新失败');
       }
     } catch (error) {
-      toast.error('更新角色失败');
+      toast.error('更新失败');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -488,6 +529,14 @@ export default function UsersPage() {
                       </td>
                       <td>
                         <div className="flex gap-1">
+                          <button
+                            onClick={() => openEditModal(user)}
+                            className="btn btn-ghost btn-xs gap-1"
+                            title="编辑用户"
+                          >
+                            <Pencil size={14} />
+                            编辑
+                          </button>
                           {isCreditsMode && (
                             <button
                               onClick={() => openCreditModal(user)}
@@ -498,29 +547,6 @@ export default function UsersPage() {
                               积分
                             </button>
                           )}
-                          <div className="dropdown dropdown-end">
-                            <button tabIndex={0} className="btn btn-ghost btn-xs">
-                              角色
-                            </button>
-                            <ul tabIndex={0} className="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-32">
-                              <li>
-                                <button
-                                  onClick={() => handleUpdateRole(user.id, 'user')}
-                                  className={user.role === 'user' ? 'active' : ''}
-                                >
-                                  普通用户
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  onClick={() => handleUpdateRole(user.id, 'admin')}
-                                  className={user.role === 'admin' ? 'active' : ''}
-                                >
-                                  管理员
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
                         </div>
                       </td>
                     </tr>
@@ -810,6 +836,106 @@ export default function UsersPage() {
                 <Save size={18} />
               )}
               创建用户
+            </button>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+
+      {/* 编辑用户弹窗 */}
+      <dialog ref={editModalRef} className="modal">
+        <div className="modal-box max-w-md">
+          <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+            <Pencil size={20} className="text-primary" />
+            编辑用户 - {editUser?.nickName}
+          </h3>
+
+          {editUser && (
+            <div className="space-y-4">
+              {/* 昵称 */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">昵称</legend>
+                <input
+                  type="text"
+                  className="input w-full"
+                  value={editForm.nickName}
+                  onChange={(e) => setEditForm({ ...editForm, nickName: e.target.value })}
+                  placeholder="请输入昵称"
+                />
+              </fieldset>
+
+              {/* 角色选择 */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">角色</legend>
+                <div className="flex flex-wrap gap-2">
+                  {availableRoles.map((role) => (
+                    <button
+                      key={role}
+                      type="button"
+                      className={`btn btn-sm gap-1 ${
+                        editForm.role === role
+                          ? role === 'admin'
+                            ? 'btn-warning'
+                            : 'btn-primary'
+                          : 'btn-ghost'
+                      }`}
+                      onClick={() => setEditForm({ ...editForm, role })}
+                    >
+                      {role === 'admin' ? <Shield size={14} /> : <User size={14} />}
+                      {role === 'admin' ? '管理员' : '普通用户'}
+                    </button>
+                  ))}
+                </div>
+                {editForm.role !== editUser.role && (
+                  <p className="label text-warning text-xs">
+                    角色将从「{editUser.role === 'admin' ? '管理员' : '普通用户'}」
+                    变更为「{editForm.role === 'admin' ? '管理员' : '普通用户'}」
+                  </p>
+                )}
+              </fieldset>
+
+              {/* 只读信息 */}
+              <div className="bg-base-200 rounded-lg p-3 space-y-1 text-sm text-base-content/60">
+                {editUser.email && (
+                  <div className="flex items-center gap-2">
+                    <Mail size={14} />
+                    <span>{editUser.email}</span>
+                  </div>
+                )}
+                {editUser.phone && (
+                  <div className="flex items-center gap-2">
+                    <Phone size={14} />
+                    <span>{editUser.phone}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Calendar size={14} />
+                  <span>注册于 {formatDate(editUser.created_time)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-ghost gap-2">
+                <X size={18} />
+                取消
+              </button>
+            </form>
+            <button
+              onClick={handleSaveEdit}
+              className="btn btn-primary gap-2"
+              disabled={saving}
+            >
+              {saving ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <Save size={18} />
+              )}
+              保存
             </button>
           </div>
         </div>

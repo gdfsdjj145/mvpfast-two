@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
+import { routing } from '@/i18n/routing';
 
 /**
  * [local] 子布局
@@ -17,7 +18,7 @@ function getSiteUrl(): string {
 
 export async function generateMetadata(props: { params: Promise<{ local: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const { local: locale } = params;
+  const locale = routing.locales.includes(params.local as any) ? params.local : routing.defaultLocale;
   const t = await getTranslations('Metadata');
   const siteUrl = getSiteUrl();
 
@@ -56,7 +57,8 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ local: string }>;
 }>) {
-  const { local: locale } = await params;
+  const { local } = await params;
+  const locale = routing.locales.includes(local as any) ? local : routing.defaultLocale;
   const messages = await getMessages();
 
   return (

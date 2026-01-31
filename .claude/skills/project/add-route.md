@@ -29,9 +29,21 @@ author: MvpFast
        ↓
 3. Model 层 (src/models/[feature].ts)
        ↓
-4. API 路由 (src/app/api/[feature]/route.ts)
+4. API 路由 (src/app/(main)/api/[feature]/route.ts)
    或 Server Actions (src/app/(main)/[local]/[feature]/actions.ts)
 ```
+
+---
+
+## API 路由分类
+
+项目的 API 路由按访问权限分为三类：
+
+| 分类 | 路径 | 权限要求 | 说明 |
+|------|------|----------|------|
+| 管理后台 | `/api/admin/[feature]` | RBAC 权限检查 | 管理员操作 |
+| 用户侧 | `/api/user/[feature]` | 需要登录 | 用户自己的数据 |
+| 公开 | `/api/[feature]` | 无需认证 | 公开访问 |
 
 ---
 
@@ -135,54 +147,8 @@ export async function getFeedbackById(id: string) {
   });
 }
 
-// 查询列表
-export async function findFeedbacks(
-  where: any = {},
-  skip = 0,
-  take = 10,
-  orderBy: { [key: string]: 'asc' | 'desc' } = { created_time: 'desc' }
-) {
-  return prisma.feedback.findMany({
-    where,
-    skip,
-    take,
-    orderBy,
-  });
-}
-
-// 获取总数
-export async function countFeedbacks(where: any = {}) {
-  return prisma.feedback.count({
-    where,
-  });
-}
-
-// 更新记录
-export async function updateFeedback(id: string, data: FeedbackUpdateInput) {
-  return prisma.feedback.update({
-    where: { id },
-    data,
-  });
-}
-
-// 删除记录
-export async function deleteFeedback(id: string) {
-  return prisma.feedback.delete({
-    where: { id },
-  });
-}
-
-// 批量删除
-export async function deleteManyFeedbacks(ids: string[]) {
-  return prisma.feedback.deleteMany({
-    where: {
-      id: { in: ids },
-    },
-  });
-}
-
-// 复合查询示例
-export async function getFeedbacksWithPagination(params: {
+// 查询列表（带分页和搜索）
+export async function getFeedbackList(params: {
   page?: number;
   pageSize?: number;
   status?: string;
@@ -206,8 +172,13 @@ export async function getFeedbacksWithPagination(params: {
   }
 
   const [total, items] = await Promise.all([
-    countFeedbacks(where),
-    findFeedbacks(where, skip, pageSize),
+    prisma.feedback.count({ where }),
+    prisma.feedback.findMany({
+      where,
+      skip,
+      take: pageSize,
+      orderBy: { created_time: 'desc' },
+    }),
   ]);
 
   return {
@@ -220,6 +191,21 @@ export async function getFeedbacksWithPagination(params: {
     },
   };
 }
+
+// 更新记录
+export async function updateFeedback(id: string, data: FeedbackUpdateInput) {
+  return prisma.feedback.update({
+    where: { id },
+    data,
+  });
+}
+
+// 删除记录
+export async function deleteFeedback(id: string) {
+  return prisma.feedback.delete({
+    where: { id },
+  });
+}
 ```
 
 ### 命名约定
@@ -228,8 +214,7 @@ export async function getFeedbacksWithPagination(params: {
 |------|---------|------|
 | 创建 | `create{Model}` | `createFeedback` |
 | 查询单个 | `get{Model}ById` | `getFeedbackById` |
-| 查询列表 | `find{Model}s` | `findFeedbacks` |
-| 计数 | `count{Model}s` | `countFeedbacks` |
+| 查询列表 | `get{Model}List` | `getFeedbackList` |
 | 更新 | `update{Model}` | `updateFeedback` |
 | 删除 | `delete{Model}` | `deleteFeedback` |
 | 批量删除 | `deleteMany{Model}s` | `deleteManyFeedbacks` |
@@ -238,48 +223,47 @@ export async function getFeedbacksWithPagination(params: {
 
 ## 第三步：API 路由
 
-### 位置
-`src/app/api/[feature]/route.ts`
+### 管理后台 API（需 RBAC 权限）
 
-### 基础 CRUD 模板
+位置: `src/app/(main)/api/admin/[feature]/route.ts`
 
 ```ts
-// src/app/api/feedback/route.ts
+// src/app/(main)/api/admin/feedback/route.ts
 import { NextResponse, NextRequest } from 'next/server';
+import { requirePermission } from '@/lib/auth-utils';
 import {
   createFeedback,
-  getFeedbacksWithPagination,
+  getFeedbackList,
 } from '@/models/feedback';
 
-// GET - 获取列表
+// GET - 获取列表（需权限）
 export async function GET(request: NextRequest) {
   try {
+    await requirePermission('feedback:manage');
+
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
     const status = searchParams.get('status') || undefined;
     const keyword = searchParams.get('keyword') || undefined;
 
-    const result = await getFeedbacksWithPagination({
-      page,
-      pageSize,
-      status,
-      keyword,
-    });
+    const result = await getFeedbackList({ page, pageSize, status, keyword });
 
     return NextResponse.json({
       code: 0,
       data: result,
       message: '获取成功',
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.message === 'Forbidden') {
+      return NextResponse.json(
+        { code: -1, data: null, message: '权限不足' },
+        { status: 403 }
+      );
+    }
     console.error('获取反馈列表失败:', error);
     return NextResponse.json(
-      {
-        code: -1,
-        data: null,
-        message: '获取失败',
-      },
+      { code: -1, data: null, message: '获取失败' },
       { status: 500 }
     );
   }
@@ -288,6 +272,8 @@ export async function GET(request: NextRequest) {
 // POST - 创建
 export async function POST(request: NextRequest) {
   try {
+    await requirePermission('feedback:manage');
+
     const data = await request.json();
 
     // 验证必填字段
@@ -295,25 +281,99 @@ export async function POST(request: NextRequest) {
     for (const field of requiredFields) {
       if (!data[field]) {
         return NextResponse.json(
-          {
-            code: -1,
-            data: null,
-            message: `缺少必填字段: ${field}`,
-          },
+          { code: -1, data: null, message: `缺少必填字段: ${field}` },
           { status: 400 }
         );
       }
     }
 
-    // 邮箱格式验证
+    const feedback = await createFeedback(data);
+
+    return NextResponse.json(
+      { code: 0, data: feedback, message: '创建成功' },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    if (error?.message === 'Forbidden') {
+      return NextResponse.json(
+        { code: -1, data: null, message: '权限不足' },
+        { status: 403 }
+      );
+    }
+    console.error('创建反馈失败:', error);
+    return NextResponse.json(
+      { code: -1, data: null, message: '创建失败' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### 用户侧 API（需登录）
+
+位置: `src/app/(main)/api/user/[feature]/route.ts`
+
+```ts
+// src/app/(main)/api/user/feedback/route.ts
+import { NextResponse, NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { createFeedback } from '@/models/feedback';
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json(
+        { code: -1, message: '请先登录' },
+        { status: 401 }
+      );
+    }
+
+    const data = await request.json();
+    const feedback = await createFeedback({
+      ...data,
+      userId: session.user.id,
+    });
+
+    return NextResponse.json(
+      { code: 0, data: feedback, message: '提交成功' },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error('提交反馈失败:', error);
+    return NextResponse.json(
+      { code: -1, data: null, message: '提交失败' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### 公开 API（无需认证）
+
+位置: `src/app/(main)/api/[feature]/route.ts`
+
+```ts
+// src/app/(main)/api/feedback/route.ts
+import { NextResponse, NextRequest } from 'next/server';
+import { createFeedback } from '@/models/feedback';
+
+export async function POST(request: NextRequest) {
+  try {
+    const data = await request.json();
+
+    // 公开接口需要更严格的验证
+    if (!data.name || !data.email || !data.message) {
+      return NextResponse.json(
+        { code: -1, data: null, message: '请填写完整信息' },
+        { status: 400 }
+      );
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
       return NextResponse.json(
-        {
-          code: -1,
-          data: null,
-          message: '邮箱格式不正确',
-        },
+        { code: -1, data: null, message: '邮箱格式不正确' },
         { status: 400 }
       );
     }
@@ -321,32 +381,25 @@ export async function POST(request: NextRequest) {
     const feedback = await createFeedback(data);
 
     return NextResponse.json(
-      {
-        code: 0,
-        data: feedback,
-        message: '提交成功',
-      },
+      { code: 0, data: feedback, message: '提交成功' },
       { status: 201 }
     );
   } catch (error) {
     console.error('创建反馈失败:', error);
     return NextResponse.json(
-      {
-        code: -1,
-        data: null,
-        message: '提交失败',
-      },
+      { code: -1, data: null, message: '提交失败' },
       { status: 500 }
     );
   }
 }
 ```
 
-### 单个资源路由
+### 单个资源路由（[id]）
 
 ```ts
-// src/app/api/feedback/[id]/route.ts
+// src/app/(main)/api/admin/feedback/[id]/route.ts
 import { NextResponse, NextRequest } from 'next/server';
+import { requirePermission } from '@/lib/auth-utils';
 import {
   getFeedbackById,
   updateFeedback,
@@ -359,34 +412,22 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    await requirePermission('feedback:manage');
     const feedback = await getFeedbackById(params.id);
 
     if (!feedback) {
       return NextResponse.json(
-        {
-          code: -1,
-          data: null,
-          message: '记录不存在',
-        },
+        { code: -1, data: null, message: '记录不存在' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({
-      code: 0,
-      data: feedback,
-      message: '获取成功',
-    });
-  } catch (error) {
-    console.error('获取反馈详情失败:', error);
-    return NextResponse.json(
-      {
-        code: -1,
-        data: null,
-        message: '获取失败',
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ code: 0, data: feedback, message: '获取成功' });
+  } catch (error: any) {
+    if (error?.message === 'Forbidden') {
+      return NextResponse.json({ code: -1, message: '权限不足' }, { status: 403 });
+    }
+    return NextResponse.json({ code: -1, message: '获取失败' }, { status: 500 });
   }
 }
 
@@ -396,37 +437,24 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    await requirePermission('feedback:manage');
     const data = await request.json();
 
     const existing = await getFeedbackById(params.id);
     if (!existing) {
       return NextResponse.json(
-        {
-          code: -1,
-          data: null,
-          message: '记录不存在',
-        },
+        { code: -1, data: null, message: '记录不存在' },
         { status: 404 }
       );
     }
 
     const feedback = await updateFeedback(params.id, data);
-
-    return NextResponse.json({
-      code: 0,
-      data: feedback,
-      message: '更新成功',
-    });
-  } catch (error) {
-    console.error('更新反馈失败:', error);
-    return NextResponse.json(
-      {
-        code: -1,
-        data: null,
-        message: '更新失败',
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ code: 0, data: feedback, message: '更新成功' });
+  } catch (error: any) {
+    if (error?.message === 'Forbidden') {
+      return NextResponse.json({ code: -1, message: '权限不足' }, { status: 403 });
+    }
+    return NextResponse.json({ code: -1, message: '更新失败' }, { status: 500 });
   }
 }
 
@@ -436,35 +464,23 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    await requirePermission('feedback:manage');
+
     const existing = await getFeedbackById(params.id);
     if (!existing) {
       return NextResponse.json(
-        {
-          code: -1,
-          data: null,
-          message: '记录不存在',
-        },
+        { code: -1, data: null, message: '记录不存在' },
         { status: 404 }
       );
     }
 
     await deleteFeedback(params.id);
-
-    return NextResponse.json({
-      code: 0,
-      data: null,
-      message: '删除成功',
-    });
-  } catch (error) {
-    console.error('删除反馈失败:', error);
-    return NextResponse.json(
-      {
-        code: -1,
-        data: null,
-        message: '删除失败',
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ code: 0, data: null, message: '删除成功' });
+  } catch (error: any) {
+    if (error?.message === 'Forbidden') {
+      return NextResponse.json({ code: -1, message: '权限不足' }, { status: 403 });
+    }
+    return NextResponse.json({ code: -1, message: '删除失败' }, { status: 500 });
   }
 }
 ```
@@ -480,10 +496,10 @@ export async function DELETE(
 
 ```ts
 'use server';
+import { auth } from '@/auth';
 import {
   createFeedback,
-  findFeedbacks,
-  countFeedbacks,
+  getFeedbackList,
   updateFeedback,
   deleteFeedback,
 } from '@/models/feedback';
@@ -500,40 +516,8 @@ export async function getList(
   page: number = 1,
   pageSize: number = 10,
   keyword: string = ''
-): Promise<{
-  data: any[];
-  pagination: {
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  };
-}> {
-  const skip = (page - 1) * pageSize;
-
-  const where = keyword
-    ? {
-        OR: [
-          { name: { contains: keyword, mode: 'insensitive' } },
-          { message: { contains: keyword, mode: 'insensitive' } },
-        ],
-      }
-    : {};
-
-  const [total, items] = await Promise.all([
-    countFeedbacks(where),
-    findFeedbacks(where, skip, pageSize, { created_time: 'desc' }),
-  ]);
-
-  return {
-    data: items,
-    pagination: {
-      total,
-      page,
-      pageSize,
-      totalPages: Math.ceil(total / pageSize),
-    },
-  };
+) {
+  return getFeedbackList({ page, pageSize, keyword });
 }
 
 // 提交反馈
@@ -544,14 +528,8 @@ export async function submitFeedback(data: {
   message: string;
 }): Promise<ActionResponse> {
   try {
-    // 验证
     if (!data.name || !data.email || !data.message) {
       return { success: false, message: '请填写完整信息' };
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-      return { success: false, message: '邮箱格式不正确' };
     }
 
     await createFeedback(data);
@@ -561,31 +539,46 @@ export async function submitFeedback(data: {
     return { success: false, message: '提交失败，请稍后重试' };
   }
 }
+```
 
-// 更新状态
-export async function updateStatus(
-  id: string,
-  status: string
-): Promise<ActionResponse> {
-  try {
-    await updateFeedback(id, { status });
-    return { success: true, message: '更新成功' };
-  } catch (error) {
-    console.error('更新状态失败:', error);
-    return { success: false, message: '更新失败' };
-  }
-}
+---
 
-// 删除
-export async function deleteItem(id: string): Promise<ActionResponse> {
-  try {
-    await deleteFeedback(id);
-    return { success: true, message: '删除成功' };
-  } catch (error) {
-    console.error('删除失败:', error);
-    return { success: false, message: '删除失败' };
-  }
-}
+## RBAC 权限集成
+
+### 添加新权限
+
+如果新功能需要权限控制，需要更新 `src/lib/rbac.ts`：
+
+```ts
+// 1. 在 PERMISSIONS 中添加新权限
+export const PERMISSIONS = {
+  // ... 现有权限
+  'feedback:manage': 'feedback:manage',
+} as const;
+
+// 2. 在 ROLE_PERMISSIONS 的 admin 角色中添加
+admin: [
+  // ... 现有权限
+  PERMISSIONS['feedback:manage'],
+],
+
+// 3. 如果需要路由级权限检查，添加到 ROUTE_PERMISSIONS
+export const ROUTE_PERMISSIONS: Record<string, string> = {
+  // ... 现有映射
+  '/dashboard/feedback': 'feedback:manage',
+};
+```
+
+### 在 API 中使用
+
+```ts
+import { requirePermission, requireAdmin } from '@/lib/auth-utils';
+
+// 检查特定权限
+await requirePermission('feedback:manage');
+
+// 检查管理员（拥有所有权限）
+await requireAdmin();
 ```
 
 ---
@@ -633,19 +626,9 @@ export async function deleteItem(id: string): Promise<ActionResponse> {
 | 201 | 已创建 | POST 成功 |
 | 400 | 请求错误 | 参数验证失败 |
 | 401 | 未授权 | 需要登录 |
-| 403 | 禁止访问 | 权限不足 |
+| 403 | 禁止访问 | RBAC 权限不足 |
 | 404 | 不存在 | 资源不存在 |
 | 500 | 服务器错误 | 服务端异常 |
-
-### 安全考虑
-
-使用项目中的安全工具：
-
-```ts
-import { validateInput, sanitizeHtml } from '@/lib/security';
-import { rateLimit } from '@/lib/rateLimit';
-import { apiLogger } from '@/lib/api-logger';
-```
 
 ---
 
@@ -653,13 +636,16 @@ import { apiLogger } from '@/lib/api-logger';
 
 ### 生成完整后端功能
 
-- [ ] **确认数据字段**
+- [ ] **确认数据字段和权限要求**
 - [ ] **修改 `prisma/schema.prisma`** 添加模型
 - [ ] **运行 `npx prisma generate`**
 - [ ] **创建 `src/models/[feature].ts`** Model 层
 - [ ] **创建 API 路由或 Server Actions**
-  - API 路由: `src/app/api/[feature]/route.ts`
+  - 管理 API: `src/app/(main)/api/admin/[feature]/route.ts`
+  - 用户 API: `src/app/(main)/api/user/[feature]/route.ts`
+  - 公开 API: `src/app/(main)/api/[feature]/route.ts`
   - Server Actions: `src/app/(main)/[local]/[feature]/actions.ts`
+- [ ] **如需 RBAC 权限**: 更新 `src/lib/rbac.ts`
 - [ ] **测试接口**
 
 ### 文件结构示例（反馈功能）
@@ -669,21 +655,23 @@ prisma/
 └── schema.prisma          # 添加 Feedback 模型
 
 src/
+├── lib/
+│   └── rbac.ts            # 添加 feedback:manage 权限（如需）
+│
 ├── models/
 │   └── feedback.ts        # Model 层 CRUD
 │
-├── app/
+├── app/(main)/
 │   ├── api/
+│   │   ├── admin/feedback/
+│   │   │   ├── route.ts       # 管理端 GET, POST
+│   │   │   └── [id]/
+│   │   │       └── route.ts   # 管理端 GET, PUT, DELETE
+│   │   │
 │   │   └── feedback/
-│   │       ├── route.ts       # GET, POST
-│   │       └── [id]/
-│   │           └── route.ts   # GET, PUT, DELETE
+│   │       └── route.ts       # 公开 POST（用户提交）
 │   │
 │   └── [local]/
-│       ├── feedback/
-│       │   ├── page.tsx       # 前台提交表单
-│       │   └── actions.ts     # Server Actions
-│       │
 │       └── dashboard/
 │           └── feedback/
 │               ├── page.tsx   # 后台列表
@@ -696,28 +684,11 @@ src/
 
 ## 高级用法
 
-### 带认证的 API
+### 文件上传（Cloudflare R2）
 
 ```ts
-import { auth } from '@/auth';
+import { uploadToR2 } from '@/lib/r2';
 
-export async function GET(request: NextRequest) {
-  const session = await auth();
-
-  if (!session) {
-    return NextResponse.json(
-      { code: -1, message: '请先登录' },
-      { status: 401 }
-    );
-  }
-
-  // 继续处理...
-}
-```
-
-### 文件上传
-
-```ts
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const file = formData.get('file') as File;
@@ -729,7 +700,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 处理文件...
+  const result = await uploadToR2(file, 'uploads');
+  return NextResponse.json({ code: 0, data: result });
 }
 ```
 
