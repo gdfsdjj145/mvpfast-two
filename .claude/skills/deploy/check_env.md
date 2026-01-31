@@ -32,9 +32,9 @@ pnpm dev
 # 1. 数据库连接（必需）
 DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/dbname"
 
-# 2. NextAuth 密钥（必需）
+# 2. Auth 密钥（必需）
 # 生成命令: openssl rand -base64 32
-NEXTAUTH_SECRET="your-random-secret-key-here"
+AUTH_SECRET="your-random-secret-key-here"
 ```
 
 ### 验证最小配置
@@ -48,7 +48,7 @@ cp .env.example .env
 pnpm dev
 ```
 
-**注意**: 开发环境下，`middleware.ts` 会跳过认证检查（`isDev = true`）。
+**注意**: 开发环境下，`middleware.ts` 会跳过认证检查（`NODE_ENV === 'development'`）。
 
 ---
 
@@ -58,13 +58,10 @@ pnpm dev
 
 ### 1. 基础登录功能
 
-如果需要真实的登录功能（非开发模式免登录）：
-
 ```env
-# NextAuth 完整配置
-NEXTAUTH_SECRET="your-secret"
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SALT=""  # 可选
+# Auth 完整配置
+AUTH_SECRET="your-secret"
+AUTH_URL="http://localhost:3000"
 ```
 
 ### 2. 手机验证码登录
@@ -99,15 +96,37 @@ MAIL_PASS="your-smtp-password"    # 授权码，非登录密码
 # 微信 AppID（公众号）
 NEXT_PUBLIC_WECHAT_APPID="wx1234567890abcdef"
 
+# 微信开放平台（PC 端扫码）
+WECHAT_OPEN_APPID="wxxxxxxxxxxx"
+WECHAT_OPEN_APPSECRET="xxxxxxxxxxxxxxxx"
+
 # 微信支付商户配置
 WECHAT_MCHID="1234567890"
 WECHAT_SERIAL_NO="证书序列号"
 WECHAT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEv...\n-----END PRIVATE KEY-----"
 ```
 
-### 5. 云购支付（替代微信支付）
+### 5. AI 对话功能
 
-更简单的支付集成方案：
+```env
+# OpenRouter（推荐，支持多模型）
+OPENROUTER_API_KEY="sk-or-v1-xxxxxxxxxxxxx"
+
+# SiliconFlow（国内访问快）
+SILICONFLOW_API_KEY="sk-xxxxxxxxxxxxx"
+```
+
+### 6. 文件上传（Cloudflare R2）
+
+```env
+R2_ENDPOINT="https://xxxx.r2.cloudflarestorage.com"
+R2_ACCESS_KEY_ID="your-r2-access-key"
+R2_SECRET_ACCESS_KEY="your-r2-secret-key"
+R2_BUCKET_NAME="your-bucket-name"
+R2_PUBLIC_DOMAIN="https://cdn.yourdomain.com"
+```
+
+### 7. 云购支付（替代微信支付）
 
 ```env
 NEXT_PUBLIC_YUNGOUOS_MCH_ID="商户号"
@@ -126,9 +145,9 @@ NEXT_PUBLIC_YUNGOUOS_API_KEY="API密钥"
 # 数据库
 DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/prod-db"
 
-# NextAuth
-NEXTAUTH_SECRET="production-secret-key"
-NEXTAUTH_URL="https://yourdomain.com"
+# Auth
+AUTH_SECRET="production-secret-key"
+AUTH_URL="https://yourdomain.com"
 
 # 网站 URL（用于 SEO、回调等）
 NEXT_PUBLIC_API_URL="https://yourdomain.com"
@@ -146,7 +165,7 @@ GOOGLE_SITE_VERIFICATION="your-verification-code"
 # 日志级别（生产环境建议 info 或 warn）
 LOG_LEVEL="info"
 
-# 数据加密密钥（不设置则使用 NEXTAUTH_SECRET）
+# 数据加密密钥（不设置则使用 AUTH_SECRET）
 ENCRYPTION_SECRET="another-secret-for-encryption"
 ```
 
@@ -170,6 +189,19 @@ MAIL_PASS="..."
 
 # 或 微信扫码
 NEXT_PUBLIC_WECHAT_APPID="..."
+WECHAT_OPEN_APPID="..."
+WECHAT_OPEN_APPSECRET="..."
+
+# AI 对话
+OPENROUTER_API_KEY="..."
+SILICONFLOW_API_KEY="..."
+
+# 文件上传 (R2)
+R2_ENDPOINT="..."
+R2_ACCESS_KEY_ID="..."
+R2_SECRET_ACCESS_KEY="..."
+R2_BUCKET_NAME="..."
+R2_PUBLIC_DOMAIN="..."
 
 # 支付功能（选一个）
 # 微信支付
@@ -202,26 +234,10 @@ vercel login
 
 # 添加环境变量
 vercel env add DATABASE_URL production
-vercel env add NEXTAUTH_SECRET production
-vercel env add NEXTAUTH_URL production
+vercel env add AUTH_SECRET production
+vercel env add AUTH_URL production
 # ... 其他变量
-
-# 或者从 .env 文件导入
-vercel env pull .env.production.local
 ```
-
-### 方式三：vercel.json 配置
-
-```json
-{
-  "env": {
-    "NEXT_PUBLIC_SITE_URL": "https://yourdomain.com",
-    "NEXT_PUBLIC_API_URL": "https://yourdomain.com"
-  }
-}
-```
-
-**注意**: 敏感变量（如 DATABASE_URL、SECRET）不要放在 vercel.json，应使用控制台或 CLI 添加。
 
 ### Vercel 环境变量分类
 
@@ -231,20 +247,23 @@ vercel env pull .env.production.local
 | Preview | 预览环境 | PR 预览部署使用 |
 | Development | 开发环境 | `vercel dev` 本地开发使用 |
 
-### Vercel 生产环境完整配置示例
+**注意**: 敏感变量（如 DATABASE_URL、SECRET）不要放在 vercel.json，应使用控制台或 CLI 添加。
 
-```
-DATABASE_URL          = mongodb+srv://...         [Production]
-NEXTAUTH_SECRET       = xxx                       [Production]
-NEXTAUTH_URL          = https://yourdomain.com    [Production]
-NEXT_PUBLIC_API_URL   = https://yourdomain.com    [Production]
-NEXT_PUBLIC_SITE_URL  = https://yourdomain.com    [Production]
+---
 
-# 可选功能
-ALIYUN_ACCESS_KEY_ID      = ...                   [Production]
-ALIYUN_ACCESS_KEY_SECRET  = ...                   [Production]
-ALIYUN_SMS_SIGN_NAME      = ...                   [Production]
-ALIYUN_SMS_TEMPLATE_CODE  = ...                   [Production]
+## Docker 部署配置
+
+使用 `docker-compose.yml` 或 `.env.production` 文件：
+
+```bash
+# 构建
+pnpm docker:build
+
+# 启动（读取 .env.production）
+pnpm docker:up
+
+# 停止
+pnpm docker:down
 ```
 
 ---
@@ -256,12 +275,13 @@ ALIYUN_SMS_TEMPLATE_CODE  = ...                   [Production]
 | 变量名 | 必需 | 描述 | 示例 |
 |--------|------|------|------|
 | `DATABASE_URL` | ✅ | MongoDB 连接字符串 | `mongodb+srv://...` |
-| `NEXTAUTH_SECRET` | ✅ | Session 加密密钥 | 32位随机字符串 |
-| `NEXTAUTH_URL` | 生产✅ | 网站基础 URL | `https://example.com` |
-| `NEXTAUTH_SALT` | ❌ | Token 加密盐值 | - |
+| `AUTH_SECRET` | ✅ | Session 加密密钥 | 32位随机字符串 |
+| `AUTH_URL` | 生产✅ | 网站基础 URL | `https://example.com` |
 | `WECHAT_MCHID` | ❌ | 微信商户号 | `1234567890` |
 | `WECHAT_SERIAL_NO` | ❌ | 微信证书序列号 | - |
 | `WECHAT_PRIVATE_KEY` | ❌ | 微信 API 私钥 | PEM 格式 |
+| `WECHAT_OPEN_APPID` | ❌ | 微信开放平台 AppID | - |
+| `WECHAT_OPEN_APPSECRET` | ❌ | 微信开放平台密钥 | - |
 | `ALIYUN_ACCESS_KEY_ID` | ❌ | 阿里云 AK | - |
 | `ALIYUN_ACCESS_KEY_SECRET` | ❌ | 阿里云 SK | - |
 | `ALIYUN_SMS_SIGN_NAME` | ❌ | 短信签名 | `MvpFast` |
@@ -270,6 +290,12 @@ ALIYUN_SMS_TEMPLATE_CODE  = ...                   [Production]
 | `MAIL_PORT` | ❌ | SMTP 端口 | `465` |
 | `MAIL_USER` | ❌ | 邮箱账号 | - |
 | `MAIL_PASS` | ❌ | 邮箱授权码 | - |
+| `OPENROUTER_API_KEY` | ❌ | OpenRouter API 密钥 | `sk-or-v1-...` |
+| `SILICONFLOW_API_KEY` | ❌ | SiliconFlow API 密钥 | `sk-...` |
+| `R2_ENDPOINT` | ❌ | Cloudflare R2 端点 | URL |
+| `R2_ACCESS_KEY_ID` | ❌ | R2 访问密钥 | - |
+| `R2_SECRET_ACCESS_KEY` | ❌ | R2 密钥 | - |
+| `R2_BUCKET_NAME` | ❌ | R2 存储桶名称 | - |
 | `ENCRYPTION_SECRET` | ❌ | 数据加密密钥 | 32位随机字符串 |
 | `LOG_LEVEL` | ❌ | 日志级别 | `info` |
 | `GOOGLE_SITE_VERIFICATION` | ❌ | Google 验证 | - |
@@ -283,6 +309,7 @@ ALIYUN_SMS_TEMPLATE_CODE  = ...                   [Production]
 | `NEXT_PUBLIC_WECHAT_APPID` | ❌ | 微信 AppID | `wx1234...` |
 | `NEXT_PUBLIC_YUNGOUOS_MCH_ID` | ❌ | 云购商户号 | - |
 | `NEXT_PUBLIC_YUNGOUOS_API_KEY` | ❌ | 云购 API 密钥 | - |
+| `R2_PUBLIC_DOMAIN` | ❌ | R2 公开域名 | `https://cdn.example.com` |
 
 ---
 
@@ -311,7 +338,7 @@ if (isSmsConfigured()) {
 ```bash
 # 检查必需变量
 node -e "
-  const required = ['DATABASE_URL', 'NEXTAUTH_SECRET'];
+  const required = ['DATABASE_URL', 'AUTH_SECRET'];
   const missing = required.filter(k => !process.env[k]);
   if (missing.length) {
     console.error('缺少环境变量:', missing.join(', '));
@@ -340,7 +367,7 @@ node -e "
 2. 重新部署（变量修改后需要重新部署）
 3. 检查变量名是否正确（区分大小写）
 
-### Q: 如何生成 NEXTAUTH_SECRET？
+### Q: 如何生成 AUTH_SECRET？
 
 **A**:
 ```bash
@@ -362,6 +389,21 @@ env 格式:
 WECHAT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...\n-----END PRIVATE KEY-----"
 ```
 
+### Q: AI 功能需要哪些变量？
+
+**A**: 至少配置一个 AI 提供商：
+- `OPENROUTER_API_KEY` — OpenRouter（支持 GPT、Claude 等多模型）
+- `SILICONFLOW_API_KEY` — SiliconFlow（国内访问快，支持国产模型）
+
+### Q: 文件上传需要什么？
+
+**A**: 需要 Cloudflare R2 存储：
+- `R2_ENDPOINT` — R2 API 端点
+- `R2_ACCESS_KEY_ID` — 访问密钥
+- `R2_SECRET_ACCESS_KEY` — 密钥
+- `R2_BUCKET_NAME` — 存储桶名称
+- `R2_PUBLIC_DOMAIN` — CDN 公开域名（用于访问上传的文件）
+
 ---
 
 ## 快速复制模板
@@ -370,26 +412,26 @@ WECHAT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...\n-----END P
 
 ```env
 DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/dev"
-NEXTAUTH_SECRET="dev-secret-change-in-production"
+AUTH_SECRET="dev-secret-change-in-production"
 ```
 
 ### 生产环境基础配置
 
 ```env
 DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/prod"
-NEXTAUTH_SECRET="your-production-secret"
-NEXTAUTH_URL="https://yourdomain.com"
+AUTH_SECRET="your-production-secret"
+AUTH_URL="https://yourdomain.com"
 NEXT_PUBLIC_API_URL="https://yourdomain.com"
 NEXT_PUBLIC_SITE_URL="https://yourdomain.com"
 ```
 
-### 生产环境完整配置（带短信登录）
+### 生产环境完整配置
 
 ```env
 # 基础
 DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/prod"
-NEXTAUTH_SECRET="your-production-secret"
-NEXTAUTH_URL="https://yourdomain.com"
+AUTH_SECRET="your-production-secret"
+AUTH_URL="https://yourdomain.com"
 NEXT_PUBLIC_API_URL="https://yourdomain.com"
 NEXT_PUBLIC_SITE_URL="https://yourdomain.com"
 
@@ -398,6 +440,17 @@ ALIYUN_ACCESS_KEY_ID="your-key-id"
 ALIYUN_ACCESS_KEY_SECRET="your-key-secret"
 ALIYUN_SMS_SIGN_NAME="YourApp"
 ALIYUN_SMS_TEMPLATE_CODE="SMS_123456789"
+
+# AI 对话
+OPENROUTER_API_KEY="sk-or-v1-..."
+SILICONFLOW_API_KEY="sk-..."
+
+# 文件上传
+R2_ENDPOINT="https://xxxx.r2.cloudflarestorage.com"
+R2_ACCESS_KEY_ID="..."
+R2_SECRET_ACCESS_KEY="..."
+R2_BUCKET_NAME="your-bucket"
+R2_PUBLIC_DOMAIN="https://cdn.yourdomain.com"
 
 # SEO
 GOOGLE_SITE_VERIFICATION="your-verification-code"

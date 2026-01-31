@@ -1,8 +1,9 @@
 import prisma from '@/lib/prisma';
 import { User, Prisma } from '@prisma/client';
+import { type Role, hasPermission } from '@/lib/rbac';
 
-// 用户角色类型
-export type UserRole = 'user' | 'admin';
+// 用户角色类型（从 RBAC 统一导入）
+export type UserRole = Role;
 
 // 创建用户
 export async function createUser(data: {
@@ -158,11 +159,16 @@ export async function deleteUser(id: string) {
   });
 }
 
-// 检查用户是否为管理员
-export async function isAdmin(userId: string): Promise<boolean> {
+// 检查用户是否拥有指定角色的权限
+export async function hasRole(userId: string, role: Role): Promise<boolean> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { role: true },
   });
-  return user?.role === 'admin';
+  return user?.role === role;
+}
+
+// 检查用户是否为管理员（hasRole 的便捷别名）
+export async function isAdmin(userId: string): Promise<boolean> {
+  return hasRole(userId, 'admin');
 }
