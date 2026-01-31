@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode, verifyPasswordLogin } from './app/(main)/[local]/auth/signin/actions';
 import { getGeneratorName } from '@/lib/generatorName';
 import { grantInitialCredits } from '@/models/credit';
+import authConfig from './auth.config';
 
 import prisma from './lib/prisma';
 
@@ -32,6 +33,7 @@ declare module 'next-auth' {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     CredentialsProvider({
       id: 'credentials',
@@ -154,13 +156,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: 'jwt',
-    maxAge: 2 * 60 * 60, // 2小时
-    updateAge: 60 * 60,
-  },
   callbacks: {
     async session({ token, session }) {
       if (session.user) {

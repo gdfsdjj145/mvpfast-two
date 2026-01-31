@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-import { JWT } from 'next-auth/jwt';
+import NextAuth from 'next-auth';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import authConfig from './auth.config';
 
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];
 
-// 需要验证的路由列表 - 确保包含所有需要保护的路径
+// 需要验证的路由列表
 const protectedRoutes = ['/pay', '/dashboard'];
 
 // 需要管理员权限的路由
@@ -16,23 +16,32 @@ const adminRoutes = ['/dashboard/settings/system'];
 
 // 创建next-intl中间件
 const intlMiddleware = createMiddleware({
-  // 使用i18n/routing中定义的配置
   locales: routing.locales,
   defaultLocale: routing.defaultLocale,
   localePrefix: 'as-needed'
 });
 
-export async function middleware(request: NextRequest) {
+// 使用 NextAuth v5 的 auth() 包装器，Edge 兼容
+const { auth } = NextAuth(authConfig);
+
+export default auth(async function middleware(request) {
   const { pathname, search } = request.nextUrl;
-  
-  // 设置进度条头
-  const response = NextResponse.next();
-  response.headers.set('X-Progress-Start', 'true');
-  
-  // 提取可能存在的语言前缀之后的实际路径
+
+  // 跳过对API路由和Next.js静态文件的特殊处理
+  if (
+    pathname.startsWith('/api/') ||
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/docs') ||
+    pathname.startsWith('/blog') ||
+    pathname.includes('.')
+  ) {
+    return NextResponse.next();
+  }
+
+  // 提取语言前缀后的实际路径
   let pathnameWithoutLocale = pathname;
   let currentLocale = '';
-  
+
   for (const locale of routing.locales) {
     if (pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`) {
       pathnameWithoutLocale = pathname.replace(new RegExp(`^/${locale}`), '');
@@ -40,123 +49,59 @@ export async function middleware(request: NextRequest) {
       break;
     }
   }
-  
-  // 跳过对API路由和Next.js静态文件的特殊处理
-  if (
-    pathname.startsWith('/api/') || 
-    pathname.startsWith('/_next/') || 
-    pathname.startsWith('/docs') ||
-    pathname.startsWith('/blog') ||
-    pathname.includes('.')
-  ) {
-    return response;
-  }
-  
-  // 调试日志
-  console.log('当前路径:', pathname);
-  console.log('去除语言前缀后的路径:', pathnameWithoutLocale);
-  
-  // 验证用户认证状态
-  const secret = process.env.NEXTAUTH_SECRET;
-  if (!secret) {
-    throw new Error('NEXTAUTH_SECRET is not set');
-  }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tokenParams: any = {
-    req: request,
-    secret: secret,
-  };
-  if (process.env.NEXTAUTH_SALT) {
-    tokenParams.salt = process.env.NEXTAUTH_SALT;
-  }
-  const token: JWT | null = await getToken(tokenParams);
+  // 通过 auth 包装器，session 直接挂在 request 上
+  const session = request.auth;
+  const isAuthenticated = !!session?.user;
 
-  console.log('token状态:', !!token);
-  
-  // 检查当前路径是否在公开路由列表中
+  console.log('当前路径:', pathname, '认证状态:', isAuthenticated);
+
+  // 公开路由直接通过
   if (publicRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-    // 公开路由直接通过国际化中间件处理
     return intlMiddleware(request);
   }
-  
-  // 检查当前路径是否在需要保护的路由列表中
+
+  // 受保护路由
   if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-    // 开发环境下跳过认证检查
     const isDev = process.env.NODE_ENV === 'development';
 
-    if (!token && !isDev) {
+    if (!isAuthenticated && !isDev) {
       console.log('未登录访问受保护路由，重定向到登录页');
-
-      // 构造登录URL时保留语言前缀
       let loginPath = '/auth/signin';
       if (currentLocale) {
         loginPath = `/${currentLocale}/auth/signin`;
       }
-
       const loginUrl = new URL(loginPath, request.url);
       loginUrl.searchParams.set('redirect', `${pathname}${search}`);
-      console.log('重定向到:', loginUrl.toString());
       return NextResponse.redirect(loginUrl);
     }
 
-    if (isDev && !token) {
+    if (isDev && !isAuthenticated) {
       console.log('[DEV] 开发环境免登录访问:', pathnameWithoutLocale);
     }
 
-    // 检查是否为管理员专属路由
+    // 管理员路由检查 - 从 JWT token 中读取 role，无需查数据库
     if (adminRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-      // 开发环境跳过管理员检查
-      if (!isDev && token) {
-        // 获取用户信息检查角色
-        const userId = token.sub as string;
-        if (userId) {
-          try {
-            // 动态导入 prisma 避免在边缘环境中出错
-            const { default: prisma } = await import('./lib/prisma');
-            const user = await prisma.user.findUnique({
-              where: { id: userId },
-              select: { role: true },
-            });
-
-            const userRole = user?.role || 'user';
-            if (userRole !== 'admin') {
-              console.log('非管理员访问管理员路由，重定向到 403');
-              let forbiddenPath = '/403';
-              if (currentLocale) {
-                forbiddenPath = `/${currentLocale}/403`;
-              }
-              return NextResponse.redirect(new URL(forbiddenPath, request.url));
-            }
-          } catch (error) {
-            console.error('检查用户角色失败:', error);
+      if (!isDev && isAuthenticated) {
+        const userRole = (session as any)?.user?.role || 'user';
+        if (userRole !== 'admin') {
+          console.log('非管理员访问管理员路由，重定向到首页');
+          let forbiddenPath = '/';
+          if (currentLocale) {
+            forbiddenPath = `/${currentLocale}/`;
           }
+          return NextResponse.redirect(new URL(forbiddenPath, request.url));
         }
-      } else if (isDev) {
-        console.log('[DEV] 开发环境跳过管理员权限检查');
       }
-    }
-  }
-  
-  // 处理登录成功后的重定向
-  if (
-    pathnameWithoutLocale === '/api/auth/signin/credentials' ||
-    pathnameWithoutLocale === '/api/auth/session'
-  ) {
-    const callbackUrl = request.nextUrl.searchParams.get('redirect');
-    if (callbackUrl) {
-      console.log('登录成功，重定向到:', callbackUrl);
-      return NextResponse.redirect(new URL(callbackUrl, request.url));
     }
   }
 
   // 检查是否是登录后的重定向
   const redirectParam = request.nextUrl.searchParams.get('redirect');
   if (
-    token &&
+    isAuthenticated &&
     redirectParam &&
     protectedRoutes.some((route) => {
-      // 检查重定向参数是否包含受保护路由，考虑可能的语言前缀
       for (const locale of routing.locales) {
         if (redirectParam.startsWith(`/${locale}${route}`)) {
           return true;
@@ -168,9 +113,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(redirectParam, request.url));
   }
 
-  // 通过国际化中间件处理其他所有路由
   return intlMiddleware(request);
-}
+});
 
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
