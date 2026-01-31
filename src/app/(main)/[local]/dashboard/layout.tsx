@@ -41,7 +41,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     ? pathSegments.slice(dashboardIndex + 1).join('/') || 'users'
     : 'users';
 
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
 
   // 开发环境模拟用户
@@ -79,13 +79,18 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     // 等待 session 加载完成
     if (status === 'loading') return;
 
-    // 如果 session 已过期（unauthenticated），重定向到登录页
+    // 如果 session 状态为 unauthenticated，先尝试刷新 session
+    // 因为 SessionProvider 的状态可能滞后于实际的 cookie 状态
     if (status === 'unauthenticated') {
-      console.log('[Dashboard] Session expired, redirecting to login');
-      const currentPath = window.location.pathname + window.location.search;
-      router.replace(`/auth/signin?redirect=${encodeURIComponent(currentPath)}`);
+      update().then((refreshed) => {
+        if (!refreshed) {
+          console.log('[Dashboard] Session expired, redirecting to login');
+          const currentPath = window.location.pathname + window.location.search;
+          router.replace(`/auth/signin?redirect=${encodeURIComponent(currentPath)}`);
+        }
+      });
     }
-  }, [status, isDev, router]);
+  }, [status, isDev, router, update]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
