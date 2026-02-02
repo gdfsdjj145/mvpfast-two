@@ -154,6 +154,9 @@ function applyI18nChanges(json: any, options: InitOptions, locale: 'zh' | 'en') 
   const name = options.name;
   const domain = options.domain;
 
+  // ---- 占位图片（使用 picsum.photos 随机图片） ----
+  const placeholderImg = (w: number, h: number) => `https://picsum.photos/${w}/${h}`;
+
   // ---- Metadata ----
   if (json.Metadata) {
     if (locale === 'zh') {
@@ -224,10 +227,16 @@ function applyI18nChanges(json: any, options: InitOptions, locale: 'zh' | 'en') 
     if (locale === 'zh') {
       json.Hero.subtitle = `构建你的${name}应用`;
       json.Hero.description = `使用 ${name} 快速构建你的网站应用，包含支付、登录、文章、博客等一系列功能`;
-      json.Hero.banner.alt = `${name} Preview`;
     } else {
       json.Hero.subtitle = `Build Your ${name} App`;
       json.Hero.description = `Build your web application quickly with ${name}, featuring payment, authentication, articles, blog and more`;
+    }
+    // 占位图片
+    if (json.Hero.testimonial) {
+      json.Hero.testimonial.avatar = placeholderImg(80, 80);
+    }
+    if (json.Hero.banner) {
+      json.Hero.banner.url = placeholderImg(800, 600);
       json.Hero.banner.alt = `${name} Preview`;
     }
   }
@@ -235,6 +244,11 @@ function applyI18nChanges(json: any, options: InitOptions, locale: 'zh' | 'en') 
   // ---- Admin ----
   if (json.Admin) {
     json.Admin.domain = domain;
+    // 占位图片
+    if (json.Admin.banner) {
+      json.Admin.banner.url = placeholderImg(1920, 1080);
+      json.Admin.banner.alt = locale === 'zh' ? '后台预览' : 'Dashboard Preview';
+    }
   }
 
   // ---- Feature ----
@@ -255,6 +269,24 @@ function applyI18nChanges(json: any, options: InitOptions, locale: 'zh' | 'en') 
     json.FeatureGrid.title = locale === 'zh'
       ? `${name}的主要特点`
       : `${name}'s main features`;
+  }
+
+  // ---- FeatureCard (占位图片) ----
+  if (json.FeatureCard && Array.isArray(json.FeatureCard.items)) {
+    json.FeatureCard.items.forEach((item: any, index: number) => {
+      if (item.image) {
+        // 每张卡片使用不同的随机图片（通过 ?random=N 参数）
+        item.image.src = `${placeholderImg(1200, 900)}?random=${index + 1}`;
+        item.image.alt = item.title || `Feature ${index + 1}`;
+      }
+    });
+  }
+
+  // ---- Brand (占位图片) ----
+  if (json.Brand && Array.isArray(json.Brand.items)) {
+    json.Brand.items.forEach((item: any, index: number) => {
+      item.logo = `${placeholderImg(64, 64)}?random=${index + 10}`;
+    });
   }
 
   // ---- Case (清空模板展示项目) ----
