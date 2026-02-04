@@ -1,7 +1,8 @@
 ---
-name: check_env
-description: 检查项目启动和部署所需的环境变量配置
+name: check-env
+description: 检查项目启动和部署所需的环境变量配置。用户说"检查环境变量"、"部署配置"、"env检查"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 环境变量检查指南
@@ -169,51 +170,6 @@ LOG_LEVEL="info"
 ENCRYPTION_SECRET="another-secret-for-encryption"
 ```
 
-### 功能模块（按需）
-
-```env
-# ========== 按需添加 ==========
-
-# 登录方式（至少选一个）
-# 手机验证码
-ALIYUN_ACCESS_KEY_ID="..."
-ALIYUN_ACCESS_KEY_SECRET="..."
-ALIYUN_SMS_SIGN_NAME="..."
-ALIYUN_SMS_TEMPLATE_CODE="..."
-
-# 或 邮箱验证码
-MAIL_HOST="..."
-MAIL_PORT="..."
-MAIL_USER="..."
-MAIL_PASS="..."
-
-# 或 微信扫码
-NEXT_PUBLIC_WECHAT_APPID="..."
-WECHAT_OPEN_APPID="..."
-WECHAT_OPEN_APPSECRET="..."
-
-# AI 对话
-OPENROUTER_API_KEY="..."
-SILICONFLOW_API_KEY="..."
-
-# 文件上传 (R2)
-R2_ENDPOINT="..."
-R2_ACCESS_KEY_ID="..."
-R2_SECRET_ACCESS_KEY="..."
-R2_BUCKET_NAME="..."
-R2_PUBLIC_DOMAIN="..."
-
-# 支付功能（选一个）
-# 微信支付
-WECHAT_MCHID="..."
-WECHAT_SERIAL_NO="..."
-WECHAT_PRIVATE_KEY="..."
-
-# 或 云购支付
-NEXT_PUBLIC_YUNGOUOS_MCH_ID="..."
-NEXT_PUBLIC_YUNGOUOS_API_KEY="..."
-```
-
 ---
 
 ## Vercel 部署配置
@@ -313,43 +269,6 @@ pnpm docker:down
 
 ---
 
-## 检查脚本
-
-项目内置了环境变量验证，位于 `src/lib/env.ts`：
-
-```ts
-import { serverEnv, clientEnv } from '@/lib/env';
-
-// 检查功能是否可用
-import {
-  isWechatPayConfigured,
-  isYungouPayConfigured,
-  isSmsConfigured,
-  isEmailConfigured
-} from '@/lib/env';
-
-if (isSmsConfigured()) {
-  // 短信功能可用
-}
-```
-
-### 手动验证命令
-
-```bash
-# 检查必需变量
-node -e "
-  const required = ['DATABASE_URL', 'AUTH_SECRET'];
-  const missing = required.filter(k => !process.env[k]);
-  if (missing.length) {
-    console.error('缺少环境变量:', missing.join(', '));
-    process.exit(1);
-  }
-  console.log('✅ 必需变量检查通过');
-"
-```
-
----
-
 ## 常见问题
 
 ### Q: 开发环境必须配置登录相关变量吗？
@@ -389,21 +308,6 @@ env 格式:
 WECHAT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkq...\n-----END PRIVATE KEY-----"
 ```
 
-### Q: AI 功能需要哪些变量？
-
-**A**: 至少配置一个 AI 提供商：
-- `OPENROUTER_API_KEY` — OpenRouter（支持 GPT、Claude 等多模型）
-- `SILICONFLOW_API_KEY` — SiliconFlow（国内访问快，支持国产模型）
-
-### Q: 文件上传需要什么？
-
-**A**: 需要 Cloudflare R2 存储：
-- `R2_ENDPOINT` — R2 API 端点
-- `R2_ACCESS_KEY_ID` — 访问密钥
-- `R2_SECRET_ACCESS_KEY` — 密钥
-- `R2_BUCKET_NAME` — 存储桶名称
-- `R2_PUBLIC_DOMAIN` — CDN 公开域名（用于访问上传的文件）
-
 ---
 
 ## 快速复制模板
@@ -423,38 +327,4 @@ AUTH_SECRET="your-production-secret"
 AUTH_URL="https://yourdomain.com"
 NEXT_PUBLIC_API_URL="https://yourdomain.com"
 NEXT_PUBLIC_SITE_URL="https://yourdomain.com"
-```
-
-### 生产环境完整配置
-
-```env
-# 基础
-DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/prod"
-AUTH_SECRET="your-production-secret"
-AUTH_URL="https://yourdomain.com"
-NEXT_PUBLIC_API_URL="https://yourdomain.com"
-NEXT_PUBLIC_SITE_URL="https://yourdomain.com"
-
-# 短信登录
-ALIYUN_ACCESS_KEY_ID="your-key-id"
-ALIYUN_ACCESS_KEY_SECRET="your-key-secret"
-ALIYUN_SMS_SIGN_NAME="YourApp"
-ALIYUN_SMS_TEMPLATE_CODE="SMS_123456789"
-
-# AI 对话
-OPENROUTER_API_KEY="sk-or-v1-..."
-SILICONFLOW_API_KEY="sk-..."
-
-# 文件上传
-R2_ENDPOINT="https://xxxx.r2.cloudflarestorage.com"
-R2_ACCESS_KEY_ID="..."
-R2_SECRET_ACCESS_KEY="..."
-R2_BUCKET_NAME="your-bucket"
-R2_PUBLIC_DOMAIN="https://cdn.yourdomain.com"
-
-# SEO
-GOOGLE_SITE_VERIFICATION="your-verification-code"
-
-# 日志
-LOG_LEVEL="info"
 ```

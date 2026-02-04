@@ -1,7 +1,8 @@
 ---
-name: seo_config
-description: 通过 next-intl message 配置国际化 SEO（路由组架构）
+name: seo-config
+description: 通过 next-intl message 配置国际化 SEO（路由组架构）。用户说"配置SEO"、"修改网站标题"、"SEO优化"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # SEO 配置指南
@@ -153,60 +154,6 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   };
 }
-```
-
-### 语言子布局 (src/app/(main)/[local]/layout.tsx)
-
-```typescript
-import { getTranslations } from 'next-intl/server';
-import type { Metadata } from 'next';
-
-export async function generateMetadata(
-  props: { params: Promise<{ local: string }> }
-): Promise<Metadata> {
-  const { local: locale } = await props.params;
-  const t = await getTranslations('Metadata');
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
-
-  return {
-    // Open Graph - 根据语言设置 locale
-    openGraph: {
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
-    },
-
-    // 语言替代版本
-    alternates: {
-      canonical: `${siteUrl}/${locale}`,
-      languages: {
-        'zh-CN': `${siteUrl}/zh`,
-        'en-US': `${siteUrl}/en`,
-      },
-    },
-  };
-}
-```
-
-### Fumadocs 布局 (src/app/(fumadocs)/layout.tsx)
-
-```typescript
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: {
-    default: 'MvpFast 文档',
-    template: '%s | MvpFast',
-  },
-  description: 'MvpFast 使用指南、API 文档和技术博客',
-  keywords: '文档, 指南, API, 博客, MvpFast',
-  openGraph: {
-    type: 'website',
-    siteName: 'MvpFast Docs',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
 ```
 
 ### 页面级 Metadata
@@ -383,31 +330,6 @@ export async function generateMetadata() {
     title: t('title'),
     description: t('description'),
   };
-}
-```
-
-### 场景 3: 添加社交媒体账号
-
-**用户**: "添加 Twitter 账号 @myapp"
-
-**操作**:
-```json
-{
-  "Metadata": {
-    "twitter": {
-      "site": "@myapp",
-      "creator": "@myapp"
-    }
-  }
-}
-```
-
-然后在 layout.tsx 中读取：
-```typescript
-twitter: {
-  card: 'summary_large_image',
-  site: t.raw('twitter.site') || undefined,
-  creator: t.raw('twitter.creator') || undefined,
 }
 ```
 

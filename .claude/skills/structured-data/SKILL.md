@@ -1,7 +1,8 @@
 ---
-name: structured_data
-description: JSON-LD 结构化数据配置指南
+name: structured-data
+description: JSON-LD 结构化数据配置指南。用户说"结构化数据"、"JSON-LD"、"Rich Snippets"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # JSON-LD 结构化数据指南
@@ -388,35 +389,6 @@ datePublished: "2024年1月15日"
 
 ---
 
-## 从 message 读取结构化数据
-
-对于 FAQ 等可以在 message 中配置的数据：
-
-```tsx
-// src/app/[locale]/page.tsx
-import { FaqJsonLd } from '@/components/seo';
-import { getTranslations } from 'next-intl/server';
-
-export default async function HomePage() {
-  const t = await getTranslations('Faq');
-
-  // 从 message 读取 FAQ 数据
-  const faqItems = t.raw('items') as Array<{
-    question: string;
-    answer: string;
-  }>;
-
-  return (
-    <>
-      <FaqJsonLd items={faqItems} />
-      {/* 页面内容 */}
-    </>
-  );
-}
-```
-
----
-
 ## 相关文件
 
 | 文件 | 用途 |
@@ -429,5 +401,5 @@ export default async function HomePage() {
 
 ## 相关技能
 
-- `seo_config.md` - 静态页面 SEO 配置
-- `dynamic_seo.md` - 动态页面 SEO 配置
+- `seo-config` - 静态页面 SEO 配置
+- `dynamic-seo` - 动态页面 SEO 配置

@@ -1,7 +1,8 @@
 ---
 name: add-page
-description: 指导 AI 如何在 mvpfast-web 项目中生成页面（表单页、列表页、详情页等）
+description: 指导 AI 如何在 mvpfast-web 项目中生成页面（表单页、列表页、详情页等）。用户说"生成页面"、"创建页面"、"新增页面"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 页面生成指南

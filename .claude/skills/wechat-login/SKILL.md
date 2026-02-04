@@ -1,7 +1,8 @@
 ---
 name: wechat-login
-description: 指导 AI 如何在 mvpfast-web 项目中实现和修改微信登录功能
+description: 指导 AI 如何在 mvpfast-web 项目中实现和修改微信登录功能。用户说"微信登录"、"扫码登录"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 微信登录实现指南
@@ -286,75 +287,6 @@ model User {
 
   @@unique([wechatOpenId, phone, email])
 }
-```
-
----
-
-## NextAuth 配置
-
-**位置**: `src/auth.ts`
-
-```ts
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-      email?: string | null;
-      phone?: string | null;
-      wechatOpenId?: string | null;
-      wechatUnionId?: string | null;
-      nickName?: string | null;
-      avatar?: string | null;
-    };
-  }
-}
-
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    CredentialsProvider({
-      id: 'credentials',
-      async authorize(credentials) {
-        const { identifier, code, type } = credentials;
-
-        if (type === 'wx') {
-          // 微信登录：通过 openId 查找用户
-          return prisma.user.findFirst({
-            where: { wechatOpenId: identifier },
-          });
-        }
-
-        // 手机/邮箱验证码登录...
-      },
-    }),
-  ],
-  session: {
-    strategy: 'jwt',
-    maxAge: 2 * 60 * 60, // 2小时
-  },
-  callbacks: {
-    async session({ token, session }) {
-      // 从数据库获取最新用户信息
-      const user = await prisma.user.findUnique({
-        where: { id: token.sub },
-      });
-      if (user) {
-        session.user = { ...user };
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
-        token.wechatOpenId = user.wechatOpenId;
-        token.wechatUnionId = user.wechatUnionId;
-      }
-      return token;
-    },
-  },
-});
 ```
 
 ---

@@ -1,7 +1,8 @@
 ---
 name: init
-description: AI 引导式项目初始化（3 步完成）
+description: AI 引导式项目初始化（3 步完成）。用户说"初始化项目"、"setup"、"init"、"创建管理员"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 项目初始化向导
