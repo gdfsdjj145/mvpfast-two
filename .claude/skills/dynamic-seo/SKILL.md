@@ -1,7 +1,8 @@
 ---
-name: dynamic_seo
-description: 动态页面的 SEO 配置指南（博客、产品详情等）
+name: dynamic-seo
+description: 动态页面的 SEO 配置指南（博客、产品详情等）。用户说"文章SEO"、"动态页面SEO"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 动态页面 SEO 指南
@@ -154,7 +155,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     openGraph: {
-      type: 'website',  // 或使用 'product' 如果需要产品特定属性
+      type: 'website',
       locale: locale === 'zh' ? 'zh_CN' : 'en_US',
       title,
       description,
@@ -163,97 +164,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         url: product.image,
         alt: title,
       }] : undefined,
-    },
-  };
-}
-```
-
----
-
-## 文档页面 SEO (Fumadocs)
-
-```typescript
-// src/app/docs/[...slug]/page.tsx
-import { getPage } from '@/lib/source';
-import type { Metadata } from 'next';
-
-interface Props {
-  params: Promise<{ slug?: string[] }>;
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const page = getPage(slug);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
-
-  if (!page) {
-    return { title: '文档未找到' };
-  }
-
-  const { title, description } = page.data;
-
-  return {
-    title,
-    description,
-    openGraph: {
-      type: 'article',
-      title,
-      description,
-      url: `${siteUrl}/docs/${slug?.join('/') || ''}`,
-    },
-  };
-}
-```
-
----
-
-## 结合静态配置和动态数据
-
-有时需要结合 message 中的通用配置和动态数据：
-
-```typescript
-// src/app/[locale]/blog/[slug]/page.tsx
-import { getTranslations } from 'next-intl/server';
-import type { Metadata } from 'next';
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug } = await params;
-
-  // 获取静态配置（如网站名称、默认图片等）
-  const globalT = await getTranslations('Metadata');
-  const pageT = await getTranslations('Pages.blog');
-
-  // 获取动态数据
-  const post = await getPost(slug);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com';
-
-  if (!post) {
-    return {
-      title: pageT('notFound') || '文章未找到',
-    };
-  }
-
-  return {
-    // 动态标题，但使用全局配置的 siteName
-    title: post.title,
-
-    description: post.excerpt,
-
-    openGraph: {
-      type: 'article',
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
-      // 动态数据
-      title: post.title,
-      description: post.excerpt,
-      url: `${siteUrl}/${locale}/blog/${slug}`,
-      publishedTime: post.date,
-      // 静态配置
-      siteName: globalT('title'),
-      // 使用文章图片或默认图片
-      images: [{
-        url: post.image || `${siteUrl}/og-image.png`,
-        alt: post.title,
-      }],
     },
   };
 }
@@ -379,7 +289,6 @@ function getOgLocale(locale: string): string {
     'zh': 'zh_CN',
     'en': 'en_US',
     'ja': 'ja_JP',
-    // 添加更多语言...
   };
   return localeMap[locale] || 'en_US';
 }
@@ -424,5 +333,5 @@ return {
 
 ## 相关技能
 
-- `seo_config.md` - 静态页面 SEO 配置
-- `structured_data.md` - JSON-LD 结构化数据
+- `seo-config` - 静态页面 SEO 配置
+- `structured-data` - JSON-LD 结构化数据

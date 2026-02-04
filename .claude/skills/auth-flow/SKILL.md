@@ -1,7 +1,8 @@
 ---
 name: auth-flow
-description: 指导 AI 理解和修改 mvpfast-web 项目的完整登录认证流程
+description: 指导 AI 理解和修改 mvpfast-web 项目的完整登录认证流程。用户说"修改登录"、"认证问题"、"权限问题"时使用。
 author: MvpFast
+user-invocable: true
 ---
 
 # 登录认证流程指南
