@@ -2,8 +2,8 @@
   
   <defs>
     <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#a47aff" />
-      <stop offset="100%" stop-color="#8558e6" />
+      <stop offset="0%" stop-color="#7a7df3" />
+      <stop offset="100%" stop-color="#595cd9" />
     </linearGradient>
   </defs>
   <rect x="0" y="0" width="64" height="64" rx="12.8" ry="12.8" fill="url(#favBg)" />
