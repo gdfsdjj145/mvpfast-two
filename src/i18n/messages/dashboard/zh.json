@@ -1,0 +1,38 @@
+{
+    "Dashboard": {
+        "main": "主要功能",
+        "business": "业务功能",
+        "tabs": {
+            "home": {
+                "title": "首页",
+                "description": "这是首页的描述"
+            },
+            "dbdemo": {
+                "title": "数据库操作展示",
+                "description": "这是数据库操作展示的描述"
+            },
+            "order": {
+                "title": "购买操作展示",
+                "description": "这是购买操作展示的描述"
+            },
+            "person": {
+                "title": "个人信息",
+                "description": "这是个人信息的描述"
+            }
+        },
+        "menu": {
+            "buy": {
+                "label": "购买"
+            },
+            "docs": {
+                "label": "文档" 
+            },
+            "home": {
+                "label": "首页"
+            },
+            "logout": {
+                "label": "退出"
+            }
+        }
+    }
+}

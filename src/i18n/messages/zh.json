@@ -1,0 +1,488 @@
+{
+  "Metadata": {
+    "title": "MvpFast-快速构建网站应用",
+    "description": "MvpFast - 使用最新技术栈快速构建你的网站应用",
+    "keywords": "MvpFast 网站开发 NextJs React TailWindCss",
+    "og": {
+      "siteName": "MvpFast",
+      "type": "website"
+    },
+    "twitter": {
+      "card": "summary_large_image"
+    }
+  },
+  "Pages": {
+    "pricing": {
+      "title": "定价方案",
+      "description": "选择适合你的 MvpFast 套餐",
+      "keywords": "定价, 套餐, 购买, MvpFast"
+    },
+    "blog": {
+      "title": "博客",
+      "description": "技术文章、产品更新和开发教程",
+      "keywords": "博客, 技术文章, 教程, NextJs"
+    },
+    "docs": {
+      "title": "文档中心",
+      "description": "MvpFast 使用指南和 API 文档",
+      "keywords": "文档, 指南, API, 教程"
+    },
+    "dashboard": {
+      "title": "控制台",
+      "description": "管理你的账户和订单",
+      "noIndex": true
+    },
+    "auth": {
+      "title": "登录",
+      "description": "登录你的 MvpFast 账户",
+      "noIndex": true
+    },
+    "pay": {
+      "title": "支付",
+      "description": "完成支付购买 MvpFast",
+      "noIndex": true
+    },
+    "notFound": {
+      "title": "页面未找到",
+      "description": "抱歉，您访问的页面不存在"
+    }
+  },
+  "Header": {
+    "logo": {
+      "url": "/brand/title-logo.png",
+      "alt": "MvpFast"
+    },
+    "nav": {
+      "items": [
+        {
+          "name": "价格",
+          "href": "/#price"
+        },
+        {
+          "name": "文档",
+          "href": "/docs/introduction",
+          "target": "_blank"
+        },
+        {
+          "name": "博客",
+          "href": "/blog",
+          "target": "_blank"
+        }
+      ]
+    },
+    "login": {
+      "label": "登录"
+    },
+    "theme": {
+      "label": "主题色"
+    },
+    "userMenu": {
+      "avatarAlt": "头像",
+      "unknownUser": "未知用户",
+      "account": "我的账户",
+      "logout": "退出登录",
+      "accountMobile": "我的",
+      "logoutMobile": "退出"
+    }
+  },
+  "Hero": {
+    "title": "AI + 模板",
+    "subtitle": "快速构建你的网站应用",
+    "description": "MvpFast是一个快速构建网站的开发模板，集成了登录、支付、数据库、微信公众号等能力，让你的网站快速上线",
+    "cta": {
+      "start": {
+        "label": "立即开始构建",
+        "href": "#price"
+      },
+      "docs": {
+        "label": "文档",
+        "href": "/docs/introduction",
+        "target": "_blank"
+      }
+    },
+    "testimonials": {
+      "avatars": ["/avatars/a2.jpg", "/avatars/a3.jpg", "/avatars/a4.jpg"],
+      "text": "已有 100+ 开发者正在使用"
+    },
+    "banner": {
+      "url": "/banners/banner.png",
+      "alt": "MvpFast Preview"
+    }
+  },
+  "Brand": {
+    "title": "强大的技术栈支撑",
+    "subtitle": "Powered By",
+    "items": [
+      {
+        "name": "Next.js",
+        "logo": "/tech/nextjs-logo.png",
+        "href": "https://nextjs.org/"
+      },
+      {
+        "name": "Tailwind CSS",
+        "logo": "/tech/tailwindcss.png",
+        "href": "https://tailwindcss.com/"
+      },
+      {
+        "name": "MongoDB",
+        "logo": "/tech/mongodb.png",
+        "href": "https://www.mongodb.com/"
+      },
+      {
+        "name": "NextAuth",
+        "logo": "/tech/auth.png",
+        "href": "https://next-auth.js.org/"
+      },
+      {
+        "name": "Vercel",
+        "logo": "/tech/vercel.svg",
+        "href": "https://vercel.com/"
+      },
+      {
+        "name": "WeChat",
+        "logo": "/tech/wechat.svg",
+        "href": "https://developers.weixin.qq.com/"
+      }
+    ]
+  },
+  "AIShowcase": {
+    "labels": {
+      "template": "模板"
+    },
+    "result": {
+      "prefix": "立刻落地你的",
+      "highlight": "想法"
+    },
+    "description": "MvpFast 提供完整的代码模板，配合 AI 编程工具，让你的创意快速变为现实"
+  },
+  "Showcase": {
+    "title": "功能展示",
+    "subtitle": "包含功能",
+    "items": [
+      {
+        "title": "着陆页",
+        "description": "通过配置文件快速搭建多语言着陆页，无需编码",
+        "image": "/showcase/landing.png"
+      },
+      {
+        "title": "后台管理",
+        "description": "集成权限控制、用户管理、配置中心",
+        "image": "/showcase/admin.png"
+      },
+      {
+        "title": "支付系统",
+        "description": "开箱即用的微信支付集成",
+        "image": "/showcase/payment.png"
+      },
+      {
+        "title": "文档博客",
+        "description": "MDX 驱动，代码高亮，全文搜索",
+        "image": "/showcase/docs.png"
+      }
+    ]
+  },
+  "Feature": {
+    "title": "快速构建网页应用",
+    "subtitle": "用最短的时间上线MVP，验证你的想法",
+    "description": "使用目前最流行的技术搭建你产品的Mvp，快速验证你的产品idea，这套模板包含了一个小产品的最基础功能，集成了登录，鉴权，邮箱，数据库，微信公众号等能力。",
+    "items": [
+      {
+        "name": "登录",
+        "icon": "CircleUser",
+        "description": "邮箱、手机号、微信公众号、github、谷歌等多种登录方式可选，涵盖国内外主流生态的登录方式，一键配置",
+        "list": [
+          "邮箱登录，利用邮箱的SMTP协议，实现邮箱登录",
+          "手机号登录，利用手机号的短信协议，实现手机号登录",
+          "微信公众号登录，利用微信公众号的OAuth2.0协议，实现微信公众号登录",
+          "github登录，利用github的OAuth2.0协议，实现github登录",
+          "谷歌登录，利用谷歌的OAuth2.0协议，实现谷歌登录"
+        ]
+      },
+      {
+        "name": "支付",
+        "icon": "BadgeJapaneseYen",
+        "description": "国内可选用微信支付和YunGouOs第三方支付，国外可选用stripe支付",
+        "list": [
+          "生成支付密钥，配置支付证书",
+          "个人使用第三方支付",
+          "支付平台负责安全性"
+        ]
+      },
+      {
+        "name": "鉴权",
+        "icon": "Shield",
+        "description": "利用NextAuth的jwt登录鉴权和Supabase的权限管理，可以提高网站的安全性，只需配置登录密钥即可",
+        "list": [
+          "jwt登录鉴权，只需配置登录密钥即可",
+          "用户数据保存在Altas里面",
+          "权限管理，可以设置用户权限，实现不同的用户权限管理",
+          "Supabase权限管理可搭配多种鉴权方便使用"
+        ]
+      },
+      {
+        "name": "数据库",
+        "icon": "DatabaseZap",
+        "description": "利用mongodb提供的云数据库能力和Supabase提供的Postgres数据库，无需费用，轻松配置后即可使用",
+        "list": [
+          "mongodb提供的云数据库能力，无需费用，轻松配置后即可使用",
+          "supabase提供的Postgres数据库，可视化的数据库管理后台，轻松管理数据库",
+          "prisma作为数据库的ORM框架，对数据库的操作更简单"
+        ]
+      },
+      {
+        "name": "样式",
+        "icon": "CarFront",
+        "description": "使用TailwindCss作为样式框架，可以轻松实现样式配置，无需额外配置",
+        "list": [
+          "TailwindCss作为样式框架，可以轻松实现样式配置，无需额外配置",
+          "daysui拥有丰富的组件库，多个主题，能快速实现好看的样式"
+        ]
+      },
+      {
+        "name": "微信",
+        "icon": "MessageCircleMore",
+        "description": "使用微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯",
+        "list": [
+          "微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯",
+          "公众号可以作为推广渠道，通过公众号的推广，可以快速推广你的产品"
+        ]
+      }
+    ]
+  },
+  "Case": {
+    "title": "用MvpFast搭建的网站",
+    "subtitle": "已经使用MvpFast搭建多个网站产品，以下产品均已上线",
+    "description": "",
+    "badge": "已上线",
+    "viewProject": "查看项目",
+    "viewAll": "查看所有案例",
+    "items": [
+      {
+        "id": 0,
+        "title": "CodeBox-智能二维码生成器",
+        "href": "https://www.codebox.club/",
+        "imageUrl": "/cases/f0.png",
+        "des": "CodeBox是一款智能二维码生成器,支持URL、WiFi、文本等多种类型二维码创建。提供个性化样式定制、实时预览、数据追踪分析等功能。轻松生成高颜值二维码，智能管理扫码数据，助力提升营销效果和用户体验。",
+        "gradient": "from-pink-500 to-rose-500",
+        "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600",
+        "category": "智能二维码生成器"
+      },
+      {
+        "id": 1,
+        "title": "LogoCook-Logo厨师",
+        "href": "https://www.logocook.shop",
+        "imageUrl": "/cases/f1.png",
+        "des": "LogoCook是一款快速免费的logo生成器,通过在线编辑就可以快速的创建自己想要的logo,包括logo免费下载,可爱的logo属性设计,上传自定义的svg文件,满足个人和企业快速创建logo的需求",
+        "gradient": "from-pink-500 to-rose-500",
+        "hoverGradient": "group-hover:from-pink-600 group-hover:to-rose-600",
+        "category": "Logo生成器"
+      },
+      {
+        "id": 2,
+        "title": "2 Hour Builder",
+        "href": "https://www.2hourbuilder.shop/zh",
+        "imageUrl": "/cases/f2.png",
+        "des": "你现在有2小时，交付一个真实输出。一个导航站，不是学习，不是收藏，是2小时后你能发出去的东西。技术人每天2小时，用AI工具完成一个可发布的输出。",
+        "gradient": "from-blue-500 to-cyan-500",
+        "hoverGradient": "group-hover:from-blue-600 group-hover:to-cyan-600",
+        "category": "导航站"
+      },
+      {
+        "id": 3,
+        "title": "CleanText AI-智能图片文字清除工具",
+        "href": "https://www.imageclean.art/zh",
+        "imageUrl": "/cases/f3.png",
+        "des": "AI智能图片文字清除工具，采用最先进的AI技术，一键自动识别并去除图片中的文字、水印、日期戳。毫秒级处理，保留背景纹理，为您呈现完美的视觉效果。支持4K高清输出，免费在线使用。",
+        "gradient": "from-purple-500 to-violet-500",
+        "hoverGradient": "group-hover:from-purple-600 group-hover:to-violet-600",
+        "category": "AI"
+      },
+      {
+        "id": 4,
+        "title": "AI二维码美化助手",
+        "href": "https://www.qrtemplate.art/zh",
+        "imageUrl": "/cases/f4.png",
+        "des": "快速生成商用收款码/美工模板，专为小摊贩、二次元摊位设计的AI二维码美化工具。支持奶茶、水果、漫展等多种风格，只需输入描述或上传素材，AI即可自动生成带预留位的美化模板，一键打印，让你的收款码更有个性。",
+        "gradient": "from-orange-500 to-amber-500",
+        "hoverGradient": "group-hover:from-orange-600 group-hover:to-amber-600",
+        "category": "AI"
+      }
+    ]
+  },
+  "Price": {
+    "title": "选择适合你的套餐",
+    "subtitle": "提供套餐的详细信息，让用户放心购买",
+    "description": "",
+    "buy": "立即购买",
+    "more": "最多人购买",
+    "tips": "如有退款问题，可联系客服",
+    "goods": {
+      "normal": {
+        "key": "normal",
+        "name": "开发模板代码",
+        "description": "包含了基础的网站开发功能，例如用户登录，数据库，博客，文章，支付等能力的集成方案。购买后，你可以永久的使用MvpFast的模板，并且享受该模板后续版本的更新功能，在网站上线过程中如遇到问题，可以享受作者的技术支持服务，帮你解决一切的技术问题。",
+        "includedFeatures": [
+          "登录 + 数据库 + 支付功能等封装能力",
+          "前端代码（NextJs + Tailwindcss）",
+          "微信公众号服务代码"
+        ],
+        "price": 0.1,
+        "creditPrice": 10,
+        "original": 399,
+        "mostPopular": false,
+        "href": "/pay?key=normal"
+      },
+      "most": {
+        "key": "most",
+        "name": "开发模板代码 + 从0到1Nextjs全栈开发课程",
+        "description": "包含开发模板代码所有内容、从0到1的Nextjs全栈开发课程所有内容",
+        "includedFeatures": [
+          "登录 + 数据库 + 支付功能等封装能力",
+          "前端代码（NextJs + Tailwindcss）",
+          "微信公众号服务代码",
+          "从0到1的Nextjs全栈开发课程"
+        ],
+        "price": 0.1,
+        "creditPrice": 10,
+        "original": 449,
+        "mostPopular": true,
+        "href": "/pay?key=most"
+      }
+    }
+  },
+  "Faq": {
+    "title": "关于MvpFast常见问题",
+    "subtitle": "如果你的问题这里答案，可以用一下方式联系我们",
+    "call": {
+      "emailLabel": "邮箱",
+      "wechatLabel": "微信",
+      "email": "freecloud@emong.com.cn",
+      "wechat": "jiajiandu"
+    },
+    "items": [
+      {
+        "question": "MvpFast的支付问题",
+        "answer": "MvpFast模板的支付功能是完全按照国家相关规定进行的，目前使用的是微信体系的支付方式，想要对接支付模块需要开发开通微信商家验证，绑定支付密钥既可以使用支付功能。"
+      },
+      {
+        "question": "购买后得到什么",
+        "answer": "购买之后，你将获得该模板的所有代码：包括登录模块、支付模块、UI模块、前端代码、微信公众号代码等等。之后你将可以利用模板快速的实现你的想法，在遇到任何MvpFast代码的问题、流程等相关问题时，可以添加微信jiajiandu进行提问，我会在24小时内回复。"
+      },
+      {
+        "question": "购买MvpFast之后，我可以做什么",
+        "answer": "你可以使用该模板搭建任意类型和数量的网站并且快速商业化，也可以单纯学习代码模板。但不允许私自二次售卖MvpFast模板代码，也不允许分享到相关代码平台，如发现将追究责任。"
+      },
+      {
+        "question": "如何部署MvpFast",
+        "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
+      }
+    ]
+  },
+  "Pay": {
+    "loading": "加载中...",
+    "loadingQRCode": "加载支付二维码...",
+    "noPaymentMethods": "暂无可用支付方式",
+    "selectPaymentMethod": "选择支付方式",
+    "confirmPayment": "确认支付 ¥{amount}",
+    "backToHome": "返回首页",
+    "order": "订单",
+    "productDetails": "商品详情",
+    "unitPrice": "单价",
+    "creditsPrice": "积分价格",
+    "discount": "优惠",
+    "totalAmount": "应付总额",
+    "credits": "积分",
+    "creditsMode": "积分购买模式",
+    "creditsPayment": "积分支付",
+    "currentBalance": "当前积分余额",
+    "productCreditsPrice": "商品积分价格",
+    "discountReduction": "优惠减免",
+    "amountToPay": "需支付",
+    "insufficientCredits": "积分不足",
+    "needMore": "还需要 {amount} 积分，请先充值",
+    "goRecharge": "前往充值 →",
+    "confirmCreditsPayment": "确认支付 {amount} 积分",
+    "processing": "处理中...",
+    "purchaseSuccess": "购买成功",
+    "paymentSuccess": "支付成功",
+    "transactionId": "交易号：",
+    "serviceWechat": "客服微信：",
+    "addWechatForTemplate": "添加客服微信获取模板",
+    "goToProfile": "前往个人页面",
+    "orderId": "订单号: {id}",
+    "createTime": "创建时间: {time}",
+    "pendingCreditsOrder": "确认积分支付后生成订单信息",
+    "pendingDirectOrder": "请选择支付方式并确认支付后生成订单信息",
+    "paymentTimeout": "请在15分钟内完成支付，否则订单将自动取消。",
+    "contactService": "如遇到问题，请联系客服wx：13022051583",
+    "loadFailed": "加载失败",
+    "refreshRetry": "请刷新页面重试",
+    "refreshPage": "刷新页面",
+    "loginFirst": "请先登录",
+    "insufficientBalance": "积分不足，当前余额: {current}，需要: {required}",
+    "validDiscount": "检测为合格优惠链接，获得优惠",
+    "selectPaymentFirst": "请选择支付方式",
+    "purchaseFailed": "购买失败",
+    "purchaseFailedRetry": "购买失败，请稍后重试"
+  },
+  "Footer": {
+    "title": "MvpFast",
+    "subtitle": "MvpFast - 快速构建你的网站应用",
+    "poweredBy": "使用 {name} 开发",
+    "beian": {
+      "text": "粤ICP备2024286477号-2",
+      "url": "https://beian.miit.gov.cn",
+      "company": "佛山依梦科技有限公司",
+      "year": "2026"
+    },
+    "items": [
+      {
+        "title": "产品",
+        "links": [
+          {
+            "name": "功能介绍",
+            "href": "/#features"
+          },
+          {
+            "name": "价格方案",
+            "href": "/#price"
+          },
+          {
+            "name": "常见问题",
+            "href": "/#faq"
+          }
+        ]
+      },
+      {
+        "title": "技术文档",
+        "links": [
+          {
+            "name": "TailwindCSS",
+            "href": "https://tailwindcss.com/"
+          },
+          {
+            "name": "Next.js",
+            "href": "https://nextjs.org/"
+          },
+          {
+            "name": "Prisma",
+            "href": "https://www.prisma.io/"
+          },
+          {
+            "name": "DaisyUI",
+            "href": "https://daisyui.com/"
+          }
+        ]
+      },
+      {
+        "title": "更多",
+        "links": [
+          {
+            "name": "商用协议",
+            "href": "/blog/commercial"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,478 @@
+{
+  "Metadata": {
+    "title": "MvpFast - Build your web application",
+    "description": "MvpFast - Build your web application with modern tech stack",
+    "keywords": "MvpFast web development NextJs React TailwindCss",
+    "og": {
+      "siteName": "MvpFast",
+      "type": "website"
+    },
+    "twitter": {
+      "card": "summary_large_image"
+    }
+  },
+  "Pages": {
+    "pricing": {
+      "title": "Pricing",
+      "description": "Choose the MvpFast plan that suits you",
+      "keywords": "pricing, plans, purchase, MvpFast"
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Technical articles, product updates and development tutorials",
+      "keywords": "blog, articles, tutorials, NextJs"
+    },
+    "docs": {
+      "title": "Documentation",
+      "description": "MvpFast user guide and API documentation",
+      "keywords": "docs, guide, API, tutorials"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Manage your account and orders",
+      "noIndex": true
+    },
+    "auth": {
+      "title": "Sign In",
+      "description": "Sign in to your MvpFast account",
+      "noIndex": true
+    },
+    "pay": {
+      "title": "Payment",
+      "description": "Complete your MvpFast purchase",
+      "noIndex": true
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "Sorry, the page you are looking for does not exist"
+    }
+  },
+  "Header": {
+    "logo": {
+      "url": "/brand/title-logo.png",
+      "alt": "MvpFast"
+    },
+    "nav": {
+      "items": [
+        {
+          "name": "Pricing",
+          "href": "/#price"
+        },
+        {
+          "name": "Docs",
+          "href": "/docs/introduction",
+          "target": "_blank"
+        },
+        {
+          "name": "Blog",
+          "href": "/blog",
+          "target": "_blank"
+        }
+      ]
+    },
+    "login": {
+      "label": "Login"
+    },
+    "theme": {
+      "label": "Theme"
+    },
+    "userMenu": {
+      "avatarAlt": "Avatar",
+      "unknownUser": "Unknown User",
+      "account": "My Account",
+      "logout": "Sign Out",
+      "accountMobile": "Account",
+      "logoutMobile": "Sign Out"
+    }
+  },
+  "Hero": {
+    "title": "AI + Template",
+    "subtitle": "Build Your MvpFast App",
+    "description": "Build your web application quickly with MvpFast, featuring payment, authentication, articles, blog and more",
+    "cta": {
+      "start": {
+        "label": "Start Building",
+        "href": "/dashboard/home"
+      },
+      "docs": {
+        "label": "Docs",
+        "href": "/docs/introduction",
+        "target": "_blank"
+      }
+    },
+    "testimonials": {
+      "avatars": ["/avatars/a2.jpg", "/avatars/a3.jpg", "/avatars/a4.jpg"],
+      "text": "Trusted by 100+ developers"
+    },
+    "banner": {
+      "url": "/banner.png",
+      "alt": "MvpFast Preview"
+    }
+  },
+  "Brand": {
+    "title": "Powerful Tech Stack",
+    "subtitle": "Powered By",
+    "items": [
+      {
+        "name": "Next.js",
+        "logo": "/tech/nextjs-logo.png",
+        "href": "https://nextjs.org/"
+      },
+      {
+        "name": "Tailwind CSS",
+        "logo": "/tech/tailwindcss.png",
+        "href": "https://tailwindcss.com/"
+      },
+      {
+        "name": "MongoDB",
+        "logo": "/tech/mongodb.png",
+        "href": "https://www.mongodb.com/"
+      },
+      {
+        "name": "NextAuth",
+        "logo": "/tech/auth.png",
+        "href": "https://next-auth.js.org/"
+      },
+      {
+        "name": "Vercel",
+        "logo": "/tech/vercel.svg",
+        "href": "https://vercel.com/"
+      },
+      {
+        "name": "WeChat",
+        "logo": "/tech/wechat.svg",
+        "href": "https://developers.weixin.qq.com/"
+      }
+    ]
+  },
+  "AIShowcase": {
+    "labels": {
+      "template": "Template"
+    },
+    "result": {
+      "prefix": "Launch your idea",
+      "highlight": "INSTANTLY"
+    },
+    "description": "MvpFast provides complete code templates. Combined with AI coding tools, turn your ideas into reality fast"
+  },
+  "Admin": {
+    "domain": "example.com",
+    "banner": {
+      "url": "https://picsum.photos/1920/1080",
+      "alt": "Dashboard Preview"
+    }
+  },
+  "Showcase": {
+    "title": "Feature Preview",
+    "subtitle": "What's Included",
+    "items": [
+      {
+        "title": "Landing Page",
+        "description": "Build multi-language landing pages via config, no coding",
+        "image": "/showcase/landing.png"
+      },
+      {
+        "title": "Admin Dashboard",
+        "description": "Integrated RBAC, user management, config center",
+        "image": "/showcase/admin.png"
+      },
+      {
+        "title": "Payment System",
+        "description": "Out-of-the-box WeChat Pay integration",
+        "image": "/showcase/payment.png"
+      },
+      {
+        "title": "Docs & Blog",
+        "description": "MDX powered, code highlighting, full-text search",
+        "image": "/showcase/docs.png"
+      }
+    ]
+  },
+  "Feature": {
+    "title": "Showcase your website features",
+    "subtitle": "This section is for showcasing your website features",
+    "description": "Showcase your product core features and highlights to users",
+    "items": [
+      {
+        "name": "Feature 1",
+        "icon": "CircleUser",
+        "description": "Showcase your product's special capabilities",
+        "list": [
+          "Invincible functionality",
+          "One-click configuration",
+          "Amazing"
+        ]
+      },
+      {
+        "name": "Feature 2",
+        "icon": "BadgeJapaneseYen",
+        "description": "What others don't have, you do",
+        "list": [
+          "Unparalleled in the industry",
+          "Unique sword technique",
+          "Advanced capabilities"
+        ]
+      },
+      {
+        "name": "Feature 3",
+        "icon": "Shield",
+        "description": "If the first two aren't enough, here's a third",
+        "list": [
+          "Laser cannon",
+          "ak47"
+        ]
+      }
+    ]
+  },
+  "FeatureGrid": {
+    "title": "MvpFast's main features",
+    "items": [
+      {
+        "icon": "CircleUser",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "Package",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "Moon",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "MessageCircleMore",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      },
+      {
+        "icon": "File",
+        "title": "Feature 1",
+        "description": "Showcase your product's special capabilities"
+      }
+    ]
+  },
+  "FeatureCard": {
+    "items": [
+      {
+        "title": "Admin Management 1",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=1",
+          "alt": "Admin Management 1"
+        }
+      },
+      {
+        "title": "Admin Management 2",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=2",
+          "alt": "Admin Management 2"
+        }
+      },
+      {
+        "title": "Admin Management 3",
+        "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=3",
+          "alt": "Admin Management 3"
+        }
+      }
+    ]
+  },
+  "Case": {
+    "title": "Case Studies",
+    "subtitle": "See how our customers use our product",
+    "description": "",
+    "items": []
+  },
+  "Price": {
+    "title": "Choose your plan",
+    "subtitle": "Detailed plan information for confident purchasing",
+    "description": "",
+    "buy": "Buy Now",
+    "more": "Most Popular",
+    "tips": "For refund issues, please contact customer service",
+    "goods": {
+      "normal": {
+        "key": "normal",
+        "name": "Development Template Code",
+        "description": "Includes basic website development functions, such as user login, database, blog, articles, payment and other integration solutions. After purchase, you can use the MvpFast template permanently, and enjoy the updated functions of subsequent versions of the template. If you encounter problems during the website launch process, you can enjoy the author's technical support service to help you solve all technical problems.",
+        "includedFeatures": [
+          "Login + Database + Payment functionality and other encapsulation capabilities",
+          "Frontend code (NextJs + Tailwindcss)",
+          "WeChat public account service code"
+        ],
+        "price": 299,
+        "creditPrice": 2990,
+        "original": 399,
+        "mostPopular": false,
+        "href": "/pay?key=normal"
+      },
+      "most": {
+        "key": "most",
+        "name": "Development Template Code + NextJs Full Stack Development Course from 0 to 1",
+        "description": "Includes all content of the development template code and all content of the NextJs full stack development course from 0 to 1",
+        "includedFeatures": [
+          "Login + Database + Payment functionality and other encapsulation capabilities",
+          "Frontend code (NextJs + Tailwindcss)",
+          "WeChat public account service code",
+          "NextJs full stack development course from 0 to 1"
+        ],
+        "price": 399,
+        "creditPrice": 3990,
+        "original": 449,
+        "mostPopular": true,
+        "href": "/pay?key=most"
+      }
+    }
+  },
+  "Faq": {
+    "title": "Common questions about MvpFast",
+    "subtitle": "If your question has an answer here, you can contact us in the following ways",
+    "call": {
+      "emailLabel": "Email",
+      "wechatLabel": "WeChat",
+      "email": "",
+      "wechat": ""
+    },
+    "items": [
+      {
+        "question": "How to get started?",
+        "answer": "Register an account to start using. We provide complete documentation and technical support."
+      },
+      {
+        "question": "What payment methods are supported?",
+        "answer": "Currently WeChat Pay is supported. More payment methods will be added."
+      },
+      {
+        "question": "How to get technical support?",
+        "answer": "You can contact our technical support team via email or WeChat."
+      }
+    ]
+  },
+  "FaqList": {
+    "title": "FAQ",
+    "items": [
+      {
+        "title": "How to get started?",
+        "answer": "Register an account to start using. We provide complete documentation and technical support."
+      },
+      {
+        "title": "What payment methods are supported?",
+        "answer": "Currently WeChat Pay is supported. More payment methods will be added."
+      },
+      {
+        "title": "How to get technical support?",
+        "answer": "You can contact our technical support team via email or WeChat."
+      }
+    ]
+  },
+  "Pay": {
+    "loading": "Loading...",
+    "loadingQRCode": "Loading payment QR code...",
+    "noPaymentMethods": "No payment methods available",
+    "selectPaymentMethod": "Select Payment Method",
+    "confirmPayment": "Confirm Payment ¥{amount}",
+    "backToHome": "Back to Home",
+    "order": "Order",
+    "productDetails": "Product Details",
+    "unitPrice": "Unit Price",
+    "creditsPrice": "Credits Price",
+    "discount": "Discount",
+    "totalAmount": "Total Amount",
+    "credits": "credits",
+    "creditsMode": "Credits Purchase Mode",
+    "creditsPayment": "Credits Payment",
+    "currentBalance": "Current Credits Balance",
+    "productCreditsPrice": "Product Credits Price",
+    "discountReduction": "Discount Reduction",
+    "amountToPay": "Amount to Pay",
+    "insufficientCredits": "Insufficient Credits",
+    "needMore": "Need {amount} more credits, please recharge first",
+    "goRecharge": "Go to Recharge →",
+    "confirmCreditsPayment": "Confirm Payment {amount} credits",
+    "processing": "Processing...",
+    "purchaseSuccess": "Purchase Successful",
+    "paymentSuccess": "Payment Successful",
+    "transactionId": "Transaction ID: ",
+    "serviceWechat": "Service WeChat: ",
+    "addWechatForTemplate": "Add service WeChat to get the template",
+    "goToProfile": "Go to Profile",
+    "orderId": "Order ID: {id}",
+    "createTime": "Created at: {time}",
+    "pendingCreditsOrder": "Order info will be generated after confirming credits payment",
+    "pendingDirectOrder": "Please select a payment method and confirm to generate order info",
+    "paymentTimeout": "Please complete payment within 15 minutes, otherwise the order will be automatically cancelled.",
+    "contactService": "If you encounter any issues, please contact service WeChat: 13022051583",
+    "loadFailed": "Loading Failed",
+    "refreshRetry": "Please refresh the page and try again",
+    "refreshPage": "Refresh Page",
+    "loginFirst": "Please login first",
+    "insufficientBalance": "Insufficient credits, current balance: {current}, required: {required}",
+    "validDiscount": "Valid discount link detected, discount applied",
+    "selectPaymentFirst": "Please select a payment method",
+    "purchaseFailed": "Purchase failed",
+    "purchaseFailedRetry": "Purchase failed, please try again later"
+  },
+  "Footer": {
+    "title": "MvpFast",
+    "subtitle": "MvpFast - Build your web application quickly",
+    "poweredBy": "Built with {name}",
+    "beian": {
+      "text": "",
+      "url": ""
+    },
+    "items": [
+      {
+        "title": "Product",
+        "links": [
+          {
+            "name": "Features",
+            "href": "/#features"
+          },
+          {
+            "name": "Pricing",
+            "href": "/#price"
+          },
+          {
+            "name": "FAQ",
+            "href": "/#faq"
+          }
+        ]
+      },
+      {
+        "title": "Technical Docs",
+        "links": [
+          {
+            "name": "TailwindCSS",
+            "href": "https://tailwindcss.com/"
+          },
+          {
+            "name": "Next.js",
+            "href": "https://nextjs.org/"
+          },
+          {
+            "name": "Prisma",
+            "href": "https://www.prisma.io/"
+          },
+          {
+            "name": "DaisyUI",
+            "href": "https://daisyui.com/"
+          }
+        ]
+      },
+      {
+        "title": "More",
+        "links": [
+          {
+            "name": "Commercial Agreement",
+            "href": "/blog/commercial"
+          }
+        ]
+      }
+    ]
+  }
+}

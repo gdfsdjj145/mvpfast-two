@@ -1,0 +1,165 @@
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
+import { cn } from '@/lib/utils/common';
+import './globals.css';
+import { ReduxProvider } from '@/store';
+import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProviders } from '@/components/theme/ThemeProvider';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { GlobalJsonLd } from '@/components/seo';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+
+/**
+ * Main 路由组的根布局
+ * 用于主应用（[local]/* 路由）
+ */
+
+/**
+ * 获取网站基础 URL
+ */
+function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || 'https://example.com';
+}
+
+const inter = Inter({ subsets: ['latin'] });
+
+const fonts = localFont({
+  src: [
+    {
+      path: '../../../public/fonts/xft.ttf',
+    },
+  ],
+  variable: '--font-xft',
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('Metadata');
+  const siteUrl = getSiteUrl();
+
+  const title = t('title');
+  const description = t('description');
+  const keywords = t('keywords');
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
+    description,
+    keywords,
+    authors: [{ name: 'MVP Fast Team' }],
+    creator: 'MVP Fast',
+    publisher: 'MVP Fast',
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    metadataBase: new URL(siteUrl),
+
+    // Open Graph
+    openGraph: {
+      type: 'website',
+      locale: 'zh_CN',
+      url: siteUrl,
+      siteName: title,
+      title,
+      description,
+      images: [
+        {
+          url: `${siteUrl}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+
+    // Twitter Card
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${siteUrl}/og-image.png`],
+    },
+
+    // Robots
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+
+    // 语言替代版本
+    alternates: {
+      canonical: siteUrl,
+      languages: {
+        'zh-CN': `${siteUrl}/zh`,
+        'en-US': `${siteUrl}/en`,
+      },
+    },
+
+    // 图标
+    icons: {
+      icon: [
+        { url: '/favicons/icon_16x16.png', sizes: '16x16', type: 'image/png' },
+        { url: '/favicons/icon_32x32.png', sizes: '32x32', type: 'image/png' },
+        { url: '/favicons/icon_48x48.png', sizes: '48x48', type: 'image/png' },
+        { url: '/favicons/icon_64x64.png', sizes: '64x64', type: 'image/png' },
+      ],
+      apple: [
+        { url: '/favicons/icon_128x128.png', sizes: '128x128', type: 'image/png' },
+        { url: '/favicons/icon_256x256.png', sizes: '256x256', type: 'image/png' },
+      ],
+      other: [
+        { url: '/favicons/icon_512x512.png', sizes: '512x512', type: 'image/png' },
+        { url: '/favicons/icon_1024x1024.png', sizes: '1024x1024', type: 'image/png' },
+      ],
+    },
+
+    // 验证
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION,
+    },
+  };
+}
+
+export default async function MainLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const locale = await getLocale();
+
+  return (
+    <html lang={locale} data-theme="light" style={{ colorScheme: 'light' }}>
+      <head>
+        <GlobalJsonLd />
+        <meta name="color-scheme" content="light only" />
+      </head>
+      <body className={cn(fonts.variable, inter.className)}>
+        <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
+          <SessionProvider>
+            <ReduxProvider>
+              {children}
+              <GoogleAnalytics />
+            </ReduxProvider>
+          </SessionProvider>
+        </ThemeProviders>
+        <Toaster />
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
+  );
+}

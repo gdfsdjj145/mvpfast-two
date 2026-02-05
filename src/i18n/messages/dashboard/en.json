@@ -1,0 +1,36 @@
+{
+    "Dashboard": {
+        "tabs": {
+            "home": {
+                "title": "Home",
+                "description": "This is the home page description"
+            },
+            "dbdemo": {
+                "title": "Database Operations Demo",
+                "description": "This is the database operations demo description"
+            },
+            "order": {
+                "title": "Purchase Operations Demo",
+                "description": "This is the purchase operations demo description"
+            },
+            "person": {
+                "title": "Personal Information",
+                "description": "This is the personal information description"
+            }
+        },
+        "menu": {
+            "buy": {
+                "label": "Purchase"
+            },
+            "docs": {
+                "label": "Documentation"
+            },
+            "home": {
+                "label": "Home"
+            },
+            "logout": {
+                "label": "Logout"
+            }
+        }
+    }
+}
