@@ -158,8 +158,8 @@ export default function OrderManagementPage() {
       product: { label: '商品购买', color: 'badge-primary' },
       credit: { label: '积分充值', color: 'badge-secondary' },
     };
-    const config = types[type] || { label: type, color: 'badge-ghost' };
-    return <span className={`badge ${config.color} badge whitespace-nowrap`}>{config.label}</span>;
+    const typeConfig = types[type] || { label: type, color: 'badge-ghost' };
+    return <span className={`badge ${typeConfig.color} whitespace-nowrap`}>{typeConfig.label}</span>;
   };
 
   return (
@@ -303,7 +303,7 @@ export default function OrderManagementPage() {
                     <tr>
                       <th>序号</th>
                       <td>订单号</td>
-                      <td>商品</td>
+                      <td className="min-w-[180px]">商品</td>
                       {isCreditsMode && <td>类型</td>}
                       <td>用户</td>
                       <td>金额</td>

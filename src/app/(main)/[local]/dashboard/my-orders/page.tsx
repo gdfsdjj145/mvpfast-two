@@ -64,9 +64,9 @@ export default function MyOrdersPage() {
 
   const renderOrderType = (type: string) => {
     if (type === 'credit') {
-      return <span className="badge badge-secondary badge">积分充值</span>;
+      return <span className="badge badge-secondary whitespace-nowrap">积分充值</span>;
     }
-    return <span className="badge badge-primary badge">商品购买</span>;
+    return <span className="badge badge-primary whitespace-nowrap">商品购买</span>;
   };
 
 

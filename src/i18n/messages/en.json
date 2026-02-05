@@ -111,32 +111,50 @@
     }
   },
   "Brand": {
+    "title": "Powerful Tech Stack",
+    "subtitle": "Powered By",
     "items": [
       {
-        "name": "NextJs",
+        "name": "Next.js",
         "logo": "/tech/nextjs-logo.png",
-        "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
-        "name": "TailWindCss",
+        "name": "Tailwind CSS",
         "logo": "/tech/tailwindcss.png",
-        "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
-        "name": "Mongodb",
+        "name": "MongoDB",
         "logo": "/tech/mongodb.png",
-        "stars": "26K⭐",
-        "href": "https://www.mongodb.com/cloud/atlas/register"
+        "href": "https://www.mongodb.com/"
+      },
+      {
+        "name": "NextAuth",
+        "logo": "/tech/auth.png",
+        "href": "https://next-auth.js.org/"
+      },
+      {
+        "name": "Vercel",
+        "logo": "/tech/vercel.svg",
+        "href": "https://vercel.com/"
       },
       {
         "name": "WeChat",
-        "logo": "/social/wx.png",
-        "stars": "",
-        "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
+        "logo": "/tech/wechat.svg",
+        "href": "https://developers.weixin.qq.com/"
       }
     ]
+  },
+  "AIShowcase": {
+    "labels": {
+      "template": "Template"
+    },
+    "result": {
+      "prefix": "Launch your idea",
+      "highlight": "INSTANTLY"
+    },
+    "description": "MvpFast provides complete code templates. Combined with AI coding tools, turn your ideas into reality fast"
   },
   "Admin": {
     "domain": "example.com",
@@ -144,6 +162,32 @@
       "url": "/banners/banner-1.png",
       "alt": "Admin Preview"
     }
+  },
+  "Showcase": {
+    "title": "Feature Preview",
+    "subtitle": "What's Included",
+    "items": [
+      {
+        "title": "Landing Page",
+        "description": "Build multi-language landing pages via config, no coding",
+        "image": "/showcase/landing.png"
+      },
+      {
+        "title": "Admin Dashboard",
+        "description": "Integrated RBAC, user management, config center",
+        "image": "/showcase/admin.png"
+      },
+      {
+        "title": "Payment System",
+        "description": "Out-of-the-box WeChat Pay integration",
+        "image": "/showcase/payment.png"
+      },
+      {
+        "title": "Docs & Blog",
+        "description": "MDX powered, code highlighting, full-text search",
+        "image": "/showcase/docs.png"
+      }
+    ]
   },
   "Feature": {
     "title": "Showcase your website features",

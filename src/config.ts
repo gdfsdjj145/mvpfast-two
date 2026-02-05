@@ -53,7 +53,7 @@ export const config = {
   // ============================================
   // 'direct' - 单次购买模式：用户直接支付购买商品，商品使用 price 定价
   // 'credits' - 积分购买模式：用户先充值积分，再用积分购买商品，商品使用 creditPrice 定价
-  purchaseMode: 'direct' as PurchaseMode,
+  purchaseMode: 'credits' as PurchaseMode,
 
   // ============================================
   // 积分充值套餐（仅 purchaseMode: 'credits' 时生效）
