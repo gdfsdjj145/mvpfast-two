@@ -1,0 +1,62 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+name: product-rules
+description: 项目的基础规则，描述项目文件，项目技术栈
+globs:
+    - 'src/**/*.ts'
+    - 'src/**/*.tsx'
+---
+
+# 项目基础 规范
+
+## 基础规则
+
+-  数据库相关的规则，继承 [db.mdc](mdc:.cursor/rules/backend/db.mdc)
+-  组件生成使用 .tsx 扩展名
+-  组件名使用 PascalCase 命名
+
+## 项目主要技术栈
+
+项目使用NextJs的App Router模式，样式使用Tailwindcss、Daisyui，鉴权使用Next-auth
+
+- NextJs
+- TypeScript
+- React
+- Tailwindcss
+- Daisyui
+- Next-auth
+
+技术栈版本可以看 [package.json](mdc:package.json) 文件对应的版本
+
+## 项目结构
+
+src/
+├── app/            # 项目核心页面文件
+├── components/     # 通用组件
+├── i18n/           # next-intl国际化
+├── hooks/          # 自定义 hooks
+├── lib/            # 工具函数
+├── models/         # 数据库api
+├── stores/         # 全局状态管理
+├── styles/         # 样式文件
+├── middleware.ts   # 中间件文件
+└── auth.ts         # next-auth配置
+
+### 性能优化
+
+-  合理拆分组件
+-  使用 React.memo 避免不必要渲染
+-  使用 React.lazy 实现代码分割
+-  图片使用 next/image 优化
+
+### TypeScript 集成
+
+-  为 Props 定义接口
+-  使用 FC 类型声明组件
+-  避免使用 any
+-  合理使用泛型
+

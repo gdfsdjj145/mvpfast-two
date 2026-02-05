@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+name: db-rules
+description: 用于读取数据库表接口，利用数据库表结构生成api方法
+---
+
+# MonggoDb 规范
+
+## 基础规则
+
+- 读取 [schema.prisma](mdc:prisma/schema.prisma) 内的表结构
+- 使用 [prisma.ts](mdc:src/lib/prisma.ts) 导出的prisma作为数据库orm调用
+- 使用 MongoDB 数据库
+- 生成的数据库函数名字使用 方式+表名+类型, 比如查询user表的列表数据，生成的函数为 getUserList
+- 查询函数默认自带分页，默认查询limit为10，传入page，size，limit等参数
+- 参考项目 src/models 下的文件
+- prisma 使用以下引用
+```typescript
+import prisma from "@/lib/prisma";
+```

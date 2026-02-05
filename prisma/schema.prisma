@@ -1,0 +1,201 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model DbUserDemo {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime @db.Date @default(now())
+  nickName     String
+  tenant_id    String?  @db.ObjectId
+}
+
+model Order {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time   DateTime @db.Date @default(now())
+  identifier     String
+  name           String
+  orderId        String   @unique
+  orderType      String   // 订单类型：product(商品购买) / credit(积分充值)
+  price          Float
+  promoter       String?
+  promotionPrice Float
+  transactionId  String   @unique
+
+  // 积分充值专用字段
+  creditAmount   Int?     // 充值的积分数量
+}
+
+model PayOrder {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time  DateTime @db.Date
+  identifier String
+  orderType  String
+  price      Float
+  sign       String?
+  status     String
+}
+
+
+model Promotion {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  checkout       Boolean  @default(false)
+  created_time   DateTime @db.Date @default(now())
+  identifier     String
+  orderType      String
+  promotionPrice Float
+  purchaser      String
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  avatar        String?
+  created_time  DateTime @db.Date @default(now())
+  email         String?
+  nickName      String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  phone         String?
+  password      String?  // 加密后的密码（bcrypt）
+  wechatOpenId  String?
+  wechatUnionId String?
+
+  // 积分系统字段
+  credits       Int      @default(0)  // 用户积分余额
+  totalSpent    Float    @default(0)  // 累计消费金额
+
+  // 权限系统字段
+  role          String   @default("user")  // "user" | "admin"
+
+  @@unique([wechatOpenId, phone, email])
+}
+
+model VerificationCode {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  code         String
+  created_time DateTime @db.Date @default(now())
+  identifier   String
+  expires_at   DateTime @db.Date
+}
+
+model VerificationWxQrCode {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime @db.Date @default(now())
+  identifier   String   @unique
+  isScan       Boolean
+  openId       String?
+}
+
+// 积分交易记录表
+model CreditTransaction {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime @db.Date @default(now())
+  userId       String   // 用户ID
+  type         String   // 类型：recharge(充值) / consume(消费) / refund(退款)
+  amount       Int      // 积分数量（正数为增加，负数为减少）
+  balance      Int      // 交易后余额
+  orderId      String?  // 关联订单号（充值时）
+  description  String   // 描述
+  metadata     Json?    // 额外元数据
+
+  @@index([userId])
+  @@index([created_time])
+}
+
+// 系统配置表
+model SystemConfig {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime @db.Date @default(now())
+  updated_time DateTime @db.Date @updatedAt
+  key          String   @unique     // 配置键 (e.g., "system.db")
+  value        Json                 // 配置值（JSON 格式）
+  type         String               // "boolean" | "string" | "array" | "object"
+  category     String               // "system" | "auth" | "payment" | "product"
+  description  String?              // 描述
+  isActive     Boolean  @default(true)
+  updatedBy    String?  @db.ObjectId
+
+  @@index([category])
+  @@index([isActive])
+}
+
+// 配置审计日志表
+model ConfigAuditLog {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time   DateTime @db.Date @default(now())
+  configKey      String
+  oldValue       Json?
+  newValue       Json
+  changedBy      String   @db.ObjectId
+  changedByEmail String?
+  action         String   // "create" | "update" | "delete"
+  ipAddress      String?
+  userAgent      String?
+
+  @@index([configKey])
+  @@index([changedBy])
+  @@index([created_time])
+}
+
+// 兑换码表
+model RedemptionCode {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  created_time  DateTime  @db.Date @default(now())
+  updated_time  DateTime  @db.Date @updatedAt
+  code          String    @unique          // 兑换码（唯一）
+  creditAmount  Int                        // 积分数量
+  maxUses       Int       @default(1)      // 最大使用次数
+  usedCount     Int       @default(0)      // 已使用次数
+  expiresAt     DateTime? @db.Date         // 过期时间（null表示永不过期）
+  isActive      Boolean   @default(true)   // 是否启用
+  description   String?                    // 描述/备注
+  createdBy     String    @db.ObjectId     // 创建者ID（管理员）
+  batchId       String?                    // 批次ID（批量生成时使用）
+
+  @@index([isActive])
+  @@index([expiresAt])
+  @@index([batchId])
+}
+
+// 兑换码使用记录表
+model RedemptionRecord {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_time   DateTime @db.Date @default(now())
+  codeId         String   @db.ObjectId     // 兑换码ID
+  code           String                    // 兑换码（冗余存储便于查询）
+  userId         String   @db.ObjectId     // 使用者ID
+  userIdentifier String                    // 用户标识（昵称/邮箱/手机）
+  creditAmount   Int                       // 兑换的积分数量
+
+  @@index([codeId])
+  @@index([userId])
+  @@index([created_time])
+  @@unique([codeId, userId])              // 同一用户同一兑换码只能使用一次
+}
+
+// 博客文章表
+model Post {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  created_time DateTime  @db.Date @default(now())
+  updated_time DateTime  @db.Date @updatedAt
+  title        String
+  slug         String    @unique
+  description  String?
+  content      String
+  coverImage   String?
+  category     String?
+  tags         String[]
+  status       String    @default("draft") // "draft" | "published"
+  authorId     String    @db.ObjectId
+  authorName   String
+  publishedAt  DateTime? @db.Date
+  views        Int       @default(0)
+
+  @@index([status])
+  @@index([category])
+  @@index([created_time])
+}

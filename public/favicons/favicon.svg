@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  
+  <defs>
+    <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a7df3" />
+      <stop offset="100%" stop-color="#595cd9" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="64" height="64" rx="12.8" ry="12.8" fill="url(#favBg)" />
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central"
+    font-family="'Inter', -apple-system, sans-serif" font-size="36" font-weight="700" fill="white">
+    M
+  </text>
+</svg>

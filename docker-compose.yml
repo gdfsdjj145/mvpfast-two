@@ -1,0 +1,126 @@
+# ===========================================
+# MVP Fast Web - Docker Compose
+# ===========================================
+#
+# 使用方法:
+#   开发环境: docker compose up -d
+#   生产环境: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   查看日志: docker compose logs -f
+#   停止服务: docker compose down
+#
+# ===========================================
+
+services:
+  # -------------------------------------------
+  # 应用服务
+  # -------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mvpfast-app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      # WeChat 配置
+      - WECHAT_APP_ID=${WECHAT_APP_ID:-}
+      - WECHAT_APP_SECRET=${WECHAT_APP_SECRET:-}
+      - WECHAT_PAY_MERCHANT_ID=${WECHAT_PAY_MERCHANT_ID:-}
+      - WECHAT_PAY_API_KEY=${WECHAT_PAY_API_KEY:-}
+      - WECHAT_PAY_SERIAL_NO=${WECHAT_PAY_SERIAL_NO:-}
+      - WECHAT_PAY_PRIVATE_KEY=${WECHAT_PAY_PRIVATE_KEY:-}
+      - WECHAT_PAY_CERTIFICATE=${WECHAT_PAY_CERTIFICATE:-}
+      - WECHAT_PAY_NOTIFY_URL=${WECHAT_PAY_NOTIFY_URL:-}
+      # 阿里云 SMS
+      - ALIYUN_ACCESS_KEY_ID=${ALIYUN_ACCESS_KEY_ID:-}
+      - ALIYUN_ACCESS_KEY_SECRET=${ALIYUN_ACCESS_KEY_SECRET:-}
+      - ALIYUN_SMS_SIGN_NAME=${ALIYUN_SMS_SIGN_NAME:-}
+      - ALIYUN_SMS_TEMPLATE_CODE=${ALIYUN_SMS_TEMPLATE_CODE:-}
+      # Email
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - EMAIL_FROM=${EMAIL_FROM:-}
+      # 日志
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - mvpfast-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # -------------------------------------------
+  # MongoDB 服务 (开发/测试用)
+  # -------------------------------------------
+  mongo:
+    image: mongo:7
+    container_name: mvpfast-mongo
+    restart: unless-stopped
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-password}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE:-mvpfast}
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+    networks:
+      - mvpfast-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # -------------------------------------------
+  # Mongo Express (可选的数据库管理界面)
+  # -------------------------------------------
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mvpfast-mongo-express
+    restart: unless-stopped
+    ports:
+      - "${MONGO_EXPRESS_PORT:-8081}:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_ROOT_USERNAME:-admin}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_ROOT_PASSWORD:-password}
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USERNAME:-admin}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD:-admin}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - mvpfast-network
+    profiles:
+      - tools
+
+# -------------------------------------------
+# 网络配置
+# -------------------------------------------
+networks:
+  mvpfast-network:
+    driver: bridge
+
+# -------------------------------------------
+# 数据卷配置
+# -------------------------------------------
+volumes:
+  mongo-data:
+    driver: local
+  mongo-config:
+    driver: local
