@@ -66,7 +66,7 @@ export default function AddUserModal({
           <h2 className="text-xl font-bold">
             {initialData ? '编辑用户' : '添加用户'}
           </h2>
-          <button className="btn btn-ghost btn-sm" onClick={onClose}>
+          <button className="btn btn-ghost" onClick={onClose}>
             ✕
           </button>
         </div>

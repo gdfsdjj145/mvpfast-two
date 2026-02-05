@@ -1,7 +1,7 @@
 'use server';
 import { createOrder as modelCreateOrder, getOrders } from '@/models/order';
 import { rechargeCredits, consumeCredits, getUserCredits, hasEnoughCredits } from '@/models/credit';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 
 // 创建已支付的订单
 export const createOrder = async (order: any) => {

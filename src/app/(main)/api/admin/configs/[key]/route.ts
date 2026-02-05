@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAdmin, getClientInfo } from '@/lib/auth-utils';
+import { requireAdmin, getClientInfo } from '@/lib/auth/utils';
 import { getConfigByKey, deleteConfig } from '@/models/systemConfig';
 import { getAuditLogsByKey, createAuditLog } from '@/models/configAuditLog';
-import { clearConfigCache } from '@/lib/config-service';
+import { clearConfigCache } from '@/lib/config/service';
 
 type RouteParams = {
   params: Promise<{ key: string }>;

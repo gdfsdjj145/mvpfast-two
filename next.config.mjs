@@ -55,10 +55,20 @@ if (process.env.NODE_ENV === 'production') {
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['framer-motion'],
+  // 允许局域网设备访问开发服务器
+  allowedDevOrigins: [
+    'http://localhost:*',
+    'http://127.0.0.1:*',
+  ],
   images: {
     unoptimized: true,
-    domains: ['localhost'],
+    // Next.js 16: 声明允许的图片质量值
+    qualities: [75, 80, 85, 90],
     remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
       {
         protocol: 'https',
         hostname: '**',

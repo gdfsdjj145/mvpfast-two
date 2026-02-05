@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Settings, Shield, CreditCard, Gift, BarChart3, Bot, Loader2, Save } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Shield, CreditCard, Gift, BarChart3, Bot, Save, CircleAlert, Settings } from 'lucide-react';
 import toast from 'react-hot-toast';
 import AuthConfig from './AuthConfig';
 import PaymentConfig from './PaymentConfig';
@@ -14,6 +14,16 @@ import { config as appConfig } from '@/config';
 type ConfigType = 'boolean' | 'string' | 'array' | 'object';
 type ConfigCategory = 'system' | 'auth' | 'payment' | 'product' | 'credits';
 type TabType = 'general' | 'auth' | 'payment' | 'credits' | 'analytics' | 'ai';
+
+// Tab 配置
+const TABS = [
+  { key: 'general' as TabType, label: '通用配置', icon: Settings, description: '网站基本信息设置' },
+  { key: 'auth' as TabType, label: '认证配置', icon: Shield, description: '登录方式管理' },
+  { key: 'payment' as TabType, label: '支付配置', icon: CreditCard, description: '支付渠道管理' },
+  { key: 'credits' as TabType, label: '积分配置', icon: Gift, description: '积分规则设置', creditsOnly: true },
+  { key: 'analytics' as TabType, label: '统计配置', icon: BarChart3, description: '数据统计服务' },
+  { key: 'ai' as TabType, label: 'AI 配置', icon: Bot, description: 'AI 服务配置' },
+];
 
 // 本地配置状态类型
 interface LocalGeneralConfig {
@@ -66,7 +76,6 @@ export default function SystemConfigPage() {
 
   // 原始配置（从服务器加载的）
   const [authConfig, setAuthConfig] = useState<LocalAuthConfig>({ loginType: 'phone', loginTypes: ['phone'] });
-  const [paymentConfig, setPaymentConfig] = useState<any[]>([]);
   const [generalConfig, setGeneralConfig] = useState<LocalGeneralConfig>({ siteName: DEFAULT_SITE_NAME });
   const [creditsConfig, setCreditsConfig] = useState<LocalCreditsConfig>(defaultCreditsConfig);
   const [analyticsConfig, setAnalyticsConfig] = useState<LocalAnalyticsConfig>({ googleAnalyticsId: '' });
@@ -113,14 +122,6 @@ export default function SystemConfigPage() {
       };
       setAuthConfig(authConfigValue);
       setLocalAuthConfig(authConfigValue);
-
-      // 加载支付配置
-      const payConfigItem = data.items?.find((item: SystemConfig) => item.key === 'payment.methods');
-      if (payConfigItem && Array.isArray(payConfigItem.value)) {
-        setPaymentConfig(payConfigItem.value);
-      } else {
-        setPaymentConfig([]);
-      }
 
       // 加载通用配置
       const siteNameItem = data.items?.find((item: SystemConfig) => item.key === 'system.siteName');
@@ -327,159 +328,153 @@ export default function SystemConfigPage() {
     }
   };
 
-  // 保存支付配置（支付配置仍保留即时保存）
-  const handleSavePayment = async (methods: any[]) => {
-    try {
-      const response = await fetch('/api/admin/configs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          key: 'payment.methods',
-          value: methods,
-          type: 'array',
-          category: 'payment',
-          description: '支付方式配置',
-        }),
-      });
+  // 获取当前活动 Tab 的信息
+  const activeTabInfo = TABS.find(t => t.key === activeTab);
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to save payment config');
-      }
-
-      setPaymentConfig(methods);
-    } catch (error: any) {
-      console.error('Save payment config error:', error);
-      throw error;
-    }
-  };
+  // 过滤可见的 tabs
+  const visibleTabs = TABS.filter(tab => !tab.creditsOnly || isCreditsMode);
 
   return (
-    <div className="space-y-4">
-      {/* Header with Save Button */}
-      <div className="flex justify-between items-center">
-        <div role="tablist" className="tabs tabs-boxed bg-base-200 p-1">
-          <button
-            role="tab"
-            className={`tab gap-2 ${activeTab === 'general' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('general')}
-          >
-            <Settings size={16} />
-            通用配置
-          </button>
-          <button
-            role="tab"
-            className={`tab gap-2 ${activeTab === 'auth' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('auth')}
-          >
-            <Shield size={16} />
-            认证配置
-          </button>
-          <button
-            role="tab"
-            className={`tab gap-2 ${activeTab === 'payment' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('payment')}
-          >
-            <CreditCard size={16} />
-            支付配置
-          </button>
-          {isCreditsMode && (
-            <button
-              role="tab"
-              className={`tab gap-2 ${activeTab === 'credits' ? 'tab-active' : ''}`}
-              onClick={() => setActiveTab('credits')}
-            >
-              <Gift size={16} />
-              积分配置
-            </button>
-          )}
-          <button
-            role="tab"
-            className={`tab gap-2 ${activeTab === 'analytics' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
-          >
-            <BarChart3 size={16} />
-            统计配置
-          </button>
-          <button
-            role="tab"
-            className={`tab gap-2 ${activeTab === 'ai' ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab('ai')}
-          >
-            <Bot size={16} />
-            AI 配置
-          </button>
-        </div>
+    <div className="space-y-6">
+      {/* Tab Navigation + Save Button */}
+      <div className="bg-base-100 rounded-2xl shadow-sm border border-base-200 p-2">
+        <div className="flex items-center justify-between gap-2">
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+            {visibleTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`
+                    flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium
+                    transition-all duration-200 cursor-pointer
+                    ${isActive
+                      ? 'bg-primary text-primary-content shadow-md'
+                      : 'text-base-content/70 hover:bg-base-200 hover:text-base-content'
+                    }
+                  `}
+                >
+                  <Icon size={18} className={isActive ? '' : 'opacity-70'} />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Save Button */}
-        {hasChanges && (
-          <button
-            onClick={handleSaveAll}
-            className="btn btn-primary gap-2"
-            disabled={saving}
-          >
-            {saving ? (
-              <>
-                <span className="loading loading-spinner loading-sm"></span>
-                保存中...
-              </>
-            ) : (
-              <>
-                <Save size={16} />
-                保存配置
-              </>
+          {/* Save Button */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            {hasChanges && (
+              <div className="hidden md:flex items-center gap-1.5 text-warning text-sm">
+                <CircleAlert size={14} />
+                <span>未保存</span>
+              </div>
             )}
-          </button>
-        )}
+            <button
+              onClick={handleSaveAll}
+              className={`btn btn-sm gap-1.5 transition-all duration-200 ${
+                hasChanges
+                  ? 'btn-primary shadow-md hover:shadow-lg'
+                  : 'btn-ghost btn-disabled opacity-50'
+              }`}
+              disabled={saving || !hasChanges}
+            >
+              {saving ? (
+                <>
+                  <span className="loading loading-spinner loading-xs"></span>
+                  <span className="hidden sm:inline">保存中</span>
+                </>
+              ) : (
+                <>
+                  <Save size={16} />
+                  <span className="hidden sm:inline">保存</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Loading State */}
+      {/* Active Tab Description */}
+      {activeTabInfo && !loading && (
+        <div className="flex items-center gap-2 text-sm text-base-content/60 -mt-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          {activeTabInfo.description}
+        </div>
+      )}
+
+      {/* Loading State - 骨架屏 */}
       {loading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="space-y-4">
+          <div className="animate-pulse">
+            <div className="h-4 bg-base-200 rounded w-48 mb-4"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="card bg-base-100 shadow">
+                <div className="card-body p-6">
+                  <div className="h-5 bg-base-200 rounded w-32 mb-4"></div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-base-200 rounded w-full"></div>
+                    <div className="h-10 bg-base-200 rounded w-full"></div>
+                    <div className="h-3 bg-base-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="card bg-base-100 shadow">
+                <div className="card-body p-6">
+                  <div className="h-5 bg-base-200 rounded w-32 mb-4"></div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-base-200 rounded w-full"></div>
+                    <div className="h-10 bg-base-200 rounded w-full"></div>
+                    <div className="h-3 bg-base-200 rounded w-2/3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Tab Content */}
-      {!loading && activeTab === 'general' && (
-        <GeneralConfig
-          siteName={localGeneralConfig.siteName}
-          onChange={setLocalGeneralConfig}
-        />
-      )}
+      <div className={loading ? 'hidden' : ''}>
+        {activeTab === 'general' && (
+          <GeneralConfig
+            siteName={localGeneralConfig.siteName}
+            onChange={setLocalGeneralConfig}
+          />
+        )}
 
-      {!loading && activeTab === 'auth' && (
-        <AuthConfig
-          loginType={localAuthConfig.loginType}
-          loginTypes={localAuthConfig.loginTypes}
-          onChange={setLocalAuthConfig}
-        />
-      )}
+        {activeTab === 'auth' && (
+          <AuthConfig
+            loginType={localAuthConfig.loginType}
+            loginTypes={localAuthConfig.loginTypes}
+            onChange={setLocalAuthConfig}
+          />
+        )}
 
-      {!loading && activeTab === 'payment' && (
-        <PaymentConfig
-          initialMethods={paymentConfig}
-          onSave={handleSavePayment}
-        />
-      )}
+        {activeTab === 'payment' && (
+          <PaymentConfig />
+        )}
 
-      {!loading && activeTab === 'credits' && isCreditsMode && (
-        <CreditsConfig
-          config={localCreditsConfig}
-          onChange={setLocalCreditsConfig}
-        />
-      )}
+        {activeTab === 'credits' && isCreditsMode && (
+          <CreditsConfig
+            config={localCreditsConfig}
+            onChange={setLocalCreditsConfig}
+          />
+        )}
 
-      {!loading && activeTab === 'analytics' && (
-        <AnalyticsConfig
-          config={localAnalyticsConfig}
-          onChange={setLocalAnalyticsConfig}
-        />
-      )}
+        {activeTab === 'analytics' && (
+          <AnalyticsConfig
+            config={localAnalyticsConfig}
+            onChange={setLocalAnalyticsConfig}
+          />
+        )}
 
-      {!loading && activeTab === 'ai' && (
-        <AIConfig />
-      )}
+        {activeTab === 'ai' && (
+          <AIConfig />
+        )}
+      </div>
     </div>
   );
 }

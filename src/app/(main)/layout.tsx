@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/common';
 import './globals.css';
 import { ReduxProvider } from '@/store';
 import { Toaster } from 'react-hot-toast';

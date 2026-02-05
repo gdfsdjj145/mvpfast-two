@@ -168,13 +168,13 @@ const DbDemo = () => {
       render: (row: any) => (
         <div className="flex gap-2">
           <button
-            className="btn btn-sm btn-outline"
+            className="btn btn-outline"
             onClick={() => handleOpenModal(row)}
           >
             编辑
           </button>
           <button
-            className="btn btn-sm btn-error btn-outline"
+            className="btn btn-error btn-outline"
             onClick={() => handleDeleteUser(row.id)}
           >
             删除

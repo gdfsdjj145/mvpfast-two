@@ -57,7 +57,7 @@ export default function I18NComponent() {
       <button
         ref={buttonRef}
         onClick={toggleMenu}
-        className="flex items-center justify-center gap-1.5 w-8 h-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        className="flex items-center justify-center gap-1.5 w-8 h-8 text-base-content/70 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors"
         aria-label="切换语言"
       >
         <span className="text-base leading-none">{currentLanguage.flag}</span>
@@ -74,7 +74,7 @@ export default function I18NComponent() {
             />
             {/* Dropdown */}
             <div
-              className="fixed z-[9999] bg-white rounded-xl shadow-lg border border-gray-100 py-1 min-w-[140px]"
+              className="fixed z-[9999] bg-base-100 rounded-xl shadow-lg border border-base-200 py-1 min-w-[140px]"
               style={{
                 top: `${menuPosition.top}px`,
                 right: `${menuPosition.right}px`,
@@ -86,8 +86,8 @@ export default function I18NComponent() {
                   onClick={() => switchLanguage(item.locale)}
                   className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
                     locale === item.locale
-                      ? 'bg-purple-50 text-purple-600 font-medium'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'text-base-content hover:bg-base-200'
                   }`}
                 >
                   <span className="text-lg">{item.flag}</span>

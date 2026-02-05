@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { config } from '@/config';
+import { formatDateTime } from '@/lib/utils/common';
 
 interface Order {
   id: string;
@@ -150,9 +151,6 @@ export default function OrderManagementPage() {
   };
 
   // 格式化日期
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN');
-  };
 
   // 订单类型标签
   const renderOrderType = (type: string) => {
@@ -161,7 +159,7 @@ export default function OrderManagementPage() {
       credit: { label: '积分充值', color: 'badge-secondary' },
     };
     const config = types[type] || { label: type, color: 'badge-ghost' };
-    return <span className={`badge ${config.color} badge-sm whitespace-nowrap`}>{config.label}</span>;
+    return <span className={`badge ${config.color} badge whitespace-nowrap`}>{config.label}</span>;
   };
 
   return (
@@ -169,7 +167,7 @@ export default function OrderManagementPage() {
       {/* 统计卡片 */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="card bg-base-100 border border-base-200">
+          <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="card-body p-4 flex-row items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                 <ShoppingCart size={20} className="text-primary" />
@@ -180,7 +178,7 @@ export default function OrderManagementPage() {
               </div>
             </div>
           </div>
-          <div className="card bg-base-100 border border-base-200">
+          <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="card-body p-4 flex-row items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
                 <Calendar size={20} className="text-secondary" />
@@ -191,7 +189,7 @@ export default function OrderManagementPage() {
               </div>
             </div>
           </div>
-          <div className="card bg-base-100 border border-base-200">
+          <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="card-body p-4 flex-row items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center shrink-0">
                 <DollarSign size={20} className="text-success" />
@@ -202,7 +200,7 @@ export default function OrderManagementPage() {
               </div>
             </div>
           </div>
-          <div className="card bg-base-100 border border-base-200">
+          <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="card-body p-4 flex-row items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-info/10 flex items-center justify-center shrink-0">
                 <TrendingUp size={20} className="text-info" />
@@ -224,7 +222,7 @@ export default function OrderManagementPage() {
               <input
                 type="text"
                 placeholder="搜索订单号、交易号、用户..."
-                className="input input-bordered input-sm w-full"
+                className="input input-bordered input-md w-full"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -233,7 +231,7 @@ export default function OrderManagementPage() {
             {isCreditsMode && (
               <div className="form-control">
                 <select
-                  className="select select-bordered select-sm"
+                  className="select select-bordered select-md"
                   value={orderType}
                   onChange={(e) => setOrderType(e.target.value)}
                 >
@@ -247,7 +245,7 @@ export default function OrderManagementPage() {
             <div className="form-control">
               <input
                 type="date"
-                className="input input-bordered input-sm"
+                className="input input-bordered input-md"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
@@ -255,18 +253,22 @@ export default function OrderManagementPage() {
             <div className="form-control">
               <input
                 type="date"
-                className="input input-bordered input-sm"
+                className="input input-bordered input-md"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
 
             <div className="flex gap-2">
-              <button type="submit" className="btn btn-primary btn-sm gap-1">
-                <Search size={14} />
+              <button type="submit" className="btn btn-primary gap-1" disabled={loading}>
+                {loading ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  <Search size={14} />
+                )}
                 搜索
               </button>
-              <button type="button" onClick={handleReset} className="btn btn-ghost btn-sm gap-1">
+              <button type="button" onClick={handleReset} className="btn btn-ghost gap-1" disabled={loading}>
                 <Filter size={14} />
                 重置
               </button>
@@ -296,7 +298,7 @@ export default function OrderManagementPage() {
             <>
               {/* daisyUI table: pin-rows 固定表头, pin-cols 固定首尾th列 */}
               <div className="overflow-x-auto max-w-full">
-                <table className="table table-sm table-pin-rows table-pin-cols table-zebra">
+                <table className="table table-pin-rows table-pin-cols table-zebra">
                   <thead>
                     <tr>
                       <th>序号</th>
@@ -312,7 +314,7 @@ export default function OrderManagementPage() {
                   </thead>
                   <tbody>
                     {orders.map((order, index) => (
-                      <tr key={order.id}>
+                      <tr key={order.id} className="hover">
                         <th>{(page - 1) * pageSize + index + 1}</th>
                         <td>
                           <span className="font-mono text-xs">{order.orderId}</span>
@@ -326,7 +328,7 @@ export default function OrderManagementPage() {
                             )}
                             <span>{order.name}</span>
                             {isCreditsMode && order.creditAmount && (
-                              <span className="badge badge-sm badge-secondary shrink-0">
+                              <span className="badge-secondary shrink-0">
                                 +{order.creditAmount}
                               </span>
                             )}
@@ -351,7 +353,7 @@ export default function OrderManagementPage() {
                         </td>
                         <td>
                           <span className="text-xs text-base-content/60">
-                            {formatDate(order.created_time)}
+                            {formatDateTime(order.created_time)}
                           </span>
                         </td>
                         <th>
@@ -378,7 +380,7 @@ export default function OrderManagementPage() {
                 <div className="flex justify-center mt-6">
                   <div className="join">
                     <button
-                      className="join-item btn btn-sm"
+                      className="join-item btn"
                       disabled={page <= 1}
                       onClick={() => setPage(page - 1)}
                     >
@@ -398,7 +400,7 @@ export default function OrderManagementPage() {
                       return (
                         <button
                           key={pageNum}
-                          className={`join-item btn btn-sm ${page === pageNum ? 'btn-primary' : ''}`}
+                          className={`join-item btn ${page === pageNum ? 'btn-primary' : ''}`}
                           onClick={() => setPage(pageNum)}
                         >
                           {pageNum}
@@ -406,7 +408,7 @@ export default function OrderManagementPage() {
                       );
                     })}
                     <button
-                      className="join-item btn btn-sm"
+                      className="join-item btn"
                       disabled={page >= totalPages}
                       onClick={() => setPage(page + 1)}
                     >

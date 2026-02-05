@@ -70,7 +70,7 @@ export default function AddUserModal({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">添加用户</h2>
-          <button className="btn btn-ghost btn-sm" onClick={onClose}>
+          <button className="btn btn-ghost" onClick={onClose}>
             ✕
           </button>
         </div>

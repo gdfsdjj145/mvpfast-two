@@ -19,6 +19,7 @@ import {
   FilePlus,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { formatDateTime } from '@/lib/utils/common';
 import ImageUpload, {
   uploadImageFile,
 } from '@/components/common/ImageUpload';
@@ -268,43 +269,34 @@ export default function PostsPage() {
     }
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   return (
     <div className="space-y-4">
       {/* 统计卡片 */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-primary">
               <FileText size={24} />
             </div>
             <div className="stat-title text-xs">总文章数</div>
             <div className="stat-value text-2xl">{stats.total}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-success">
               <BookOpen size={24} />
             </div>
             <div className="stat-title text-xs">已发布</div>
             <div className="stat-value text-2xl">{stats.published}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-warning">
               <FilePlus size={24} />
             </div>
             <div className="stat-title text-xs">草稿</div>
             <div className="stat-value text-2xl">{stats.draft}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-secondary">
               <Eye size={24} />
             </div>
@@ -325,20 +317,20 @@ export default function PostsPage() {
                 <input
                   type="text"
                   placeholder="搜索文章标题..."
-                  className="input input-bordered join-item flex-1 input-sm"
+                  className="input input-bordered join-item flex-1 input-md"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="btn btn-primary join-item btn-sm"
+                  className="btn btn-primary join-item"
                 >
                   <Search size={16} />
                 </button>
               </div>
             </form>
             <select
-              className="select select-bordered select-sm"
+              className="select select-bordered select-md"
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
@@ -351,8 +343,9 @@ export default function PostsPage() {
             </select>
             <button
               onClick={() => fetchPosts()}
-              className="btn btn-ghost btn-sm btn-square"
+              className="btn btn-ghost btn-square"
               title="刷新"
+              disabled={loading}
             >
               <RefreshCw
                 size={16}
@@ -361,7 +354,7 @@ export default function PostsPage() {
             </button>
             <button
               onClick={openCreateModal}
-              className="btn btn-primary btn-sm gap-1"
+              className="btn btn-primary gap-1"
             >
               <Plus size={16} />
               新建文章
@@ -374,7 +367,7 @@ export default function PostsPage() {
       <div className="card bg-base-100 shadow">
         <div className="card-body p-0">
           <div className="overflow-x-auto">
-            <table className="table table-sm">
+            <table className="table table-zebra">
               <thead>
                 <tr>
                   <th>标题</th>
@@ -415,7 +408,7 @@ export default function PostsPage() {
                       </td>
                       <td>
                         {post.category ? (
-                          <div className="badge badge-outline badge-sm">
+                          <div className="badge badge-outline badge">
                             {post.category}
                           </div>
                         ) : (
@@ -424,11 +417,11 @@ export default function PostsPage() {
                       </td>
                       <td>
                         {post.status === 'published' ? (
-                          <div className="badge badge-success badge-sm gap-1">
+                          <div className="badge badge-success badge gap-1">
                             已发布
                           </div>
                         ) : (
-                          <div className="badge badge-warning badge-sm gap-1">
+                          <div className="badge badge-warning badge gap-1">
                             草稿
                           </div>
                         )}
@@ -436,7 +429,7 @@ export default function PostsPage() {
                       <td className="text-sm">{post.authorName}</td>
                       <td>
                         <div className="text-xs text-base-content/60">
-                          {formatDate(
+                          {formatDateTime(
                             post.publishedAt || post.created_time
                           )}
                         </div>
@@ -481,15 +474,15 @@ export default function PostsPage() {
               </div>
               <div className="join">
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page <= 1}
                   onClick={() => setPage((p) => p - 1)}
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <button className="join-item btn btn-sm">第 {page} 页</button>
+                <button className="join-item btn">第 {page} 页</button>
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page >= totalPages}
                   onClick={() => setPage((p) => p + 1)}
                 >

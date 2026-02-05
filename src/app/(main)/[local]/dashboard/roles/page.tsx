@@ -13,7 +13,7 @@ import {
   getAllPermissions,
   type Role,
   type Permission,
-} from '@/lib/rbac';
+} from '@/lib/auth/rbac';
 
 // 权限分组展示
 const PERMISSION_GROUPS: { label: string; permissions: Permission[] }[] = [
@@ -59,7 +59,7 @@ export default function RolesPage() {
     <div className="card bg-base-100 shadow">
       <div className="card-body p-0">
         <div className="overflow-x-auto">
-          <table className="table table-sm">
+          <table className="table table-zebra">
             <thead>
               <tr>
                 <th className="w-40">权限分组</th>
@@ -67,7 +67,7 @@ export default function RolesPage() {
                 <th>说明</th>
                 {roles.map((role) => (
                   <th key={role} className="text-center">
-                    <div className={`badge ${ROLE_META[role].color} badge-sm gap-1`}>
+                    <div className={`badge ${ROLE_META[role].color} badge gap-1`}>
                       {ROLE_META[role].icon}
                       {ROLE_META[role].label}
                     </div>

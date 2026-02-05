@@ -2,41 +2,6 @@
 import { Settings } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-export const THEMES = [
-  'light',
-  'dark',
-  'cupcake',
-  'bumblebee',
-  'emerald',
-  'corporate',
-  'synthwave',
-  'retro',
-  'cyberpunk',
-  'valentine',
-  'halloween',
-  'garden',
-  'forest',
-  'aqua',
-  'lofi',
-  'pastel',
-  'fantasy',
-  'wireframe',
-  'black',
-  'luxury',
-  'dracula',
-  'cmyk',
-  'autumn',
-  'business',
-  'acid',
-  'lemonade',
-  'night',
-  'coffee',
-  'winter',
-  'dim',
-  'nord',
-  'sunset',
-];
-
 export default function ThemeChoose() {
   const { setTheme } = useTheme();
 
@@ -51,7 +16,7 @@ export default function ThemeChoose() {
         <div className="drawer-content">
           <label
             htmlFor="my-drawer-4"
-            className="flex items-center justify-center w-8 h-8 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+            className="flex items-center justify-center w-8 h-8 text-base-content/70 hover:text-base-content hover:bg-base-200 rounded-lg transition-colors cursor-pointer"
             aria-label="应用设置"
           >
             <Settings className="w-[18px] h-[18px]" />
@@ -63,14 +28,14 @@ export default function ThemeChoose() {
             aria-label="close sidebar"
             className="drawer-overlay"
           />
-          <div className="bg-white min-h-full w-80 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">应用设置</h3>
+          <div className="bg-base-100 min-h-full w-80 p-6">
+            <h3 className="text-lg font-semibold text-base-content mb-6">应用设置</h3>
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-600 mb-3">主题色（当前仅支持亮色主题）</p>
+                <p className="text-sm text-base-content/70 mb-3">主题色（当前仅支持亮色主题）</p>
                 <button
                   onClick={handleThemeClick}
-                  className="w-full p-3 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors"
+                  className="w-full p-3 bg-base-200 hover:bg-base-300 rounded-xl border border-base-300 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="grid grid-cols-4 h-8 w-16 rounded-lg overflow-hidden" data-theme="light">
@@ -79,7 +44,7 @@ export default function ThemeChoose() {
                       <div className="bg-base-content" />
                       <div className="bg-primary" />
                     </div>
-                    <span className="text-sm text-gray-700">Light</span>
+                    <span className="text-sm text-base-content">Light</span>
                   </div>
                 </button>
               </div>
