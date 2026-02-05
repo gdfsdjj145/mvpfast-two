@@ -52,22 +52,22 @@ const UserMenu = () => {
       {/* PC端显示 */}
       <div className="hidden sm:block dropdown dropdown-end">
         <label tabIndex={0} className="cursor-pointer">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-sm font-medium overflow-hidden">
+          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-content text-sm font-medium overflow-hidden">
             {renderName()}
           </div>
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content menu p-2 shadow-lg bg-white rounded-xl w-48 mt-3 border border-gray-100"
+          className="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-xl w-48 mt-3 border border-base-200"
         >
-          <li className="px-3 py-2 text-xs text-gray-500 border-b border-gray-100 mb-1">
+          <li className="px-3 py-2 text-xs text-base-content/50 border-b border-base-200 mb-1">
             {renderFullName()}
           </li>
           <li>
             <Link
-              href="/dashboard/home"
+              href="/dashboard/my-orders"
               prefetch={false}
-              className="text-sm text-gray-700 hover:bg-gray-50 rounded-lg"
+              className="text-sm text-base-content hover:bg-base-200 rounded-lg"
             >
               {t('userMenu.account')}
             </Link>
@@ -75,7 +75,7 @@ const UserMenu = () => {
           <li>
             <button
               onClick={handleLogout}
-              className="text-sm text-red-500 hover:bg-red-50 rounded-lg"
+              className="text-sm text-error hover:bg-error/10 rounded-lg"
             >
               {t('userMenu.logout')}
             </button>
@@ -85,10 +85,10 @@ const UserMenu = () => {
 
       {/* 移动端显示 */}
       <div className="sm:hidden flex items-center gap-2">
-        <Link href="/dashboard/home" prefetch={false} className="text-sm text-gray-600">
+        <Link href="/dashboard/my-orders" prefetch={false} className="text-sm text-base-content/70">
           {t('userMenu.accountMobile')}
         </Link>
-        <button onClick={handleLogout} className="text-sm text-red-500">
+        <button onClick={handleLogout} className="text-sm text-error">
           {t('userMenu.logoutMobile')}
         </button>
       </div>
@@ -104,17 +104,19 @@ export default function Header() {
   const { siteConfig } = useSiteConfig();
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <header className="sticky top-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-200">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img
+            <Image
               alt={siteConfig.siteName}
               src="/favicon.ico"
+              width={32}
+              height={32}
               className="h-8 w-auto"
             />
-            <span className="text-lg font-bold text-gray-900">{siteConfig.siteName}</span>
+            <span className="text-lg font-bold text-base-content">{siteConfig.siteName}</span>
           </Link>
 
           {/* Navigation */}
@@ -125,7 +127,7 @@ export default function Header() {
                 href={item.href}
                 target={item.target}
                 rel={item.rel}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2.5 text-sm font-medium text-base-content/60 hover:text-base-content rounded-lg hover:bg-base-200/80 transition-all duration-200 cursor-pointer"
               >
                 {t(`nav.items.${index}.name`)}
               </a>
@@ -141,7 +143,7 @@ export default function Header() {
             ) : (
               <Link
                 href="/auth/signin"
-                className="ml-2 px-5 py-2 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-500 rounded-full hover:shadow-lg hover:shadow-purple-500/25 transition-all"
+                className="ml-2 btn btn-primary rounded-full px-5 min-h-[40px] h-10"
               >
                 {t('login.label')}
               </Link>

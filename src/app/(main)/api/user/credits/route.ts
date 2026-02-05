@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 
 // GET: 获取用户积分信息和交易记录
 export async function GET(request: NextRequest) {

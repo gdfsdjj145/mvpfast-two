@@ -1,7 +1,7 @@
 // 创建测试用户
 // 运行方式: npx tsx scripts/create-test-users.ts
 
-import prisma from '../src/lib/prisma';
+import prisma from '../src/lib/core/prisma';
 
 async function createTestUsers() {
   console.log('=== 创建测试用户 ===\n');

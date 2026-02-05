@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { getUserList, getUserStats, isAdmin } from '@/models/user';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 import bcrypt from 'bcryptjs';
-import { getGeneratorName } from '@/lib/generatorName';
+import { getGeneratorName } from '@/lib/utils/name-generator';
 
 // GET: 获取用户列表
 export async function GET(request: NextRequest) {

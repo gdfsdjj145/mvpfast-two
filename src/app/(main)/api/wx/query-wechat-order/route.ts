@@ -1,4 +1,4 @@
-import { queryOrder } from '@/lib/pay';
+import { queryOrder } from '@/lib/services/pay';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

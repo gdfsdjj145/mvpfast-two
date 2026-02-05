@@ -1,7 +1,7 @@
 // 测试脚本 - 检测 API 和数据库操作是否正常
 // 运行方式: npx ts-node --compiler-options '{"module":"CommonJS"}' scripts/test-redemption.ts
 
-import prisma from '../src/lib/prisma';
+import prisma from '../src/lib/core/prisma';
 
 async function testRedemptionFeature() {
   console.log('=== 兑换码功能测试 ===\n');

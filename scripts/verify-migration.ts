@@ -3,7 +3,7 @@
  * 检查迁移后现有数据是否完整
  */
 
-import prisma from '../src/lib/prisma'
+import prisma from '../src/lib/core/prisma'
 
 async function verifyMigration() {
   console.log('🔍 开始验证数据库迁移...\n')

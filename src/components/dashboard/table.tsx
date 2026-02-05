@@ -1,23 +1,39 @@
 import React from 'react';
 
-const Table = ({
+// 类型定义
+interface Column<T = Record<string, unknown>> {
+  prop: string;
+  label: string;
+  render?: (row: T) => React.ReactNode;
+}
+
+interface PaginationInfo {
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+interface TableOptions {
+  change?: (page: number) => void;
+  noDataText?: string;
+}
+
+interface TableProps<T = Record<string, unknown>> {
+  data: T[];
+  columns: Column<T>[];
+  options?: TableOptions;
+  pagination?: PaginationInfo | null;
+}
+
+const Table = <T extends Record<string, unknown>>({
   data,
   columns,
   options = {},
   pagination = null,
-}: {
-  data: any[];
-  columns: any[];
-  options?: any;
-  pagination?: {
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  } | null;
-}) => {
+}: TableProps<T>) => {
   const handlePageChange = (type: 'prev' | 'next') => {
-    if (!pagination) return;
+    if (!pagination || !options.change) return;
     let page = pagination.page;
     if (type === 'prev') {
       page--;
@@ -35,23 +51,19 @@ const Table = ({
         <thead>
           <tr>
             <th></th>
-            {columns.map((column, index) => (
-              <th>{column.label}</th>
+            {columns.map((column) => (
+              <th key={column.prop}>{column.label}</th>
             ))}
           </tr>
         </thead>
         {Boolean(data.length) ? (
           <tbody>
-            {data.map((row, index) => (
-              <tr key={index}>
-                <th>{index + 1}</th>
-                {columns.map((column, index) => (
-                  <td>
-                    {column.render
-                      ? column.render(row)
-                      : column.render
-                      ? column.render(row)
-                      : row[column.prop]}
+            {data.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                <th>{rowIndex + 1}</th>
+                {columns.map((column) => (
+                  <td key={column.prop}>
+                    {column.render ? column.render(row) : (row[column.prop] as React.ReactNode)}
                   </td>
                 ))}
               </tr>
@@ -61,7 +73,7 @@ const Table = ({
           <tbody>
             <tr>
               <td colSpan={columns.length + 1} className="text-center">
-                {(options.noDataText && options.noDataText) || '暂无数据'}
+                {options.noDataText || '暂无数据'}
               </td>
             </tr>
           </tbody>

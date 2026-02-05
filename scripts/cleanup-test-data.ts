@@ -1,7 +1,7 @@
 // 清理测试数据
 // 运行方式: npx tsx scripts/cleanup-test-data.ts
 
-import prisma from '../src/lib/prisma';
+import prisma from '../src/lib/core/prisma';
 
 async function cleanupTestData() {
   console.log('=== 清理测试数据 ===\n');

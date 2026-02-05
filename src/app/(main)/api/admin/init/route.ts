@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { executeInit, isSystemInitialized } from '@/lib/init-service';
+import { executeInit, isSystemInitialized } from '@/lib/init';
 
 export async function POST(request: NextRequest) {
   try {

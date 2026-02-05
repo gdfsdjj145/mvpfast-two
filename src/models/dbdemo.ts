@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 import { DbUserDemo, Prisma } from '@prisma/client';
 
 // 创建DbUserDemo记录

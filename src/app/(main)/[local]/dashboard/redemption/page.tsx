@@ -21,6 +21,7 @@ import {
   Clock,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { formatDateTime } from '@/lib/utils/common';
 
 interface RedemptionCode {
   id: string;
@@ -93,6 +94,10 @@ export default function RedemptionPage() {
 
   // 复制状态
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // 操作中的状态（防止重复点击）
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // 获取兑换码列表
   const fetchCodes = async () => {
@@ -264,6 +269,9 @@ export default function RedemptionPage() {
 
   // 切换状态
   const handleToggleStatus = async (code: RedemptionCode) => {
+    if (togglingId) return; // 防止重复点击
+
+    setTogglingId(code.id);
     try {
       const res = await fetch(`/api/admin/redemption-codes/${code.id}`, {
         method: 'PUT',
@@ -280,15 +288,20 @@ export default function RedemptionPage() {
       }
     } catch {
       toast.error('操作失败');
+    } finally {
+      setTogglingId(null);
     }
   };
 
   // 删除兑换码
   const handleDelete = async (code: RedemptionCode) => {
+    if (deletingId) return; // 防止重复点击
+
     if (!confirm(`确定要删除兑换码 ${code.code} 吗？此操作不可恢复。`)) {
       return;
     }
 
+    setDeletingId(code.id);
     try {
       const res = await fetch(`/api/admin/redemption-codes/${code.id}`, {
         method: 'DELETE',
@@ -303,19 +316,16 @@ export default function RedemptionPage() {
       }
     } catch {
       toast.error('删除失败');
+    } finally {
+      setDeletingId(null);
     }
   };
 
   // 格式化日期
-  const formatDate = (dateStr: string | null) => {
+  // 格式化日期，支持 null 值
+  const formatDateNullable = (dateStr: string | null) => {
     if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    return formatDateTime(dateStr);
   };
 
   // 检查是否过期
@@ -329,28 +339,28 @@ export default function RedemptionPage() {
       {/* 统计卡片 */}
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-primary">
               <Ticket size={24} />
             </div>
             <div className="stat-title text-xs">总兑换码</div>
             <div className="stat-value text-2xl">{stats.totalCodes}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-success">
               <Check size={24} />
             </div>
             <div className="stat-title text-xs">有效兑换码</div>
             <div className="stat-value text-2xl">{stats.activeCodes}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-warning">
               <Hash size={24} />
             </div>
             <div className="stat-title text-xs">已使用次数</div>
             <div className="stat-value text-2xl">{stats.totalUsed}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-secondary">
               <Coins size={24} />
             </div>
@@ -369,17 +379,17 @@ export default function RedemptionPage() {
                 <input
                   type="text"
                   placeholder="搜索兑换码或描述..."
-                  className="input input-bordered join-item flex-1 input-sm"
+                  className="input input-bordered join-item flex-1 input-md"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <button type="submit" className="btn btn-primary join-item btn-sm">
+                <button type="submit" className="btn btn-primary join-item">
                   <Search size={16} />
                 </button>
               </div>
             </form>
             <select
-              className="select select-bordered select-sm"
+              className="select select-bordered select-md"
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
@@ -392,14 +402,15 @@ export default function RedemptionPage() {
             </select>
             <button
               onClick={() => fetchCodes()}
-              className="btn btn-ghost btn-sm btn-square"
+              className="btn btn-ghost btn-square"
               title="刷新"
+              disabled={loading}
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={() => createModalRef.current?.showModal()}
-              className="btn btn-primary btn-sm gap-1"
+              className="btn btn-primary gap-1"
             >
               <Plus size={16} />
               创建
@@ -409,7 +420,7 @@ export default function RedemptionPage() {
                 setBatchResult([]);
                 batchModalRef.current?.showModal();
               }}
-              className="btn btn-secondary btn-sm gap-1"
+              className="btn btn-secondary gap-1"
             >
               <Hash size={16} />
               批量生成
@@ -422,7 +433,7 @@ export default function RedemptionPage() {
       <div className="card bg-base-100 shadow">
         <div className="card-body p-0">
           <div className="overflow-x-auto">
-            <table className="table table-sm">
+            <table className="table table-zebra">
               <thead>
                 <tr>
                   <th>兑换码</th>
@@ -486,13 +497,13 @@ export default function RedemptionPage() {
                       </td>
                       <td>
                         {!code.isActive ? (
-                          <span className="badge badge-error badge-sm">已禁用</span>
+                          <span className="badge badge-error badge">已禁用</span>
                         ) : isExpired(code.expiresAt) ? (
-                          <span className="badge badge-warning badge-sm">已过期</span>
+                          <span className="badge badge-warning badge">已过期</span>
                         ) : code.usedCount >= code.maxUses ? (
-                          <span className="badge badge-ghost badge-sm">已用完</span>
+                          <span className="badge badge-ghost badge">已用完</span>
                         ) : (
-                          <span className="badge badge-success badge-sm">有效</span>
+                          <span className="badge badge-success badge">有效</span>
                         )}
                       </td>
                       <td>
@@ -500,7 +511,7 @@ export default function RedemptionPage() {
                           {code.expiresAt ? (
                             <>
                               <Clock size={12} />
-                              {formatDate(code.expiresAt)}
+                              {formatDateNullable(code.expiresAt)}
                             </>
                           ) : (
                             <span className="text-success">永不过期</span>
@@ -510,7 +521,7 @@ export default function RedemptionPage() {
                       <td>
                         <div className="flex items-center gap-1 text-xs text-base-content/60">
                           <Calendar size={12} />
-                          {formatDate(code.created_time)}
+                          {formatDateNullable(code.created_time)}
                         </div>
                       </td>
                       <td>
@@ -526,15 +537,27 @@ export default function RedemptionPage() {
                             onClick={() => handleToggleStatus(code)}
                             className={`btn btn-ghost btn-xs ${code.isActive ? 'text-warning' : 'text-success'}`}
                             title={code.isActive ? '禁用' : '启用'}
+                            disabled={togglingId === code.id}
                           >
-                            {code.isActive ? <Ban size={14} /> : <Check size={14} />}
+                            {togglingId === code.id ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : code.isActive ? (
+                              <Ban size={14} />
+                            ) : (
+                              <Check size={14} />
+                            )}
                           </button>
                           <button
                             onClick={() => handleDelete(code)}
                             className="btn btn-ghost btn-xs text-error"
                             title="删除"
+                            disabled={deletingId === code.id}
                           >
-                            <Trash2 size={14} />
+                            {deletingId === code.id ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              <Trash2 size={14} />
+                            )}
                           </button>
                         </div>
                       </td>
@@ -552,15 +575,15 @@ export default function RedemptionPage() {
             </div>
             <div className="join">
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={page <= 1}
                 onClick={() => setPage(p => p - 1)}
               >
                 <ChevronLeft size={16} />
               </button>
-              <button className="join-item btn btn-sm">第 {page} 页</button>
+              <button className="join-item btn">第 {page} 页</button>
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => p + 1)}
               >
@@ -824,7 +847,7 @@ export default function RedemptionPage() {
                           <tr key={record.id}>
                             <td>{record.userIdentifier}</td>
                             <td className="text-success">+{record.creditAmount}</td>
-                            <td className="text-xs text-base-content/60">{formatDate(record.created_time)}</td>
+                            <td className="text-xs text-base-content/60">{formatDateNullable(record.created_time)}</td>
                           </tr>
                         ))}
                       </tbody>

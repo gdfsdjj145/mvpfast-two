@@ -1,5 +1,5 @@
 'use server';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 
 export const gerShareByUserId = async (userId: string) => {
   try {

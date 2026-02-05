@@ -1,7 +1,7 @@
 // API 集成测试脚本
 // 运行方式: npx tsx scripts/test-api-integration.ts
 
-import prisma from '../src/lib/prisma';
+import prisma from '../src/lib/core/prisma';
 
 async function testAPIIntegration() {
   console.log('=== API 集成测试 ===\n');
