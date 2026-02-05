@@ -1,7 +1,7 @@
 import { blogSource } from '@/../source';
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils/common';
 import { type PageData } from 'fumadocs-core/source';
 import { getPublishedPosts } from '@/models/post';
 

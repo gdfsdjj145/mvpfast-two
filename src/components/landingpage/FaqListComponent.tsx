@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useTranslations, useMessages } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/common';
 
 export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -17,7 +17,7 @@ export default function FaqSection() {
   };
 
   return (
-    <section className="py-20 sm:py-24 lg:py-32 bg-gray-50">
+    <section className="py-20 sm:py-24 lg:py-32 bg-base-200">
       <div className="max-w-3xl mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ export default function FaqSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-base-content tracking-tight">
             {t('title')}
           </h2>
         </motion.div>
@@ -39,18 +39,18 @@ export default function FaqSection() {
           {faqListConfig.map((item: { title: string; answer: string }, index: number) => (
             <div
               key={index}
-              className="bg-white rounded-xl border border-gray-100 overflow-hidden"
+              className="bg-base-100 rounded-xl border border-base-300 overflow-hidden"
             >
               <button
                 onClick={() => toggleItem(index)}
-                className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between p-5 text-left hover:bg-base-200 transition-colors"
               >
-                <span className="font-medium text-gray-900 pr-4">
+                <span className="font-medium text-base-content pr-4">
                   {t(`items.${index}.title`)}
                 </span>
                 <ChevronDown
                   className={cn(
-                    'w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0',
+                    'w-5 h-5 text-base-content/40 transition-transform duration-300 flex-shrink-0',
                     openIndex === index && 'rotate-180'
                   )}
                 />
@@ -62,7 +62,7 @@ export default function FaqSection() {
                 )}
               >
                 <div className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
+                  <p className="px-5 pb-5 text-sm text-base-content/70 leading-relaxed">
                     {t(`items.${index}.answer`)}
                   </p>
                 </div>

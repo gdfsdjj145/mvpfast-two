@@ -27,7 +27,8 @@ import {
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { config } from '@/config';
-import { ROLE_PERMISSIONS, type Role } from '@/lib/rbac';
+import { ROLE_PERMISSIONS, type Role } from '@/lib/auth/rbac';
+import { formatDateTime } from '@/lib/utils/common';
 
 interface UserData {
   id: string;
@@ -318,14 +319,14 @@ export default function UsersPage() {
     switch (role) {
       case 'admin':
         return (
-          <div className="badge badge-warning badge-sm gap-1">
+          <div className="badge badge-warning badge gap-1">
             <Shield size={12} />
             管理员
           </div>
         );
       default:
         return (
-          <div className="badge badge-ghost badge-sm gap-1">
+          <div className="badge badge-ghost badge gap-1">
             <User size={12} />
             用户
           </div>
@@ -354,37 +355,27 @@ export default function UsersPage() {
     );
   };
 
-  // 格式化日期
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   return (
     <div className="space-y-4">
       {/* 统计卡片 */}
       {stats && (
         <div className={`grid gap-3 ${isCreditsMode ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3'}`}>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-primary">
               <Users size={24} />
             </div>
             <div className="stat-title text-xs">总用户数</div>
             <div className="stat-value text-2xl">{stats.total}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-warning">
               <Shield size={24} />
             </div>
             <div className="stat-title text-xs">管理员</div>
             <div className="stat-value text-2xl">{stats.admins}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-success">
               <TrendingUp size={24} />
             </div>
@@ -392,7 +383,7 @@ export default function UsersPage() {
             <div className="stat-value text-2xl">{stats.activeUsers}</div>
           </div>
           {isCreditsMode && (
-            <div className="stat bg-base-100 shadow rounded-xl p-4">
+            <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
               <div className="stat-figure text-secondary">
                 <Coins size={24} />
               </div>
@@ -412,17 +403,17 @@ export default function UsersPage() {
                 <input
                   type="text"
                   placeholder="搜索用户名、邮箱、手机号..."
-                  className="input input-bordered join-item flex-1 input-sm"
+                  className="input input-bordered join-item flex-1 input-md"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-                <button type="submit" className="btn btn-primary join-item btn-sm">
+                <button type="submit" className="btn btn-primary join-item">
                   <Search size={16} />
                 </button>
               </div>
             </form>
             <select
-              className="select select-bordered select-sm"
+              className="select select-bordered select-md"
               value={roleFilter}
               onChange={(e) => {
                 setRoleFilter(e.target.value);
@@ -435,14 +426,15 @@ export default function UsersPage() {
             </select>
             <button
               onClick={() => fetchUsers()}
-              className="btn btn-ghost btn-sm btn-square"
+              className="btn btn-ghost btn-square"
               title="刷新"
+              disabled={loading}
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
             <button
               onClick={openCreateModal}
-              className="btn btn-primary btn-sm gap-1"
+              className="btn btn-primary gap-1"
             >
               <UserPlus size={16} />
               新增用户
@@ -455,7 +447,7 @@ export default function UsersPage() {
       <div className="card bg-base-100 shadow">
         <div className="card-body p-0">
           <div className="overflow-x-auto">
-            <table className="table table-sm">
+            <table className="table table-zebra">
               <thead>
                 <tr>
                   <th>用户</th>
@@ -524,7 +516,7 @@ export default function UsersPage() {
                       <td>
                         <div className="flex items-center gap-1 text-xs text-base-content/60">
                           <Calendar size={12} />
-                          {formatDate(user.created_time)}
+                          {formatDateTime(user.created_time)}
                         </div>
                       </td>
                       <td>
@@ -564,15 +556,15 @@ export default function UsersPage() {
               </div>
               <div className="join">
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page <= 1}
                   onClick={() => setPage(p => p - 1)}
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <button className="join-item btn btn-sm">第 {page} 页</button>
+                <button className="join-item btn">第 {page} 页</button>
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page >= totalPages}
                   onClick={() => setPage(p => p + 1)}
                 >
@@ -660,7 +652,7 @@ export default function UsersPage() {
                   <div className="mt-3">
                     <button
                       onClick={handleAdjustCredits}
-                      className="btn btn-primary btn-sm gap-2"
+                      className="btn btn-primary gap-2"
                       disabled={adjusting || creditAmount === 0 || !creditReason.trim()}
                     >
                       {adjusting ? (
@@ -724,7 +716,7 @@ export default function UsersPage() {
                               {tx.description}
                             </td>
                             <td className="text-xs text-base-content/60">
-                              {formatDate(tx.created_time)}
+                              {formatDateTime(tx.created_time)}
                             </td>
                           </tr>
                         ))}
@@ -874,7 +866,7 @@ export default function UsersPage() {
                     <button
                       key={role}
                       type="button"
-                      className={`btn btn-sm gap-1 ${
+                      className={`btn gap-1 ${
                         editForm.role === role
                           ? role === 'admin'
                             ? 'btn-warning'
@@ -912,7 +904,7 @@ export default function UsersPage() {
                 )}
                 <div className="flex items-center gap-2">
                   <Calendar size={14} />
-                  <span>注册于 {formatDate(editUser.created_time)}</span>
+                  <span>注册于 {formatDateTime(editUser.created_time)}</span>
                 </div>
               </div>
             </div>

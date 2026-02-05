@@ -1,7 +1,7 @@
 // 创建后台管理测试数据
 // 运行方式: npx tsx scripts/create-test-data.ts
 
-import prisma from '../src/lib/prisma';
+import prisma from '../src/lib/core/prisma';
 
 async function createTestData() {
   console.log('=== 创建后台管理测试数据 ===\n');

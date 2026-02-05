@@ -144,7 +144,7 @@ export default function WeChatH5Pay({
   return (
     <div className="w-full">
       {paymentStatus === 'success' ? (
-        <div className="text-green-500">支付成功</div>
+        <div className="text-success">支付成功</div>
       ) : (
         <button
           onClick={handleClick}

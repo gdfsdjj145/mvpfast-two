@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { isR2Configured } from '@/lib/env';
-import { validateFile, generateKey, uploadToR2 } from '@/lib/r2';
+import { isR2Configured } from '@/lib/config/env';
+import { validateFile, generateKey, uploadToR2 } from '@/lib/services/storage';
 
 export async function POST(request: NextRequest) {
   try {

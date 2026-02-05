@@ -4,7 +4,7 @@ import {
   generateJsapiSignature,
   generateNonce,
   generateTimestamp,
-} from '@/lib/pay';
+} from '@/lib/services/pay';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {

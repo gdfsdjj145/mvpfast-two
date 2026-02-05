@@ -2,8 +2,8 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import { encode } from 'next-auth/jwt';
-import prisma from '@/lib/prisma';
-import { getGeneratorName } from '@/lib/generatorName';
+import prisma from '@/lib/core/prisma';
+import { getGeneratorName } from '@/lib/utils/name-generator';
 import { grantInitialCredits } from '@/models/credit';
 
 // 微信开放平台接口获取 access_token

@@ -4,9 +4,6 @@
   themes: light --default;
 }
 
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
-
 
 @layer base {
   *,
@@ -70,6 +67,7 @@
   html {
     scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */
     scrollbar-width: thin; /* 滚动条宽度 */
+    scroll-behavior: smooth; /* 平滑滚动 */
   }
 
   /* 修改特定容器的滚动条样式 */
@@ -154,4 +152,37 @@
   left: 0;
   width: 100%;
   height: 3px;
+}
+
+/* Dashboard 侧边栏滚动条样式 - 防止布局抖动 */
+.dashboard-nav-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.dashboard-nav-scroll:hover {
+  scrollbar-color: #e5e7eb transparent;
+}
+
+.dashboard-nav-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-nav-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-nav-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.dashboard-nav-scroll:hover::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+}
+
+/* 防止内容加载时的布局抖动 */
+.layout-stable {
+  contain: layout style;
 }

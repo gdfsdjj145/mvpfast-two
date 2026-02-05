@@ -10,7 +10,7 @@ export default function AdminComponent() {
   const t = useTranslations('Admin');
 
   return (
-    <section className="bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 lg:py-20">
+    <section className="bg-gradient-to-b from-base-100 to-base-200 py-12 sm:py-16 lg:py-20">
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -20,20 +20,20 @@ export default function AdminComponent() {
           className="relative"
         >
           {/* Browser Frame */}
-          <div className="bg-gray-800 rounded-t-xl px-4 py-3 flex items-center gap-2">
+          <div className="bg-neutral rounded-t-xl px-4 py-3 flex items-center gap-2">
             <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-error" />
+              <div className="w-3 h-3 rounded-full bg-warning" />
+              <div className="w-3 h-3 rounded-full bg-success" />
             </div>
             <div className="flex-1 mx-4">
-              <div className="bg-gray-700 rounded-md px-3 py-1 text-xs text-gray-400 max-w-md mx-auto text-center">
+              <div className="bg-neutral-content/10 rounded-md px-3 py-1 text-xs text-neutral-content/60 max-w-md mx-auto text-center">
                 {t('domain')}
               </div>
             </div>
           </div>
           {/* Screenshot */}
-          <div className="bg-white rounded-b-xl overflow-hidden shadow-2xl shadow-gray-900/20">
+          <div className="bg-base-100 rounded-b-xl overflow-hidden shadow-2xl shadow-base-content/20">
             <Image
               src={adminConfig.banner.url}
               alt={adminConfig.banner.alt}

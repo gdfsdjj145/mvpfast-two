@@ -1,14 +1,16 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { updateUserInfo } from './actions';
 import toast from 'react-hot-toast';
 import ImageUpload from '@/components/common/ImageUpload';
+import { Save } from 'lucide-react';
 
 export default function PersonPage() {
   const { data: session, status, update: updateSession } = useSession();
   const [user, setUser] = React.useState<any>(null);
   const [avatar, setAvatar] = React.useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (session?.user) {
@@ -18,25 +20,30 @@ export default function PersonPage() {
   }, [session]);
 
   const handleSave = async () => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id || saving) return;
 
-    const res = await updateUserInfo(session.user.id, {
-      avatar: avatar,
-      nickName: user.nickName,
-    });
-
-    if (res.code === 0) {
-      await updateSession({
-        ...session,
-        user: {
-          ...session.user,
-          avatar: avatar,
-          nickName: user.nickName,
-        },
+    setSaving(true);
+    try {
+      const res = await updateUserInfo(session.user.id, {
+        avatar: avatar,
+        nickName: user.nickName,
       });
-      toast.success('保存成功');
-    } else {
-      toast.error('保存失败');
+
+      if (res.code === 0) {
+        await updateSession({
+          ...session,
+          user: {
+            ...session.user,
+            avatar: avatar,
+            nickName: user.nickName,
+          },
+        });
+        toast.success('保存成功');
+      } else {
+        toast.error('保存失败');
+      }
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -88,10 +95,21 @@ export default function PersonPage() {
       </div>
       <div className="mt-8 flex justify-center">
         <button
-          className="btn btn-secondary w-full max-w-xs"
+          className="btn btn-secondary w-full max-w-xs gap-2"
           onClick={handleSave}
+          disabled={saving}
         >
-          保存修改
+          {saving ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              保存中...
+            </>
+          ) : (
+            <>
+              <Save size={18} />
+              保存修改
+            </>
+          )}
         </button>
       </div>
     </div>

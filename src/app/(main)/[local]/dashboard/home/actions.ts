@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 import { auth } from '@/auth';
 import { getUserCreditInfo, getCreditTransactions } from '@/models/credit';
 import { unstable_noStore as noStore } from 'next/cache';

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import QRCode from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import axios from 'axios';
 import { paySign } from '@/lib/pay/sign';
 import { checkYungouOrderStatus } from '@/app/(main)/[local]/pay/actions';
@@ -180,28 +180,28 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-error">{error}</div>;
   }
 
   if (!qrCodeUrl) {
-    return <div className="text-red-500">无法生成支付二维码</div>;
+    return <div className="text-error">无法生成支付二维码</div>;
   }
 
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-xl font-bold mb-4">请使用微信扫描二维码支付</h2>
       <div className="relative">
-        <QRCode value={qrCodeUrl} size={256} />
+        <QRCodeCanvas value={qrCodeUrl} size={256} />
         {paymentStatus === 'success' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-base-100 bg-opacity-80">
             <svg
-              className="w-16 h-16 text-green-500"
+              className="w-16 h-16 text-success"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -214,8 +214,8 @@ const WeChatPayQRCode: React.FC<WeChatPayQRCodeProps> = ({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            <p className="mt-4 text-xl font-bold text-green-600">支付成功！</p>
-            <p className="mt-2 text-gray-600">感谢您的购买，祝您使用愉快！</p>
+            <p className="mt-4 text-xl font-bold text-success">支付成功！</p>
+            <p className="mt-2 text-base-content/70">感谢您的购买，祝您使用愉快！</p>
           </div>
         )}
       </div>
