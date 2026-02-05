@@ -101,12 +101,12 @@
       }
     },
     "testimonial": {
-      "avatar": "/avatars/a1.jpg",
+      "avatar": "https://picsum.photos/80/80",
       "name": "Developer",
       "quote": "A minimalist template system that boosts development efficiency by 300%"
     },
     "banner": {
-      "url": "/banners/banner.png",
+      "url": "https://picsum.photos/800/600",
       "alt": "MvpFast Preview"
     }
   },
@@ -159,8 +159,8 @@
   "Admin": {
     "domain": "example.com",
     "banner": {
-      "url": "/banners/banner-1.png",
-      "alt": "Admin Preview"
+      "url": "https://picsum.photos/1920/1080",
+      "alt": "Dashboard Preview"
     }
   },
   "Showcase": {
@@ -261,24 +261,24 @@
         "title": "Admin Management 1",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=1",
+          "alt": "Admin Management 1"
         }
       },
       {
         "title": "Admin Management 2",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=2",
+          "alt": "Admin Management 2"
         }
       },
       {
         "title": "Admin Management 3",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=3",
+          "alt": "Admin Management 3"
         }
       }
     ]
