@@ -59,12 +59,11 @@ export default auth(async function middleware(request) {
     return intlMiddleware(request);
   }
 
-  // 受保护路由
+  // 受保护路由 - 需要登录验证
   if (protectedRoutes.some(route => pathnameWithoutLocale.startsWith(route))) {
-    const isDev = process.env.NODE_ENV === 'development';
-
-    if (!isAuthenticated && !isDev) {
-      console.log('未登录访问受保护路由，重定向到登录页');
+    // 未登录时重定向到登录页
+    if (!isAuthenticated) {
+      console.log('未登录访问受保护路由，重定向到登录页:', pathnameWithoutLocale);
       let loginPath = '/auth/signin';
       if (currentLocale) {
         loginPath = `/${currentLocale}/auth/signin`;
@@ -74,26 +73,20 @@ export default auth(async function middleware(request) {
       return NextResponse.redirect(loginUrl);
     }
 
-    if (isDev && !isAuthenticated) {
-      console.log('[DEV] 开发环境免登录访问:', pathnameWithoutLocale);
-    }
-
     // 基于 RBAC 的路由权限检查
     const requiredPermission = Object.entries(ROUTE_PERMISSIONS)
       .find(([route]) => pathnameWithoutLocale.startsWith(route));
 
     if (requiredPermission) {
-      if (!isDev && isAuthenticated) {
-        const userRole = (session as any)?.user?.role || 'user';
-        const [, permission] = requiredPermission;
-        if (!hasPermission(userRole, permission)) {
-          console.log('无权限访问路由，重定向到首页');
-          let forbiddenPath = '/';
-          if (currentLocale) {
-            forbiddenPath = `/${currentLocale}/`;
-          }
-          return NextResponse.redirect(new URL(forbiddenPath, request.url));
+      const userRole = (session as any)?.user?.role || 'user';
+      const [, permission] = requiredPermission;
+      if (!hasPermission(userRole, permission)) {
+        console.log('无权限访问路由，重定向到403页面:', pathnameWithoutLocale);
+        let forbiddenPath = '/403';
+        if (currentLocale) {
+          forbiddenPath = `/${currentLocale}/403`;
         }
+        return NextResponse.redirect(new URL(forbiddenPath, request.url));
       }
     }
   }
