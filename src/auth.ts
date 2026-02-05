@@ -2,11 +2,11 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyCode, verifyPasswordLogin } from './app/(main)/[local]/auth/signin/actions';
-import { getGeneratorName } from '@/lib/generatorName';
+import { getGeneratorName } from '@/lib/utils/name-generator';
 import { grantInitialCredits } from '@/models/credit';
 import authConfig from './auth.config';
 
-import prisma from './lib/prisma';
+import prisma from './lib/core/prisma';
 
 declare module 'next-auth' {
   interface Session {

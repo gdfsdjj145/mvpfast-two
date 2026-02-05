@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/core/prisma';
 import { User, Prisma } from '@prisma/client';
-import { type Role, hasPermission } from '@/lib/rbac';
+import { type Role, hasPermission } from '@/lib/auth/rbac';
 
 // 用户角色类型（从 RBAC 统一导入）
 export type UserRole = Role;

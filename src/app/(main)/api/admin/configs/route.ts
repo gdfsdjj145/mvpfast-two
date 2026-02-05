@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAdmin, getClientInfo } from '@/lib/auth-utils';
+import { requireAdmin, getClientInfo } from '@/lib/auth/utils';
 import { getConfigs, upsertConfig } from '@/models/systemConfig';
 import { createAuditLog } from '@/models/configAuditLog';
-import { clearConfigCache } from '@/lib/config-service';
+import { clearConfigCache } from '@/lib/config/service';
 import { getConfigByKey } from '@/models/systemConfig';
 
 // GET /api/admin/configs - 获取配置列表

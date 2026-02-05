@@ -1,4 +1,4 @@
-import { docs, blogs } from './.source';
+import { docs, blogs } from './.source/server';
 import { loader } from 'fumadocs-core/source';
  
 export const source = loader({

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
+import { formatDateTime } from '@/lib/utils/common';
 
 interface CreditTransaction {
   id: string;
@@ -119,44 +120,34 @@ export default function CreditsPage() {
     fetchTransactions();
   };
 
-  // 格式化日期
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   // 渲染类型标签
   const renderTypeBadge = (type: string) => {
     switch (type) {
       case 'recharge':
         return (
-          <span className="badge badge-success badge-sm gap-1">
+          <span className="badge badge-success badge gap-1">
             <TrendingUp size={12} />
             充值
           </span>
         );
       case 'consume':
         return (
-          <span className="badge badge-error badge-sm gap-1">
+          <span className="badge badge-error badge gap-1">
             <TrendingDown size={12} />
             消费
           </span>
         );
       case 'refund':
         return (
-          <span className="badge badge-warning badge-sm gap-1">
+          <span className="badge badge-warning badge gap-1">
             <ArrowRightLeft size={12} />
             退款
           </span>
         );
       default:
         return (
-          <span className="badge badge-ghost badge-sm">{type}</span>
+          <span className="badge badge-ghost badge">{type}</span>
         );
     }
   };
@@ -172,7 +163,7 @@ export default function CreditsPage() {
       {/* 管理员统计卡片 */}
       {isAdmin && adminStats && (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-primary">
               <User size={24} />
             </div>
@@ -180,14 +171,14 @@ export default function CreditsPage() {
             <div className="stat-value text-2xl">{adminStats.usersWithCredits ?? 0}</div>
             <div className="stat-desc">总用户 {adminStats.totalUsers ?? 0}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-warning">
               <Coins size={24} />
             </div>
             <div className="stat-title text-xs">系统总积分</div>
             <div className="stat-value text-2xl">{(adminStats.totalCreditsInSystem ?? 0).toLocaleString()}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-success">
               <TrendingUp size={24} />
             </div>
@@ -200,28 +191,28 @@ export default function CreditsPage() {
       {/* 用户统计卡片 */}
       {!isAdmin && userStats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-warning">
               <Coins size={24} />
             </div>
             <div className="stat-title text-xs">当前积分</div>
             <div className="stat-value text-2xl">{(userStats.currentCredits ?? 0).toLocaleString()}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-success">
               <TrendingUp size={24} />
             </div>
             <div className="stat-title text-xs">累计充值</div>
             <div className="stat-value text-2xl text-success">+{(userStats.totalRecharge ?? 0).toLocaleString()}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-error">
               <TrendingDown size={24} />
             </div>
             <div className="stat-title text-xs">累计消费</div>
             <div className="stat-value text-2xl text-error">-{(userStats.totalConsume ?? 0).toLocaleString()}</div>
           </div>
-          <div className="stat bg-base-100 shadow rounded-xl p-4">
+          <div className="stat bg-base-100 shadow rounded-xl p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="stat-figure text-primary">
               <Calendar size={24} />
             </div>
@@ -242,18 +233,18 @@ export default function CreditsPage() {
                   <input
                     type="text"
                     placeholder="搜索用户ID..."
-                    className="input input-bordered join-item flex-1 input-sm"
+                    className="input input-bordered join-item flex-1 input-md"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
-                  <button type="submit" className="btn btn-primary join-item btn-sm">
+                  <button type="submit" className="btn btn-primary join-item">
                     <Search size={16} />
                   </button>
                 </div>
               </form>
             )}
             <select
-              className="select select-bordered select-sm"
+              className="select select-bordered select-md"
               value={typeFilter}
               onChange={(e) => {
                 setTypeFilter(e.target.value);
@@ -267,8 +258,9 @@ export default function CreditsPage() {
             </select>
             <button
               onClick={() => fetchTransactions()}
-              className="btn btn-ghost btn-sm btn-square"
+              className="btn btn-ghost btn-square"
               title="刷新"
+              disabled={loading}
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             </button>
@@ -280,7 +272,7 @@ export default function CreditsPage() {
       <div className="card bg-base-100 shadow">
         <div className="card-body p-0">
           <div className="overflow-x-auto">
-            <table className="table table-sm">
+            <table className="table table-zebra">
               <thead>
                 <tr>
                   {isAdmin && <th>用户ID</th>}
@@ -339,7 +331,7 @@ export default function CreditsPage() {
                       <td>
                         <div className="flex items-center gap-1 text-xs text-base-content/60">
                           <Calendar size={12} />
-                          {formatDate(tx.created_time)}
+                          {formatDateTime(tx.created_time)}
                         </div>
                       </td>
                     </tr>
@@ -356,15 +348,15 @@ export default function CreditsPage() {
             </div>
             <div className="join">
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={page <= 1}
                 onClick={() => setPage(p => p - 1)}
               >
                 <ChevronLeft size={16} />
               </button>
-              <button className="join-item btn btn-sm">第 {page} 页</button>
+              <button className="join-item btn">第 {page} 页</button>
               <button
-                className="join-item btn btn-sm"
+                className="join-item btn"
                 disabled={page >= totalPages}
                 onClick={() => setPage(p => p + 1)}
               >

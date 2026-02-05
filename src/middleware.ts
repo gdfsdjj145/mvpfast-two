@@ -4,7 +4,7 @@ import NextAuth from 'next-auth';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import authConfig from './auth.config';
-import { ROUTE_PERMISSIONS, hasPermission } from '@/lib/rbac';
+import { ROUTE_PERMISSIONS, hasPermission } from '@/lib/auth/rbac';
 
 // 不需要验证的路由列表
 const publicRoutes = ['/docs', '/blog', '/api/auth', '/auth/signin'];

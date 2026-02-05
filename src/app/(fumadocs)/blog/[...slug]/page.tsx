@@ -4,7 +4,7 @@ import { getMDXComponents } from '../mdx-components';
 import Link from 'next/link';
 import { getPostBySlug, incrementPostViews } from '@/models/post';
 import ReactMarkdown from 'react-markdown';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils/common';
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;

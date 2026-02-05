@@ -279,7 +279,7 @@ export default function AIChatPage() {
           <div className="dropdown dropdown-end">
             <label
               tabIndex={0}
-              className="btn btn-sm btn-ghost gap-2 font-normal"
+              className="btn btn-ghost gap-2 font-normal"
             >
               <span className="max-w-[150px] truncate text-xs">
                 {formatModelName(models.find((m) => m.id === selectedModel) || { id: selectedModel, name: selectedModel })}
@@ -313,7 +313,7 @@ export default function AIChatPage() {
           {/* Settings */}
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className={`btn btn-sm btn-ghost btn-square ${showSettings ? 'btn-active' : ''}`}
+            className={`btn btn-ghost btn-square ${showSettings ? 'btn-active' : ''}`}
           >
             <Settings2 className="w-4 h-4" />
           </button>
@@ -321,7 +321,7 @@ export default function AIChatPage() {
           {/* Refresh Models */}
           <button
             onClick={loadModels}
-            className="btn btn-sm btn-ghost btn-square"
+            className="btn btn-ghost btn-square"
             disabled={isLoadingModels}
           >
             <RefreshCw className={`w-4 h-4 ${isLoadingModels ? 'animate-spin' : ''}`} />
@@ -330,7 +330,7 @@ export default function AIChatPage() {
           {/* Clear Chat */}
           <button
             onClick={handleClear}
-            className="btn btn-sm btn-ghost btn-square text-error"
+            className="btn btn-ghost btn-square text-error"
             disabled={messages.length === 0}
           >
             <Trash2 className="w-4 h-4" />
@@ -361,7 +361,7 @@ export default function AIChatPage() {
             <textarea
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
-              className="textarea textarea-bordered textarea-sm w-full h-20 text-sm"
+              className="textarea textarea-bordered textarea w-full h-20 text-sm"
               placeholder="Enter system prompt..."
             />
           </div>

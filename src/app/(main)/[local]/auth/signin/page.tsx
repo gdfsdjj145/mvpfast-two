@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useSiteConfig } from '@/hooks/useSiteConfig';
 import { useAppDispatch, useAppSelector } from '@/store/hook';
 import { fetchPublicConfigs, selectLoginConfig, selectPublicConfigLoaded } from '@/store/publicConfig';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 const LOGIN_HASH: Record<string, string> = {
   wx: '微信登录',
@@ -174,7 +175,7 @@ export default function SignInPage() {
   if (!configLoaded) {
     return (
       <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-base-200 via-base-100 to-base-200">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+        <LoadingSpinner size="lg" />
       </div>
     );
   }

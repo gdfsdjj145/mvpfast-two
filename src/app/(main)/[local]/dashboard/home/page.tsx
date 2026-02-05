@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
-import { useSession } from 'next-auth/react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,13 +24,17 @@ import {
   History,
   Ticket,
   Gift,
-  Wallet,
   X,
   CheckCircle,
   Loader2,
+  Sparkles,
+  Calendar,
+  ArrowUpRight,
+  Wallet,
 } from 'lucide-react';
 import { config } from '@/config';
 import toast from 'react-hot-toast';
+import { formatDateTimeShort } from '@/lib/utils/common';
 
 // 注册 ChartJS 组件
 ChartJS.register(
@@ -83,6 +86,25 @@ export default function DashboardPage() {
 
   // 是否为积分模式
   const isCreditsMode = config.purchaseMode === 'credits';
+
+  // 动画配置 - 提升到组件顶部
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { type: 'spring', stiffness: 400, damping: 25 },
+    },
+  };
 
   // 打开兑换弹窗
   const openRedeemModal = () => {
@@ -169,15 +191,6 @@ export default function DashboardPage() {
     fetchData();
   }, [dateRange]);
 
-  // 格式化日期
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   // 渲染类型图标
   const getTypeIcon = (type: string) => {
@@ -207,25 +220,37 @@ export default function DashboardPage() {
     }
   };
 
-  // 趋势图配置
+  // 趋势图配置 - 现代化样式
   const trendChartData = {
     labels: data?.dailyData?.labels || [],
     datasets: [
       {
         label: '充值',
         data: data?.dailyData?.recharge || [],
-        borderColor: 'rgb(34, 197, 94)',
-        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.08)',
         fill: true,
         tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#10b981',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
       },
       {
         label: '消费',
         data: data?.dailyData?.consume || [],
-        borderColor: 'rgb(239, 68, 68)',
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        borderColor: '#f43f5e',
+        backgroundColor: 'rgba(244, 63, 94, 0.08)',
         fill: true,
         tension: 0.4,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#f43f5e',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
       },
     ],
   };
@@ -233,27 +258,66 @@ export default function DashboardPage() {
   const trendChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      intersect: false,
+      mode: 'index' as const,
+    },
     plugins: {
       legend: {
-        position: 'top' as const,
+        display: false,
+      },
+      tooltip: {
+        backgroundColor: '#1f2937',
+        titleColor: '#fff',
+        bodyColor: '#d1d5db',
+        borderColor: '#374151',
+        borderWidth: 1,
+        padding: 12,
+        cornerRadius: 8,
+        displayColors: true,
+        boxPadding: 4,
       },
     },
     scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: '#9ca3af',
+          font: { size: 11 },
+        },
+        border: {
+          display: false,
+        },
+      },
       y: {
         beginAtZero: true,
+        grid: {
+          color: '#f3f4f6',
+        },
+        ticks: {
+          color: '#9ca3af',
+          font: { size: 11 },
+          padding: 8,
+        },
+        border: {
+          display: false,
+        },
       },
     },
   };
 
-  // 分布图数据
+  // 分布图数据 - 现代化配色
   const distributionData = {
     labels: ['充值', '消费'],
     datasets: [
       {
         data: [data?.totalRecharge || 0, Math.abs(data?.totalConsume || 0)],
-        backgroundColor: ['rgba(34, 197, 94, 0.8)', 'rgba(239, 68, 68, 0.8)'],
-        borderColor: ['rgb(34, 197, 94)', 'rgb(239, 68, 68)'],
-        borderWidth: 2,
+        backgroundColor: ['#10b981', '#f43f5e'],
+        borderColor: ['#fff', '#fff'],
+        borderWidth: 3,
+        hoverOffset: 8,
       },
     ],
   };
@@ -270,325 +334,411 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* 时间范围选择 */}
-      <div className="flex justify-end">
-        <div className="join">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6"
+    >
+      {/* 时间范围选择 - 更精致的设计 */}
+      <motion.div variants={itemVariants} className="flex justify-end">
+        <div className="inline-flex items-center gap-1 p-1 bg-base-200/60 rounded-xl">
           <button
-            className={`join-item btn btn-sm ${dateRange === 7 ? 'btn-primary' : 'btn-ghost'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              dateRange === 7
+                ? 'bg-white text-primary shadow-sm'
+                : 'text-base-content/60 hover:text-base-content hover:bg-white/50'
+            }`}
             onClick={() => setDateRange(7)}
           >
+            <Calendar size={14} className="inline-block mr-1.5 -mt-0.5" />
             近7天
           </button>
           <button
-            className={`join-item btn btn-sm ${dateRange === 30 ? 'btn-primary' : 'btn-ghost'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              dateRange === 30
+                ? 'bg-white text-primary shadow-sm'
+                : 'text-base-content/60 hover:text-base-content hover:bg-white/50'
+            }`}
             onClick={() => setDateRange(30)}
           >
+            <Calendar size={14} className="inline-block mr-1.5 -mt-0.5" />
             近30天
           </button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* 主要统计卡片 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* 当前积分 - 大卡片 */}
+      {/* 主要统计卡片 - 重新设计 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* 当前积分 - 主视觉卡片 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="md:col-span-2 lg:col-span-1 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-white shadow-lg"
+          variants={itemVariants}
+          className="md:col-span-2 lg:col-span-1 relative overflow-hidden group cursor-pointer"
         >
-          {isLoading ? (
-            <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-white/30 rounded w-1/2"></div>
-              <div className="h-10 bg-white/30 rounded w-3/4"></div>
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center gap-2 mb-2">
-                <Coins size={20} />
-                <span className="text-white/80 text-sm font-medium">当前积分</span>
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-400 to-amber-500 rounded-2xl" />
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.08%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50" />
+          <div className="relative p-6 text-white">
+            {isLoading ? (
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-white/30 rounded w-1/2" />
+                <div className="h-12 bg-white/30 rounded w-3/4" />
               </div>
-              <div className="text-4xl font-bold">
-                {(data?.credits || 0).toLocaleString()}
-              </div>
-              <div className="text-white/70 text-sm mt-2">
-                累计消费 ¥{(data?.totalSpent || 0).toFixed(2)}
-              </div>
-            </>
-          )}
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center">
+                      <Coins size={22} className="text-white" />
+                    </div>
+                    <span className="text-white/90 font-medium">当前积分</span>
+                  </div>
+                  <Sparkles size={20} className="text-white/60" />
+                </div>
+                <div className="text-4xl font-bold tracking-tight mb-1">
+                  {(data?.credits || 0).toLocaleString()}
+                </div>
+                <div className="flex items-center gap-2 text-white/70 text-sm">
+                  <span>累计消费</span>
+                  <span className="font-semibold text-white/90">¥{(data?.totalSpent || 0).toFixed(2)}</span>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mb-16 group-hover:scale-150 transition-transform duration-500" />
         </motion.div>
 
-        {/* 总充值 */}
+        {/* 总充值 - 现代卡片 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-100 transition-all duration-300 cursor-pointer group"
         >
           {isLoading ? (
             <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-base-300 rounded w-1/2"></div>
-              <div className="h-8 bg-base-300 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-100 rounded w-1/2" />
+              <div className="h-8 bg-gray-100 rounded w-3/4" />
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-2 bg-success/10 rounded-lg">
-                  <TrendingUp size={18} className="text-success" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                  <TrendingUp size={22} className="text-emerald-500" />
                 </div>
-                <span className="text-base-content/60 text-sm">总充值</span>
+                <div className="flex items-center gap-1 text-emerald-500 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
+                  <ArrowUpRight size={12} />
+                  <span>收入</span>
+                </div>
               </div>
-              <div className="text-2xl font-bold text-success">
+              <div className="text-sm text-gray-500 mb-1">总充值</div>
+              <div className="text-2xl font-bold text-gray-900">
                 +{(data?.totalRecharge || 0).toLocaleString()}
               </div>
             </>
           )}
         </motion.div>
 
-        {/* 总消费 */}
+        {/* 总消费 - 现代卡片 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-rose-100 transition-all duration-300 cursor-pointer group"
         >
           {isLoading ? (
             <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-base-300 rounded w-1/2"></div>
-              <div className="h-8 bg-base-300 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-100 rounded w-1/2" />
+              <div className="h-8 bg-gray-100 rounded w-3/4" />
             </div>
           ) : (
             <>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="p-2 bg-error/10 rounded-lg">
-                  <TrendingDown size={18} className="text-error" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+                  <TrendingDown size={22} className="text-rose-500" />
                 </div>
-                <span className="text-base-content/60 text-sm">总消费</span>
+                <div className="flex items-center gap-1 text-rose-500 text-xs font-medium bg-rose-50 px-2 py-1 rounded-full">
+                  <ArrowUpRight size={12} className="rotate-90" />
+                  <span>支出</span>
+                </div>
               </div>
-              <div className="text-2xl font-bold text-error">
+              <div className="text-sm text-gray-500 mb-1">总消费</div>
+              <div className="text-2xl font-bold text-gray-900">
                 {(data?.totalConsume || 0).toLocaleString()}
               </div>
             </>
           )}
         </motion.div>
 
-        {/* 快捷操作 */}
+        {/* 快捷操作 - 现代卡片 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+          variants={itemVariants}
+          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300"
         >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Gift size={18} className="text-primary" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center">
+              <Gift size={22} className="text-violet-500" />
             </div>
-            <span className="text-base-content/60 text-sm">快捷操作</span>
+            <span className="text-xs text-gray-400 font-medium">快捷入口</span>
           </div>
           <button
             onClick={openRedeemModal}
-            className="btn btn-primary btn-sm w-full gap-2"
+            className="w-full py-3 px-4 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
           >
-            <Ticket size={16} />
+            <Ticket size={18} />
             兑换积分
           </button>
         </motion.div>
       </div>
 
       {/* 图表和交易记录 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* 趋势图 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* 趋势图 - 优化设计 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="lg:col-span-2 bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+          variants={itemVariants}
+          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
         >
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <History size={20} className="text-primary" />
-            近{dateRange}天积分变动
-          </h3>
-          <div className="h-64">
-            {isLoading ? (
-              <div className="animate-pulse h-full bg-base-300 rounded"></div>
-            ) : (
-              <Line data={trendChartData} options={trendChartOptions} />
-            )}
+          <div className="p-5 border-b border-gray-100">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                  <History size={20} className="text-blue-500" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">积分变动趋势</h3>
+                  <p className="text-xs text-gray-400">近{dateRange}天数据统计</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 text-xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                  <span className="text-gray-500">充值</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                  <span className="text-gray-500">消费</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-5">
+            <div className="h-64">
+              {isLoading ? (
+                <div className="animate-pulse h-full bg-gray-50 rounded-xl" />
+              ) : (
+                <Line data={trendChartData} options={trendChartOptions} />
+              )}
+            </div>
           </div>
         </motion.div>
 
-        {/* 分布图 */}
+        {/* 分布图 - 优化设计 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-base-100 rounded-2xl p-5 shadow-md border border-base-300/50"
+          variants={itemVariants}
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
         >
-          <h3 className="text-lg font-semibold mb-4">积分分布</h3>
-          <div className="h-64 flex items-center justify-center">
-            {isLoading ? (
-              <div className="animate-pulse w-40 h-40 bg-base-300 rounded-full"></div>
-            ) : (data?.totalRecharge || 0) + Math.abs(data?.totalConsume || 0) > 0 ? (
-              <Doughnut
-                data={distributionData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: 'bottom',
-                    },
-                  },
-                }}
-              />
-            ) : (
-              <div className="text-center text-base-content/50">
-                <Coins size={40} className="mx-auto mb-2 opacity-30" />
-                <p className="text-sm">暂无数据</p>
+          <div className="p-5 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                <Coins size={20} className="text-amber-500" />
               </div>
-            )}
+              <div>
+                <h3 className="font-semibold text-gray-900">积分分布</h3>
+                <p className="text-xs text-gray-400">收支占比分析</p>
+              </div>
+            </div>
+          </div>
+          <div className="p-5">
+            <div className="h-64 flex items-center justify-center">
+              {isLoading ? (
+                <div className="animate-pulse w-40 h-40 bg-gray-50 rounded-full" />
+              ) : (data?.totalRecharge || 0) + Math.abs(data?.totalConsume || 0) > 0 ? (
+                <Doughnut
+                  data={distributionData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                      legend: {
+                        position: 'bottom',
+                        labels: {
+                          padding: 16,
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                        },
+                      },
+                    },
+                  }}
+                />
+              ) : (
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+                    <Coins size={28} className="text-gray-300" />
+                  </div>
+                  <p className="text-sm text-gray-400">暂无数据</p>
+                </div>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
 
-      {/* 最近交易记录 */}
+      {/* 最近交易记录 - 现代化表格设计 */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-        className="bg-base-100 rounded-2xl shadow-md border border-base-300/50"
+        variants={itemVariants}
+        className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
       >
-        <div className="p-5 border-b border-base-300">
-          <h3 className="text-lg font-semibold flex items-center gap-2">
-            <History size={20} className="text-primary" />
-            最近交易记录
-          </h3>
+        <div className="p-5 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                <ArrowRightLeft size={20} className="text-indigo-500" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">最近交易</h3>
+                <p className="text-xs text-gray-400">最新的积分变动记录</p>
+              </div>
+            </div>
+            {data?.recentTransactions && data.recentTransactions.length > 0 && (
+              <a
+                href="/dashboard/credits"
+                className="text-sm text-indigo-500 hover:text-indigo-600 font-medium flex items-center gap-1 transition-colors"
+              >
+                查看全部
+                <ArrowUpRight size={14} />
+              </a>
+            )}
+          </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>类型</th>
-                <th>积分变动</th>
-                <th>余额</th>
-                <th>描述</th>
-                <th>时间</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-8">
-                    <span className="loading loading-spinner loading-md"></span>
-                  </td>
+          {isLoading ? (
+            <div className="p-8 flex justify-center">
+              <span className="loading loading-spinner loading-md text-gray-300" />
+            </div>
+          ) : !data?.recentTransactions?.length ? (
+            <div className="p-12 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
+                <History size={28} className="text-gray-300" />
+              </div>
+              <p className="text-sm text-gray-400">暂无交易记录</p>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">类型</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">变动</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">余额</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">描述</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">时间</th>
                 </tr>
-              ) : !data?.recentTransactions?.length ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-8 text-base-content/50">
-                    暂无交易记录
-                  </td>
-                </tr>
-              ) : (
-                data.recentTransactions.map((tx) => (
-                  <tr key={tx.id} className="hover">
-                    <td>
-                      <div className="flex items-center gap-2">
-                        {getTypeIcon(tx.type)}
-                        <span className="text-sm">{getTypeText(tx.type)}</span>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {data.recentTransactions.map((tx) => (
+                  <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
+                    <td className="py-4 px-5">
+                      <div className="flex items-center gap-2.5">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          tx.type === 'recharge' ? 'bg-emerald-50' :
+                          tx.type === 'consume' ? 'bg-rose-50' : 'bg-amber-50'
+                        }`}>
+                          {tx.type === 'recharge' ? (
+                            <TrendingUp size={16} className="text-emerald-500" />
+                          ) : tx.type === 'consume' ? (
+                            <TrendingDown size={16} className="text-rose-500" />
+                          ) : (
+                            <ArrowRightLeft size={16} className="text-amber-500" />
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-gray-700">{getTypeText(tx.type)}</span>
                       </div>
                     </td>
-                    <td>
-                      <span
-                        className={`font-semibold ${
-                          tx.amount > 0 ? 'text-success' : 'text-error'
-                        }`}
-                      >
-                        {tx.amount > 0 ? '+' : ''}
-                        {tx.amount}
+                    <td className="py-4 px-5">
+                      <span className={`text-sm font-semibold ${
+                        tx.amount > 0 ? 'text-emerald-500' : 'text-rose-500'
+                      }`}>
+                        {tx.amount > 0 ? '+' : ''}{tx.amount}
                       </span>
                     </td>
-                    <td>
-                      <div className="flex items-center gap-1">
-                        <Coins size={14} className="text-warning" />
-                        {tx.balance}
+                    <td className="py-4 px-5">
+                      <div className="flex items-center gap-1.5">
+                        <Coins size={14} className="text-amber-400" />
+                        <span className="text-sm text-gray-600">{tx.balance}</span>
                       </div>
                     </td>
-                    <td>
-                      <span className="text-sm text-base-content/70 max-w-[200px] truncate block">
+                    <td className="py-4 px-5">
+                      <span className="text-sm text-gray-500 max-w-[200px] truncate block">
                         {tx.description}
                       </span>
                     </td>
-                    <td>
-                      <span className="text-sm text-base-content/50">
-                        {formatDate(tx.created_time)}
+                    <td className="py-4 px-5">
+                      <span className="text-sm text-gray-400">
+                        {formatDateTimeShort(tx.created_time)}
                       </span>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
-        {data?.recentTransactions && data.recentTransactions.length > 0 && (
-          <div className="p-4 border-t border-base-300 text-center">
-            <a href="/dashboard/credits" className="link link-primary text-sm">
-              查看全部记录 →
-            </a>
-          </div>
-        )}
       </motion.div>
 
-      {/* 兑换积分弹窗 */}
-      <dialog ref={modalRef} className="modal">
-        <div className="modal-box">
-          <button
-            onClick={closeRedeemModal}
-            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          >
-            <X size={18} />
-          </button>
-
-          <h3 className="font-bold text-lg flex items-center gap-2 mb-4">
-            <Ticket size={20} className="text-primary" />
-            兑换积分
-          </h3>
+      {/* 兑换积分弹窗 - 现代化设计 */}
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white p-0 rounded-t-3xl sm:rounded-2xl max-w-md">
+          {/* 头部 */}
+          <div className="relative p-6 pb-4">
+            <button
+              onClick={closeRedeemModal}
+              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            >
+              <X size={16} className="text-gray-500" />
+            </button>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-200">
+                <Ticket size={24} className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg text-gray-900">兑换积分</h3>
+                <p className="text-sm text-gray-400">输入兑换码获取积分</p>
+              </div>
+            </div>
+          </div>
 
           {redeemResult?.success ? (
-            // 兑换成功显示
-            <div className="text-center py-6">
-              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={32} className="text-success" />
+            /* 兑换成功显示 */
+            <div className="px-6 pb-6">
+              <div className="text-center py-6 bg-emerald-50 rounded-2xl">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle size={32} className="text-emerald-500" />
+                </div>
+                <h4 className="text-xl font-bold text-emerald-600 mb-2">兑换成功</h4>
+                <p className="text-gray-600">
+                  获得 <span className="font-bold text-amber-500">{redeemResult.creditAmount}</span> 积分
+                </p>
               </div>
-              <h4 className="text-xl font-bold text-success mb-2">兑换成功！</h4>
-              <p className="text-base-content/70 mb-4">
-                获得 <span className="font-bold text-warning">{redeemResult.creditAmount}</span> 积分
-              </p>
-              <div className="bg-base-200 rounded-xl p-4">
-                <div className="text-sm text-base-content/60">当前积分余额</div>
-                <div className="text-2xl font-bold flex items-center justify-center gap-2">
-                  <Coins size={20} className="text-warning" />
+              <div className="mt-4 p-4 bg-gray-50 rounded-xl">
+                <div className="text-sm text-gray-400 text-center mb-1">当前积分余额</div>
+                <div className="text-2xl font-bold flex items-center justify-center gap-2 text-gray-900">
+                  <Coins size={22} className="text-amber-400" />
                   {redeemResult.newBalance?.toLocaleString()}
                 </div>
               </div>
               <button
                 onClick={closeRedeemModal}
-                className="btn btn-primary mt-6"
+                className="w-full mt-4 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium transition-colors"
               >
                 完成
               </button>
             </div>
           ) : (
-            // 输入兑换码
-            <div className="space-y-4">
+            /* 输入兑换码 */
+            <div className="px-6 pb-6 space-y-4">
               <div>
-                <label className="label">
-                  <span className="label-text">请输入兑换码</span>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  兑换码
                 </label>
                 <input
                   type="text"
                   placeholder="例如：WELCOME100"
-                  className="input input-bordered w-full uppercase"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all uppercase font-mono tracking-wider"
                   value={redeemCode}
                   onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
                   onKeyDown={(e) => {
@@ -602,33 +752,34 @@ export default function DashboardPage() {
               </div>
 
               {redeemResult && !redeemResult.success && (
-                <div className="alert alert-error">
+                <div className="flex items-center gap-2 p-3 bg-rose-50 text-rose-600 rounded-xl text-sm">
+                  <X size={16} />
                   <span>{redeemResult.message}</span>
                 </div>
               )}
 
-              <div className="modal-action">
+              <div className="flex gap-3 pt-2">
                 <button
                   onClick={closeRedeemModal}
-                  className="btn btn-ghost"
+                  className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
                   disabled={isRedeeming}
                 >
                   取消
                 </button>
                 <button
                   onClick={handleRedeem}
-                  className="btn btn-primary gap-2"
+                  className="flex-1 py-3 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 disabled:from-gray-300 disabled:to-gray-300 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
                   disabled={isRedeeming || !redeemCode.trim()}
                 >
                   {isRedeeming ? (
                     <>
-                      <Loader2 size={16} className="animate-spin" />
-                      兑换中...
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>兑换中</span>
                     </>
                   ) : (
                     <>
-                      <Ticket size={16} />
-                      确认兑换
+                      <Ticket size={18} />
+                      <span>确认兑换</span>
                     </>
                   )}
                 </button>
@@ -640,6 +791,6 @@ export default function DashboardPage() {
           <button onClick={closeRedeemModal}>close</button>
         </form>
       </dialog>
-    </div>
+    </motion.div>
   );
 }

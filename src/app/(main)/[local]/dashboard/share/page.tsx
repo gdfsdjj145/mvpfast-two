@@ -67,7 +67,7 @@ export default function page() {
               toast.success('复制连接成功');
             }}
           >
-            <div className="inline-block bg-linear-to-r cursor-pointer from-pink-500 to-purple-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-pink-600 hover:to-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+            <div className="inline-block bg-gradient-to-r cursor-pointer from-primary to-secondary text-primary-content font-bold py-3 px-8 rounded-full text-lg hover:opacity-90 transition duration-200 ease-in-out transform hover:-translate-y-1">
               复制分享链接
             </div>
           </ClipboardCopyButton>
@@ -75,7 +75,7 @@ export default function page() {
       ) : (
         <div className="space-y-6">
           <div className="overflow-x-auto bg-white">
-            <table className="table">
+            <table className="table table-zebra">
               {/* head */}
               <thead>
                 <tr>
@@ -88,7 +88,7 @@ export default function page() {
               <tbody>
                 {/* row 1 */}
                 {promotions.map((row, index) => (
-                  <tr>
+                  <tr key={index} className="hover">
                     <th>{index + 1}</th>
                     <td>¥{row.promotionPrice}</td>
                     <td>{row.checkout ? '是' : '否'}</td>
@@ -136,7 +136,7 @@ export default function page() {
                 toast.success('复制连接成功');
               }}
             >
-              <div className="inline-block bg-linear-to-r cursor-pointer from-pink-500 to-purple-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-pink-600 hover:to-purple-700 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+              <div className="inline-block bg-gradient-to-r cursor-pointer from-primary to-secondary text-primary-content font-bold py-3 px-8 rounded-full text-lg hover:opacity-90 transition duration-200 ease-in-out transform hover:-translate-y-1">
                 复制分享链接
               </div>
             </ClipboardCopyButton>

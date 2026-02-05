@@ -15,7 +15,7 @@ export default function FeaturesGrid() {
   };
 
   return (
-    <section className="py-20 sm:py-24 lg:py-32 bg-gray-50">
+    <section className="py-20 sm:py-24 lg:py-32 bg-base-200">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -23,7 +23,7 @@ export default function FeaturesGrid() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-base-content tracking-tight">
             {t('title')}
           </h2>
         </motion.div>
@@ -36,15 +36,15 @@ export default function FeaturesGrid() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="group bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-500/5 transition-all duration-300"
+              className="group bg-base-100 rounded-2xl p-6 sm:p-8 border border-base-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 transition-all duration-200 cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-purple-600 mb-5 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-5 group-hover:scale-110 transition-transform duration-300">
                 {renderIcon(feature.icon)}
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-base-content mb-2">
                 {t(`items.${index}.title`)}
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-base-content/70 text-sm leading-relaxed">
                 {t(`items.${index}.description`)}
               </p>
             </motion.div>

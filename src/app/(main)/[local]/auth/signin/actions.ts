@@ -1,8 +1,8 @@
 'use server';
-import prisma from '@/lib/prisma';
-import { getGeneratorName } from '@/lib/generatorName';
-import sendEmail from '@/lib/email';
-import sendPhone from '@/lib/phone';
+import prisma from '@/lib/core/prisma';
+import { getGeneratorName } from '@/lib/utils/name-generator';
+import sendEmail from '@/lib/services/email';
+import sendPhone from '@/lib/services/sms';
 import { grantInitialCredits } from '@/models/credit';
 import bcrypt from 'bcryptjs';
 

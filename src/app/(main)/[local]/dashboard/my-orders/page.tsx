@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { config } from '@/config';
+import { formatDateTime } from '@/lib/utils/common';
 import { ShoppingBag, FileText, Clock, CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 
 type Order = {
@@ -63,26 +64,17 @@ export default function MyOrdersPage() {
 
   const renderOrderType = (type: string) => {
     if (type === 'credit') {
-      return <span className="badge badge-secondary badge-sm">积分充值</span>;
+      return <span className="badge badge-secondary badge">积分充值</span>;
     }
-    return <span className="badge badge-primary badge-sm">商品购买</span>;
+    return <span className="badge badge-primary badge">商品购买</span>;
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
 
   return (
     <div className="space-y-6">
       {/* 统计卡片 */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="card bg-base-100 border border-base-200">
+        <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
           <div className="card-body p-4 flex-row items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
               <ShoppingBag size={20} className="text-primary" />
@@ -93,7 +85,7 @@ export default function MyOrdersPage() {
             </div>
           </div>
         </div>
-        <div className="card bg-base-100 border border-base-200">
+        <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
           <div className="card-body p-4 flex-row items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0">
               <CreditCard size={20} className="text-secondary" />
@@ -107,7 +99,7 @@ export default function MyOrdersPage() {
           </div>
         </div>
         {purchaseMode === 'credits' && (
-          <div className="card bg-base-100 border border-base-200">
+          <div className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
             <div className="card-body p-4 flex-row items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
                 <FileText size={20} className="text-accent" />
@@ -126,7 +118,7 @@ export default function MyOrdersPage() {
       {/* 筛选 */}
       <div className="flex items-center gap-3">
         <select
-          className="select select-sm select-bordered rounded-xl"
+          className="select select-md select-bordered rounded-xl"
           value={orderType}
           onChange={(e) => { setOrderType(e.target.value); setPage(1); }}
         >
@@ -153,65 +145,67 @@ export default function MyOrdersPage() {
       ) : (
         <>
           {/* 桌面端表格 */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="table table-sm">
-              <thead>
-                <tr className="text-base-content/50">
-                  <th>订单编号</th>
-                  <th>商品</th>
-                  {purchaseMode === 'credits' && <th>类型</th>}
-                  <th>金额</th>
-                  {purchaseMode === 'credits' && <th>积分</th>}
-                  <th>交易号</th>
-                  <th>时间</th>
+          <div className="hidden md:block card bg-base-100 border border-base-200 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="table table-zebra">
+              <thead className="bg-base-200/50">
+                <tr className="text-base-content/70">
+                  <th className="font-semibold">订单编号</th>
+                  <th className="font-semibold">商品</th>
+                  {purchaseMode === 'credits' && <th className="font-semibold">类型</th>}
+                  <th className="font-semibold">金额</th>
+                  {purchaseMode === 'credits' && <th className="font-semibold">积分</th>}
+                  <th className="font-semibold">交易号</th>
+                  <th className="font-semibold">时间</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id} className="hover">
                     <td>
-                      <span className="font-mono text-xs">{order.orderId}</span>
+                      <span className="font-mono text-sm">{order.orderId}</span>
                     </td>
-                    <td className="font-medium">{order.name}</td>
+                    <td className="font-medium text-base">{order.name}</td>
                     {purchaseMode === 'credits' && (
                       <td>{renderOrderType(order.orderType)}</td>
                     )}
                     <td>
-                      <span className="font-semibold">¥{order.price.toFixed(2)}</span>
+                      <span className="font-semibold text-base">¥{order.price.toFixed(2)}</span>
                       {order.promotionPrice > 0 && (
-                        <span className="text-xs text-success ml-1">-¥{order.promotionPrice}</span>
+                        <span className="text-sm text-success ml-2">-¥{order.promotionPrice}</span>
                       )}
                     </td>
                     {purchaseMode === 'credits' && (
                       <td>
                         {order.creditAmount ? (
-                          <span className="text-secondary font-medium">+{order.creditAmount}</span>
+                          <span className="text-secondary font-semibold text-base">+{order.creditAmount}</span>
                         ) : (
                           <span className="text-base-content/30">-</span>
                         )}
                       </td>
                     )}
                     <td>
-                      <span className="font-mono text-xs text-base-content/60 max-w-[140px] truncate block">
+                      <span className="font-mono text-sm text-base-content/60 max-w-[160px] truncate block">
                         {order.transactionId}
                       </span>
                     </td>
                     <td>
-                      <span className="text-xs text-base-content/60 flex items-center gap-1">
-                        <Clock size={12} />
-                        {formatDate(order.created_time)}
+                      <span className="text-sm text-base-content/60 flex items-center gap-1.5">
+                        <Clock size={14} />
+                        {formatDateTime(order.created_time)}
                       </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table>
+            </div>
           </div>
 
           {/* 移动端卡片 */}
           <div className="md:hidden space-y-3">
             {orders.map((order) => (
-              <div key={order.id} className="card bg-base-100 border border-base-200">
+              <div key={order.id} className="card bg-base-100 border border-base-200 hover:shadow-md transition-shadow duration-200 cursor-pointer">
                 <div className="card-body p-4 gap-3">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{order.name}</span>
@@ -231,7 +225,7 @@ export default function MyOrdersPage() {
                     <span className="font-mono">{order.orderId}</span>
                     <span className="flex items-center gap-1">
                       <Clock size={11} />
-                      {formatDate(order.created_time)}
+                      {formatDateTime(order.created_time)}
                     </span>
                   </div>
                 </div>
@@ -244,7 +238,7 @@ export default function MyOrdersPage() {
             <div className="flex justify-center">
               <div className="join">
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page <= 1}
                   onClick={() => setPage(page - 1)}
                 >
@@ -255,10 +249,10 @@ export default function MyOrdersPage() {
                   .map((p, idx, arr) => (
                     <React.Fragment key={p}>
                       {idx > 0 && arr[idx - 1] !== p - 1 && (
-                        <button className="join-item btn btn-sm btn-disabled">...</button>
+                        <button className="join-item btn btn-disabled">...</button>
                       )}
                       <button
-                        className={`join-item btn btn-sm ${p === page ? 'btn-primary' : ''}`}
+                        className={`join-item btn ${p === page ? 'btn-primary' : ''}`}
                         onClick={() => setPage(p)}
                       >
                         {p}
@@ -266,7 +260,7 @@ export default function MyOrdersPage() {
                     </React.Fragment>
                   ))}
                 <button
-                  className="join-item btn btn-sm"
+                  className="join-item btn"
                   disabled={page >= totalPages}
                   onClick={() => setPage(page + 1)}
                 >
