@@ -111,32 +111,50 @@
     }
   },
   "Brand": {
+    "title": "强大的技术栈支撑",
+    "subtitle": "Powered By",
     "items": [
       {
-        "name": "NextJs",
+        "name": "Next.js",
         "logo": "/tech/nextjs-logo.png",
-        "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
-        "name": "TailWindCss",
+        "name": "Tailwind CSS",
         "logo": "/tech/tailwindcss.png",
-        "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
-        "name": "Mongodb",
+        "name": "MongoDB",
         "logo": "/tech/mongodb.png",
-        "stars": "26K⭐",
-        "href": "https://www.mongodb.com/zh-cn/cloud/atlas/register"
+        "href": "https://www.mongodb.com/"
+      },
+      {
+        "name": "NextAuth",
+        "logo": "/tech/auth.png",
+        "href": "https://next-auth.js.org/"
+      },
+      {
+        "name": "Vercel",
+        "logo": "/tech/vercel.svg",
+        "href": "https://vercel.com/"
       },
       {
         "name": "WeChat",
-        "logo": "/social/wx.png",
-        "stars": "",
-        "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
+        "logo": "/tech/wechat.svg",
+        "href": "https://developers.weixin.qq.com/"
       }
     ]
+  },
+  "AIShowcase": {
+    "labels": {
+      "template": "模板"
+    },
+    "result": {
+      "prefix": "立刻落地你的",
+      "highlight": "想法"
+    },
+    "description": "MvpFast 提供完整的代码模板，配合 AI 编程工具，让你的创意快速变为现实"
   },
   "Admin": {
     "domain": "example.com",
@@ -144,6 +162,32 @@
       "url": "/banners/banner-1.png",
       "alt": "后台预览"
     }
+  },
+  "Showcase": {
+    "title": "功能展示",
+    "subtitle": "What's Included",
+    "items": [
+      {
+        "title": "着陆页",
+        "description": "通过配置文件快速搭建多语言着陆页，无需编码",
+        "image": "/showcase/landing.png"
+      },
+      {
+        "title": "后台管理",
+        "description": "集成权限控制、用户管理、配置中心",
+        "image": "/showcase/admin.png"
+      },
+      {
+        "title": "支付系统",
+        "description": "开箱即用的微信支付集成",
+        "image": "/showcase/payment.png"
+      },
+      {
+        "title": "文档博客",
+        "description": "MDX 驱动，代码高亮，全文搜索",
+        "image": "/showcase/docs.png"
+      }
+    ]
   },
   "Feature": {
     "title": "展示你网站的功能",

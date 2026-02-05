@@ -2,48 +2,99 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useMessages, useTranslations } from 'next-intl';
+import { useTranslations, useMessages } from 'next-intl';
 
 export default function AdminComponent() {
+  const t = useTranslations('Showcase');
   const messages = useMessages();
-  const adminConfig = messages.Admin as any;
-  const t = useTranslations('Admin');
+  const showcaseConfig = messages.Showcase as any;
+  const items = showcaseConfig?.items || [];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
+  };
 
   return (
-    <section className="bg-gradient-to-b from-base-100 to-base-200 py-12 sm:py-16 lg:py-20">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12">
+    <section className="relative py-16 md:py-24 overflow-hidden">
+      {/* 背景 */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-base-200/30 to-transparent" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 标题区域 */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          className="text-center mb-10 md:mb-12"
+          initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="relative"
+          transition={{ duration: 0.5 }}
         >
-          {/* Browser Frame */}
-          <div className="bg-neutral rounded-t-xl px-4 py-3 flex items-center gap-2">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-error" />
-              <div className="w-3 h-3 rounded-full bg-warning" />
-              <div className="w-3 h-3 rounded-full bg-success" />
-            </div>
-            <div className="flex-1 mx-4">
-              <div className="bg-neutral-content/10 rounded-md px-3 py-1 text-xs text-neutral-content/60 max-w-md mx-auto text-center">
-                {t('domain')}
+          <p className="text-sm font-medium text-primary tracking-wider uppercase mb-2">
+            {t('subtitle')}
+          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-base-content">
+            {t('title')}
+          </h2>
+        </motion.div>
+
+        {/* 整齐的 2x2 网格布局 */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+        >
+          {items.slice(0, 4).map((item: { title: string; description: string; image: string }, index: number) => (
+            <motion.div
+              key={index}
+              variants={cardVariants}
+              className="group bg-base-100 rounded-2xl overflow-hidden
+                border border-base-200/80 hover:border-primary/20
+                hover:shadow-xl transition-all duration-300"
+            >
+              {/* 文字区域 */}
+              <div className="p-5 md:p-6">
+                <h3 className="text-lg md:text-xl font-bold text-base-content">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-base-content/60 mt-1.5 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
-            </div>
-          </div>
-          {/* Screenshot */}
-          <div className="bg-base-100 rounded-b-xl overflow-hidden shadow-2xl shadow-base-content/20">
-            <Image
-              src={adminConfig.banner.url}
-              alt={adminConfig.banner.alt}
-              width={1920}
-              height={1080}
-              quality={90}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
-              className="w-full h-auto"
-            />
-          </div>
+
+              {/* 图片区域 */}
+              <div className="px-5 md:px-6 pb-5 md:pb-6">
+                <div className="relative rounded-xl overflow-hidden border border-base-200/60 shadow-md
+                  group-hover:shadow-lg transition-shadow duration-300 aspect-[16/10]">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    quality={85}
+                    className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

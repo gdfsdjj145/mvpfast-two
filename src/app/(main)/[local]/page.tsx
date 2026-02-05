@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 
 // 动态导入非首屏组件，减少首屏 JS bundle 大小
 const BrandComponent = dynamic(() => import('@/components/landingpage/BrandComponent'));
+const AIShowcaseComponent = dynamic(() => import('@/components/landingpage/AIShowcaseComponent'));
 const AdminComponent = dynamic(() => import('@/components/landingpage/AdminComponent'));
 const FeatureComponent = dynamic(() => import('@/components/landingpage/FeatureComponent'));
 const FeaturesCard = dynamic(() => import('@/components/landingpage/FeaturesCardComponent'));
@@ -21,6 +22,7 @@ export default function Home() {
       <main>
         <HeroComponent />
         <BrandComponent />
+        <AIShowcaseComponent />
         <AdminComponent />
         <FeatureComponent />
         <FeaturesCard />
