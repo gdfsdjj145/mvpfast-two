@@ -101,12 +101,12 @@
       }
     },
     "testimonial": {
-      "avatar": "/avatars/a1.jpg",
+      "avatar": "https://picsum.photos/80/80",
       "name": "Developer",
       "quote": "A minimalist template system that boosts development efficiency by 300%"
     },
     "banner": {
-      "url": "/banners/banner.png",
+      "url": "https://picsum.photos/800/600",
       "alt": "MvpFast Preview"
     }
   },
@@ -114,25 +114,25 @@
     "items": [
       {
         "name": "NextJs",
-        "logo": "/tech/nextjs-logo.png",
+        "logo": "https://picsum.photos/64/64?random=10",
         "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
         "name": "TailWindCss",
-        "logo": "/tech/tailwindcss.png",
+        "logo": "https://picsum.photos/64/64?random=11",
         "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
         "name": "Mongodb",
-        "logo": "/tech/mongodb.png",
+        "logo": "https://picsum.photos/64/64?random=12",
         "stars": "26K⭐",
         "href": "https://www.mongodb.com/cloud/atlas/register"
       },
       {
         "name": "WeChat",
-        "logo": "/social/wx.png",
+        "logo": "https://picsum.photos/64/64?random=13",
         "stars": "",
         "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
       }
@@ -141,8 +141,8 @@
   "Admin": {
     "domain": "example.com",
     "banner": {
-      "url": "/banners/banner-1.png",
-      "alt": "Admin Preview"
+      "url": "https://picsum.photos/1920/1080",
+      "alt": "Dashboard Preview"
     }
   },
   "Feature": {
@@ -217,24 +217,24 @@
         "title": "Admin Management 1",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=1",
+          "alt": "Admin Management 1"
         }
       },
       {
         "title": "Admin Management 2",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=2",
+          "alt": "Admin Management 2"
         }
       },
       {
         "title": "Admin Management 3",
         "description": "Has backend management to manage users, roles, permissions, menus, logs, etc.",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=3",
+          "alt": "Admin Management 3"
         }
       }
     ]

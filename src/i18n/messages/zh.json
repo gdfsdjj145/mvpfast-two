@@ -101,12 +101,12 @@
       }
     },
     "testimonial": {
-      "avatar": "/avatars/a1.jpg",
+      "avatar": "https://picsum.photos/80/80",
       "name": "开发者",
       "quote": "极简的模板系统，让开发效率提升300%"
     },
     "banner": {
-      "url": "/banners/banner.png",
+      "url": "https://picsum.photos/800/600",
       "alt": "MvpFast Preview"
     }
   },
@@ -114,25 +114,25 @@
     "items": [
       {
         "name": "NextJs",
-        "logo": "/tech/nextjs-logo.png",
+        "logo": "https://picsum.photos/64/64?random=10",
         "stars": "126K⭐",
         "href": "https://nextjs.org/"
       },
       {
         "name": "TailWindCss",
-        "logo": "/tech/tailwindcss.png",
+        "logo": "https://picsum.photos/64/64?random=11",
         "stars": "82K⭐",
         "href": "https://tailwindcss.com/"
       },
       {
         "name": "Mongodb",
-        "logo": "/tech/mongodb.png",
+        "logo": "https://picsum.photos/64/64?random=12",
         "stars": "26K⭐",
         "href": "https://www.mongodb.com/zh-cn/cloud/atlas/register"
       },
       {
         "name": "WeChat",
-        "logo": "/social/wx.png",
+        "logo": "https://picsum.photos/64/64?random=13",
         "stars": "",
         "href": "https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html"
       }
@@ -141,7 +141,7 @@
   "Admin": {
     "domain": "example.com",
     "banner": {
-      "url": "/banners/banner-1.png",
+      "url": "https://picsum.photos/1920/1080",
       "alt": "后台预览"
     }
   },
@@ -217,24 +217,24 @@
         "title": "后台管理1",
         "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=1",
+          "alt": "后台管理1"
         }
       },
       {
         "title": "后台管理2",
         "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=2",
+          "alt": "后台管理2"
         }
       },
       {
         "title": "后台管理3",
         "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
         "image": {
-          "src": "banner-1.png",
-          "alt": ""
+          "src": "https://picsum.photos/1200/900?random=3",
+          "alt": "后台管理3"
         }
       }
     ]
