@@ -1,0 +1,6 @@
+{
+    "title": "支付",
+    "icon": "Payment",
+    "pages": ["..."],
+    "defaultOpen": true
+  }

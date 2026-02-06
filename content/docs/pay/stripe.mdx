@@ -1,0 +1,74 @@
+---
+order: 3
+key: stripe
+title: Stripe
+description: 支付的介绍
+---
+
+> Stripe 作为海外最广泛使用的在线支付处理平台，方便的接入集成，基本是开发者接入海外支付的首
+
+官网地址：https://stripe.com/
+
+目前接入`Stripe`需要海外企业认证，需要做海外应用的可以选择。
+
+![stripe1](/docs/assets/pay/stripe1.png)
+
+##### 配置变量
+
+```json
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=stripe提供的key
+STRIPE_WEBHOOK_SECRET_CLI=测试stripe的cli key （可选）
+STRIPE_WEBHOOK_SECRET=使用webhook作为回调的secret
+```
+
+项目中使用`/api/webhook`来作为`Stripe`的支付回调。
+
+##### SDK 创建支付页面
+
+```tsx
+import { config } from '@/config';
+
+export async function createCheckoutSession(key: string, id: string) {
+  if (!id) {
+    window.location.href = '/auth/signin';
+    return;
+  }
+
+  const stripe = require('stripe')(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+
+  const good = config.goods.find((item) => item.key === key);
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'], // 支持的支付方式
+    line_items: [
+      {
+        price_data: {
+          currency: config.paySize,
+          product_data: {
+            name: good.name, // 商品名称
+          },
+          unit_amount: good.price * 100, // 商品价格（单位是分，如 $20.00 = 2000）
+        },
+        quantity: 1, // 商品数量
+      },
+    ],
+    mode: 'payment', // 支付模式
+    success_url: `${window.location.origin}/dashboard/home`,
+    cancel_url: `${window.location.origin}/`,
+    metadata: {
+      userId: id, // 自定义用户 ID 参数
+      goodType: good.key,
+      goodPrice: good.price,
+      goodName: good.name,
+      custom_info: 'any_custom_data', // 其他自定义信息
+    },
+  });
+
+  return session.url;
+}
+```
+
+##### 优点
+
+- Stripe 提供很快捷的接入方式，使用 SDK 即可快速创建支付页面
+- 支持丰富的支付方式，包含全球 135+货币

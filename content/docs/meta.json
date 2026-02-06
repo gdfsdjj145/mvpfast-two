@@ -1,0 +1,6 @@
+{
+    "title": "文档",
+    "icon": "Documentation",
+    "pages": ["introduction","start",  "database", "pay","features", "components"],
+    "defaultOpen": true
+}

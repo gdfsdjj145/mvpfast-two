@@ -1,0 +1,27 @@
+---
+order: 4
+key: github
+title: Github同步
+description: Github的介绍
+---
+
+当模板有新功能时，我们如何同步新功能到我们的项目。
+
+1、新建一个分支，备份主分支代码，以免失手
+
+```bash
+git checkout -b copymain
+```
+
+2、同步上游代码
+
+```bash
+git checkout main
+git remote add upstream 模板仓库地址
+git fetch upstream
+git merge upstream/main
+```
+
+3、解决冲突
+
+模板代码可能和你的项目中有冲突代码，请手动解决。

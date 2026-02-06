@@ -1,0 +1,42 @@
+---
+order: 1
+key: landingpage
+title: LandingPage
+description: landingpage
+---
+
+LandingPage 的组件进行了配置化，我们可以通过修改配置文件来快速改变 LandingPage 的内容。
+
+##### 修改配置文件
+
+LandingPage 的配置文件在`/src/store/landingpage.ts`。
+
+里面有对应组件的配置，你可以直接修改值的内容。
+
+```ts
+export const landingpageConfig = {
+  header: {
+    logo: {
+      url: '/title-logo.png',
+      alt: 'MvpFast',
+    },
+    nav: {
+      items: [],
+    },
+  },
+  // ... more options
+};
+```
+
+每个字段组件中都有对应内容，你可自行修改。
+
+##### 使用 Cursor 快速修改配置
+
+可以使用以下的提示词作参考，也可以你自己写。
+
+```ts
+我想要为我的产品构建一个名为“xxx”的登录页面，请重写landingpage.ts
+文件，要求字段不能修改，内容参考 @Web @https://xxx
+```
+
+![image-20250120153259082](/docs/assets/components/landingpage.png)

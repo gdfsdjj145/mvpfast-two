@@ -1,0 +1,110 @@
+---
+order: 1
+key: table
+title: Table组件
+description: table
+---
+
+为了更方便的使用表格，封装了基础的表格组件。
+
+![image-20250205164620456](/docs/assets/components/table.png)
+
+```tsx
+import Table from '@/components/dashboard/table';
+```
+
+##### 使用
+
+```tsx
+<Table
+  data={user}
+  columns={columns}
+  options={{
+    change: (val) => handlePageChange(val),
+  }}
+  pagination={pageInfo}
+></Table>
+```
+
+##### 参数
+
+| 名称       | 默认值      | 说明             |
+| ---------- | ----------- | ---------------- |
+| data       | []（数组）  | 表格数据         |
+| columns    | [] （数组） | 表格列           |
+| options    | {}          | 表格部分内容参数 |
+| pagination | null        | null 为不分页    |
+
+##### 参数说明
+
+`columns`, `data`参考
+
+```tsx
+const data = [
+  {
+    nickName: 'test',
+    createdDate: 999999,
+  },
+  {
+    nickName: 'test2',
+    createdDate: 999999,
+  },
+];
+
+const columns = [
+  {
+    label: '用户名',
+    prop: 'nickName',
+  },
+  {
+    label: '创建时间',
+    prop: 'createdDate',
+    render: (row: any) =>
+      dayjs(row.createdDate).format('YYYY年MM月DD日 HH:mm:ss'),
+  },
+  {
+    label: '操作',
+    prop: 'action',
+    render: (row: any) => (
+      <div className="flex gap-2">
+        <button
+          className="btn btn-sm btn-outline"
+          onClick={() => handleEdit(row)}
+        >
+          编辑
+        </button>
+        <button
+          className="btn btn-sm btn-error btn-outline"
+          onClick={() => handleDelete(row.id)}
+        >
+          删除
+        </button>
+      </div>
+    ),
+  },
+];
+```
+
+`options`参考
+
+- change： 表格翻页回调
+
+```tsx
+<Table
+  data={user}
+  columns={columns}
+  options={{
+    change: (val) => handlePageChange(val),
+  }}
+></Table>
+```
+
+`pagination`参考
+
+```tsx
+total: number; // 数据总数
+page: number; // 当前页
+pageSize: number; // 一页数量
+totalPages: number; // 总页数
+} | null;
+```
