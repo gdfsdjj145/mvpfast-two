@@ -33,7 +33,6 @@ R2_PUBLIC_DOMAIN=https://你的公开访问域名
 
 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)，进入 **R2 对象存储** 页面，点击 **创建存储桶**。
 
-![r2](/docs/assets/r2.png)
 
 #### 获取 API Token
 
@@ -41,15 +40,12 @@ R2_PUBLIC_DOMAIN=https://你的公开访问域名
 
 创建成功后会显示 `Access Key ID` 和 `Secret Access Key`，复制到 `.env` 对应变量。
 
-![r2-1](/docs/assets/r2-1.png)
-
 #### 配置公开访问域名
 
 在存储桶的 **设置** 页面，开启 **公开访问**，绑定自定义域名或使用 R2 提供的 `r2.dev` 子域名。
 
 该域名就是 `R2_PUBLIC_DOMAIN` 的值。
 
-![r2-2](/docs/assets/r2-2.png)
 
 ### 3. 上传功能说明
 
