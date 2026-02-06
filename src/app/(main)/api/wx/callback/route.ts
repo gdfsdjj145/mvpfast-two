@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { encode } from 'next-auth/jwt';
 import prisma from '@/lib/core/prisma';
 import { getGeneratorName } from '@/lib/utils/name-generator';
 import { grantInitialCredits } from '@/models/credit';
@@ -26,67 +25,74 @@ async function getWechatUserInfo(accessToken: string, openid: string) {
 }
 
 export async function GET(request: NextRequest) {
-  try {
-    const code = request.nextUrl.searchParams.get('code');
-    const state = request.nextUrl.searchParams.get('state');
+  const code = request.nextUrl.searchParams.get('code');
+  const state = request.nextUrl.searchParams.get('state');
 
+  console.log('[WxCallback] 收到微信回调, state:', state, ', code:', code ? '有' : '无');
+
+  try {
     if (!code) {
+      console.warn('[WxCallback] 缺少授权码 code');
       return NextResponse.json(
-        {
-          data: {},
-          message: '未获取到微信授权码',
-        },
+        { data: {}, message: '未获取到微信授权码' },
         { status: 400 }
       );
     }
 
     // 通过 state 参数区分开放平台登录和公众号登录
-    // state 以 'open_' 开头表示是微信开放平台登录
     const isOpenPlatform = state?.startsWith('open_');
+    console.log('[WxCallback] 登录方式:', isOpenPlatform ? '开放平台' : '公众号');
 
     if (isOpenPlatform) {
-      // 微信开放平台登录流程
+      // ========== 微信开放平台登录流程 ==========
+
+      // 1. 获取 access_token
+      console.log('[WxCallback] 正在获取微信 access_token...');
       const tokenData = await getWechatOpenAccessToken(code);
 
       if (tokenData.errcode) {
-        console.error('获取微信access_token失败:', tokenData);
+        console.error('[WxCallback] 获取 access_token 失败:', JSON.stringify(tokenData));
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_SITE_URL}/auth/signin?error=wx_token_failed`
         );
       }
 
       const { access_token, openid, unionid } = tokenData;
+      console.log('[WxCallback] access_token 获取成功, openid:', openid, ', unionid:', unionid || '无');
 
-      // 获取用户信息
+      // 2. 获取用户信息
+      console.log('[WxCallback] 正在获取微信用户信息...');
       const userInfo = await getWechatUserInfo(access_token, openid);
 
       if (userInfo.errcode) {
-        console.error('获取微信用户信息失败:', userInfo);
+        console.error('[WxCallback] 获取用户信息失败:', JSON.stringify(userInfo));
         return NextResponse.redirect(
           `${process.env.NEXT_PUBLIC_SITE_URL}/auth/signin?error=wx_userinfo_failed`
         );
       }
 
       const { nickname, headimgurl } = userInfo;
+      console.log('[WxCallback] 用户信息获取成功, nickname:', nickname);
 
-      // 查找或创建用户
-      // 优先通过 unionid 查找，如果没有则通过 openid 查找
+      // 3. 查找或创建用户（确保用户存在于数据库中）
       let user = null;
+      let isNewUser = false;
 
       if (unionid) {
         user = await prisma.user.findFirst({
           where: { wechatUnionId: unionid },
         });
+        if (user) console.log('[WxCallback] 通过 unionid 找到用户:', user.id);
       }
 
       if (!user) {
         user = await prisma.user.findFirst({
           where: { wechatOpenId: openid },
         });
+        if (user) console.log('[WxCallback] 通过 openid 找到用户:', user.id);
       }
 
       if (!user) {
-        // 创建新用户
         user = await prisma.user.create({
           data: {
             wechatOpenId: openid,
@@ -97,8 +103,10 @@ export async function GET(request: NextRequest) {
             phone: null,
           },
         });
-        // 新用户注册，赠送初始积分
+        isNewUser = true;
+        console.log('[WxCallback] 创建新用户:', user.id);
         await grantInitialCredits(user.id);
+        console.log('[WxCallback] 已赠送初始积分');
       } else {
         // 更新用户信息（如果有新的 unionid 或头像昵称变更）
         const updateData: {
@@ -122,73 +130,48 @@ export async function GET(request: NextRequest) {
             where: { id: user.id },
             data: updateData,
           });
+          console.log('[WxCallback] 已更新用户信息:', Object.keys(updateData).join(', '));
         }
       }
 
-      // 生成 JWT token
-      const token = await encode({
-        token: {
-          sub: user.id,
-          email: user.email,
-          phone: user.phone,
-          wechatOpenId: user.wechatOpenId,
-          wechatUnionId: user.wechatUnionId,
-          nickName: user.nickName,
-          avatar: user.avatar,
-        },
-        secret: process.env.NEXTAUTH_SECRET!,
-        salt: 'next-auth.session-token',
-      });
+      // 4. 跳转到 signin 页面，交给 NextAuth 的 signIn() 处理 JWT + Cookie
+      const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
+      redirectUrl.searchParams.set('id', openid);
+      redirectUrl.searchParams.set('type', 'wxlogin');
 
-      // 创建响应并设置 cookie
-      const redirectUrl = new URL('/', request.nextUrl.origin);
-      const response = NextResponse.redirect(redirectUrl);
+      console.log('[WxCallback] 开放平台登录完成, 用户:', user.id, ', isNew:', isNewUser, ', 跳转 signin 页面走 NextAuth 流程');
 
-      // 设置 next-auth session cookie
-      response.cookies.set('next-auth.session-token', token, {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 2 * 60 * 60, // 2小时，与 auth.ts 中的 session.maxAge 保持一致
-      });
-
-      return response;
+      return NextResponse.redirect(redirectUrl, { status: 302 });
     } else {
-      // 原有的公众号登录流程
+      // ========== 公众号登录流程 ==========
+      console.log('[WxCallback] 开始公众号登录流程, 请求外部 API:', `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`);
+
       const { data }: any = await axios({
         method: 'post',
         url: `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`,
-        data: {
-          code: code,
-        },
+        data: { code },
       });
+
       const opneid = data.data.openid || '';
 
       if (!opneid) {
-        console.error('微信回调处理失败', opneid);
-      } else {
-        const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
-        redirectUrl.searchParams.set('id', opneid);
-        redirectUrl.searchParams.set('type', 'wxlogin');
-
-        console.log('Redirecting to:', redirectUrl.toString());
-
-        return NextResponse.redirect(redirectUrl, {
-          status: 302,
-        });
+        console.error('[WxCallback] 公众号登录失败: 未获取到 openid, 响应:', JSON.stringify(data));
+        return NextResponse.redirect(
+          `${process.env.NEXT_PUBLIC_SITE_URL}/auth/signin?error=wx_openid_failed`
+        );
       }
 
-      return NextResponse.json(
-        {
-          data: {},
-          message: '',
-        },
-        { status: 200 }
-      );
+      const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
+      redirectUrl.searchParams.set('id', opneid);
+      redirectUrl.searchParams.set('type', 'wxlogin');
+
+      console.log('[WxCallback] 公众号登录成功, openid:', opneid, ', 跳转:', redirectUrl.toString());
+
+      return NextResponse.redirect(redirectUrl, { status: 302 });
     }
   } catch (error) {
-    console.error('微信回调处理失败', error);
+    console.error('[WxCallback] 微信回调处理异常:', error instanceof Error ? error.message : error);
+    console.error('[WxCallback] 异常堆栈:', error instanceof Error ? error.stack : '无');
     return NextResponse.redirect(
       `${process.env.NEXT_PUBLIC_SITE_URL}/auth/signin?error=wx_callback_failed`
     );

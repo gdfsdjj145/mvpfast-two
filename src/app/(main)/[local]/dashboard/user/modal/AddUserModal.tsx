@@ -64,7 +64,7 @@ export default function AddUserModal({
       }`}
     >
       <div
-        className={`bg-white rounded-lg p-6 w-[500px] transition-all duration-300 ${
+        className={`bg-base-100 rounded-lg p-6 w-[500px] transition-all duration-300 ${
           isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
         }`}
       >

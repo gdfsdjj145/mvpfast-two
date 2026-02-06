@@ -185,7 +185,7 @@ const DbDemo = () => {
   ];
 
   return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow">
+    <div className="overflow-x-auto bg-base-100 rounded-lg shadow">
       <div className="p-4 flex justify-between items-center border-b">
         <div className="flex items-center gap-2 flex-1 max-w-md">
           <input
@@ -232,7 +232,7 @@ const DbDemo = () => {
       ) : (
         <>
           {currentSearch && (
-            <div className="p-2 bg-blue-50 text-blue-700">
+            <div className="p-2 bg-info/10 text-info">
               当前搜索: {currentSearch} 
               {pageInfo.total > 0 ? `（共找到 ${pageInfo.total} 条结果）` : '（无匹配结果）'}
             </div>
@@ -246,7 +246,7 @@ const DbDemo = () => {
             pagination={pageInfo}
           />
           {users.length === 0 && !loading && (
-            <div className="text-center p-8 text-gray-500">
+            <div className="text-center p-8 text-base-content/60">
               {currentSearch ? '没有找到匹配的用户' : '暂无数据，请添加用户'}
             </div>
           )}
