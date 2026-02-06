@@ -90,7 +90,7 @@ const WeChatPc = () => {
           setLoading(false);
         }}
       />
-      <div className="relative h-[180px]">
+      <div className="relative h-[180px] overflow-hidden">
         {loading && (
           <div className="absolute inset-0 bg-base-100 flex justify-center items-center z-10">
             <div className="text-center">
