@@ -55,7 +55,7 @@ const WeChatPc = () => {
         redirect_uri: redirectUri,
         state: state,
         style: 'black',
-        href: '/css/wxlogin.css',
+        href: `${domain}/css/wxlogin.css`,
         onReady: function (isReady: boolean) {
           if (isReady) {
             setLoading(false);
