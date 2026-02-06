@@ -72,7 +72,7 @@ export const config = {
   goods: [
     {
       key: 'normal',
-      name: '商品1',
+      name: '基础版',
       description: '快来购买啊',
       includedFeatures: ['独孤九剑', '少林大力金刚脚', '铁头功'],
       price: 199,

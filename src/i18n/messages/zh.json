@@ -319,32 +319,45 @@
     "goods": {
       "normal": {
         "key": "normal",
-        "name": "开发模板代码",
-        "description": "包含了基础的网站开发功能，例如用户登录，数据库，博客，文章，支付等能力的集成方案。购买后，你可以永久的使用MvpFast的模板，并且享受该模板后续版本的更新功能，在网站上线过程中如遇到问题，可以享受作者的技术支持服务，帮你解决一切的技术问题。",
+        "name": "基础版",
+        "description": "",
         "includedFeatures": [
-          "登录 + 数据库 + 支付功能等封装能力",
-          "前端代码（NextJs + Tailwindcss）",
-          "微信公众号服务代码"
+          { "text": "NexJs 模板", "included": true },
+          { "text": "文章和博客", "included": true },
+          { "text": "微信支付功能和微信登录", "included": true },
+          { "text": "MongoDb数据库功能", "included": true },
+          { "text": "谷歌统计功能", "included": true },
+          { "text": "丰富的组件库和动画", "included": true },
+          { "text": "AI SKILL 和 AI API 集成", "included": true },
+          { "text": "模板学习资料和视频教程", "included": false },
+          { "text": "技术支持服务", "included": false },
+          { "text": "持续更新", "included": false }
         ],
-        "price": 0.1,
+        "price": 459,
         "creditPrice": 10,
-        "original": 399,
+        "original": 559,
         "mostPopular": false,
         "href": "/pay?key=normal"
       },
       "most": {
         "key": "most",
-        "name": "开发模板代码 + 从0到1Nextjs全栈开发课程",
-        "description": "包含开发模板代码所有内容、从0到1的Nextjs全栈开发课程所有内容",
+        "name": "终生版",
+        "description": "",
         "includedFeatures": [
-          "登录 + 数据库 + 支付功能等封装能力",
-          "前端代码（NextJs + Tailwindcss）",
-          "微信公众号服务代码",
-          "从0到1的Nextjs全栈开发课程"
+          { "text": "NexJs 模板", "included": true },
+          { "text": "文章和博客", "included": true },
+          { "text": "微信支付功能和微信登录", "included": true },
+          { "text": "MongoDb数据库功能", "included": true },
+          { "text": "谷歌统计功能", "included": true },
+          { "text": "丰富的组件库和动画", "included": true },
+          { "text": "AI SKILL 和 AI API 集成", "included": true },
+          { "text": "模板学习资料和视频教程", "included": true },
+          { "text": "技术支持服务", "included": true },
+          { "text": "持续更新", "included": true }
         ],
-        "price": 0.1,
+        "price": 499,
         "creditPrice": 10,
-        "original": 449,
+        "original": 599,
         "mostPopular": true,
         "href": "/pay?key=most"
       }

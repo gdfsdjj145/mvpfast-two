@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTranslations, useMessages } from 'next-intl';
 import { cn } from '@/lib/utils/common';
@@ -95,14 +95,29 @@ export default function PriceComponent() {
 
               {/* Features */}
               <ul className="space-y-3 mb-8">
-                {good.includedFeatures.map((feature: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                      <Check className="w-3 h-3 text-primary" />
-                    </span>
-                    <span className="text-sm text-base-content/70">{feature}</span>
-                  </li>
-                ))}
+                {good.includedFeatures.map((feature: any, i: number) => {
+                  const text = typeof feature === 'string' ? feature : feature.text;
+                  const included = typeof feature === 'string' ? true : feature.included;
+                  return (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className={cn(
+                        "flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5",
+                        included ? "bg-primary/10" : "bg-base-300/50"
+                      )}>
+                        {included
+                          ? <Check className="w-3 h-3 text-primary" />
+                          : <X className="w-3 h-3 text-base-content/30" />
+                        }
+                      </span>
+                      <span className={cn(
+                        "text-sm",
+                        included ? "text-base-content/70" : "text-base-content/30 line-through"
+                      )}>
+                        {text}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* CTA Button */}

@@ -92,7 +92,7 @@
     "cta": {
       "start": {
         "label": "Start Building",
-        "href": "/dashboard/home"
+        "href": "#price"
       },
       "docs": {
         "label": "Docs",
@@ -105,7 +105,7 @@
       "text": "Trusted by 100+ developers"
     },
     "banner": {
-      "url": "/banner.png",
+      "url": "/banners/banner.png",
       "alt": "MvpFast Preview"
     }
   },
@@ -301,9 +301,16 @@
         "name": "Development Template Code",
         "description": "Includes basic website development functions, such as user login, database, blog, articles, payment and other integration solutions. After purchase, you can use the MvpFast template permanently, and enjoy the updated functions of subsequent versions of the template. If you encounter problems during the website launch process, you can enjoy the author's technical support service to help you solve all technical problems.",
         "includedFeatures": [
-          "Login + Database + Payment functionality and other encapsulation capabilities",
-          "Frontend code (NextJs + Tailwindcss)",
-          "WeChat public account service code"
+          { "text": "NextJs Template", "included": true },
+          { "text": "Articles and Blog", "included": true },
+          { "text": "WeChat Payment and WeChat Login", "included": true },
+          { "text": "MongoDB Database", "included": true },
+          { "text": "Google Analytics", "included": true },
+          { "text": "Rich Component Library and Animations", "included": true },
+          { "text": "AI SKILL and AI API Integration", "included": true },
+          { "text": "Template Learning Materials and Video Tutorials", "included": false },
+          { "text": "Technical Support Service", "included": false },
+          { "text": "Continuous Updates", "included": false }
         ],
         "price": 299,
         "creditPrice": 2990,
@@ -316,10 +323,16 @@
         "name": "Development Template Code + NextJs Full Stack Development Course from 0 to 1",
         "description": "Includes all content of the development template code and all content of the NextJs full stack development course from 0 to 1",
         "includedFeatures": [
-          "Login + Database + Payment functionality and other encapsulation capabilities",
-          "Frontend code (NextJs + Tailwindcss)",
-          "WeChat public account service code",
-          "NextJs full stack development course from 0 to 1"
+          { "text": "NextJs Template", "included": true },
+          { "text": "Articles and Blog", "included": true },
+          { "text": "WeChat Payment and WeChat Login", "included": true },
+          { "text": "MongoDB Database", "included": true },
+          { "text": "Google Analytics", "included": true },
+          { "text": "Rich Component Library and Animations", "included": true },
+          { "text": "AI SKILL and AI API Integration", "included": true },
+          { "text": "Template Learning Materials and Video Tutorials", "included": true },
+          { "text": "Technical Support Service", "included": true },
+          { "text": "Continuous Updates", "included": true }
         ],
         "price": 399,
         "creditPrice": 3990,
