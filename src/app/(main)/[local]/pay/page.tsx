@@ -101,7 +101,6 @@ export default function PaymentPage() {
   const [isH5Browser, setIsH5Browser] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
 
-<<<<<<< HEAD
   // 如果只有一个支付方式，自动选中
   useEffect(() => {
     if (availablePayments.length === 1 && !payType) {
@@ -109,8 +108,6 @@ export default function PaymentPage() {
     }
   }, [availablePayments, payType]);
 
-=======
->>>>>>> upstream/feature/2.0
   useEffect(() => {
     const getShare = async () => {
       if (status === 'authenticated' && session) {
