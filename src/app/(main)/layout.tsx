@@ -142,13 +142,12 @@ export default async function MainLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} data-theme="light" style={{ colorScheme: 'light' }}>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <GlobalJsonLd />
-        <meta name="color-scheme" content="light only" />
       </head>
       <body className={cn(fonts.variable, inter.className)}>
-        <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} forcedTheme="light">
+        <ThemeProviders attribute="data-theme" defaultTheme="light" enableSystem={false} storageKey="theme">
           <SessionProvider>
             <ReduxProvider>
               {children}

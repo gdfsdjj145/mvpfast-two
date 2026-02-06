@@ -39,12 +39,12 @@ export default function page() {
   const renderLoading = () => (
     <div className="flex justify-center items-center h-64">
       <div className="animate-bounce">
-        <div className="w-16 h-16 bg-pink-300 rounded-full flex items-center justify-center">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <div className="w-6 h-6 bg-pink-500 rounded-full"></div>
+        <div className="w-16 h-16 bg-primary/30 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-base-100 rounded-full flex items-center justify-center">
+            <div className="w-6 h-6 bg-primary rounded-full"></div>
           </div>
         </div>
-        <div className="text-center mt-4 text-pink-500 font-bold">
+        <div className="text-center mt-4 text-primary font-bold">
           加载中...
         </div>
       </div>
@@ -56,11 +56,11 @@ export default function page() {
       {isLoading ? (
         renderLoading()
       ) : promotions.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl shadow-md">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+        <div className="text-center py-16 bg-base-100 rounded-xl shadow-md">
+          <h2 className="text-3xl font-bold text-base-content mb-4">
             暂无分享数据
           </h2>
-          <p className="text-xl text-gray-600 mb-8">立即分享，获取收益！</p>
+          <p className="text-xl text-base-content/60 mb-8">立即分享，获取收益！</p>
           <ClipboardCopyButton
             text={`${location.host}/pay?key=most&sharecode=${session?.user?.id}`}
             cb={() => {
@@ -74,7 +74,7 @@ export default function page() {
         </div>
       ) : (
         <div className="space-y-6">
-          <div className="overflow-x-auto bg-white">
+          <div className="overflow-x-auto bg-base-100">
             <table className="table table-zebra">
               {/* head */}
               <thead>

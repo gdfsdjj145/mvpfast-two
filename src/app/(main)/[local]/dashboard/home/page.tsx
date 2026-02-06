@@ -346,8 +346,8 @@ export default function DashboardPage() {
           <button
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               dateRange === 7
-                ? 'bg-white text-primary shadow-sm'
-                : 'text-base-content/60 hover:text-base-content hover:bg-white/50'
+                ? 'bg-base-100 text-primary shadow-sm'
+                : 'text-base-content/60 hover:text-base-content hover:bg-base-100/50'
             }`}
             onClick={() => setDateRange(7)}
           >
@@ -357,8 +357,8 @@ export default function DashboardPage() {
           <button
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               dateRange === 30
-                ? 'bg-white text-primary shadow-sm'
-                : 'text-base-content/60 hover:text-base-content hover:bg-white/50'
+                ? 'bg-base-100 text-primary shadow-sm'
+                : 'text-base-content/60 hover:text-base-content hover:bg-base-100/50'
             }`}
             onClick={() => setDateRange(30)}
           >
@@ -410,12 +410,12 @@ export default function DashboardPage() {
         {/* 总充值 - 现代卡片 */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-100 transition-all duration-300 cursor-pointer group"
+          className="bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 hover:shadow-md hover:border-emerald-100 transition-all duration-300 cursor-pointer group"
         >
           {isLoading ? (
             <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-gray-100 rounded w-1/2" />
-              <div className="h-8 bg-gray-100 rounded w-3/4" />
+              <div className="h-4 bg-base-300 rounded w-1/2" />
+              <div className="h-8 bg-base-300 rounded w-3/4" />
             </div>
           ) : (
             <>
@@ -428,8 +428,8 @@ export default function DashboardPage() {
                   <span>收入</span>
                 </div>
               </div>
-              <div className="text-sm text-gray-500 mb-1">总充值</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-base-content/60 mb-1">总充值</div>
+              <div className="text-2xl font-bold text-base-content">
                 +{(data?.totalRecharge || 0).toLocaleString()}
               </div>
             </>
@@ -439,12 +439,12 @@ export default function DashboardPage() {
         {/* 总消费 - 现代卡片 */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md hover:border-rose-100 transition-all duration-300 cursor-pointer group"
+          className="bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 hover:shadow-md hover:border-rose-100 transition-all duration-300 cursor-pointer group"
         >
           {isLoading ? (
             <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-gray-100 rounded w-1/2" />
-              <div className="h-8 bg-gray-100 rounded w-3/4" />
+              <div className="h-4 bg-base-300 rounded w-1/2" />
+              <div className="h-8 bg-base-300 rounded w-3/4" />
             </div>
           ) : (
             <>
@@ -457,8 +457,8 @@ export default function DashboardPage() {
                   <span>支出</span>
                 </div>
               </div>
-              <div className="text-sm text-gray-500 mb-1">总消费</div>
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-sm text-base-content/60 mb-1">总消费</div>
+              <div className="text-2xl font-bold text-base-content">
                 {(data?.totalConsume || 0).toLocaleString()}
               </div>
             </>
@@ -468,13 +468,13 @@ export default function DashboardPage() {
         {/* 快捷操作 - 现代卡片 */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300"
+          className="bg-base-100 rounded-2xl p-5 shadow-sm border border-base-200 hover:shadow-md transition-all duration-300"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center">
               <Gift size={22} className="text-violet-500" />
             </div>
-            <span className="text-xs text-gray-400 font-medium">快捷入口</span>
+            <span className="text-xs text-base-content/50 font-medium">快捷入口</span>
           </div>
           <button
             onClick={openRedeemModal}
@@ -491,27 +491,27 @@ export default function DashboardPage() {
         {/* 趋势图 - 优化设计 */}
         <motion.div
           variants={itemVariants}
-          className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+          className="lg:col-span-2 bg-base-100 rounded-2xl shadow-sm border border-base-200 overflow-hidden"
         >
-          <div className="p-5 border-b border-gray-100">
+          <div className="p-5 border-b border-base-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                   <History size={20} className="text-blue-500" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">积分变动趋势</h3>
-                  <p className="text-xs text-gray-400">近{dateRange}天数据统计</p>
+                  <h3 className="font-semibold text-base-content">积分变动趋势</h3>
+                  <p className="text-xs text-base-content/50">近{dateRange}天数据统计</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                  <span className="text-gray-500">充值</span>
+                  <span className="text-base-content/60">充值</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                  <span className="text-gray-500">消费</span>
+                  <span className="text-base-content/60">消费</span>
                 </div>
               </div>
             </div>
@@ -519,7 +519,7 @@ export default function DashboardPage() {
           <div className="p-5">
             <div className="h-64">
               {isLoading ? (
-                <div className="animate-pulse h-full bg-gray-50 rounded-xl" />
+                <div className="animate-pulse h-full bg-base-200 rounded-xl" />
               ) : (
                 <Line data={trendChartData} options={trendChartOptions} />
               )}
@@ -530,23 +530,23 @@ export default function DashboardPage() {
         {/* 分布图 - 优化设计 */}
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+          className="bg-base-100 rounded-2xl shadow-sm border border-base-200 overflow-hidden"
         >
-          <div className="p-5 border-b border-gray-100">
+          <div className="p-5 border-b border-base-200">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
                 <Coins size={20} className="text-amber-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">积分分布</h3>
-                <p className="text-xs text-gray-400">收支占比分析</p>
+                <h3 className="font-semibold text-base-content">积分分布</h3>
+                <p className="text-xs text-base-content/50">收支占比分析</p>
               </div>
             </div>
           </div>
           <div className="p-5">
             <div className="h-64 flex items-center justify-center">
               {isLoading ? (
-                <div className="animate-pulse w-40 h-40 bg-gray-50 rounded-full" />
+                <div className="animate-pulse w-40 h-40 bg-base-200 rounded-full" />
               ) : (data?.totalRecharge || 0) + Math.abs(data?.totalConsume || 0) > 0 ? (
                 <Doughnut
                   data={distributionData}
@@ -568,10 +568,10 @@ export default function DashboardPage() {
                 />
               ) : (
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
-                    <Coins size={28} className="text-gray-300" />
+                  <div className="w-16 h-16 rounded-2xl bg-base-200 flex items-center justify-center mx-auto mb-3">
+                    <Coins size={28} className="text-base-content/30" />
                   </div>
-                  <p className="text-sm text-gray-400">暂无数据</p>
+                  <p className="text-sm text-base-content/50">暂无数据</p>
                 </div>
               )}
             </div>
@@ -582,17 +582,17 @@ export default function DashboardPage() {
       {/* 最近交易记录 - 现代化表格设计 */}
       <motion.div
         variants={itemVariants}
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+        className="bg-base-100 rounded-2xl shadow-sm border border-base-200 overflow-hidden"
       >
-        <div className="p-5 border-b border-gray-100">
+        <div className="p-5 border-b border-base-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
                 <ArrowRightLeft size={20} className="text-indigo-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">最近交易</h3>
-                <p className="text-xs text-gray-400">最新的积分变动记录</p>
+                <h3 className="font-semibold text-base-content">最近交易</h3>
+                <p className="text-xs text-base-content/50">最新的积分变动记录</p>
               </div>
             </div>
             {data?.recentTransactions && data.recentTransactions.length > 0 && (
@@ -609,29 +609,29 @@ export default function DashboardPage() {
         <div className="overflow-x-auto">
           {isLoading ? (
             <div className="p-8 flex justify-center">
-              <span className="loading loading-spinner loading-md text-gray-300" />
+              <span className="loading loading-spinner loading-md text-base-content/30" />
             </div>
           ) : !data?.recentTransactions?.length ? (
             <div className="p-12 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center mx-auto mb-3">
-                <History size={28} className="text-gray-300" />
+              <div className="w-16 h-16 rounded-2xl bg-base-200 flex items-center justify-center mx-auto mb-3">
+                <History size={28} className="text-base-content/30" />
               </div>
-              <p className="text-sm text-gray-400">暂无交易记录</p>
+              <p className="text-sm text-base-content/50">暂无交易记录</p>
             </div>
           ) : (
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">类型</th>
-                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">变动</th>
-                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">余额</th>
-                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">描述</th>
-                  <th className="text-left py-3 px-5 text-xs font-semibold text-gray-400 uppercase tracking-wider">时间</th>
+                <tr className="border-b border-base-200">
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-base-content/50 uppercase tracking-wider">类型</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-base-content/50 uppercase tracking-wider">变动</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-base-content/50 uppercase tracking-wider">余额</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-base-content/50 uppercase tracking-wider">描述</th>
+                  <th className="text-left py-3 px-5 text-xs font-semibold text-base-content/50 uppercase tracking-wider">时间</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-base-200">
                 {data.recentTransactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={tx.id} className="hover:bg-base-200/50 transition-colors">
                     <td className="py-4 px-5">
                       <div className="flex items-center gap-2.5">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
@@ -646,7 +646,7 @@ export default function DashboardPage() {
                             <ArrowRightLeft size={16} className="text-amber-500" />
                           )}
                         </div>
-                        <span className="text-sm font-medium text-gray-700">{getTypeText(tx.type)}</span>
+                        <span className="text-sm font-medium text-base-content">{getTypeText(tx.type)}</span>
                       </div>
                     </td>
                     <td className="py-4 px-5">
@@ -659,16 +659,16 @@ export default function DashboardPage() {
                     <td className="py-4 px-5">
                       <div className="flex items-center gap-1.5">
                         <Coins size={14} className="text-amber-400" />
-                        <span className="text-sm text-gray-600">{tx.balance}</span>
+                        <span className="text-sm text-base-content/80">{tx.balance}</span>
                       </div>
                     </td>
                     <td className="py-4 px-5">
-                      <span className="text-sm text-gray-500 max-w-[200px] truncate block">
+                      <span className="text-sm text-base-content/60 max-w-[200px] truncate block">
                         {tx.description}
                       </span>
                     </td>
                     <td className="py-4 px-5">
-                      <span className="text-sm text-gray-400">
+                      <span className="text-sm text-base-content/50">
                         {formatDateTimeShort(tx.created_time)}
                       </span>
                     </td>
@@ -682,22 +682,22 @@ export default function DashboardPage() {
 
       {/* 兑换积分弹窗 - 现代化设计 */}
       <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box bg-white p-0 rounded-t-3xl sm:rounded-2xl max-w-md">
+        <div className="modal-box bg-base-100 p-0 rounded-t-3xl sm:rounded-2xl max-w-md">
           {/* 头部 */}
           <div className="relative p-6 pb-4">
             <button
               onClick={closeRedeemModal}
-              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+              className="absolute right-4 top-4 w-8 h-8 rounded-full bg-base-200 hover:bg-base-300 flex items-center justify-center transition-colors"
             >
-              <X size={16} className="text-gray-500" />
+              <X size={16} className="text-base-content/60" />
             </button>
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-200">
                 <Ticket size={24} className="text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-gray-900">兑换积分</h3>
-                <p className="text-sm text-gray-400">输入兑换码获取积分</p>
+                <h3 className="font-bold text-lg text-base-content">兑换积分</h3>
+                <p className="text-sm text-base-content/50">输入兑换码获取积分</p>
               </div>
             </div>
           </div>
@@ -710,20 +710,20 @@ export default function DashboardPage() {
                   <CheckCircle size={32} className="text-emerald-500" />
                 </div>
                 <h4 className="text-xl font-bold text-emerald-600 mb-2">兑换成功</h4>
-                <p className="text-gray-600">
+                <p className="text-base-content/80">
                   获得 <span className="font-bold text-amber-500">{redeemResult.creditAmount}</span> 积分
                 </p>
               </div>
-              <div className="mt-4 p-4 bg-gray-50 rounded-xl">
-                <div className="text-sm text-gray-400 text-center mb-1">当前积分余额</div>
-                <div className="text-2xl font-bold flex items-center justify-center gap-2 text-gray-900">
+              <div className="mt-4 p-4 bg-base-200 rounded-xl">
+                <div className="text-sm text-base-content/50 text-center mb-1">当前积分余额</div>
+                <div className="text-2xl font-bold flex items-center justify-center gap-2 text-base-content">
                   <Coins size={22} className="text-amber-400" />
                   {redeemResult.newBalance?.toLocaleString()}
                 </div>
               </div>
               <button
                 onClick={closeRedeemModal}
-                className="w-full mt-4 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-medium transition-colors"
+                className="w-full mt-4 py-3 bg-neutral hover:bg-neutral-focus text-neutral-content rounded-xl font-medium transition-colors"
               >
                 完成
               </button>
@@ -732,13 +732,13 @@ export default function DashboardPage() {
             /* 输入兑换码 */
             <div className="px-6 pb-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-base-content mb-2">
                   兑换码
                 </label>
                 <input
                   type="text"
                   placeholder="例如：WELCOME100"
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all uppercase font-mono tracking-wider"
+                  className="w-full px-4 py-3 bg-base-200 border border-base-300 rounded-xl text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all uppercase font-mono tracking-wider"
                   value={redeemCode}
                   onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
                   onKeyDown={(e) => {
@@ -761,14 +761,14 @@ export default function DashboardPage() {
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={closeRedeemModal}
-                  className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
+                  className="flex-1 py-3 bg-base-200 hover:bg-base-300 text-base-content rounded-xl font-medium transition-colors"
                   disabled={isRedeeming}
                 >
                   取消
                 </button>
                 <button
                   onClick={handleRedeem}
-                  className="flex-1 py-3 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 disabled:from-gray-300 disabled:to-gray-300 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 disabled:from-base-300 disabled:to-base-300 text-white rounded-xl font-medium transition-all flex items-center justify-center gap-2"
                   disabled={isRedeeming || !redeemCode.trim()}
                 >
                   {isRedeeming ? (

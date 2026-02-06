@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: light --default;
+  themes: light --default, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter, dim, nord, sunset;
 }
 
 
@@ -40,29 +40,7 @@
     --p: #6366f1;
   }
 
-  /* 强制保持亮色主题，禁用深色模式 */
-  html, html[data-theme='light'], html[data-theme='dark'] {
-    color-scheme: light !important;
-  }
-
-  /* 确保所有元素都使用亮色主题 */
-  *, *::before, *::after {
-    color-scheme: light !important;
-  }
-
-  /* 强制 body 使用亮色背景 */
-  body {
-    background-color: white !important;
-    color: black !important;
-  }
-
-  /* 覆盖任何可能的深色模式样式 */
-  @media (prefers-color-scheme: dark) {
-    :root, html, body {
-      background-color: white !important;
-      color: black !important;
-    }
-  }
+  /* 主题会根据 data-theme 属性自动切换 */
 
   html {
     scrollbar-color: #e8e8e8; /* 滑块颜色 轨道颜色 */

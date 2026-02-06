@@ -50,7 +50,7 @@ export default function page() {
   };
 
   return (
-    <div className="overflow-x-auto bg-white">
+    <div className="overflow-x-auto bg-base-100">
       <div className="p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">用户管理</h1>
         <div className="flex gap-2">
