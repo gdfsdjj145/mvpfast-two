@@ -152,14 +152,14 @@ export default function AuthConfig({ loginType, loginTypes, onChange }: AuthConf
                     />
                     <div className="swap-on">
                       <div className="w-10 h-6 rounded-full bg-primary flex items-center justify-end pr-1 transition-colors">
-                        <div className="w-4 h-4 rounded-full bg-white shadow-sm flex items-center justify-center">
+                        <div className="w-4 h-4 rounded-full bg-base-100 shadow-sm flex items-center justify-center">
                           <Check size={10} className="text-primary" />
                         </div>
                       </div>
                     </div>
                     <div className="swap-off">
                       <div className="w-10 h-6 rounded-full bg-base-300 flex items-center pl-1 transition-colors">
-                        <div className="w-4 h-4 rounded-full bg-white shadow-sm" />
+                        <div className="w-4 h-4 rounded-full bg-base-100 shadow-sm" />
                       </div>
                     </div>
                   </label>

@@ -180,7 +180,7 @@ export default function CaseComponent() {
 
                 {/* View Project indicator on hover */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <span className="flex items-center gap-2 px-5 py-2.5 bg-white/95 backdrop-blur-sm rounded-full text-sm font-medium text-base-content shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <span className="flex items-center gap-2 px-5 py-2.5 bg-base-100/95 backdrop-blur-sm rounded-full text-sm font-medium text-base-content shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <ExternalLink className="w-4 h-4" aria-hidden="true" />
                     {t('viewProject') || 'View Project'}
                   </span>
@@ -189,7 +189,7 @@ export default function CaseComponent() {
                 {/* Optional Tag Badge */}
                 {item.tag && (
                   <div className="absolute top-4 left-4">
-                    <span className="badge badge-sm bg-white/90 backdrop-blur-sm border-0 text-base-content font-medium shadow-sm">
+                    <span className="badge badge-sm bg-base-100/90 backdrop-blur-sm border-0 text-base-content font-medium shadow-sm">
                       {item.tag}
                     </span>
                   </div>

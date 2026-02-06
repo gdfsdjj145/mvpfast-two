@@ -275,22 +275,22 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         {/* 控制台首页 */}
         <Link
           href="/dashboard/home"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-base-content/60 hover:text-base-content hover:bg-base-200 transition-colors"
         >
           <Home size={14} />
           <span>控制台</span>
         </Link>
 
-        <ChevronRight size={14} className="text-gray-300" />
+        <ChevronRight size={14} className="text-base-content/30" />
 
         {/* 当前页面 */}
         {currentMenuItem ? (
-          <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-900 font-medium">
-            <span className="[&>svg]:w-3.5 [&>svg]:h-3.5 text-gray-500">{currentMenuItem.icon}</span>
+          <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-base-200 text-base-content font-medium">
+            <span className="[&>svg]:w-3.5 [&>svg]:h-3.5 text-base-content/60">{currentMenuItem.icon}</span>
             <span>{currentMenuItem.label}</span>
           </span>
         ) : (
-          <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-100 text-gray-900 font-medium">
+          <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-base-200 text-base-content font-medium">
             {currentPath}
           </span>
         )}
@@ -312,7 +312,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className="h-screen bg-[#f8fafc] flex">
+    <div className="h-screen bg-base-200 flex">
       {/* Mobile menu overlay */}
       {mobileMenuOpen ? (
         <div
@@ -324,10 +324,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar - 固定定位，不随内容滚动 */}
       <aside
         style={{ width: collapsed ? '5rem' : '18rem', minWidth: collapsed ? '5rem' : '18rem', maxWidth: collapsed ? '5rem' : '18rem' }}
-        className={`flex-shrink-0 bg-white h-screen flex flex-col transition-all duration-300 ease-in-out z-50 fixed top-0 left-0 border-r border-gray-100 shadow-sm ${mobileMenuOpen ? 'flex' : 'hidden lg:flex'}`}
+        className={`flex-shrink-0 bg-base-100 h-screen flex flex-col transition-all duration-300 ease-in-out z-50 fixed top-0 left-0 border-r border-base-200 shadow-sm ${mobileMenuOpen ? 'flex' : 'hidden lg:flex'}`}
       >
         {/* Logo - 更精致的设计 */}
-        <div className="h-16 px-4 border-b border-gray-100 flex items-center justify-between">
+        <div className="h-16 px-4 border-b border-base-200 flex items-center justify-between">
           {collapsed ? (
             <Link href="/" className="w-full flex justify-center">
               <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
@@ -339,16 +339,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                 <Image src="/favicon.ico" alt={siteConfig.siteName} width={40} height={40} className="w-full h-full object-contain" />
               </div>
-              <span className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="text-lg font-bold bg-gradient-to-r from-base-content to-base-content/70 bg-clip-text text-transparent">
                 {siteConfig.siteName}
               </span>
             </Link>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className={`w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors ${collapsed ? 'hidden' : ''}`}
+            className={`w-8 h-8 rounded-lg hover:bg-base-200 flex items-center justify-center transition-colors ${collapsed ? 'hidden' : ''}`}
           >
-            <ChevronLeft size={18} className="text-gray-400" />
+            <ChevronLeft size={18} className="text-base-content/50" />
           </button>
         </div>
 
@@ -359,35 +359,35 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <div className="space-y-6 animate-pulse">
               {/* 概览组骨架 */}
               <div>
-                {!collapsed && <div className="h-3 w-12 bg-gray-200 rounded mb-3 mx-3" />}
+                {!collapsed && <div className="h-3 w-12 bg-base-300 rounded mb-3 mx-3" />}
                 <div className="space-y-1">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className={`flex items-center gap-3 px-3 py-2.5 ${collapsed ? 'justify-center' : ''}`}>
-                      <div className="w-5 h-5 bg-gray-200 rounded" />
-                      {!collapsed && <div className="h-4 bg-gray-200 rounded flex-1" />}
+                      <div className="w-5 h-5 bg-base-300 rounded" />
+                      {!collapsed && <div className="h-4 bg-base-300 rounded flex-1" />}
                     </div>
                   ))}
                 </div>
               </div>
               {/* 管理功能组骨架 */}
               <div>
-                {!collapsed && <div className="h-3 w-16 bg-gray-200 rounded mb-3 mx-3" />}
+                {!collapsed && <div className="h-3 w-16 bg-base-300 rounded mb-3 mx-3" />}
                 <div className="space-y-1">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div key={i} className={`flex items-center gap-3 px-3 py-2.5 ${collapsed ? 'justify-center' : ''}`}>
-                      <div className="w-5 h-5 bg-gray-200 rounded" />
-                      {!collapsed && <div className="h-4 bg-gray-200 rounded flex-1" />}
+                      <div className="w-5 h-5 bg-base-300 rounded" />
+                      {!collapsed && <div className="h-4 bg-base-300 rounded flex-1" />}
                     </div>
                   ))}
                 </div>
               </div>
               {/* AI 工具组骨架 */}
               <div>
-                {!collapsed && <div className="h-3 w-14 bg-gray-200 rounded mb-3 mx-3" />}
+                {!collapsed && <div className="h-3 w-14 bg-base-300 rounded mb-3 mx-3" />}
                 <div className="space-y-1">
                   <div className={`flex items-center gap-3 px-3 py-2.5 ${collapsed ? 'justify-center' : ''}`}>
-                    <div className="w-5 h-5 bg-gray-200 rounded" />
-                    {!collapsed && <div className="h-4 bg-gray-200 rounded flex-1" />}
+                    <div className="w-5 h-5 bg-base-300 rounded" />
+                    {!collapsed && <div className="h-4 bg-base-300 rounded flex-1" />}
                   </div>
                 </div>
               </div>
@@ -397,7 +397,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             menuGroups.map((group, groupIndex) => (
               <div key={groupIndex} className="mb-6">
                 {collapsed ? null : (
-                  <div className="px-3 mb-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <div className="px-3 mb-2 text-[11px] font-semibold text-base-content/50 uppercase tracking-wider">
                     {group.title}
                   </div>
                 )}
@@ -410,19 +410,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                           href={`/dashboard/${item.key}`}
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative
                             ${isActive
-                              ? 'bg-gradient-to-r from-primary to-primary/90 text-white shadow-md shadow-primary/25'
-                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              ? 'bg-gradient-to-r from-primary to-primary/90 text-primary-content shadow-md shadow-primary/25'
+                              : 'text-base-content/80 hover:bg-base-200 hover:text-base-content'
                             }
                             ${collapsed ? 'justify-center' : ''}
                           `}
                         >
-                          <span className={`flex-shrink-0 transition-colors ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                          <span className={`flex-shrink-0 transition-colors ${isActive ? 'text-primary-content' : 'text-base-content/50 group-hover:text-base-content/80'}`}>
                             {item.icon}
                           </span>
                           {collapsed ? (
-                            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl">
+                            <div className="absolute left-full ml-2 px-3 py-2 bg-neutral text-neutral-content text-sm rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-xl">
                               {item.label}
-                              <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45" />
+                              <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-neutral rotate-45" />
                             </div>
                           ) : (
                             <span className="font-medium text-sm">{item.label}</span>
@@ -439,33 +439,33 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Collapse toggle for collapsed state */}
         {collapsed ? (
-          <div className="px-3 py-2 border-t border-gray-100">
+          <div className="px-3 py-2 border-t border-base-200">
             <button
               onClick={() => setCollapsed(false)}
-              className="w-full h-10 rounded-xl hover:bg-gray-50 flex items-center justify-center transition-colors"
+              className="w-full h-10 rounded-xl hover:bg-base-200 flex items-center justify-center transition-colors"
             >
-              <ChevronRight size={18} className="text-gray-400" />
+              <ChevronRight size={18} className="text-base-content/50" />
             </button>
           </div>
         ) : null}
 
         {/* User Profile - 优化设计 */}
-        <div className="border-t border-gray-100 p-3 relative" ref={menuRef}>
+        <div className="border-t border-base-200 p-3 relative" ref={menuRef}>
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`flex items-center gap-3 w-full p-2 rounded-xl hover:bg-gray-50 transition-colors ${collapsed ? 'justify-center' : ''}`}
+            className={`flex items-center gap-3 w-full p-2 rounded-xl hover:bg-base-200 transition-colors ${collapsed ? 'justify-center' : ''}`}
           >
-            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 flex-shrink-0">
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-base-200 flex-shrink-0">
               {renderAvatar()}
             </div>
             {collapsed ? null : (
               <>
                 <div className="flex-1 min-w-0 text-left">
-                  <div className="font-medium text-gray-900 truncate text-sm">{renderFullName()}</div>
+                  <div className="font-medium text-base-content truncate text-sm">{renderFullName()}</div>
                 </div>
                 <ChevronUp
                   size={18}
-                  className={`text-gray-400 transition-transform duration-200 ${isMenuOpen ? '' : 'rotate-180'}`}
+                  className={`text-base-content/50 transition-transform duration-200 ${isMenuOpen ? '' : 'rotate-180'}`}
                 />
               </>
             )}
@@ -474,17 +474,17 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {/* Dropdown Menu - 现代化下拉菜单 */}
           {isMenuOpen ? (
             <div
-              className={`absolute ${collapsed ? 'left-20 bottom-4 w-64' : 'bottom-full left-3 right-3'} mb-2 bg-white rounded-xl shadow-xl border border-gray-100 z-50 overflow-hidden`}
+              className={`absolute ${collapsed ? 'left-20 bottom-4 w-64' : 'bottom-full left-3 right-3'} mb-2 bg-base-100 rounded-xl shadow-xl border border-base-200 z-50 overflow-hidden`}
             >
               {/* User Info Header */}
-              <div className="p-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+              <div className="p-4 bg-gradient-to-r from-base-200 to-base-100 border-b border-base-200">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-gray-200">
+                  <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-base-300">
                     {renderAvatar()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-gray-900 text-sm truncate">{renderFullName()}</div>
-                    <div className="text-xs text-gray-400">管理您的账户</div>
+                    <div className="font-semibold text-base-content text-sm truncate">{renderFullName()}</div>
+                    <div className="text-xs text-base-content/50">管理您的账户</div>
                   </div>
                 </div>
               </div>
@@ -492,26 +492,26 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               {/* Menu Items */}
               <ul className="p-2">
                 {/* Settings Section */}
-                <li className="px-2 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                <li className="px-2 py-1.5 text-[11px] font-semibold text-base-content/50 uppercase tracking-wider">
                   设置
                 </li>
                 {menuItems.slice(0, 1).map((item) => (
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-gray-50 rounded-lg transition-colors text-gray-700 text-sm"
+                      className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-base-200 rounded-lg transition-colors text-base-content text-sm"
                     >
-                      <span className="text-gray-400">{item.icon}</span>
+                      <span className="text-base-content/50">{item.icon}</span>
                       <span className="font-medium">{item.label}</span>
                     </Link>
                   </li>
                 ))}
 
                 {/* Divider */}
-                <div className="my-2 border-t border-gray-100" />
+                <div className="my-2 border-t border-base-200" />
 
                 {/* Quick Links Section */}
-                <li className="px-2 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                <li className="px-2 py-1.5 text-[11px] font-semibold text-base-content/50 uppercase tracking-wider">
                   快捷链接
                 </li>
                 {menuItems.slice(1).map((item) => (
@@ -519,16 +519,16 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     <a
                       href={item.href}
                       target={item.target}
-                      className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-gray-50 rounded-lg transition-colors text-gray-700 text-sm"
+                      className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-base-200 rounded-lg transition-colors text-base-content text-sm"
                     >
-                      <span className="text-gray-400">{item.icon}</span>
+                      <span className="text-base-content/50">{item.icon}</span>
                       <span className="font-medium">{item.label}</span>
                     </a>
                   </li>
                 ))}
 
                 {/* Divider */}
-                <div className="my-2 border-t border-gray-100" />
+                <div className="my-2 border-t border-base-200" />
 
                 {/* Logout */}
                 <li>
@@ -551,14 +551,14 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         className={`flex-1 flex flex-col h-screen min-w-0 transition-[margin] duration-300 ${collapsed ? 'lg:ml-20' : 'lg:ml-72'}`}
       >
         {/* Top Navigation Bar - 固定高度，不可压缩 */}
-        <header className="h-16 min-h-16 flex-shrink-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-30">
+        <header className="h-16 min-h-16 flex-shrink-0 bg-base-100/80 backdrop-blur-md border-b border-base-200 z-30">
           <div className="h-full px-4 lg:px-6 flex items-center justify-between gap-4">
             {/* Mobile menu toggle */}
             <button
-              className="w-10 h-10 rounded-xl hover:bg-gray-100 flex items-center justify-center lg:hidden transition-colors"
+              className="w-10 h-10 rounded-xl hover:bg-base-200 flex items-center justify-center lg:hidden transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X size={20} className="text-gray-600" /> : <Menu size={20} className="text-gray-600" />}
+              {mobileMenuOpen ? <X size={20} className="text-base-content/80" /> : <Menu size={20} className="text-base-content/80" />}
             </button>
 
             {/* Breadcrumbs - Desktop */}
@@ -567,22 +567,22 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
 
             {/* User avatar - Mobile */}
-            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100 lg:hidden">
+            <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-base-200 lg:hidden">
               {renderAvatar()}
             </div>
           </div>
         </header>
 
         {/* Content area - 可滚动区域 */}
-        <main className="flex-1 overflow-y-auto bg-[#f8fafc]">
+        <main className="flex-1 overflow-y-auto bg-base-200">
           <div className="p-4 lg:p-6 max-w-[1400px] mx-auto">
             {/* Page header - 更精致的标题设计 */}
             <div className="mb-6">
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-base-content">
                 {currentPageInfo?.label || '控制台'}
               </h1>
               {currentPageInfo?.description && (
-                <p className="text-gray-500 text-sm mt-1">{currentPageInfo.description}</p>
+                <p className="text-base-content/60 text-sm mt-1">{currentPageInfo.description}</p>
               )}
             </div>
 
@@ -592,7 +592,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </main>
 
         {/* Footer - 固定高度，不可压缩 */}
-        <footer className="flex-shrink-0 py-4 px-6 bg-white border-t border-gray-100 text-center text-sm text-gray-400">
+        <footer className="flex-shrink-0 py-4 px-6 bg-base-100 border-t border-base-200 text-center text-sm text-base-content/50">
           © {new Date().getFullYear()} {siteConfig.siteName}
         </footer>
       </div>
