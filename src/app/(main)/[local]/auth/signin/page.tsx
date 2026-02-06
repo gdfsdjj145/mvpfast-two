@@ -96,12 +96,14 @@ export default function SignInPage() {
   const configLoaded = useAppSelector(selectPublicConfigLoaded);
   const [type, setType] = useState('');
   const [loading, setLoading] = useState(false);
+  const [wxLoginProcessing, setWxLoginProcessing] = useState(false);
   const [form, setForm] = useState({
     identifier: '',
     code: '',
     password: '',
   });
   const searchParams = useSearchParams();
+  const wxLoginCalledRef = React.useRef(false);
 
   useEffect(() => {
     dispatch(fetchPublicConfigs());
@@ -112,6 +114,40 @@ export default function SignInPage() {
       setType(loginConfig.loginType);
     }
   }, [configLoaded, loginConfig.loginType, type]);
+
+  // 微信回调自动登录：检测 URL 参数 ?id=openid&type=wxlogin
+  useEffect(() => {
+    const wxOpenId = searchParams.get('id');
+    const loginType = searchParams.get('type');
+
+    if (loginType === 'wxlogin' && wxOpenId && !wxLoginCalledRef.current) {
+      wxLoginCalledRef.current = true;
+      setWxLoginProcessing(true);
+      console.log('[SignIn] 检测到微信回调, openid:', wxOpenId, ', 自动调用 signIn...');
+
+      signIn('credentials', {
+        type: 'wx',
+        identifier: wxOpenId,
+        code: '',
+        redirect: false,
+      }).then(async (res) => {
+        if (res?.error) {
+          console.error('[SignIn] 微信自动登录失败:', res.error);
+          toast.error('微信登录失败，请重试');
+          setWxLoginProcessing(false);
+        } else {
+          console.log('[SignIn] 微信自动登录成功, 正在跳转...');
+          await update();
+          router.push('/');
+          router.refresh();
+        }
+      }).catch((err) => {
+        console.error('[SignIn] 微信自动登录异常:', err);
+        toast.error('微信登录失败，请重试');
+        setWxLoginProcessing(false);
+      });
+    }
+  }, [searchParams, update, router]);
 
   const handleFormChnage = (key: string, value: string) => {
     setForm({
@@ -172,10 +208,15 @@ export default function SignInPage() {
     }
   };
 
-  if (!configLoaded) {
+  if (!configLoaded || wxLoginProcessing) {
     return (
       <div className="h-screen w-full flex justify-center items-center bg-gradient-to-br from-base-200 via-base-100 to-base-200">
-        <LoadingSpinner size="lg" />
+        <div className="text-center">
+          <LoadingSpinner size="lg" />
+          {wxLoginProcessing && (
+            <p className="mt-4 text-sm text-base-content/50">正在登录中...</p>
+          )}
+        </div>
       </div>
     );
   }

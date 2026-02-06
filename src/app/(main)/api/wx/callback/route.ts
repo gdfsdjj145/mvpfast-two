@@ -1,17 +1,9 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { encode } from 'next-auth/jwt';
 import prisma from '@/lib/core/prisma';
 import { getGeneratorName } from '@/lib/utils/name-generator';
 import { grantInitialCredits } from '@/models/credit';
-
-// 根据环境决定 cookie 名称和 salt
-// 生产环境 HTTPS 下 NextAuth 使用 __Secure- 前缀
-const useSecureCookies = process.env.NODE_ENV === 'production';
-const cookieName = useSecureCookies
-  ? '__Secure-next-auth.session-token'
-  : 'next-auth.session-token';
 
 // 微信开放平台接口获取 access_token
 async function getWechatOpenAccessToken(code: string) {
@@ -30,20 +22,6 @@ async function getWechatUserInfo(accessToken: string, openid: string) {
 
   const response = await axios.get(url);
   return response.data;
-}
-
-// 从 state 参数中解析 redirect 路径
-// state 格式: open_<random> 或 open_<random>_redirect_<encodedPath>
-function parseRedirectFromState(state: string | null): string | null {
-  if (!state) return null;
-  const marker = '_redirect_';
-  const idx = state.indexOf(marker);
-  if (idx === -1) return null;
-  try {
-    return decodeURIComponent(state.substring(idx + marker.length));
-  } catch {
-    return null;
-  }
 }
 
 export async function GET(request: NextRequest) {
@@ -96,7 +74,7 @@ export async function GET(request: NextRequest) {
       const { nickname, headimgurl } = userInfo;
       console.log('[WxCallback] 用户信息获取成功, nickname:', nickname);
 
-      // 3. 查找或创建用户
+      // 3. 查找或创建用户（确保用户存在于数据库中）
       let user = null;
       let isNewUser = false;
 
@@ -115,7 +93,6 @@ export async function GET(request: NextRequest) {
       }
 
       if (!user) {
-        // 创建新用户
         user = await prisma.user.create({
           data: {
             wechatOpenId: openid,
@@ -128,8 +105,6 @@ export async function GET(request: NextRequest) {
         });
         isNewUser = true;
         console.log('[WxCallback] 创建新用户:', user.id);
-
-        // 新用户注册，赠送初始积分
         await grantInitialCredits(user.id);
         console.log('[WxCallback] 已赠送初始积分');
       } else {
@@ -159,39 +134,14 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // 4. 生成 JWT token（包含 role 字段）
-      console.log('[WxCallback] 正在生成 JWT, cookie 名:', cookieName);
-      const token = await encode({
-        token: {
-          sub: user.id,
-          email: user.email,
-          phone: user.phone,
-          wechatOpenId: user.wechatOpenId,
-          wechatUnionId: user.wechatUnionId,
-          nickName: user.nickName,
-          avatar: user.avatar,
-          role: user.role,
-        },
-        secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET!,
-        salt: cookieName,
-      });
+      // 4. 跳转到 signin 页面，交给 NextAuth 的 signIn() 处理 JWT + Cookie
+      const redirectUrl = new URL('/auth/signin', request.nextUrl.origin);
+      redirectUrl.searchParams.set('id', openid);
+      redirectUrl.searchParams.set('type', 'wxlogin');
 
-      // 5. 确定跳转地址
-      const redirectPath = parseRedirectFromState(state);
-      const redirectUrl = new URL(redirectPath || '/', request.nextUrl.origin);
-      console.log('[WxCallback] 登录成功, 用户:', user.id, ', role:', user.role, ', isNew:', isNewUser, ', 跳转:', redirectUrl.pathname);
+      console.log('[WxCallback] 开放平台登录完成, 用户:', user.id, ', isNew:', isNewUser, ', 跳转 signin 页面走 NextAuth 流程');
 
-      // 6. 设置 cookie 并跳转
-      const response = NextResponse.redirect(redirectUrl);
-      response.cookies.set(cookieName, token, {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: useSecureCookies,
-        maxAge: 2 * 60 * 60, // 2小时，与 auth.ts 中的 session.maxAge 保持一致
-      });
-
-      return response;
+      return NextResponse.redirect(redirectUrl, { status: 302 });
     } else {
       // ========== 公众号登录流程 ==========
       console.log('[WxCallback] 开始公众号登录流程, 请求外部 API:', `${process.env.NEXT_PUBLIC_API_URL}/auth/wechat`);
