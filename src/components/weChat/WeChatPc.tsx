@@ -115,7 +115,7 @@ const WeChatPc = () => {
         <div
           id="wx_login_container"
           ref={containerRef}
-          className="flex justify-center"
+          className="flex justify-center overflow-hidden"
         />
       </div>
     </>
