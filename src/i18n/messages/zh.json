@@ -86,6 +86,7 @@
     }
   },
   "Hero": {
+<<<<<<< HEAD
     "title": "AI + 模板",
     "subtitle": "快速构建你的网站应用",
     "description": "MvpFast是一个快速构建网站的开发模板，集成了登录、支付、数据库、微信公众号等能力，让你的网站快速上线",
@@ -93,6 +94,15 @@
       "start": {
         "label": "立即开始构建",
         "href": "#price"
+=======
+    "title": "AI + Template",
+    "subtitle": "构建你的MvpFast应用",
+    "description": "使用 MvpFast 快速构建你的网站应用，包含支付、登录、文章、博客等一系列功能",
+    "cta": {
+      "start": {
+        "label": "立即开始构建",
+        "href": "/dashboard/home"
+>>>>>>> upstream/feature/2.0
       },
       "docs": {
         "label": "文档",
@@ -100,12 +110,22 @@
         "target": "_blank"
       }
     },
+<<<<<<< HEAD
     "testimonials": {
       "avatars": ["/avatars/a2.jpg", "/avatars/a3.jpg", "/avatars/a4.jpg"],
       "text": "已有 100+ 开发者正在使用"
     },
     "banner": {
       "url": "/banners/banner.png",
+=======
+    "testimonial": {
+      "avatar": "https://picsum.photos/80/80",
+      "name": "开发者",
+      "quote": "极简的模板系统，让开发效率提升300%"
+    },
+    "banner": {
+      "url": "https://picsum.photos/800/600",
+>>>>>>> upstream/feature/2.0
       "alt": "MvpFast Preview"
     }
   },
@@ -182,6 +202,7 @@
     ]
   },
   "Feature": {
+<<<<<<< HEAD
     "title": "快速构建网页应用",
     "subtitle": "用最短的时间上线MVP，验证你的想法",
     "description": "使用目前最流行的技术搭建你产品的Mvp，快速验证你的产品idea，这套模板包含了一个小产品的最基础功能，集成了登录，鉴权，邮箱，数据库，微信公众号等能力。",
@@ -245,10 +266,44 @@
         "list": [
           "微信生态作为基础，可以搭配公众号一起推广使用，符合国内大多数用户使用习惯",
           "公众号可以作为推广渠道，通过公众号的推广，可以快速推广你的产品"
+=======
+    "title": "展示你网站的功能",
+    "subtitle": "这一部分用于展示你的网站功能",
+    "description": "向用户展示产品的核心功能和特色",
+    "items": [
+      {
+        "name": "功能1",
+        "icon": "CircleUser",
+        "description": "展示出你产品的特色能力",
+        "list": [
+          "有无敌的功能",
+          "一键配置",
+          "太牛了"
+        ]
+      },
+      {
+        "name": "功能2",
+        "icon": "BadgeJapaneseYen",
+        "description": "别人没有的你也有",
+        "list": [
+          "独步武林",
+          "独孤九剑",
+          "吸星大法"
+        ]
+      },
+      {
+        "name": "功能3",
+        "icon": "Shield",
+        "description": "前面两个不够，还有第三个",
+        "list": [
+          "激光炮",
+          "ak47"
+>>>>>>> upstream/feature/2.0
         ]
       }
     ]
   },
+<<<<<<< HEAD
   "Case": {
     "title": "用MvpFast搭建的网站",
     "subtitle": "已经使用MvpFast搭建多个网站产品，以下产品均已上线",
@@ -309,6 +364,72 @@
       }
     ]
   },
+=======
+  "FeatureGrid": {
+    "title": "MvpFast的主要特点",
+    "items": [
+      {
+        "icon": "CircleUser",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "Package",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "Moon",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "MessageCircleMore",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      },
+      {
+        "icon": "File",
+        "title": "功能1",
+        "description": "展示出你产品的特色能力"
+      }
+    ]
+  },
+  "FeatureCard": {
+    "items": [
+      {
+        "title": "后台管理1",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=1",
+          "alt": "后台管理1"
+        }
+      },
+      {
+        "title": "后台管理2",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=2",
+          "alt": "后台管理2"
+        }
+      },
+      {
+        "title": "后台管理3",
+        "description": "拥有后台管理，可以管理用户、角色、权限、菜单、日志等",
+        "image": {
+          "src": "https://picsum.photos/1200/900?random=3",
+          "alt": "后台管理3"
+        }
+      }
+    ]
+  },
+  "Case": {
+    "title": "客户案例",
+    "subtitle": "查看使用我们产品的客户案例",
+    "description": "",
+    "items": []
+  },
+>>>>>>> upstream/feature/2.0
   "Price": {
     "title": "选择适合你的套餐",
     "subtitle": "提供套餐的详细信息，让用户放心购买",
@@ -356,6 +477,7 @@
     "call": {
       "emailLabel": "邮箱",
       "wechatLabel": "微信",
+<<<<<<< HEAD
       "email": "freecloud@emong.com.cn",
       "wechat": "jiajiandu"
     },
@@ -375,6 +497,40 @@
       {
         "question": "如何部署MvpFast",
         "answer": "部署MvpFast非常简单，只需将代码提交到个人的git仓库，之后通过Vercel一键部署，整个流程只需1分钟。"
+=======
+      "email": "",
+      "wechat": ""
+    },
+    "items": [
+      {
+        "question": "如何开始使用？",
+        "answer": "注册账号后即可开始使用，我们提供完整的文档和技术支持。"
+      },
+      {
+        "question": "支持哪些支付方式？",
+        "answer": "目前支持微信支付，后续会增加更多支付方式。"
+      },
+      {
+        "question": "如何获得技术支持？",
+        "answer": "你可以通过邮件或微信联系我们的技术支持团队。"
+      }
+    ]
+  },
+  "FaqList": {
+    "title": "常见问题",
+    "items": [
+      {
+        "title": "如何开始使用？",
+        "answer": "注册账号后即可开始使用，我们提供完整的文档和技术支持。"
+      },
+      {
+        "title": "支持哪些支付方式？",
+        "answer": "目前支持微信支付，后续会增加更多支付方式。"
+      },
+      {
+        "title": "如何获得技术支持？",
+        "answer": "你可以通过邮件或微信联系我们的技术支持团队。"
+>>>>>>> upstream/feature/2.0
       }
     ]
   },
@@ -430,10 +586,15 @@
     "subtitle": "MvpFast - 快速构建你的网站应用",
     "poweredBy": "使用 {name} 开发",
     "beian": {
+<<<<<<< HEAD
       "text": "粤ICP备2024286477号-2",
       "url": "https://beian.miit.gov.cn",
       "company": "佛山依梦科技有限公司",
       "year": "2026"
+=======
+      "text": "",
+      "url": ""
+>>>>>>> upstream/feature/2.0
     },
     "items": [
       {

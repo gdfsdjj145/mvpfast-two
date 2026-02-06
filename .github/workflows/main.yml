@@ -1,0 +1,43 @@
+name: Sync from Template
+
+on:
+  schedule:
+    # 每天凌晨 1 点运行
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "kajian"
+          git config user.email "929932952@qq.com"
+
+      - name: Authenticate with GitHub
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote add template https://$TOKEN@github.com/gdfsdjj145/mvpfast.git || git remote set-url template https://$TOKEN@github.com/gdfsdjj145/mvpfast.git
+
+      - name: Fetch template
+        run: git fetch template
+
+      - name: Merge template changes
+        run: |
+          git merge template/release --no-commit --allow-unrelated-histories || true
+          git commit -am "Sync template updates" || true
+
+      - name: Push changes
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://$TOKEN@github.com/mvpfast/mvpfast-web.git main
+          echo "Push complete"
