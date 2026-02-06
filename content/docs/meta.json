@@ -1,6 +1,13 @@
 {
-    "title": "文档",
-    "icon": "Documentation",
-    "pages": ["introduction","start",  "database", "pay","features", "components"],
-    "defaultOpen": true
+  "title": "文档",
+  "icon": "Documentation",
+  "pages": [
+    "--- 快速开始 ---",
+    "introduction", 
+    "AI-introduction", 
+    "start",
+    "--- 核心功能 ---",
+    "wechat",
+    "database", "pay", "features", "components"],
+  "defaultOpen": true
 }

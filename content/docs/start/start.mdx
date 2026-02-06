@@ -1,53 +1,86 @@
 ---
-order: 1
-key: start
-title: 开始
-description: 开始
+title: 首页
+description: 首页落地页的组件组成和自定义方法
 ---
 
-**通过简单的配置，就能将你的网站构建成功** ⚡
+首页由多个独立组件拼装而成，所有文案通过 i18n 国际化文件配置，修改文案无需改动代码。
 
-我们必须将一个非常漂亮的落地页展现在你的客户面前，并添加购买链接。
+## 页面结构
 
-你跟着教程做，就可以快速的上线你的网站了。
-
-<br />
-
-1.如果你不知道怎么做，请查看 [快速开始](/docs/introduction)。
-<br />
-
-2.这是首页的代码，你可以复制使用。
+首页入口文件位于 `src/app/(main)/[local]/page.tsx`，当前组件排列顺序：
 
 ```tsx
-import Header from '@/components/Header';
-import HeroComponent from '@/components/landingpage/HeroComponent';
-import FeatureComponent from '@/components/landingpage/FeatureComponent';
-import CaseComponent from '@/components/landingpage/CaseComponent';
-import PriceComponent from '@/components/landingpage/PriceComponent';
-import FaqComponents from '@/components/landingpage/FaqComponents';
-import Footer from '@/components/Footer';
+<Header />           {/* 顶部导航 */}
+<HeroComponent />    {/* 主视觉区 - 首屏静态加载 */}
+<BrandComponent />   {/* 品牌展示 - 动态加载 */}
+<AIShowcaseComponent /> {/* AI 工具展示 - 动态加载 */}
+<AdminComponent />   {/* 后台管理展示 - 动态加载 */}
+<FeatureComponent /> {/* 功能特性 - 动态加载 */}
+<CaseComponent />    {/* 案例展示 - 动态加载 */}
+<PriceComponent />   {/* 价格方案 - 动态加载 */}
+<FaqComponents />    {/* 常见问题 - 动态加载 */}
+<Footer />           {/* 页脚 */}
+```
 
-export default function Home() {
-  return (
-    <div className="font-xft">
-      <Header></Header>
-      <main>
-        <HeroComponent></HeroComponent>
-        <FeatureComponent></FeatureComponent>
-        <CaseComponent></CaseComponent>
-        <PriceComponent></PriceComponent>
-        <FaqComponents></FaqComponents>
-      </main>
-      <Footer></Footer>
-    </div>
-  );
+除 `HeroComponent` 外，其余组件均使用 `next/dynamic` 动态导入，减少首屏 JS 体积。
+
+你可以自由调整组件顺序、删除不需要的组件，或添加自己的模块。
+
+## 组件说明
+
+| 组件 | 文件路径 | i18n 命名空间 | 说明 |
+|------|---------|--------------|------|
+| Header | `src/components/Header.tsx` | `Header` | 顶部导航，包含用户菜单、语言切换 |
+| Hero | `src/components/landingpage/HeroComponent.tsx` | `Hero` | 主标题、副标题、CTA 按钮、Banner 图 |
+| Brand | `src/components/landingpage/BrandComponent.tsx` | `Brand` | 合作品牌 Logo 展示，交错动画 |
+| AI Showcase | `src/components/landingpage/AIShowcaseComponent.tsx` | `AIShowcase` | AI 工具集成展示 (Claude、ChatGPT 等) |
+| Admin | `src/components/landingpage/AdminComponent.tsx` | `Showcase` | 后台管理界面截图展示 |
+| Feature | `src/components/landingpage/FeatureComponent.tsx` | `Feature` | 功能特性介绍，图标 + 描述 |
+| Case | `src/components/landingpage/CaseComponent.tsx` | `Case` | 案例展示，图片 + 链接 |
+| Price | `src/components/landingpage/PriceComponent.tsx` | `Price` | 价格方案对比，支持 ✅/❌ 特性标记 |
+| FAQ | `src/components/landingpage/FaqComponents.tsx` | `Faq` | 常见问题手风琴，含联系方式 |
+| Footer | `src/components/Footer.tsx` | `Footer` | 页脚信息、链接列表、备案信息 |
+
+## 修改文案
+
+所有文案集中在 i18n 翻译文件中，**无需修改组件代码**：
+
+- 中文：`src/i18n/messages/zh.json`
+- 英文：`src/i18n/messages/en.json`
+
+以 Hero 区域为例，修改 `zh.json` 中的 `Hero` 字段：
+
+```json
+{
+  "Hero": {
+    "title": "你的产品标题",
+    "titleHighlight": "高亮关键词",
+    "subtitle": "一句话描述你的产品价值",
+    "cta": {
+      "start": { "text": "立即开始", "href": "#price" },
+      "demo": { "text": "查看演示", "href": "/demo" }
+    }
+  }
 }
 ```
 
-3.根据你的业务内容进行一些文案的修改。尽量突出重点，修改完成你就拥有一个好看的落地页了。
-<br />
+其他组件同理，找到对应命名空间修改即可。
 
-4.开启数据库功能，数据库功能包含用户、支付等数据的存储，如果想要整个商业链路，就需要开启[数据库](docs/database/mongodb)。
-<br />
+## 增删组件
 
-> 你已经完成了你赚钱的第一步了，加油 🚀
+**删除组件** — 在 `page.tsx` 中移除对应的 import 和 JSX 标签即可。
+
+**添加自定义组件** — 在 `src/components/landingpage/` 下新建组件，然后在 `page.tsx` 中引入：
+
+```tsx
+const MySection = dynamic(() => import('@/components/landingpage/MySection'));
+
+// 在 <main> 中添加
+<MySection />
+```
+
+## 样式与动画
+
+- 所有组件使用 **Tailwind CSS 4 + DaisyUI 5** 进行样式编写
+- 大部分组件使用 **framer-motion** 实现滚动入场动画
+- 主题色通过 `src/app/(main)/globals.css` 中的 DaisyUI 变量 `--p` 控制，修改一处全局生效

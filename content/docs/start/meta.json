@@ -1,6 +1,6 @@
 {
-    "title": "介绍",
-    "icon": "Introduction",
+    "title": "指南",
+    "icon": "Book",
     "pages": ["..."],
-    "defaultOpen": true
+    "defaultOpen": false
   }

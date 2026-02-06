@@ -1,85 +1,107 @@
 ---
-order: 1
-key: introduction
-title: 快速开始
-description: MvpFast的介绍
+title: 手动开始
+description: MvpFast 模板的介绍和快速启动指南
+icon: Play
 ---
 
-欢迎来到 MvpFast🙋
+#### 欢迎来到 MvpFast 👏
 
-下面是 MvpFast 模板的介绍，请你按照下面的步骤启动你的项目。
+MvpFast 是一套基于 Next.js 15 的全栈 SaaS 模板，集成了登录鉴权、微信支付、数据库、AI 对话、国际化等能力，帮助你快速构建并上线 MVP 产品。
 
-完成之后，你可以按照文章教程，五分钟就能启动 MvpFast 并且快速的构建你自己的应用吧 ⚡
+## 启动项目
 
+### 1. 克隆仓库
 
-
-#### 启动一个本地服务
-
-1.通过 github 仓库下载模板，购买的用户会邀请进入 github 仓库
+购买后会邀请进入 GitHub 仓库，通过以下命令拉取代码：
 
 ```bash
 git clone https://github.com/mvpfast/xxxxx.git
-cd [xxx]
+cd mvpfast
 pnpm install
 git remote remove origin
-pnpm run dev
 ```
 
-> 建议使用 Node 环境>= 20.0.0 （作者使用的环境）
+> 要求 Node.js >= 20.0.0，推荐使用 pnpm 作为包管理器。
 
+### 2. 配置环境变量
 
+复制 `.env.example` 为 `.env`，填写必要配置：
 
-2.新增一个`.env`配置文件
-
-```json
-DATABASE_URL="你的数据库url"
-MAIL_HOST=xx
-MAIL_PORT=xx
-MAIL_USER=xx
-MAIL_PASS=xx
-NEXTAUTH_SECRET=mvpfast
-NEXTAUTH_SALT=mvpfast
-ALIYUN_ACCESS_KEY_ID=xx
-ALIYUN_ACCESS_KEY_SECRET=xx
-ALIYUN_SMS_SIGN_NAME=xx
-ALIYUN_SMS_TEMPLATE_CODE=xx
-NEXT_PUBLIC_API_URL=xx
-NEXT_PUBLIC_WECHAT_APPID=xx
-WECHAT_MCHID=xx
-WECHAT_API_V3_KEY=xx
-WECHAT_SERIAL_NO=xxx
-WECHAT_PRIVATE_KEY=`-----BEGIN PRIVATE KEY-----
-xxxx
------END PRIVATE KEY-----`
-
+```bash
+cp .env.example .env
 ```
 
+**最小启动配置**（只需这两项即可运行）：
 
+```bash
+# 数据库（MongoDB Atlas 免费创建）
+DATABASE_URL="mongodb+srv://user:pass@cluster.mongodb.net/mydb"
 
-3.打开 `http://localhost:3000` 可以看到你的网站‘
+# Auth 密钥（终端执行 openssl rand -base64 32 生成）
+AUTH_SECRET="你的密钥"
+```
 
-> 虽然你打开看到的会有报错，但是无关紧要
+其他配置（微信支付、短信、邮件、AI 等）按需开启，详见 `.env.example` 中的注释。
 
-#### 项目结构
+> 开发环境下无需配置短信/邮件服务，可使用万能验证码 `000000` 登录。
 
-📁 **src/app** → 主业务文件
+### 3. 初始化数据库
 
-📁 **src/app/api** → API 路由
+```bash
+npx prisma db push
+```
 
-📁 **src/components** → 公用组件内容
+### 4. 创建管理员
 
-📁 **src/lib** → 公用方法库
+```bash
+npx tsx scripts/create-admin.ts admin@example.com
+```
 
-📁 **content** → 文档和博客 md 文件
+### 5. 启动开发服务器
 
-📁 **prisma** → 数据库文件
+```bash
+pnpm dev
+```
 
+打开 [http://localhost:3000](http://localhost:3000) 即可看到你的网站。
 
+## 项目结构
 
-#### config.ts
+```
+src/
+├── app/
+│   ├── (fumadocs)/        # 文档和博客（独立布局）
+│   ├── (main)/            # 主应用
+│   │   ├── [local]/       # 国际化路由 (/zh, /en)
+│   │   │   ├── auth/      # 登录注册
+│   │   │   ├── dashboard/ # 后台管理（RBAC 保护）
+│   │   │   └── pay/       # 支付页面
+│   │   └── api/           # API 路由
+│   │       ├── admin/     # 管理员接口
+│   │       ├── user/      # 用户接口
+│   │       └── wx/        # 微信（支付 + 登录）
+├── components/            # React 组件
+├── models/                # 数据库操作函数
+├── lib/                   # 工具库（鉴权、支付、配置等）
+├── i18n/messages/         # 国际化翻译文件
+├── store/                 # Redux 状态管理
+├── config.ts              # 购买模式、商品配置
+├── auth.ts                # NextAuth 认证配置
+└── middleware.ts           # 路由中间件（i18n + RBAC）
 
-这是你存放项目配置的文件。你可以根据你需要的内容修改每个参数。
+prisma/schema.prisma       # 数据库模型定义
+content/                   # MDX 文档和博客内容
+```
 
+## 核心配置文件
 
+| 文件 | 作用 |
+|------|------|
+| `src/config.ts` | 购买模式（直接购买 / 积分模式）、商品定义 |
+| `src/auth.ts` | 登录方式配置（密码、验证码、微信） |
+| `src/lib/rbac.ts` | 角色权限定义（admin / user） |
+| `src/i18n/messages/*.json` | 国际化文本（含导航、首页、价格等） |
+| `src/app/(main)/globals.css` | 主题色配置（DaisyUI 变量） |
+| `.env` | 环境变量（数据库、支付、短信、AI 等） |
 
-> 你已经成功的启动了项目了，接下来根据教程，开始构建你的应用吧。
+> 接下来请按照左侧文档目录，逐步配置数据库、支付、登录等功能模块。

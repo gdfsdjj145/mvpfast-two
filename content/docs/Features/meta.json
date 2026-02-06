@@ -1,6 +1,6 @@
 {
     "title": "功能",
     "icon": "Features",
-    "pages": ["..."],
+    "pages": ["wechatLogin", "email", "phone", "google", "r2"],
     "defaultOpen": true
   }

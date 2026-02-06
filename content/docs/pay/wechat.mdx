@@ -1,6 +1,6 @@
 ---
 order: 1
-key: pay
+key: wechat-pay
 title: 微信支付
 description: 支付的介绍
 ---
@@ -10,12 +10,14 @@ description: 支付的介绍
 支付需要的环境变量，其中`v3支付私钥`在微信云服务中已经获取过，证书序列号看图，**注意，序列号和私钥都是要使用同一个证书**
 
 ```js
-NEXT_PUBLIC_API_URL = 支付回调地址; // 你的vercel部署域名
-NEXT_PUBLIC_WECHAT_APPID = 公众号id;
-WECHAT_MCHID = 商家号;
-WECHAT_API_V3_KEY = v3支付私钥;
-WECHAT_SERIAL_NO = 证书序列号;
-WECHAT_PRIVATE_KEY = 证书密钥;
+# 微信商户号
+WECHAT_MCHID=
+# 微信 API V3 密钥
+WECHAT_API_V3_KEY=
+# 微信 API 证书序列号
+WECHAT_SERIAL_NO=
+# 微信 API 私钥
+WECHAT_PRIVATE_KEY=
 ```
 
 ![pay1](/docs/assets/pay1.png)
@@ -36,13 +38,10 @@ const BASEINFO = {
 };
 ```
 
-模板配有简单的购买页面
+微信支付页面
 
-![pay2](/docs/assets/pay2.png)
+![pay2](/docs/assets/pay/wechat-pay.png)
 
-购买成功
-
-![pay3](/docs/assets/pay3.png)
 
 ##### 注意
 

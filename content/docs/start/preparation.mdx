@@ -1,98 +1,97 @@
 ---
-order: 2
-key: preparation
-title: 了解
-description: 了解
+title: 了解项目
+description: 帮助你了解 MvpFast 的技术栈和项目架构
 ---
 
-**MvpFast** 使用以下主要技术：
+## 技术栈
 
-1. [Next.js](https://nextjs.org/) - React 框架
-2. [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
-3. [Prisma](https://www.prisma.io/) - 下一代 ORM
-4. [NextAuth.js](https://next-auth.js.org/) - 身份认证解决方案
-5. [DaisyUI](https://daisyui.com/) - Tailwind CSS 组件库
-6. [MongoDB Atlas](https://www.mongodb.com/zh-cn/cloud/atlas/register) - 数据库
-7. [Vercel](https://vercel.com/) - 云平台
-8. [GitHub](https://github.com/) - 代码托管平台
-9. [微信开发](https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html) - 公众号开发
+| 类别 | 技术 | 版本 |
+|------|------|------|
+| 框架 | [Next.js](https://nextjs.org/) (App Router) | 15 |
+| 语言 | [TypeScript](https://www.typescriptlang.org/) | 5 |
+| UI 框架 | [Tailwind CSS](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/) | 4 / 5 |
+| 数据库 | [MongoDB Atlas](https://www.mongodb.com/atlas) + [Prisma](https://www.prisma.io/) ORM | - |
+| 认证 | [NextAuth.js](https://authjs.dev/) v5 + RBAC | 5 (beta) |
+| 国际化 | [next-intl](https://next-intl-docs.vercel.app/) | - |
+| 状态管理 | [Redux Toolkit](https://redux-toolkit.js.org/) | - |
+| 文档/博客 | [Fumadocs](https://fumadocs.vercel.app/) + MDX | - |
+| AI 服务 | [OpenRouter](https://openrouter.ai/) / [SiliconFlow](https://siliconflow.cn/) | - |
+| 文件存储 | [Cloudflare R2](https://www.cloudflare.com/r2/) | - |
+| 部署 | [Vercel](https://vercel.com/) / Docker | - |
+| 支付 | 微信支付 v3 API | - |
+| 短信/邮件 | 阿里云短信 / SMTP 邮件 | - |
 
-<br />
+## 项目架构
 
-**MvpFast** 里面还包含了很多的组件文件，它们可以帮助你快速的构建自己想要的内容。
+MvpFast 使用 **路由组 (Route Groups)** 分离两套独立的布局系统：
 
-在`/components`文件夹里面你可以找到你需要的组件，包括但不限于 Hero、Price 等等组件，你可以看文档的**components** 部分。
-
-根布局组件在`src/app/layout.tsx`，它是整个网站的最根部的布局组件，包含一些网站监听，数据传输，主题选择等等功能，你也可以通过**metadata**来做你的**seo**修改。
-
-```tsx
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import localFont from 'next/font/local';
-import { cn } from '@/lib/utils';
-import dynamic from 'next/dynamic';
-import './globals.css';
-import { ReduxProvider } from '@/store';
-import { Toaster } from 'react-hot-toast';
-import Script from 'next/script';
-import { Analytics } from '@vercel/analytics/react';
-import { SessionProvider } from 'next-auth/react';
-import { ThemeProviders } from '@/components/theme/ThemeProvider';
-import { SpeedInsights } from '@vercel/speed-insights/next';
-const PageProgressBar = dynamic(() => import('@/components/PageProgressBar'), {
-  ssr: false,
-});
-
-const inter = Inter({ subsets: ['latin'] });
-
-const fonts = localFont({
-  src: [
-    {
-      path: '../../public/fonts/xft.ttf',
-    },
-  ],
-  variable: '--font-xft',
-});
-
-export const metadata: Metadata = {
-  title: 'MvpFast-快速构建网站应用',
-  description:
-    '这是一款能帮助你快速构建个人网站的应用，使用最新的前端技术栈，集成登录、鉴权、手机、邮箱、数据库、博客、文章、支付等等网站所需要的功能，你只需要花几个小时开发你的核心功能就可以上线，一次购买，永久拥有',
-  keywords:
-    '开发模板 快速开发 NextJs React TailWindCss Mongdb Atlas wechat 微信体系 永久拥有 快速构建 NextAuth 网站开发 Saas模板 微信登录',
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="zh">
-      <body className={cn(fonts.variable, inter.className)}>
-        <PageProgressBar />
-        <ThemeProviders attribute="data-theme" defaultTheme="light">
-          <SessionProvider>
-            <ReduxProvider>{children}</ReduxProvider>
-          </SessionProvider>
-        </ThemeProviders>
-        <Toaster></Toaster>
-        <Analytics></Analytics>
-        <SpeedInsights></SpeedInsights>
-        <Script
-          strategy="lazyOnload"
-          src={`https://www.googletagmanager.com/gtag/js?id=xxx`}
-        />
-        <Script id="ga-script" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){window.dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'xxx');
-          `}
-        </Script>
-      </body>
-    </html>
-  );
-}
 ```
+src/app/
+├── (fumadocs)/           # 文档/博客（Fumadocs UI 布局）
+│   ├── docs/             # /docs/*
+│   └── blog/             # /blog/*
+│
+├── (main)/               # 主应用（自定义布局）
+│   ├── [local]/          # 国际化路由 /zh/* 和 /en/*
+│   │   ├── page.tsx      # 首页 Landing Page
+│   │   ├── auth/         # 登录 / 注册
+│   │   ├── dashboard/    # 后台管理（RBAC 保护）
+│   │   └── pay/          # 支付页面
+│   └── api/              # API 路由
+│       ├── admin/        # 管理员接口（需鉴权）
+│       ├── user/         # 用户接口（需登录）
+│       └── wx/           # 微信登录 + 微信支付
+```
+
+> 路由组名称 `(fumadocs)` 和 `(main)` 不会出现在 URL 中。
+
+## 根布局
+
+主应用的根布局位于 `src/app/(main)/layout.tsx`，包含以下功能：
+
+- **国际化 SEO** — 通过 `next-intl` 的 `getTranslations` 动态生成多语言 metadata
+- **Open Graph / Twitter Card** — 自动生成社交分享信息
+- **JSON-LD 结构化数据** — `<GlobalJsonLd />` 组件输出搜索引擎结构化数据
+- **主题控制** — 强制亮色主题，通过 DaisyUI 的 `data-theme` 切换
+- **全局 Provider** — SessionProvider (认证)、ReduxProvider (状态)、ThemeProviders (主题)
+- **Google Analytics** — 通过独立组件按需加载，不阻塞渲染
+
+## 核心目录
+
+| 目录 | 说明 |
+|------|------|
+| `src/components/landingpage/` | 首页组件 (Hero、Feature、Price、FAQ 等) |
+| `src/components/dashboard/` | 后台组件 (Table 等) |
+| `src/components/weChat/` | 微信登录/支付组件 |
+| `src/models/` | 数据库操作函数 (CRUD 封装) |
+| `src/lib/` | 工具库 (鉴权、支付签名、R2 存储、RBAC 等) |
+| `src/i18n/messages/` | 国际化翻译文件 (zh.json / en.json) |
+| `src/store/` | Redux 全局状态管理 |
+| `src/constants/` | 常量定义 (路由、API 地址、消息等) |
+| `prisma/schema.prisma` | 数据库模型定义 |
+| `content/` | MDX 文档和博客内容 |
+
+## 认证与权限
+
+系统使用 **RBAC (基于角色的访问控制)**，定义在 `src/lib/rbac.ts`：
+
+- **admin** — 全部权限 (用户管理、订单、系统配置等)
+- **user** — 基础权限 (个人信息、AI 对话、自己的订单等)
+
+权限在三层生效：
+
+1. **中间件层** (`src/middleware.ts`) — 根据路由自动拦截未授权访问
+2. **API 层** — `requireAdmin()` 或 `requirePermission()` 鉴权
+3. **页面层** — `hasPermission()` 控制 UI 显示
+
+## 配置管理
+
+MvpFast 采用 **代码配置 + 数据库配置** 双层模式：
+
+| 配置类型 | 位置 | 说明 |
+|---------|------|------|
+| 购买模式 / 商品 | `src/config.ts` | 支持 `direct` (直接购买) 和 `credits` (积分购买) 两种模式 |
+| 站点名称 / 登录方式 / 支付方式 | 数据库 `SystemConfig` 表 | 通过后台管理界面修改，支持审计日志 |
+| 国际化文本 | `src/i18n/messages/*.json` | 首页、导航、价格等所有展示文本 |
+| 主题色 | `src/app/(main)/globals.css` | DaisyUI 主题变量 `--p` |
+| 环境变量 | `.env` | 数据库、密钥、第三方服务凭据 |

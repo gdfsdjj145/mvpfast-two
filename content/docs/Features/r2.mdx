@@ -1,0 +1,147 @@
+---
+order: 4
+key: r2
+title: Cloudflare R2 文件存储
+description: Cloudflare R2 文件存储配置和使用
+---
+
+**MVPFAST** 集成了 Cloudflare R2 对象存储，用于图片上传和文件管理。R2 兼容 S3 API，无出口流量费用。
+
+### 1. 环境变量配置
+
+在 `.env` 文件中配置以下变量：
+
+```bash
+R2_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+R2_ACCESS_KEY_ID=你的 Access Key ID
+R2_SECRET_ACCESS_KEY=你的 Secret Access Key
+R2_BUCKET_NAME=你的存储桶名称
+R2_PUBLIC_DOMAIN=https://你的公开访问域名
+```
+
+| 变量 | 说明 |
+|------|------|
+| `R2_ENDPOINT` | R2 的 S3 兼容 API 端点，包含你的 Cloudflare Account ID |
+| `R2_ACCESS_KEY_ID` | R2 API Token 的 Access Key ID |
+| `R2_SECRET_ACCESS_KEY` | R2 API Token 的 Secret Access Key |
+| `R2_BUCKET_NAME` | 存储桶名称 |
+| `R2_PUBLIC_DOMAIN` | 存储桶的公开访问域名，用于拼接文件 URL |
+
+### 2. Cloudflare 控制台配置
+
+#### 创建存储桶
+
+登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)，进入 **R2 对象存储** 页面，点击 **创建存储桶**。
+
+![r2](/docs/assets/r2.png)
+
+#### 获取 API Token
+
+在 R2 概览页面，点击右侧 **管理 R2 API 令牌**，创建新的 API Token，权限选择 **对象读和写**。
+
+创建成功后会显示 `Access Key ID` 和 `Secret Access Key`，复制到 `.env` 对应变量。
+
+![r2-1](/docs/assets/r2-1.png)
+
+#### 配置公开访问域名
+
+在存储桶的 **设置** 页面，开启 **公开访问**，绑定自定义域名或使用 R2 提供的 `r2.dev` 子域名。
+
+该域名就是 `R2_PUBLIC_DOMAIN` 的值。
+
+![r2-2](/docs/assets/r2-2.png)
+
+### 3. 上传功能说明
+
+#### API 接口
+
+上传接口位于 `src/app/(main)/api/upload/route.ts`，需要登录后使用：
+
+```
+POST /api/upload?type=general
+Content-Type: multipart/form-data
+Body: file=<文件>
+```
+
+**请求参数：**
+- `type` — 上传类型，决定文件存储路径，可选值：`post`（文章）、`avatar`（头像）、`general`（通用，默认）
+
+**返回格式：**
+
+```json
+{ "success": true, "url": "https://域名/uploads/1234567890-abc123.png", "key": "uploads/1234567890-abc123.png" }
+```
+
+#### 文件限制
+
+| 限制项 | 值 |
+|--------|-----|
+| 最大文件大小 | 5MB |
+| 支持格式 | JPG、PNG、GIF、WebP、SVG |
+
+#### 存储路径规则
+
+上传的文件按类型自动归类到不同目录：
+
+| type 参数 | 存储目录 | 用途 |
+|-----------|----------|------|
+| `post` | `posts/` | 文章配图 |
+| `avatar` | `avatars/` | 用户头像 |
+| `general` | `uploads/` | 通用上传 |
+
+文件名格式：`{目录}/{时间戳}-{随机ID}.{扩展名}`
+
+### 4. 前端组件使用
+
+项目提供了 `ImageUpload` 组件（`src/components/common/ImageUpload.tsx`），支持点击上传和拖拽上传：
+
+```tsx
+import ImageUpload from '@/components/common/ImageUpload';
+
+// 默认模式 — 矩形拖拽区域
+<ImageUpload
+  value={imageUrl}
+  onChange={(url) => setImageUrl(url)}
+  type="post"
+/>
+
+// 头像模式 — 圆形裁剪区域
+<ImageUpload
+  value={avatarUrl}
+  onChange={(url) => setAvatarUrl(url)}
+  type="avatar"
+  variant="avatar"
+/>
+```
+
+**Props：**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `value` | `string` | — | 当前图片 URL |
+| `onChange` | `(url: string) => void` | — | URL 变化回调 |
+| `type` | `string` | `general` | 上传类型 |
+| `variant` | `default \| avatar` | `default` | 组件样式 |
+| `disabled` | `boolean` | `false` | 禁用状态 |
+
+#### 编程式上传
+
+在 Markdown 编辑器等场景中，可以使用 `uploadImageFile` 函数：
+
+```tsx
+import { uploadImageFile } from '@/components/common/ImageUpload';
+
+const url = await uploadImageFile(file, 'post');
+if (url) {
+  // 上传成功，url 为文件公开访问地址
+}
+```
+
+### 5. 核心文件
+
+| 文件 | 说明 |
+|------|------|
+| `src/lib/services/storage.ts` | R2 存储服务（上传、删除、校验） |
+| `src/lib/config/env.ts` | 环境变量校验，含 `isR2Configured()` |
+| `src/app/(main)/api/upload/route.ts` | 上传 API 接口 |
+| `src/components/common/ImageUpload.tsx` | 图片上传前端组件 |
