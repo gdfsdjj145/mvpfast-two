@@ -59,6 +59,12 @@
           "href": "/#price"
         },
         {
+          "name": "StarVeil AI 漫画",
+          "href": "https://starveilai.com",
+          "target": "_blank",
+          "rel": "noopener noreferrer external"
+        },
+        {
           "name": "文档",
           "href": "/docs/introduction",
           "target": "_blank"
@@ -257,6 +263,16 @@
     "viewProject": "查看项目",
     "viewAll": "查看所有案例",
     "items": [
+      {
+        "id": "starveil",
+        "title": "StarVeil AI-让你的角色出演漫画",
+        "href": "https://starveilai.com",
+        "imageUrl": "/cases/starveil.webp",
+        "des": "StarVeil AI 是一站式 AI 漫画创作工作台，可将故事灵感快速生成短篇、小故事或连载漫画，并支持角色资产复用、编辑、续写与导出。",
+        "gradient": "from-violet-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-violet-600 group-hover:to-indigo-600",
+        "category": "AI 漫画创作"
+      },
       {
         "id": 0,
         "title": "CodeBox-智能二维码生成器",

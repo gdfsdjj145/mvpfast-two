@@ -59,6 +59,12 @@
           "href": "/#price"
         },
         {
+          "name": "StarVeil AI Comics",
+          "href": "https://starveilai.com",
+          "target": "_blank",
+          "rel": "noopener noreferrer external"
+        },
+        {
           "name": "Docs",
           "href": "/docs/introduction",
           "target": "_blank"
@@ -286,7 +292,21 @@
     "title": "Case Studies",
     "subtitle": "See how our customers use our product",
     "description": "",
-    "items": []
+    "badge": "Live",
+    "viewProject": "View project",
+    "viewAll": "View all projects",
+    "items": [
+      {
+        "id": "starveil",
+        "title": "StarVeil AI-Comics starring your characters",
+        "href": "https://starveilai.com",
+        "imageUrl": "/cases/starveil.webp",
+        "des": "StarVeil AI is an all-in-one AI comics creation workspace for turning story ideas into short comics, visual stories, or serialized comics with reusable characters, editing, continuation, and export tools.",
+        "gradient": "from-violet-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-violet-600 group-hover:to-indigo-600",
+        "category": "AI Comics Creation"
+      }
+    ]
   },
   "Price": {
     "title": "Choose your plan",
