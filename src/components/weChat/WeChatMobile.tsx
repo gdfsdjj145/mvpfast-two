@@ -1,70 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const generateOAuthUrl = (redirectUri: string, state: string = ''): string => {
-  const params = new URLSearchParams({
-    appid: process.env.NEXT_PUBLIC_WECHAT_APPID || '',
-    redirect_uri: redirectUri,
-    response_type: 'code',
-    scope: 'snsapi_userinfo',
-    state: state,
-  });
-  return `https://open.weixin.qq.com/connect/oauth2/authorize?${params.toString()}#wechat_redirect`;
-};
 const WeChatMobile = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleWxLogin = async () => {
-    // 获取当前域名
-    const currentDomain = window.location.origin;
-    const authUrl = generateOAuthUrl(`${currentDomain}/api/wx/callback`);
-
-    window.location.href = authUrl;
-  };
-
-  // 检查是否在微信浏览器中
-  const isWxClient = () => {
-    const ua = navigator.userAgent.toLowerCase();
-    return ua.indexOf('micromessenger') !== -1;
-  };
-
-  useEffect(() => {
-    // 检查 URL 参数中是否有 code
-    const id = searchParams.get('id');
-    const type = searchParams.get('type');
-
-    const checkLogin = async (id: string) => {
-      setIsLoading(true);
-      try {
-        const res = await signIn('credentials', {
-          type: 'wx',
-          identifier: id,
-          redirect: false,
-        });
-        if (res?.error) {
-          toast.error(res?.error);
-        } else {
-          const callbackUrl = searchParams.get('redirect') || '/';
-          window.location.href = callbackUrl;
-        }
-      } catch (error) {
-        toast.error('登录失败，请重试');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (id && type === 'wxlogin') {
-      checkLogin(id);
+  const handleWxLogin = () => {
+    if (!navigator.userAgent.toLowerCase().includes('micromessenger')) {
+      toast.error('请在微信中打开此页面');
+      return;
     }
-  }, [searchParams, router]); // 依赖项包含 searchParams 和 router
+    setIsLoading(true);
+    window.location.href = '/api/wx/authorize';
+  };
 
   return (
     <div className="w-full p-4 flex flex-col items-center">

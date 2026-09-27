@@ -26,6 +26,10 @@ const serverEnvSchema = z.object({
   WECHAT_MCHID: z.string().optional(),
   WECHAT_SERIAL_NO: z.string().optional(),
   WECHAT_PRIVATE_KEY: z.string().optional(),
+  WECHAT_MP_APPSECRET: z.string().optional(),
+  WECHAT_API_V3_KEY: z.string().optional(),
+  WECHAT_PAY_VERIFY_KEY: z.string().optional(),
+  WECHAT_PAY_VERIFY_SERIAL: z.string().optional(),
 
   // 阿里云短信
   ALIYUN_ACCESS_KEY_ID: z.string().optional(),
@@ -60,7 +64,6 @@ const serverEnvSchema = z.object({
  * 客户端环境变量 Schema (NEXT_PUBLIC_ 前缀)
  */
 const clientEnvSchema = z.object({
-  NEXT_PUBLIC_API_URL: z.string().url('API URL 必须是有效的 URL').optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url('网站 URL 必须是有效的 URL').optional(),
   NEXT_PUBLIC_WECHAT_APPID: z.string().optional(),
   NEXT_PUBLIC_YUNGOUOS_MCH_ID: z.string().optional(),
@@ -105,7 +108,6 @@ function validateServerEnv(): ServerEnv {
  */
 function validateClientEnv(): ClientEnv {
   const clientEnvData = {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_WECHAT_APPID: process.env.NEXT_PUBLIC_WECHAT_APPID,
     NEXT_PUBLIC_YUNGOUOS_MCH_ID: process.env.NEXT_PUBLIC_YUNGOUOS_MCH_ID,
@@ -145,7 +147,7 @@ export const serverEnv: ServerEnv = validateServerEnv();
  * ```ts
  * import { clientEnv } from '@/lib/config';
  *
- * const apiUrl = clientEnv.NEXT_PUBLIC_API_URL;
+ * const siteUrl = clientEnv.NEXT_PUBLIC_SITE_URL;
  * ```
  */
 export const clientEnv: ClientEnv = validateClientEnv();

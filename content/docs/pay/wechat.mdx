@@ -2,49 +2,25 @@
 order: 1
 key: wechat-pay
 title: 微信支付
-description: 支付的介绍
+description: 微信支付接入与通知配置
 ---
 
-> 本项目目前支持的支付体系是使用微信支付体系，我们需要先部署模板提供的微信服务代码`mvpfast-wx-server`
+MVPFast 直接在 Next.js 服务端调用微信支付 APIv3。支付下单时的 `notify_url` 指向当前站点的 `/api/wechat-pay-callback`，无需微信云托管。
 
-支付需要的环境变量，其中`v3支付私钥`在微信云服务中已经获取过，证书序列号看图，**注意，序列号和私钥都是要使用同一个证书**
+在 Vercel 的 Production 环境配置商户号、商户 API 证书、APIv3 密钥，以及微信支付公钥（或平台证书）和对应 ID/序列号：
 
-```js
-# 微信商户号
-WECHAT_MCHID=
-# 微信 API V3 密钥
-WECHAT_API_V3_KEY=
-# 微信 API 证书序列号
-WECHAT_SERIAL_NO=
-# 微信 API 私钥
-WECHAT_PRIVATE_KEY=
+```text
+WECHAT_MCHID=商户号
+WECHAT_SERIAL_NO=商户 API 证书序列号
+WECHAT_PRIVATE_KEY=商户 API 私钥 PEM
+WECHAT_API_V3_KEY=商户 APIv3 密钥
+WECHAT_PAY_VERIFY_KEY=微信支付公钥 PEM 或微信支付平台证书 PEM
+WECHAT_PAY_VERIFY_SERIAL=PUB_KEY_ID_... 或平台证书序列号
+NEXT_PUBLIC_SITE_URL=https://www.mvpfast.top
 ```
 
-![pay1](/docs/assets/pay1.png)
+商户私钥用于发起支付请求；微信支付公钥或平台证书用于校验微信发来的通知，两者不可互换。与商户私钥配套的 `BEGIN CERTIFICATE` 商户 API 证书也不能用于通知验签。服务端会先按请求原文验签，再解密和核对商户号、AppID、币种与支付状态。验签失败时返回非 2xx，让微信按其通知机制重试。
 
-### 1.支付流程
+若商户此前使用平台证书模式，申请微信支付公钥后还需在商户平台开启公钥切换。请等切换完成后，再只用 `PUB_KEY_ID_...` 配置回调验签；切换中仍可能收到使用平台证书签名的通知。
 
-下图展示**MVPFAST**支付模块的主要流程，模板已经为你处理好支付流程中的问题，你只需要配置好对应环境变量即可
-
-![pay](/docs/assets/pay.png)
-
-### 2.支付商品信息修改
-
-```js
-// pay/page.tsx
-const BASEINFO = {
-  amount: 1, // 商品价格（分单位）, 1 = 0.01元
-  description: 'MvpFast模板购买', // 商品信息描述
-};
-```
-
-微信支付页面
-
-![pay2](/docs/assets/pay/wechat-pay.png)
-
-
-##### 注意
-
-购买成功后，**微信商家号**会收到付款，`wx-server`页面收到支付回调的处理，模板当前回调处理只做了输出，如有业务处理，可修改`wx-server`代码，之后可以在商家号【交易订单】页面查询订单情况，**所以在本地调试时最好使用`amount:1`来测试**
-
-![pay4](/docs/assets/pay4.png)
+当前购买页面仍通过服务端查询微信订单状态，并在确认成功后创建业务订单。通知接口负责可信接收，不会单独发放商品或积分。需要自动履约时，应增加服务端待支付订单与幂等处理。
