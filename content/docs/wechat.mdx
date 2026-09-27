@@ -1,111 +1,37 @@
 ---
 key: wechat
 title: 微信体系能力
-description: 微信体系能力介绍
+description: 微信登录与支付的服务端配置
 icon: Cpu
 ---
 
-**MVPFAST**使用了集成了微信体系的基础功能，包括微信公众号登录，微信公众号回复，微信支付等能力，本教程将会介绍如何部署`mvpfast-wx-server`项目
+MVPFast 的 PC 微信登录使用微信开放平台，手机微信内登录使用公众号网页授权。两个流程都由当前 Next.js 项目的 Vercel 服务端接口处理，不需要单独部署微信云托管服务。
 
-微信体系能力有两个核心：
-1. [微信服务号能力](/docs/features/wechatLogin) - 认证 300 元
-2. [微信支付](/docs/pay/wechat) - 商家号注册
+## 登录配置
 
-#### 1.准备工作
+在 Vercel 项目的 Production 环境配置以下变量；AppSecret 仅供服务端读取，不要加 `NEXT_PUBLIC_` 前缀：
 
-开始之前，获取拉取`mvpfast-wx-server`项目代码，项目中`config.js`是本项目的基础配置文件
-
-```json
-callbackServer: '项目回调地址’,
-appid: '公众号appid',
-mchid: '商家号appid',
-publicKey:'v3支付公钥',
-privateKey: 'v3支付密钥',
+```text
+NEXT_PUBLIC_SITE_URL=https://www.mvpfast.top
+NEXT_PUBLIC_WECHAT_OPEN_APPID=网站应用 AppID
+WECHAT_OPEN_APPID=网站应用 AppID
+WECHAT_OPEN_APPSECRET=网站应用 AppSecret
+NEXT_PUBLIC_WECHAT_APPID=公众号 AppID
+WECHAT_MP_APPSECRET=公众号 AppSecret
 ```
 
-项目回调地址就是之前我们部署**MVPFAST**项目的域名，这里复制你都域名进去就行了
+公众号后台的网页授权域名应与 `NEXT_PUBLIC_SITE_URL` 的域名一致。手机登录从 `/api/wx/authorize` 发起，微信回到 `/api/wx/callback`；PC 登录使用微信开放平台扫码。回调校验一次性 `state`，再签发短时一次性登录票据。
 
-##### 公众号 appid 获取
+## 微信支付配置
 
-到你的公众号页面，在公众号**【基本配置**】里面可以获取**【公众号 appid】**
+支付下单接口将通知地址设置为本站 `/api/wechat-pay-callback`。该路由使用微信支付公钥或微信支付平台证书验签，再用商户 APIv3 密钥解密通知。除现有商户号、商户 API 证书序列号和商户私钥外，还需配置：
 
-![wechat](/docs/assets/wechat.png)
+```text
+WECHAT_API_V3_KEY=商户平台设置的 32 字节 APIv3 密钥
+WECHAT_PAY_VERIFY_KEY=微信支付公钥 PEM 或微信支付平台证书 PEM 全文
+WECHAT_PAY_VERIFY_SERIAL=对应的 PUB_KEY_ID_... 或平台证书序列号
+```
 
-##### 商家号 mchid 获取
+微信支付公钥和 ID 可在商户平台「账户中心 → API 安全」获取。`WECHAT_PAY_VERIFY_KEY` 可使用真实换行或字面量 `\\n` 存储。其 ID/序列号必须与通知请求头中的 `Wechatpay-Serial` 一致。`BEGIN PRIVATE KEY` 是商户请求签名私钥；与它配套的商户 API 证书不能用于微信通知验签。
 
-打开个人商家号后台页面，选择**【个人信息】**页面，登录账号就是**【商家号 mchid】**
-
-![wechat1](/docs/assets/wechat1.png)
-
-##### v3 支付公/私钥
-
-在商家号后台打开【API 安全】页面，需要先开通 v3 支付，然后在【商户 API 证书】选项点击【管理证书】，按照提示添加证书。
-
-![wechat2](/docs/assets/wechat2.png)
-
-成功新增证书之后可以在电脑本地得到证书文件，分别获取公钥和私钥的变量值
-
-![wechat3](/docs/assets/wechat3.png)
-
-### 2.微信云托管
-
-在微信公众号进入【开发者工具】页面，点击微信云托管
-
-![wechat4](/docs/assets/wechat4.png)
-
-选择【模板部署】启动服务
-
-![wechat5](/docs/assets/wechat5.png)
-
-选择【express】模板，创建服务的时候会有输入数据库密码，第一次使用会有重置初始密码，自己修改就好，之后就等待服务开始部署
-
-![wechat6](/docs/assets/wechat6.png)
-
-![wechat7](/docs/assets/wechat7.png)
-
-服务完成初始化之后，我们还需要调整服务，进行一些配置设置
-
-服务设置里面的公网访问地址，就是**MVPFAST**中`NEXT_PUBLIC_API_URL`的变量值
-
-- 最少实例数设置为 1，如果设置为 0 的话，微信服务会在空闲时自动关闭，只有调用时才会启动
-
-【基础配置】页面可以修改实例数
-
-![wechat9](/docs/assets/wechat9.png)
-
-- 设置服务流水线
-
-【流水线页面】可以设置云服务的流水线，代码库使用`github`，代码仓库选择`mvpfast-wx-server`，分支为主分支
-
-![wechat8](/docs/assets/wechat8.png)
-
-- 设置云调用接口权限
-
-微信云服务规定，服务使用内部接口时需要添加接口权限
-
-![wechat10](/docs/assets/wechat10.png)
-
-### 3.微信公众号消息回复
-
-`mvpfast-wx-server`还包含公众号登录功能，需要在公众号页面进行相关的配置
-
-![wechat12](/docs/assets/wechat12.png)
-
-- 环境 ID：云托管环境 ID
-
-在云托管【环境设置】页面获取
-
-![wechat11](/docs/assets/wechat11.png)
-
-- 服务名称：云托管服务
-
-在云托管【服务列表】中，选择你刚刚部署的服务，其名称就是
-
-![wechat13](/docs/assets/wechat13.png)
-
-- Path：/wx-text
-- 推送模式： JSON
-
-### 4.完成
-
-这些步骤完成之后，即可使用**MVPFAST**中微信体系的功能。
+当前项目的支付通知路由只负责验证和接收通知；现有页面仍通过服务端查单确认付款后创建订单和发放积分。若以后改为收到通知就自动履约，应先持久化待支付订单并实现幂等事务，不能仅依据浏览器提交的商品和金额发放权益。

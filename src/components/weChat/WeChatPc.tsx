@@ -19,11 +19,6 @@ declare global {
   }
 }
 
-// 生成随机 state 用于防 CSRF 攻击
-const generateState = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
-
 const WeChatPc = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +26,7 @@ const WeChatPc = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const initCalledRef = useRef(false);
 
-  const initWxLogin = useCallback(() => {
+  const initWxLogin = useCallback(async () => {
     if (initCalledRef.current) return;
 
     if (!window.WxLogin) {
@@ -44,9 +39,13 @@ const WeChatPc = () => {
     const appid = process.env.NEXT_PUBLIC_WECHAT_OPEN_APPID;
     const domain = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
     const redirectUri = encodeURIComponent(`${domain}/api/wx/callback`);
-    const state = `open_${generateState()}`;
 
     try {
+      const stateResponse = await fetch('/api/wx/state', { cache: 'no-store' });
+      if (!stateResponse.ok) throw new Error('无法创建微信登录状态');
+      const { state }: { state?: string } = await stateResponse.json();
+      if (!state?.startsWith('open_')) throw new Error('微信登录状态无效');
+
       new window.WxLogin({
         self_redirect: false,
         id: 'wx_login_container',

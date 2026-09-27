@@ -52,8 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           password?: string;
         };
 
-        console.log('credentials', credentials);
-
         // 账号密码登录
         if (type === 'password') {
           // 判断是邮箱还是手机号：含@为邮箱，纯数字为手机号，其他视为用户名（按email查）
@@ -71,22 +69,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
+        if (type === 'wx_ticket') {
+          if (!code || !await verifyCode(type, { identifier, code })) return null;
+          return prisma.user.findUnique({ where: { id: identifier } });
+        }
+
+        if (!['email', 'phone', 'dev'].includes(type)) return null;
         const verifyState = await verifyCode(type, {
           identifier,
           code,
         });
 
-        if (type === 'wx') {
-          const res = await prisma.user.findFirst({
-            where: {
-              wechatOpenId: identifier,
-            },
-          });
-          if (res) {
-            return res;
-          }
-        } else {
-          if (verifyState) {
+        if (verifyState) {
             let res = null;
             if (type === 'email') {
               res = await prisma.user.findFirst({
@@ -150,7 +144,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             if (res) {
               return res;
             }
-          }
         }
         return null;
       },
