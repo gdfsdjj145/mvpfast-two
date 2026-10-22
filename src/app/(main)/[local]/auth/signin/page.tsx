@@ -115,20 +115,20 @@ export default function SignInPage() {
     }
   }, [configLoaded, loginConfig.loginType, type]);
 
-  // 微信回调自动登录：检测 URL 参数 ?id=openid&type=wxlogin
+  // 微信回调自动登录：一次性票据绑定站内用户 ID。
   useEffect(() => {
-    const wxOpenId = searchParams.get('id');
+    const userId = searchParams.get('id');
     const loginType = searchParams.get('type');
+    const loginToken = searchParams.get('loginToken');
 
-    if (loginType === 'wxlogin' && wxOpenId && !wxLoginCalledRef.current) {
+    if (loginType === 'wxlogin' && userId && loginToken && !wxLoginCalledRef.current) {
       wxLoginCalledRef.current = true;
       setWxLoginProcessing(true);
-      console.log('[SignIn] 检测到微信回调, openid:', wxOpenId, ', 自动调用 signIn...');
 
       signIn('credentials', {
-        type: 'wx',
-        identifier: wxOpenId,
-        code: '',
+        type: 'wx_ticket',
+        identifier: userId,
+        code: loginToken,
         redirect: false,
       }).then(async (res) => {
         if (res?.error) {

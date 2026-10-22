@@ -1,46 +1,7 @@
-import { NextResponse, NextRequest } from 'next/server';
-import prisma from '@/lib/core/prisma';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
-  const result = await request.json();
-
-  const qrCode = await prisma.verificationWxQrCode.findUnique({
-    where: {
-      identifier: result.ticket,
-    },
-  });
-
-  if (!qrCode) {
-    // 二维码不存在
-    return NextResponse.json(
-      {
-        data: {},
-        message: '二维码不存在',
-      },
-      {
-        status: 500,
-      }
-    );
-  }
-
-  // 二维码存在  修改二维码数据状态
-  await prisma.verificationWxQrCode.update({
-    where: {
-      identifier: result.ticket,
-    },
-    data: {
-      isScan: true,
-      openId: result.openId,
-    },
-  });
-
-  return NextResponse.json(
-    {
-      data: {},
-      message: '已修改二维码状态',
-    },
-    {
-      status: 200,
-    }
-  );
-}
+// 旧云托管公众号扫码回调已停用。
+export const POST = () => NextResponse.json(
+  { error: '公众号扫码回调接口已停用' },
+  { status: 410 },
+);

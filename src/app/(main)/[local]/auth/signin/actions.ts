@@ -83,7 +83,7 @@ export const verifyCode = async (type: string, params: any) => {
   const { identifier, code } = params;
 
   // 开发环境：允许使用万能验证码 "000000"
-  if (process.env.NODE_ENV === 'development' && code === '000000') {
+  if (process.env.NODE_ENV === 'development' && ['email', 'phone', 'dev'].includes(type) && code === '000000') {
     console.log('[DEV MODE] 使用万能验证码登录:', identifier);
     return true;
   }
@@ -108,81 +108,6 @@ export const verifyCode = async (type: string, params: any) => {
     // 验证失败
     return false;
   }
-};
-
-// 生成微信二维码
-export const createQrCode = async (ticket: string) => {
-  await prisma.verificationWxQrCode.create({
-    data: {
-      identifier: ticket,
-      isScan: false,
-    },
-  });
-
-  return {
-    code: 0,
-    data: {},
-    message: '',
-  };
-};
-
-export const checkQrCode = async (
-  ticket: string
-): Promise<{
-  openId: string;
-  isScan: boolean;
-}> => {
-  const qrcode: any = await prisma.verificationWxQrCode.findUnique({
-    where: {
-      identifier: ticket,
-    },
-    select: {
-      isScan: true,
-      openId: true,
-    },
-  });
-  if (!qrcode?.isScan) {
-    return {
-      isScan: false,
-      openId: '',
-    };
-  }
-
-  const user = await prisma.user.findFirst({
-    where: {
-      wechatOpenId: qrcode.openId as string,
-    },
-  });
-
-  console.log(user, 'user');
-
-  if (!user) {
-    // 没用用户 创建用户
-
-    const newUser = await prisma.user.create({
-      data: {
-        wechatOpenId: qrcode.openId as string,
-        nickName: getGeneratorName(),
-        phone: null,
-        email: null,
-      },
-    });
-
-    // 新用户注册，赠送初始积分
-    await grantInitialCredits(newUser.id);
-
-    return {
-      openId: qrcode.openId as string,
-      isScan: true,
-    };
-  }
-
-  // 已创建用户
-
-  return {
-    openId: user.wechatOpenId ?? '',
-    isScan: true,
-  };
 };
 
 // 密码加密

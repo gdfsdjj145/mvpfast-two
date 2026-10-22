@@ -64,7 +64,7 @@ import { serverEnv, clientEnv, isWechatPayConfigured } from '@/lib/env';
 const dbUrl = serverEnv.DATABASE_URL;
 
 // 客户端环境变量
-const apiUrl = clientEnv.NEXT_PUBLIC_API_URL;
+const siteUrl = clientEnv.NEXT_PUBLIC_SITE_URL;
 
 // 检查功能是否配置
 if (isWechatPayConfigured()) {

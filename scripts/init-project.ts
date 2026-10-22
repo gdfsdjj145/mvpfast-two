@@ -97,7 +97,6 @@ function writeEnvFiles(options: InitOptions) {
 # 开发环境配置（自动生成）
 # ==============================
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_API_URL=http://localhost:3000
 `;
 
   // .env.production
@@ -105,7 +104,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 # 生产环境配置（自动生成）
 # ==============================
 NEXT_PUBLIC_SITE_URL=${prodUrl}
-NEXT_PUBLIC_API_URL=${prodUrl}
 `;
 
   fs.writeFileSync(resolve('.env.development'), devContent, 'utf-8');

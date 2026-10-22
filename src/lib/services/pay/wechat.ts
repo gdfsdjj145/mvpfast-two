@@ -6,6 +6,7 @@
 
 import crypto from 'crypto';
 import axios from 'axios';
+import { getWechatPayVerificationKey } from './notification';
 
 const WECHAT_PAY_URL =
   'https://api.mch.weixin.qq.com/v3/pay/transactions/native';
@@ -13,6 +14,26 @@ const JSAPI_PAY_URL = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
 
 const NATIVE_PAY_PATHNAME = '/v3/pay/transactions/native';
 const JSAPI_PAY_PATHNAME = '/v3/pay/transactions/jsapi';
+
+function getNotifyUrl() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!siteUrl) throw new Error('NEXT_PUBLIC_SITE_URL environment variable is not set');
+  const apiV3Key = process.env.WECHAT_API_V3_KEY;
+  const verificationKey = process.env.WECHAT_PAY_VERIFY_KEY;
+  const verificationSerial = process.env.WECHAT_PAY_VERIFY_SERIAL;
+  if (!apiV3Key || !verificationKey || !verificationSerial) {
+    throw new Error('微信支付通知验签尚未配置');
+  }
+  if (Buffer.byteLength(apiV3Key, 'utf8') !== 32) {
+    throw new Error('微信支付通知验签配置无效');
+  }
+  getWechatPayVerificationKey(verificationKey, verificationSerial, process.env.WECHAT_SERIAL_NO);
+  const url = new URL('/api/wechat-pay-callback', siteUrl);
+  if (process.env.NODE_ENV === 'production' && url.protocol !== 'https:') {
+    throw new Error('微信支付通知地址必须使用 HTTPS');
+  }
+  return url.toString();
+}
 
 interface OrderInfo {
   description: string;
@@ -72,7 +93,7 @@ export async function createNativeOrder(orderInfo: OrderInfo) {
     mchid: process.env.WECHAT_MCHID,
     description: orderInfo.description,
     out_trade_no: orderInfo.outTradeNo,
-    notify_url: `${process.env.NEXT_PUBLIC_API_URL}/api/wechat-pay-callback`,
+    notify_url: getNotifyUrl(),
     amount: {
       total: orderInfo.amount,
       currency: 'CNY',
@@ -115,7 +136,7 @@ export async function createJsapiOrder(orderInfo: OrderInfo, userId: string) {
     mchid: process.env.WECHAT_MCHID,
     description: orderInfo.description,
     out_trade_no: orderInfo.outTradeNo,
-    notify_url: `${process.env.NEXT_PUBLIC_API_URL}/api/wechat-pay-callback`,
+    notify_url: getNotifyUrl(),
     amount: {
       total: orderInfo.amount,
       currency: 'CNY',

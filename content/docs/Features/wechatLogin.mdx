@@ -13,9 +13,11 @@ description: 微信登录能力介绍
 NEXT_PUBLIC_WECHAT_OPEN_APPID=""
 WECHAT_OPEN_APPID=""
 WECHAT_OPEN_APPSECRET=""
+NEXT_PUBLIC_WECHAT_APPID=""
+WECHAT_MP_APPSECRET=""
 ```
 
-移动端的登录还到公众号进行以下配置。
+移动端还需在公众号后台将站点域名配置为网页授权域名。AppSecret 只放在 Vercel 服务端环境变量中；公众号网页授权由当前项目处理，无需单独部署云托管服务。
 
 ![image-20241120151052471](/docs/assets/wechatLogin3.png)
 
