@@ -264,6 +264,16 @@
     "viewAll": "查看所有案例",
     "items": [
       {
+        "id": "zhuque",
+        "title": "朱雀新媒体创作",
+        "href": "https://svip.zhuque.net.cn",
+        "imageUrl": "/cases/zhuque.png",
+        "des": "朱雀新媒体创作是一站式 AI 智能创作平台，融合 AI 写作、公众号智能排版、热点洞察与智能配图，帮助新媒体创作者高效完成内容创作与营销。",
+        "gradient": "from-blue-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-blue-600 group-hover:to-indigo-600",
+        "category": "AI 新媒体创作"
+      },
+      {
         "id": "starveil",
         "title": "StarVeil AI-让你的角色出演漫画",
         "href": "https://starveilai.com",

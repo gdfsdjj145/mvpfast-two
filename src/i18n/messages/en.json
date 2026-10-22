@@ -297,6 +297,16 @@
     "viewAll": "View all projects",
     "items": [
       {
+        "id": "zhuque",
+        "title": "Zhuque AI - Content Creation Platform",
+        "href": "https://svip.zhuque.net.cn",
+        "imageUrl": "/cases/zhuque.png",
+        "des": "Zhuque AI is an all-in-one content creation platform combining AI writing, WeChat article formatting, trending topic insights, and AI illustrations to help creators produce content and support their marketing workflows.",
+        "gradient": "from-blue-500 to-indigo-500",
+        "hoverGradient": "group-hover:from-blue-600 group-hover:to-indigo-600",
+        "category": "AI Content Creation"
+      },
+      {
         "id": "starveil",
         "title": "StarVeil AI-Comics starring your characters",
         "href": "https://starveilai.com",
